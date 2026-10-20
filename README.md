@@ -109,11 +109,22 @@ AdSense, and the site has to be live before AdSense will even review it.
 
 ## Deployment
 
+The build runs in GitHub Actions and the finished `dist/` is uploaded to
+Cloudflare Pages with `wrangler`. Cloudflare never builds the site itself, so
+its own project settings stay empty — every variable lives in GitHub.
+
 1. Create a free Cloudflare account, then a Pages project named `calccents`.
-2. Add two GitHub repository secrets: `CLOUDFLARE_API_TOKEN` and
+2. Add two GitHub repository **secrets**: `CLOUDFLARE_API_TOKEN` and
    `CLOUDFLARE_ACCOUNT_ID`.
 3. Push to `main`. The workflow verifies the build and then deploys `dist/`.
-4. Attach the custom domain to the Pages project in the Cloudflare dashboard.
+
+Until those two secrets exist, the deploy step is skipped and the pipeline
+reports why; the rest of CI still runs. The first push after the secrets are
+added deploys on its own, with no further action.
+
+Attach the custom domain to the Pages project in the Cloudflare dashboard. The
+canonical origin in `src/config/site.ts` and the generated `robots.txt` and
+`sitemap-index.xml` already point at `calccents.com`.
 
 The build is fully static, so there is no server to run, patch or pay for.
 Rollback is a matter of promoting an earlier deployment from the Cloudflare
@@ -124,8 +135,19 @@ Pages dashboard.
 1. Apply for AdSense once the site is live at its final address.
 2. Create three display ad units: one for the result panel, one for the
    in-article position, one for the footer.
-3. Put the publisher ID and the three slot IDs into the GitHub secrets
-   environment or the Cloudflare Pages environment variables, and redeploy.
+3. Add the publisher ID and the three slot IDs as GitHub repository
+   **variables** — not secrets, because every one of them is embedded in the
+   public HTML — and push again.
+
+| Variable | Where it goes |
+|---|---|
+| `PUBLIC_ADSENSE_CLIENT`, `PUBLIC_ADSENSE_SLOT_*` | Repository → Settings → Secrets and variables → Actions → **Variables** |
+| `PUBLIC_GA_ID`, `PUBLIC_BUTTONDOWN_FORM` | Same place, also as variables |
+| `CLOUDFLARE_API_TOKEN`, `CLOUDFLARE_ACCOUNT_ID` | Same place, under **Secrets** |
+
+The ad slots are env-gated on purpose. An `<ins>` element on a page that has
+no publisher content behind it is one of the reasons a site gets rejected by
+AdSense, and the site has to be live before AdSense will even review it.
 
 Keep the number of ad units per page at three or fewer. On a comparable
 site, cutting the ad units on the main page from 18 to 9 raised page RPM by
