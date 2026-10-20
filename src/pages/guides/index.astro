@@ -1,0 +1,120 @@
+---
+import Base from '../../layouts/Base.astro';
+import AdSlot from '../../components/AdSlot.astro';
+import { getCollection } from 'astro:content';
+import { SITE } from '../../config/site.ts';
+
+const guides = (await getCollection('guides')).sort(
+  (a, b) => b.data.date.getTime() - a.data.date.getTime(),
+);
+
+const groups = ['Home and mortgages', 'Renting and owning', 'Investing'] as const;
+const byGroup = groups
+  .map((group) => ({ group, guides: guides.filter((guide) => guide.data.group === group) }))
+  .filter((entry) => entry.guides.length > 0);
+---
+
+<Base
+  title="Guides"
+  description="Fifteen explanations of the arithmetic behind mortgages, renting versus buying and compound interest, each with its formula, its assumptions and its sources."
+  path="/guides/"
+>
+  <div class="container">
+    <div class="page-head">
+      <nav class="breadcrumb" aria-label="Breadcrumb">
+        <a href="/">Home</a>
+        <span aria-hidden="true">/</span>
+        <span>Guides</span>
+      </nav>
+      <h1>Guides</h1>
+      <p class="page-head__lede">
+        In-depth explanations of the arithmetic and the assumptions behind the
+        calculators. Every guide shows the formula, links to the primary
+        sources, and carries a review date.
+      </p>
+      <div class="reviewed-line" style="margin-top: var(--space-5);">
+        <span>{guides.length} guides</span>
+        <span aria-hidden="true">·</span>
+        <span>Reviewed by <a href="/editorial-team/">{SITE.reviewer.name}</a></span>
+      </div>
+    </div>
+
+    {
+      byGroup.map((entry) => (
+        <section class="section-sm">
+          <p class="eyebrow" style="color: var(--text-muted);">
+            {entry.group}
+          </p>
+          <div style="margin-top: var(--space-5);">
+            {entry.guides.map((guide) => (
+              <a class="guide-row" href={`/guides/${guide.id}/`}>
+                <span>
+                  <span class="guide-row__title">{guide.data.title}</span>
+                  <span class="guide-row__desc">{guide.data.description}</span>
+                </span>
+                <span class="guide-row__meta">
+                  {guide.data.readingMinutes} min
+                </span>
+              </a>
+            ))}
+          </div>
+        </section>
+      ))
+    }
+
+    <AdSlot placement="in-article" />
+
+    <section class="section-sm">
+      <div class="card">
+        <h2 style="font-size: var(--text-xl);">Missing something?</h2>
+        <p class="text-secondary" style="margin-top: var(--space-3); max-width: 60ch;">
+          Guides are written around the arithmetic readers find hardest to
+          follow. If a financial concept is not covered here, tell us which one
+          and what about it is confusing.
+        </p>
+        <p style="margin-top: var(--space-5);">
+          <a class="btn" href="/contact/">Suggest a topic</a>
+        </p>
+      </div>
+    </section>
+
+    <AdSlot placement="footer" />
+  </div>
+</Base>
+
+<style>
+  .guide-row {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: var(--space-8);
+    padding: var(--space-5) 0;
+    border-bottom: 1px solid var(--border-subtle);
+    text-decoration: none;
+    color: inherit;
+  }
+
+  .guide-row:hover .guide-row__title {
+    color: var(--accent);
+  }
+
+  .guide-row__title {
+    display: block;
+    color: var(--text);
+    font-weight: 500;
+  }
+
+  .guide-row__desc {
+    display: block;
+    margin-top: var(--space-1);
+    color: var(--text-muted);
+    font-size: var(--text-sm);
+    max-width: 72ch;
+  }
+
+  .guide-row__meta {
+    color: var(--text-muted);
+    font-size: var(--text-sm);
+    white-space: nowrap;
+  }
+</style>

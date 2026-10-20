@@ -1,0 +1,147 @@
+---
+title: "Rent vs Buy Calculator Explained"
+description: "How the rent versus buy comparison is built, what the crossover month actually means, and which costs sit outside the calculation entirely in practice."
+date: 2026-10-01
+lastReviewed: 2026-10-20
+author: "Kostan Proff"
+reviewedBy: "Kostan Proff"
+group: "Renting and owning"
+readingMinutes: 9
+sources:
+  - label: "CFPB — Mortgages and consumer tools"
+    url: "https://www.consumerfinance.gov/consumer-tools/mortgages/"
+  - label: "HUD — Helping American Homeowners"
+    url: "https://www.hud.gov/helping_american_homeowners"
+  - label: "BLS — Consumer Price Index"
+    url: "https://www.bls.gov/cpi/"
+  - label: "FRED — House Price Index for the United States"
+    url: "https://fred.stlouisfed.org/series/HPINUS"
+relatedTools:
+  - "rent-vs-buy"
+  - "mortgage-payment"
+faq:
+  - q: "Why does the tool not say which option is better?"
+    a: "Because the answer depends on things the arithmetic cannot see: your other savings, your income, how long you plan to stay, and how much uncertainty you can absorb. The comparison produces a crossover month, which is a fact about the numbers, and the judgement stays with you."
+  - q: "What is the net cost of owning?"
+    a: "It is the cash you have paid towards the home, including the down payment and closing costs, minus the equity you have built, which is the current value of the home minus the balance still owed. A negative figure means you have built more equity than you have paid out."
+  - q: "Why is maintenance a percentage of the price?"
+    a: "Repairs do not appear on any statement, but they arrive. Expressing maintenance as a percentage of the purchase price each year keeps it visible next to the other running costs instead of letting it disappear into the comparison."
+  - q: "Does selling cost appear in the monthly figures?"
+    a: "No. Selling costs are paid once, on the day you sell, so they are reported separately at the end of the horizon rather than spread across the months that precede it."
+  - q: "What if the home price falls?"
+    a: "Enter a negative annual change and the value falls every month. Equity shrinks, the crossover month moves further away or disappears entirely, and the net cost of owning rises. The tool handles a falling market without special treatment."
+  - q: "Is a 30-year horizon realistic?"
+    a: "The horizon is an input. A shorter horizon favours renting, because the upfront cost of buying is recovered over more years, and a longer horizon favours owning. The tool lets you set 5, 10, 15 or 30 years so the effect of that choice is visible."
+---
+
+Renting and buying are two different arrangements for the same underlying
+thing: a roof over your head and a place to work. The
+<a href="/tools/rent-vs-buy/">rent versus buy calculator</a> compares them on
+cash and on equity, and stops there.
+
+It does not produce a verdict, and the reason is worth stating before the
+arithmetic. A verdict would depend on facts the page cannot see — what else
+you have saved, how stable your income is, how long you plan to be in the
+place, how much you would mind a bad month. Those inputs change the answer
+without changing any of the arithmetic.
+
+## Two ledgers, one month at a time
+
+The comparison runs two cash-flow ledgers side by side.
+
+The **renting ledger** adds your monthly rent and your renter's insurance.
+That is the whole of it. There is no deposit to recover, no maintenance, no
+transaction cost at the end.
+
+The **owning ledger** adds:
+
+- The mortgage payment, taken from the standard amortization formula
+- Property tax, as a percentage of the purchase price per year
+- Homeowners insurance, as an annual figure divided by twelve
+- Any HOA or condo fee
+- A maintenance allowance, as a percentage of the purchase price per year
+- The down payment and closing costs, on the first month
+
+The maintenance allowance is the one people argue about. Repairs do not
+appear on a closing statement, but they arrive, and they arrive whether or not
+a mortgage is attached. Excluding them flatters owning; treating them as
+enormous flatters it the other way. Expressing them as a percentage of the
+purchase price each year keeps them next to the other running costs, where
+they can be argued about properly.
+
+## Equity is the part that is easy to miss
+
+Running the cash ledgers on their own produces an incomplete picture, because
+owning puts an asset on the balance sheet while renting does not.
+
+So the calculator tracks two more figures each month:
+
+- **Home value**, grown or shrunk monthly at the annual rate you enter
+- **Remaining loan balance**, taken from the amortization schedule
+
+Their difference is your equity:
+
+**equity = home value − remaining loan balance**
+
+The **net cost of owning** is then the cash you have paid, minus that equity:
+
+**net cost = down payment + closing costs + all monthly ownership costs − equity**
+
+This is the number that can be compared with the rent you would have paid
+over the same period. Early on, the net cost of owning is high, because you
+have paid a large upfront sum and built very little equity. As the years pass
+and the balance falls, the net cost drops, and at some point it falls below
+the rent.
+
+## The crossover month
+
+That point is the crossover month, and it is the most useful single number
+the tool produces. It is the first month where:
+
+**net cost of owning < total rent paid over the same months**
+
+Read it carefully. Before the crossover, renting has cost less in cash
+terms. After it, owning has cost less once equity is counted. Neither side of
+that line is a recommendation; it is the point where the two lines on the
+graph cross, and the location of that crossing depends entirely on the
+inputs.
+
+The crossover gets later when the rent is low relative to the purchase
+price, when the rate is high, when the horizon is short, and when the
+appreciation assumption is low or negative. It never arrives at all when
+rent is small relative to the purchase price, which is the arithmetic reason
+a cash purchase in an expensive market can be the more expensive option
+over five years.
+
+## What is deliberately outside
+
+The comparison covers cash and equity. It does not cover:
+
+- **Tax on a sale.** Any gain and the exclusion that may apply to it are
+  outside the scope of the tool.
+- **The mortgage interest deduction.** Whether that is worth anything depends
+  on your marginal rate and your circumstances.
+- **Transaction costs on the purchase.** Closing costs enter as a percentage
+  of the price; the detail of what they cover is in the guide on closing
+  costs.
+- **Different quality of housing.** A rental is not the same building as a
+  purchase in a different neighbourhood, and no formula captures that.
+- **The option to move.** Renting keeps a lease; buying keeps a mortgage. Both
+  have their own costs of exit, and neither appears here.
+
+## A note on the appreciation input
+
+The annual change in value you enter is applied every month for the whole
+horizon, in both directions if the number is negative. No forecast is
+involved, and no historical average is substituted for your input.
+
+That matters, because the assumption is one of the most powerful levers in
+the whole comparison. A home price that rises at 3 percent a year and one that
+rises at 1 percent produce materially different equity figures over a
+five-year horizon, and both are plausible assumptions rather than facts about
+the future.
+
+The Federal Reserve Bank of St. Louis publishes long-run house price series
+that are useful for calibrating the input, and the Bureau of Labor Statistics
+publishes the inflation data behind the real-value adjustments elsewhere on
+this site. Neither is a prediction.

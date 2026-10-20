@@ -1,0 +1,138 @@
+---
+title: "Mortgage Rate and Term Tradeoffs"
+description: "How rate and term move a mortgage payment together, what a shorter term costs in monthly payment and saves in total, and how to read the tradeoff."
+date: 2026-10-12
+lastReviewed: 2026-10-20
+author: "Kostan Proff"
+reviewedBy: "Kostan Proff"
+group: "Home and mortgages"
+readingMinutes: 7
+sources:
+  - label: "Freddie Mac — Primary Mortgage Market Survey"
+    url: "https://www.freddiemac.com/pmms"
+  - label: "CFPB — Mortgage payment calculation"
+    url: "https://www.consumerfinance.gov/ask-cfpb/"
+  - label: "Fannie Mae — Research and insights"
+    url: "https://www.fanniemae.com/research-and-insights"
+relatedTools:
+  - "mortgage-payment"
+faq:
+  - q: "Why does a shorter term cost so much more per month?"
+    a: "Because the balance falls faster, so there is less time for interest to accumulate on it. The payment goes up and the total interest goes down, and the size of the movement depends on the rate."
+  - q: "How much does the term change the total?"
+    a: "A great deal on a 30-year loan. Moving from 30 years to 15 years typically removes around half of the total interest. On a 15-year loan the remaining term is a smaller share of the original balance and the effect is correspondingly smaller."
+  - q: "Does the rate matter more than the term?"
+    a: "On a long loan, a rate change of a percentage point is worth more than a term change of five years. On a short loan the term effect grows and the rate effect shrinks, because there is less time for either to accumulate."
+  - q: "What is a rate buydown?"
+    a: "A temporary reduction in the rate for the first year or two of the loan, with the difference either paid at closing or folded into the rate afterwards. It changes the early payments rather than the shape of the loan."
+  - q: "Should I pay a point to buy down the rate?"
+    a: "That is a break-even calculation. The point has to be repaid by the rate reduction within the period you keep the loan, and the arithmetic is straightforward to run with the payment calculator."
+  - q: "Is an adjustable rate ever worth modelling?"
+    a: "An adjustable rate has a starting rate and a schedule, and the payment moves as the index moves. The calculators on this site model fixed rates, because a fixed-rate projection is a projection and an adjustable-rate projection is a set of scenarios."
+---
+
+A mortgage has two dials that move the payment, and they move in opposite
+directions when it comes to total cost. The rate and the term are worth
+looking at together, because the effect of one depends on where the other is
+set.
+
+The
+<a href="/tools/mortgage-payment/">mortgage payment calculator</a> has both
+inputs for exactly this reason: change one and leave the other alone and the
+result shows you the size of the trade.
+
+## Rate and term move the payment together
+
+**A lower rate lowers the payment.** Directly, and immediately, for every
+payment on the loan.
+
+**A longer term lowers the payment.** Also directly, and for the same
+reason: the balance is paid down more slowly, so less interest is charged
+each year.
+
+Both of those lower the payment, and both of them raise the total cost.
+That is the shape of the trade: the monthly number and the lifetime number
+move in opposite directions.
+
+## The numbers for a typical loan
+
+Take $360,000 at 6.5 percent.
+
+| Term | Monthly P&I | Total interest |
+|---|---|---|
+| 30 years | $1,986 | about $355,000 |
+| 20 years | $2,528 | about $246,000 |
+| 15 years | $3,108 | about $201,000 |
+
+Moving from 30 years to 15 years raises the payment by 56 percent and
+removes about 43 percent of the interest. The asymmetry is the point: a
+shortening of the term costs a lot of monthly payment and saves a moderate
+amount of total interest.
+
+## The effect of the rate is larger on a long loan
+
+Change the rate on the same $360,000 and the effect depends on the term.
+
+Over 30 years, moving from 6.5 percent to 7.5 percent changes the monthly
+payment by about $90 and the total interest by roughly $60,000. Over 15
+years, the same rate change moves the payment by about $110 and the total
+interest by roughly $30,000.
+
+The rate acts on the balance for as long as the balance is outstanding. A
+long loan keeps the balance outstanding for twice as long, so the same rate
+difference has twice as much room to work.
+
+Which means the two dials are not equally powerful at every setting. On a
+thirty-year loan, the rate dominates. On a fifteen-year loan, the term is
+comparatively more important. The rule of thumb — a percentage point of
+rate is worth more than five years of term — holds for the long loans that
+most people take.
+
+## Why the first decade decides the total
+
+A 30-year loan spends its first decade with a balance that barely moves, and
+that decade is where nearly all of the interest is charged. This is why the
+term change above looks so dramatic: shortening the term does not merely
+reduce the rate at which interest is charged, it removes years from the
+front of the loan where the balance is highest.
+
+It is also why extra payments have a similar leverage. Both operate on the
+balance, and both operate most effectively early.
+
+## Points, buydowns and the shape of the early loan
+
+Two common features change the early payments without changing the
+underlying loan.
+
+A **discount point** is one percent of the loan amount paid at closing for a
+lower rate. The trade has a break-even period, and the arithmetic is a
+matter of comparing the fee against the difference in total interest over
+the period the loan is kept.
+
+A **rate buydown** reduces the rate for the first year or two and then
+resets, usually to the index plus a margin. It changes the first payments
+rather than the shape of the loan, and it is worth modelling separately
+rather than as a rate.
+
+## Reading the market context
+
+Freddie Mac's Primary Mortgage Market Survey publishes the rate series most
+often used as a reference point, and Fannie Mae's research pages carry the
+equivalent commentary on the mortgage market. Neither is a quote for a
+specific borrower.
+
+The rates on this site are not connected to any market feed. The number you
+enter is the number used, held constant for the whole term, which is what
+makes the comparison between two rates a clean arithmetic comparison rather
+than a forecast.
+
+## The comparison worth running
+
+Put the two options into the calculator with everything else identical, and
+read four numbers: the monthly payment, the total interest, the total
+housing cost and the payoff date. Then run each one with an extra payment,
+because the term and the rate change how much an extra payment is worth.
+
+That is the whole decision expressed as arithmetic. What it is worth in a
+particular life is a separate question, and one that no calculator can
+answer.

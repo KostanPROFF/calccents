@@ -1,0 +1,143 @@
+---
+title: "Compound Interest Calculator Explained"
+description: "How the compound interest projection is put together, what the effective and real rates mean, and where the arithmetic stops being simple to follow."
+date: 2026-10-01
+lastReviewed: 2026-10-20
+author: "Kostan Proff"
+reviewedBy: "Kostan Proff"
+group: "Investing"
+readingMinutes: 8
+sources:
+  - label: "Investor.gov — Compound interest"
+    url: "https://www.investor.gov/introduction-investing/investing-basics/glossary/compound-interest"
+  - label: "Investor.gov — Fees and expenses"
+    url: "https://www.investor.gov/"
+  - label: "Federal Reserve — H.15 selected interest rates"
+    url: "https://www.federalreserve.gov/releases/h15/"
+  - label: "BLS — Consumer Price Index"
+    url: "https://www.bls.gov/cpi/"
+relatedTools:
+  - "compound-interest"
+faq:
+  - q: "Why does the compounding frequency have to divide twelve?"
+    a: "Because the contributions in this tool are made monthly, and the calculation keeps the compounding period and the contribution period identical. Any frequency that divides twelve keeps that arithmetic exact rather than approximate. The six options cover yearly through every two months."
+  - q: "What is the difference between the nominal and the effective rate?"
+    a: "The nominal rate is the number stated: 7 percent. The effective annual rate is what the balance actually earns once a year of compounding is applied, which for monthly compounding is 7.229 percent. Over long periods the difference is not a rounding detail."
+  - q: "What does the real value figure mean?"
+    a: "It is the final balance expressed in the purchasing power of the starting year. The nominal balance is divided by inflation compounded over the same period, which separates real growth from the same dollars going further."
+  - q: "Does the tool model fees or taxes?"
+    a: "No. A real account's balance will differ by whatever the provider charges, and those charges are often a percentage of the balance, which makes the difference compound as well."
+  - q: "Is a regular contribution required?"
+    a: "No. Setting the monthly contribution to zero gives a plain compound interest projection on the starting balance, which is the right model for a lump sum already invested."
+  - q: "Why does the year-by-year table match the final figure?"
+    a: "Because the projection advances one period at a time rather than jumping to a closed-form result. The final balance is the last row of the table, which is also what makes the table trustworthy."
+---
+
+Compound interest is one of the few ideas in finance that is genuinely
+simple to state and genuinely hard to feel. The
+<a href="/tools/compound-interest/">compound interest calculator</a> on this
+site exists to make the arithmetic visible, because the arithmetic is what
+distinguishes this from a rule of thumb.
+
+The rule of thumb says: interest is interest on the interest. The arithmetic
+says: here is what that does to your balance, month by month, at the rate you
+entered.
+
+## What the tool does
+
+You give it a starting balance, a monthly contribution, an annual rate, a
+number of years, a compounding frequency, and an inflation rate. It advances
+one compounding period at a time.
+
+In each period it adds the interest earned on the current balance, and then
+adds the contribution for that period — at the start of the period or the end
+of it, depending on the setting. It repeats until the horizon is reached.
+
+The order matters. A contribution made at the start of a period earns
+interest for that whole period, so it ends with more than the same
+contribution made at the end. The difference per payment is small. The
+difference over thirty years is not.
+
+## The closed form
+
+The same result can be written as a single expression:
+
+**FV = P(1 + r)ⁿ + PMT · ((1 + r)ⁿ − 1) / r**
+
+Where **P** is the starting balance, **r** is the annual rate divided by the
+number of compounding periods per year, **n** is the number of periods, and
+**PMT** is the contribution made in each period.
+
+When contributions are made at the start of each period, the contribution
+term is multiplied by (1 + r), because those contributions earn an extra
+period of interest.
+
+The calculator runs the periods in sequence rather than evaluating this
+expression once, and the reason is the year-by-year table: to produce a
+table you need each intermediate balance, and the sequence produces them for
+free. The two methods agree to the cent, which is itself a useful check —
+the calculation engine is tested against exactly that agreement.
+
+At a zero rate the formula degenerates, because dividing by r is undefined.
+The calculation handles that case explicitly rather than letting it produce
+a division by zero: with no interest, the balance grows by the deposits
+alone, which is exactly what happens.
+
+## Nominal, effective and real
+
+Three rates appear in the results, and they are easy to confuse.
+
+The **nominal rate** is the number on the account: 7 percent. It is the
+number that gets quoted, and it is what you type in.
+
+The **effective annual rate** is what the balance actually earns over a year
+once compounding is applied: (1 + r) raised to the number of periods per year,
+minus one. For 7 percent compounded monthly that is 7.229 percent. The
+investor's regulator explains the distinction in its glossary, and the
+difference between the two is a compounding effect that is worth money over
+long horizons.
+
+The **real rate** removes inflation from the nominal rate:
+
+**real rate = (1 + nominal) / (1 + inflation) − 1**
+
+This is the rate that describes how much purchasing power the balance holds.
+At 7 percent nominal and 2.5 percent inflation, the real rate is about 4.44
+percent, and the balance in the calculator's real-value column is the
+nominal balance divided by inflation compounded over the same period.
+
+## The frequency question
+
+Compounding more often, at the same nominal rate, produces a larger balance.
+The nominal rate does not change; the effective rate does, and the effective
+rate is what the compounding does.
+
+The tool offers six frequencies, and they are exactly the ones that divide
+twelve. The restriction is not arbitrary: the contributions are monthly, and
+keeping the compounding period and the contribution period identical keeps
+the arithmetic exact. Monthly compounding against monthly deposits is the
+common case, and the others cover accounts that credit quarterly, twice a
+year or annually.
+
+## What this projection leaves out
+
+- **Fees.** An account charge is usually a percentage of the balance, so it
+  compounds too. Investor.gov's pages on fees and expenses explain the
+  structures in detail.
+- **Taxes.** The treatment of a retirement account and of investment gains
+  depends on the account type and on the person. The Internal Revenue
+  Service publishes the rules for the accounts it administers.
+- **Volatility.** A real investment balance falls in years when markets fall.
+  A fixed rate cannot represent that, and the tool does not try.
+- **Contribution changes.** Raising a contribution over time, or stopping
+  part-way, is outside the model. The contribution is constant across the
+  horizon.
+
+## A rule of thumb, checked
+
+The rule of thumb is that money doubles roughly every so many years at a
+given rate. You can check that against the tool. Run 30 years at 7 percent
+with no contributions and compare the result with the starting balance; run
+the same calculation with a contribution and watch the doubling time change.
+The tool exists so that the rule of thumb can be tested rather than
+believed.

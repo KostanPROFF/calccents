@@ -1,0 +1,147 @@
+---
+title: "Mortgage Payment Calculator Explained"
+description: "How the monthly mortgage payment is worked out, what PITI adds to it, and what the amortization schedule shows you about the first years of a loan."
+date: 2026-10-01
+lastReviewed: 2026-10-20
+author: "Kostan Proff"
+reviewedBy: "Kostan Proff"
+group: "Home and mortgages"
+readingMinutes: 9
+sources:
+  - label: "CFPB — How do I calculate my mortgage payment?"
+    url: "https://www.consumerfinance.gov/ask-cfpb/"
+  - label: "Freddie Mac — Primary Mortgage Market Survey"
+    url: "https://www.freddiemac.com/pmms"
+  - label: "HUD — Buying a home"
+    url: "https://www.hud.gov/helping_american_homeowners"
+  - label: "BLS — Consumer Price Index"
+    url: "https://www.bls.gov/cpi/"
+relatedTools:
+  - "mortgage-payment"
+faq:
+  - q: "Why does my payment differ from the lender's?"
+    a: "Lenders quote a payment to the nearest cent and then adjust the final one. Some also include escrow for taxes and insurance, which changes the timing but not the annual amount. The calculator shows the principal and interest figure, then adds tax, insurance and HOA as separate lines so each part is visible."
+  - q: "Does the calculator include mortgage insurance?"
+    a: "No. Private mortgage insurance depends on the loan-to-value ratio and the credit profile behind the loan, and it is cancelled on a schedule that depends on the original loan. It is listed among the things this calculation leaves out."
+  - q: "What is escrow and does it change the total?"
+    a: "Escrow is the account a lender collects taxes and insurance premiums into, usually in monthly instalments. It changes when the money is collected, not how much is collected over a year, so the annual cost is what the calculator reports."
+  - q: "Is the rate on the page live?"
+    a: "No. The rate you enter is the rate used. Nothing on the page is connected to a market feed, and no lender offers appear here."
+  - q: "Why does the last payment differ slightly?"
+    a: "The monthly payment is rounded to the nearest cent, which leaves a small remainder at the end of the term. The final payment is adjusted so the loan closes at exactly zero, the same way a lender adjusts a final payment."
+  - q: "Can I compare two loans with this calculator?"
+    a: "You can run one loan, note the figures, and run the second. The two runs happen separately, so nothing is stored between them and nothing is transmitted to the site."
+---
+
+A mortgage payment is one number with four parts, and the reason two
+people can quote different payments for the same house is usually that they
+are counting different parts.
+
+The <a href="/tools/mortgage-payment/">mortgage payment calculator</a> on this
+site splits those parts apart. The principal and interest figure comes from
+arithmetic. Property tax, insurance and any HOA fee come from you, because the
+calculator has no way of knowing what your assessor or your insurer charges.
+Showing them separately is more useful than showing a single total, because the
+total is only as good as its least visible component.
+
+## The payment formula
+
+The scheduled monthly payment is the standard amortization formula:
+
+**M = P · r(1 + r)ⁿ / ((1 + r)ⁿ − 1)**
+
+Where:
+
+- **P** is the amount borrowed, not the price of the house. With a $450,000
+  house and 20 percent down, P is $360,000.
+- **r** is the annual interest rate divided by twelve. A rate of 6.5 percent
+  becomes 0.0054166… per month.
+- **n** is the number of monthly payments. A 30-year term is 360 payments.
+
+The formula is worth reading once, because it explains something that
+otherwise looks arbitrary: the payment does not depend on how much you
+borrow, in proportion to how much you borrow. Borrow twice as much and you
+pay roughly twice as much, not four times as much. What changes with the size
+of the loan is the interest total, which grows faster than the payment does.
+
+The Consumer Financial Protection Bureau sets out the same formula in its
+mortgage guidance, and the widely used amortization tables in the industry
+are built from it.
+
+## Why the payment stays level while the split changes
+
+The formula produces a level payment. What is not level is what the payment
+is made of. In month one, almost all of it is interest, because the balance
+is still the full amount borrowed. In the last month, almost all of it is
+principal, because the balance has been ground down to almost nothing.
+
+The mechanics are simple. Each month:
+
+1. Interest is charged on the balance outstanding at the start of the month.
+2. The payment covers that interest first.
+3. Whatever is left over reduces the balance.
+4. Next month's interest is charged on the smaller balance.
+
+The consequence is that a 30-year loan is repaid much faster than it feels.
+A large share of the balance is still outstanding at the five-year mark, and
+a meaningful share of the total interest has already been paid by then. This
+is the single most counter-intuitive fact about mortgages, and it is the
+reason the year-by-year amortization table is worth reading once.
+
+## What PITI adds
+
+The payment lenders collect is usually PITI:
+
+- **Principal** — the part that repays the loan.
+- **Interest** — the cost of borrowing it.
+- **Taxes** — property tax, usually collected monthly into escrow.
+- **Insurance** — homeowners insurance, also usually collected into escrow.
+
+Tax and insurance are annual amounts divided by twelve for display. The
+division is a timing convenience, not a discount: over a year you pay the
+same total either way. What changes month to month is which month a tax bill
+lands in, and escrow is designed to smooth that out.
+
+HOA fees sit outside PITI but inside the monthly outflow for a condo or a
+house in a planned development. They are entered separately for the same
+reason: the number depends entirely on the property.
+
+## Extra payments
+
+An extra payment applied to principal lowers the balance that the next
+month's interest is charged on. The scheduled payment does not change; the
+loan simply finishes sooner, and less interest is paid in total.
+
+This is worth understanding mechanically rather than in the abstract. A
+$200 extra payment on a $360,000 loan at 6.5 percent is not $200 of
+interest saved — it is $200 of principal removed, and then every subsequent
+month's interest is charged on a balance that is $200 lower, and then
+$200 lower again. The saving compounds in the same way the loan does.
+
+## What the calculation leaves out
+
+A payment is one part of the cost of a home. The calculator deliberately
+excludes:
+
+- **Mortgage insurance**, which depends on the loan-to-value ratio and the
+  credit behind the loan, and is cancelled on its own schedule.
+- **Points and origination fees**, which are paid at closing and can be
+  folded into the rate for comparison, but are not part of the payment.
+- **Closing costs**, which are the subject of a separate guide.
+- **Escrow timing**, which decides which month bears a larger instalment.
+- **Inflation**, which changes what the payment means relative to your
+  income, but not what it is.
+
+Each of those is a real number. Keeping them out of the payment figure is
+what lets the payment figure be checked against a published table.
+
+## Checking the result
+
+If you want to confirm a figure independently, take the amount borrowed, the
+rate and the number of payments, and work the formula out on paper or with a
+spreadsheet. If the calculator's answer and yours agree, both are probably
+right. If they disagree, the most likely causes are a different definition of
+the loan amount, a rate entered as a decimal rather than a percentage, or a
+term in years where the formula wants months.
+
+That check is the whole point of showing the working.

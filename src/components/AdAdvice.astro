@@ -1,0 +1,22 @@
+---
+/**
+ * The block that says what a tool does not do.
+ *
+ * It is the structural guardrail against the site drifting into giving
+ * advice: every tool states its limits in the same place, in the same
+ * words, right under the result.
+ */
+interface Props {
+  items: string[];
+  title?: string;
+}
+
+const { items, title = 'What this calculator does not do' } = Astro.props;
+---
+
+<div class="note note--warning">
+  <p class="note__title">{title}</p>
+  <ul>
+    {items.map((item) => <li>{item}</li>)}
+  </ul>
+</div>

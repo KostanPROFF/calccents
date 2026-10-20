@@ -1,0 +1,138 @@
+---
+/**
+ * The frame every calculator page shares: breadcrumb, heading, the two
+ * column calculator area, the method, the limits, the sources and the FAQ.
+ * A tool that does not use this shell does not match the site's structure.
+ */
+import Base from '../layouts/Base.astro';
+import AdSlot from './AdSlot.astro';
+import AdAdvice from './AdAdvice.astro';
+import SourceList from './SourceList.astro';
+import Faq from './Faq.astro';
+import { SITE } from '../config/site.ts';
+import type { ToolDefinition } from '../config/tools.ts';
+
+interface Props {
+  tool: ToolDefinition;
+  faq: { q: string; a: string }[];
+  sources: { label: string; url: string }[];
+  limits: string[];
+  reviewedOn: string;
+  relatedGuides?: { slug: string; title: string }[];
+  methodNote?: string;
+}
+
+const {
+  tool,
+  faq,
+  sources,
+  limits,
+  reviewedOn,
+  relatedGuides = [],
+  methodNote,
+} = Astro.props;
+
+const path = `/tools/${tool.slug}/`;
+
+const softwareApplication = {
+  '@context': 'https://schema.org',
+  '@type': 'SoftwareApplication',
+  name: tool.name,
+  description: tool.description,
+  applicationCategory: 'FinanceApplication',
+  operatingSystem: 'Any',
+  url: new URL(path, SITE.origin).toString(),
+  isAccessibleForFree: true,
+  publisher: {
+    '@type': 'Organization',
+    name: SITE.name,
+    url: SITE.origin,
+  },
+};
+
+const faqPage = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: faq.map((item) => ({
+    '@type': 'Question',
+    name: item.q,
+    acceptedAnswer: { '@type': 'Answer', text: item.a },
+  })),
+};
+---
+
+<Base
+  title={tool.title}
+  description={tool.description}
+  path={path}
+  jsonLd={[softwareApplication, faqPage]}
+>
+  <div class="container">
+    <div class="page-head">
+      <nav class="breadcrumb" aria-label="Breadcrumb">
+        <a href="/">Home</a>
+        <span aria-hidden="true">/</span>
+        <a href="/tools/">Tools</a>
+        <span aria-hidden="true">/</span>
+        <span>{tool.name}</span>
+      </nav>
+      <h1>{tool.title}</h1>
+      <p class="page-head__lede">{tool.description}</p>
+      <div class="reviewed-line" style="margin-top: var(--space-5);">
+        <span>Last reviewed: {reviewedOn}</span>
+        <span aria-hidden="true">·</span>
+        <span>Reviewed by <a href="/editorial-team/">{SITE.reviewer.name}</a></span>
+        <span aria-hidden="true">·</span>
+        <a href="/sources/">Where the numbers come from</a>
+      </div>
+    </div>
+
+    <div class="tool-layout">
+      <div>
+        <slot name="calculator" />
+      </div>
+      <div class="tool-panel">
+        <slot name="result" />
+      </div>
+    </div>
+
+    <section class="section-sm">
+      <h2>How this is calculated</h2>
+      {methodNote && <p class="text-muted">{methodNote}</p>}
+      <div class="prose" style="margin-top: var(--space-4);">
+        <slot name="method" />
+      </div>
+    </section>
+
+    <AdAdvice items={limits} />
+
+    <AdSlot placement="in-article" />
+
+    <SourceList sources={sources} />
+
+    {
+      relatedGuides.length > 0 && (
+        <section class="section-sm">
+          <h2>Guides that go deeper</h2>
+          <div class="grid grid--2" style="margin-top: var(--space-5);">
+            {relatedGuides.map((guide) => (
+              <a class="tile" href={`/guides/${guide.slug}/`}>
+                <span class="tile__title">{guide.title}</span>
+                <span class="tile__text text-muted">Read the guide</span>
+              </a>
+            ))}
+          </div>
+        </section>
+      )
+    }
+
+    <section class="section-sm">
+      <h2>Common questions</h2>
+      <div style="margin-top: var(--space-5);">
+        <Faq items={faq} />
+      </div>
+    </section>
+
+    <AdSlot placement="footer" />
+  </div>
+</Base>

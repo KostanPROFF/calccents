@@ -1,0 +1,199 @@
+---
+import Base from '../layouts/Base.astro';
+import AdSlot from '../components/AdSlot.astro';
+import Newsletter from '../components/Newsletter.astro';
+import { SITE } from '../config/site.ts';
+import { TOOLS } from '../config/tools.ts';
+import { getCollection } from 'astro:content';
+
+const guides = (await getCollection('guides')).sort(
+  (a, b) => b.data.date.getTime() - a.data.date.getTime(),
+);
+const featured = guides.slice(0, 5);
+
+const webSite = {
+  '@context': 'https://schema.org',
+  '@type': 'WebSite',
+  name: SITE.name,
+  url: SITE.origin,
+  description: SITE.description,
+};
+
+const organization = {
+  '@context': 'https://schema.org',
+  '@type': 'Organization',
+  name: SITE.name,
+  url: SITE.origin,
+  logo: new URL('/favicon.svg', SITE.origin).toString(),
+};
+---
+
+<Base
+  title={`${SITE.name} — ${SITE.tagline}`}
+  description={SITE.description}
+  path="/"
+  jsonLd={[webSite, organization]}
+>
+  <section class="section-sm">
+    <div class="container" style="max-width: 720px; text-align: center;">
+      <p class="eyebrow">Financial calculators</p>
+      <h1 style="margin-top: var(--space-4); font-size: var(--text-4xl);">
+        Know the number before you decide
+      </h1>
+      <p class="page-head__lede" style="margin-inline: auto;">
+        Free tools for the arithmetic behind a mortgage, a lease and a pile of
+        savings. Every formula is written out, every assumption belongs to you,
+        and no page tells you what to do with the result.
+      </p>
+      <div style="margin-top: var(--space-8);">
+        <a class="btn btn--primary" href="/tools/">Browse the calculators</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="section-sm">
+    <div class="container">
+      <p class="eyebrow" style="color: var(--text-muted);">The calculators</p>
+      <h2 style="margin-top: var(--space-3); font-size: var(--text-2xl);">
+        Three questions, three sets of numbers
+      </h2>
+      <div class="grid grid--3" style="margin-top: var(--space-8);">
+        {
+          TOOLS.map((tool) => (
+            <a class="tile" href={`/tools/${tool.slug}/`}>
+              <span
+                class="brand__mark"
+                aria-hidden="true"
+                style="width: 2.25rem; height: 2.25rem; font-size: var(--text-base);"
+              >
+                {tool.category === 'Home' ? '%' : '∑'}
+              </span>
+              <span class="tile__title">{tool.name}</span>
+              <span class="tile__text">{tool.short}</span>
+              <span class="tile__meta">Calculate →</span>
+            </a>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  <section class="section-sm">
+    <div class="container">
+      <div
+        class="card card--raised"
+        style="display: grid; grid-template-columns: 1.1fr 0.9fr; gap: var(--space-10); align-items: center;"
+      >
+        <div>
+          <h2 style="font-size: var(--text-2xl);">Every figure shows its work</h2>
+          <ul
+            style="margin-top: var(--space-5); padding-left: var(--space-6); display: grid; gap: var(--space-3); color: var(--text-secondary);"
+          >
+            <li>
+              The formula sits next to the answer, in plain language and in
+              symbols.
+            </li>
+            <li>
+              Every number that comes from somewhere carries its source and its
+              date.
+            </li>
+            <li>
+              Every tool states what it does not do, in the same words, right
+              under the result.
+            </li>
+          </ul>
+          <p style="margin-top: var(--space-6);">
+            <a href="/about/">How the site is built →</a>
+          </p>
+        </div>
+        <div class="card">
+          <p class="result__label">Monthly payment</p>
+          <p class="result__headline" style="font-size: var(--text-3xl);">$2,358.42</p>
+          <div class="stat-grid">
+            <div class="stat">
+              <p class="stat__label">Principal &amp; interest</p>
+              <p class="stat__value">$1,984.12</p>
+            </div>
+            <div class="stat">
+              <p class="stat__label">Property tax</p>
+              <p class="stat__value">$280.00</p>
+            </div>
+            <div class="stat">
+              <p class="stat__label">Total interest</p>
+              <p class="stat__value">$446,031</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section-sm">
+    <div class="container">
+      <p class="eyebrow" style="color: var(--text-muted);">Guides</p>
+      <h2 style="margin-top: var(--space-3); font-size: var(--text-2xl);">
+        Deep dives into the arithmetic
+      </h2>
+      <div style="margin-top: var(--space-6);">
+        {
+          featured.map((guide) => (
+            <a
+              class="guide-row"
+              href={`/guides/${guide.id}/`}
+            >
+              <span class="guide-row__title">{guide.data.title}</span>
+              <span class="guide-row__meta">{guide.data.readingMinutes} min read</span>
+            </a>
+          ))
+        }
+      </div>
+      <p style="margin-top: var(--space-6);">
+        <a href="/guides/">All guides →</a>
+      </p>
+    </div>
+  </section>
+
+  <AdSlot placement="in-article" />
+
+  <section class="section-sm">
+    <div class="container" style="max-width: 720px;">
+      <h2 style="font-size: var(--text-xl);">Get the math in your inbox</h2>
+      <p class="text-secondary" style="margin-top: var(--space-3);">
+        One short letter when a new calculator goes live or an existing one is
+        re-reviewed. No offers, no sponsored placements.
+      </p>
+      <div style="margin-top: var(--space-5);">
+        <Newsletter />
+      </div>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .guide-row {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: var(--space-6);
+    padding: var(--space-4) 0;
+    border-bottom: 1px solid var(--border-subtle);
+    text-decoration: none;
+    color: inherit;
+    transition: color var(--transition);
+  }
+
+  .guide-row:hover .guide-row__title {
+    color: var(--accent);
+  }
+
+  .guide-row__title {
+    color: var(--text);
+    font-weight: 500;
+  }
+
+  .guide-row__meta {
+    color: var(--text-muted);
+    font-size: var(--text-sm);
+    white-space: nowrap;
+  }
+</style>

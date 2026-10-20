@@ -1,0 +1,109 @@
+---
+import Base from '../layouts/Base.astro';
+import AdSlot from '../components/AdSlot.astro';
+import { SITE } from '../config/site.ts';
+---
+
+<Base
+  title="Editorial team"
+  description="Who writes the guides, who reviews them, and what the review actually checks before a page is published."
+  path="/editorial-team/"
+>
+  <div class="container">
+    <div class="page-head">
+      <nav class="breadcrumb" aria-label="Breadcrumb">
+        <a href="/">Home</a>
+        <span aria-hidden="true">/</span>
+        <span>Editorial team</span>
+      </nav>
+      <h1>Editorial team</h1>
+      <p class="page-head__lede">
+        A small site publishes a small number of pages, and every one of them
+        carries a name against it. This page says who does what and what the
+        review checks.
+      </p>
+    </div>
+
+    <div class="grid grid--2" style="margin-bottom: var(--space-12);">
+      <div class="card">
+        <p class="eyebrow" style="color: var(--text-muted);">Author</p>
+        <h2 class="card__title" style="margin-top: var(--space-2);">
+          {SITE.author.name}
+        </h2>
+        <p class="card__body">{SITE.author.bio}</p>
+      </div>
+      <div class="card">
+        <p class="eyebrow" style="color: var(--text-muted);">Reviewer</p>
+        <h2 class="card__title" style="margin-top: var(--space-2);">
+          {SITE.reviewer.name}
+        </h2>
+        <p class="card__body">{SITE.reviewer.bio}</p>
+      </div>
+    </div>
+
+    <div class="prose">
+      <h2>What the review checks</h2>
+      <p>
+        Before a guide is published, the reviewer works through the same list
+        every time:
+      </p>
+      <ul>
+        <li>
+          <strong>The arithmetic.</strong> Every formula is checked against
+          the source it comes from, and the worked example in the text is
+          recalculated from scratch. Where a figure appears in the code, the
+          two are compared.
+        </li>
+        <li>
+          <strong>The units.</strong> Percentages against decimals, months
+          against years, dollars against thousands. Most mistakes in a
+          financial document are a unit error.
+        </li>
+        <li>
+          <strong>The edge cases.</strong> A zero rate, a zero term, a negative
+          value. Each is checked to produce a sensible answer rather than an
+          error message.
+        </li>
+        <li>
+          <strong>The wording.</strong> The page must not tell the reader what
+          to do. It explains what a number means and what it depends on, and
+          stops there. A guide that recommends an action gets rewritten.
+        </li>
+        <li>
+          <strong>The sources.</strong> Each link is opened, checked for the
+          claim it is attached to, and dated.
+        </li>
+      </ul>
+
+      <h2>How drafting tools are used</h2>
+      <p>
+        Drafting tools help with the prose. They do not decide what a page
+        says. Every figure, every formula and every claim is written or
+        checked by a person, and no page goes live without the review above.
+        A tool that produced a plausible number is exactly the kind of thing
+        this process exists to catch.
+      </p>
+
+      <h2>Review dates</h2>
+      <p>
+        Every guide carries the date it was last reviewed. A guide whose
+        content depends on outside data is reviewed at least twice a year; a
+        guide that explains arithmetic is reviewed when the formula behind it
+        changes, and in any case once a year. When a page is reviewed the
+        date moves, whether or not the text changed, so the date tells you
+        when a person last read the page.
+      </p>
+
+      <h2>Corrections</h2>
+      <p>
+        Corrections are made in the open. A page that has been corrected keeps
+        its review date updated and the correction is described in the
+        <a href="/contact/">contact</a> thread it came from. A guide with a
+        wrong figure is a defect in the review, not in the writing, and the
+        review process is what changes.
+      </p>
+    </div>
+
+    <AdSlot placement="footer" />
+  </div>
+</Base>

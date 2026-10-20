@@ -1,0 +1,131 @@
+---
+title: "How to Read an Amortization Schedule"
+description: "Each column of a mortgage amortization schedule explained, from the payment split through to the final adjusted payment that closes the loan."
+date: 2026-10-13
+lastReviewed: 2026-10-20
+author: "Kostan Proff"
+reviewedBy: "Kostan Proff"
+group: "Home and mortgages"
+readingMinutes: 6
+sources:
+  - label: "CFPB — Mortgage payment calculation"
+    url: "https://www.consumerfinance.gov/ask-cfpb/"
+  - label: "HUD — Helping American Homeowners"
+    url: "https://www.hud.gov/helping_american_homeowners"
+relatedTools:
+  - "mortgage-payment"
+faq:
+  - q: "What are the columns in an amortization schedule?"
+    a: "Usually: the payment number, the payment amount, the interest portion, the principal portion, and the remaining balance. A schedule with an extra principal column shows the additional amount applied beyond the scheduled payment."
+  - q: "Why is the first payment almost all interest?"
+    a: "Because interest is charged on the balance outstanding at the start of the month, and in month one that balance is the full amount borrowed. The principal portion is whatever is left of the payment after that interest."
+  - q: "Why does the last payment differ?"
+    a: "The monthly payment is a fixed number of cents, and the arithmetic leaves a small remainder at the end of the term. The final payment is adjusted to clear it, which is standard practice."
+  - q: "Does a schedule include taxes and insurance?"
+    a: "Usually not. A pure amortization schedule covers the loan. Escrow amounts appear on the payment statement, and property tax and insurance are annual costs divided into monthly instalments rather than amortized."
+  - q: "What does the cumulative interest column show?"
+    a: "The total interest charged up to that point in the loan. It is the figure that makes the early years visible: a large share of the total interest is charged long before the balance is small."
+  - q: "Can I use a schedule to see the effect of an extra payment?"
+    a: "Yes. The schedule recalculates month by month, so an extra payment shortens the whole schedule and the final row moves closer. That is the clearest way to see the effect of a change."
+---
+
+An amortization schedule is the loan written out month by month. It looks
+like a wall of numbers, and it is the most direct answer to the question
+"what is this loan actually costing me" that exists — because it shows
+every dollar, in order, with the balance after each payment.
+
+Here is how to read one.
+
+## The columns
+
+A typical schedule has five or six columns.
+
+**Payment number.** The month, counting from the first payment.
+
+**Payment amount.** The total paid that month. It is the same figure for
+almost every month, which is the point of amortization: the payment is
+level, and only its composition changes.
+
+**Interest.** The interest charged that month. It equals the balance at the
+start of the month multiplied by the monthly rate. The column starts high
+and declines.
+
+**Principal.** The part of the payment that reduces the balance. It is the
+payment minus the interest, and it starts small and grows. Interest plus
+principal equals the payment, and it is worth checking that on any schedule
+you are handed.
+
+**Extra.** Any amount paid above the scheduled payment, applied to
+principal. It is zero on most schedules and appears on the one you build in
+the calculator when you use the extra payment field.
+
+**Balance.** What is still owed after that payment. This is the column that
+tells the story.
+
+## The three shapes to look for
+
+**The interest column falls.** Not because the rate changes, but because
+the balance it is charged on shrinks.
+
+**The principal column rises.** Not because more of the payment is
+allocated to it by any decision, but because less of the payment is eaten by
+interest.
+
+**The balance column is the interesting one.** It falls slowly at first,
+then more quickly, then flattens as it approaches zero. The steep part is
+near the end, which is the opposite of what most people expect, and it is
+the reason a thirty-year loan is repaid much faster than it feels.
+
+## The cumulative interest column
+
+If a schedule has a column that accumulates interest rather than showing it
+per month, it is worth finding. That column answers the question the monthly
+one cannot: how much of the cost have I already paid?
+
+On a typical thirty-year loan, roughly a quarter of the total interest is
+charged in the first five years, and the majority of it is charged in the
+first decade. Seeing that in a single column is a different experience from
+adding up monthly interest figures by hand.
+
+## Why the last row is different
+
+The payment is a fixed number of cents, and a loan does not divide evenly
+into whole cents over a fixed number of months. A small balance is left
+outstanding at the end.
+
+The final payment is adjusted to clear it. This is not an anomaly and it is
+not an error; it is what happens whenever a payment is rounded. The
+calculator on this site adjusts the final payment for the same reason, and
+the last row of its schedule is the one to look at if you want to confirm
+that the loan closes at exactly zero.
+
+## What is not in a schedule
+
+A pure amortization schedule covers the loan and nothing else.
+
+**Property tax and insurance** are not amortized. They are annual costs
+divided into monthly instalments, and they appear on the payment statement
+rather than on the schedule. A schedule that includes them is showing escrow,
+not amortization.
+
+**Fees** are not in it. Closing costs, points and mortgage insurance are
+separate from the loan's arithmetic.
+
+**Inflation** is not in it. A schedule is a set of nominal figures, which is
+correct for a fixed-rate loan and does not describe what those figures buy.
+
+## Using a schedule to test a change
+
+The most practical use of a schedule is comparison. Change one input and
+read what happens:
+
+- Add $200 a month of extra principal and watch the number of rows fall.
+- Change the term from 30 years to 15 and watch the interest column start
+  much lower.
+- Change the rate and watch the interest column start much higher and the
+  whole schedule stretch.
+
+The
+<a href="/tools/mortgage-payment/">mortgage payment calculator</a> produces
+the year-by-year version of this table, and the amortization guide explains
+the mechanism behind each column.

@@ -1,0 +1,130 @@
+---
+title: "How Compounding Frequency Changes Results"
+description: "What happens to a balance when interest is credited daily, monthly, quarterly or yearly, and how to read the effective annual rate it produces."
+date: 2026-10-09
+lastReviewed: 2026-10-20
+author: "Kostan Proff"
+reviewedBy: "Kostan Proff"
+group: "Investing"
+readingMinutes: 6
+sources:
+  - label: "Investor.gov — Compound interest"
+    url: "https://www.investor.gov/introduction-investing/investing-basics/glossary/compound-interest"
+  - label: "Federal Reserve — H.15 selected interest rates"
+    url: "https://www.federalreserve.gov/releases/h15/"
+  - label: "IRS — Traditional IRAs"
+    url: "https://www.irs.gov/retirement-plans/traditional-iras"
+relatedTools:
+  - "compound-interest"
+faq:
+  - q: "Why does more frequent compounding produce more money?"
+    a: "Because the same nominal rate is applied more often to a balance that has had less time to grow. More frequent compounding means the interest is credited sooner, and the sooner it is credited the sooner it starts earning interest itself."
+  - q: "What is the effective annual rate?"
+    a: "The rate that produces the same result over a year as the nominal rate compounded at the stated frequency. It is (1 + r) raised to the number of periods per year, minus one. For 7 percent compounded monthly it is 7.229 percent."
+  - q: "How much difference does it make?"
+    a: "Over one year, almost none: 7 percent compounded monthly is 7.229 percent against 7 percent compounded annually, a difference of about $22 on a $10,000 balance. Over thirty years the difference is in the thousands."
+  - q: "Can I compound daily?"
+    a: "Not in this tool. The contributions here are monthly, and the calculation keeps the compounding period and the contribution period identical, so the frequency has to divide twelve."
+  - q: "Does the account's frequency depend on the provider?"
+    a: "Often, yes, and it is usually stated in the account terms. A savings account that credits interest monthly and one that credits daily are different products with the same headline rate."
+  - q: "Is a higher frequency the same as a higher rate?"
+    a: "No. The nominal rate is the stated number and the frequency changes what it turns into. Two accounts with the same nominal rate and different frequencies are not the same product, and the effective annual rate is how you compare them."
+---
+
+Two accounts that both advertise "7 percent" are not necessarily the same
+account. The nominal rate is the number, and the compounding frequency
+decides what the number turns into.
+
+The difference over a year is small. The difference over thirty years is not,
+and the arithmetic behind it is worth understanding rather than estimating.
+
+## Why the frequency matters
+
+The mechanism is a timing effect. Interest credited monthly is credited
+earlier than interest credited annually, and interest that has been credited
+earlier has had longer to earn interest itself.
+
+Concretely: with annual compounding, interest for the whole year lands on
+one date at the end. With monthly compounding, a twelfth of the annual
+interest lands at the end of every month and starts earning interest
+immediately. The extra interest is small, but it is earned for a long time.
+
+## The effective annual rate
+
+The way to compare two frequencies is the effective annual rate: the rate
+that produces the same result over a year as the stated rate compounded at
+the stated frequency.
+
+**EAR = (1 + r)ⁿ − 1**
+
+Where **r** is the nominal annual rate divided by the number of periods per
+year, and **n** is the number of periods per year.
+
+At 7 percent:
+
+| Frequency | Effective annual rate |
+|---|---|
+| Annually | 7.000% |
+| Twice a year | 7.122% |
+| Every four months | 7.165% |
+| Quarterly | 7.186% |
+| Every two months | 7.207% |
+| Monthly | 7.229% |
+
+The sequence is monotonic, and the steps get smaller as the frequency
+increases, which is the practical point: the first doubling of the
+frequency is worth more than the last.
+
+The
+<a href="/tools/compound-interest/">compound interest calculator</a>
+computes the effective rate directly, and it is shown in the results next to
+the nominal rate so the two can be compared.
+
+## How much difference does it make
+
+The useful way to look at this is to compare the total, not the rate.
+
+On $10,000 at 7 percent over one year, monthly compounding produces $10,722.90
+against $10,700.00 compounded annually. The difference is $22.90, which is
+not worth a decision on its own.
+
+Over thirty years with no further contributions, the same $10,000 becomes
+$76,123 compounded monthly and $75,624 compounded annually — a difference of
+$499. With a monthly contribution of $500 over the same period, both the
+balances and the difference grow much larger, because the contributions are
+earning interest at the higher effective rate as well.
+
+The pattern is consistent: the gap between two frequencies is small in the
+early years and widens steadily, because it is itself being compounded.
+
+## Why this tool offers six frequencies
+
+The tool offers annually, twice a year, every four months, quarterly, every
+two months and monthly. The reason is that the contributions here are made
+monthly, and the calculation keeps the compounding period and the
+contribution period identical.
+
+Any frequency that divides twelve keeps that arithmetic exact rather than
+approximate. Frequencies that do not divide twelve would require splitting
+a contribution across two compounding periods, which introduces a rounding
+convention that is an artefact of the model rather than a feature of the
+product.
+
+## What this is not
+
+This is a comparison of two credit terms, not a comparison of two products.
+Two accounts with the same nominal rate and the same frequency can still be
+very different, because of fees, minimum balances, limits on withdrawals,
+and how the account is treated for tax.
+
+The Investor.gov pages on fees and expenses and on account types describe
+those differences. The Federal Reserve's H.15 series records what rates
+savings products have actually paid, which is useful for checking whether a
+quoted rate is in a plausible range.
+
+## A practical test
+
+Take a rate from the H.15 series, put it into the calculator at annual
+compounding and then at monthly compounding, and read the difference in the
+final balance. That difference is the value of the more frequent credit, and
+it is a number rather than a rule of thumb.

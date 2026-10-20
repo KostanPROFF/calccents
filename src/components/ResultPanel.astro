@@ -1,0 +1,46 @@
+---
+/**
+ * The result block on a calculator page.
+ *
+ * Every value ships with a placeholder and an id, so the page script can
+ * fill it in without touching the markup. The ids are the contract between
+ * the calculation engine and the DOM.
+ */
+interface Stat {
+  id: string;
+  label: string;
+  value: string;
+  tone?: 'positive' | 'negative';
+}
+
+interface Props {
+  headlineId: string;
+  headlineLabel: string;
+  headline: string;
+  stats: Stat[];
+  note?: string;
+}
+
+const { headlineId, headlineLabel, headline, stats, note } = Astro.props;
+---
+
+<div class="result" aria-live="polite">
+  <p class="result__label">{headlineLabel}</p>
+  <p class="result__headline" id={headlineId}>{headline}</p>
+  <div class="stat-grid">
+    {
+      stats.map((stat) => (
+        <div class="stat">
+          <p class="stat__label">{stat.label}</p>
+          <p
+            class={`stat__value${stat.tone ? ` stat__value--${stat.tone}` : ''}`}
+            id={stat.id}
+          >
+            {stat.value}
+          </p>
+        </div>
+      ))
+    }
+  </div>
+  {note && <p class="muted-block" style="margin-top: var(--space-4);">{note}</p>}
+</div>

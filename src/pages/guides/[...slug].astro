@@ -1,0 +1,129 @@
+---
+import { getCollection, render } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+import AdSlot from '../../components/AdSlot.astro';
+import Faq from '../../components/Faq.astro';
+import SourceList from '../../components/SourceList.astro';
+import { SITE } from '../../config/site.ts';
+import { getTool } from '../../config/tools.ts';
+
+export async function getStaticPaths() {
+  const guides = await getCollection('guides');
+  return guides.map((guide) => ({
+    params: { slug: guide.id },
+    props: { guide },
+  }));
+}
+
+const { guide } = Astro.props;
+const { Content } = await render(guide);
+const data = guide.data;
+
+const relatedTools = data.relatedTools
+  .map((slug) => {
+    try {
+      return getTool(slug);
+    } catch {
+      return null;
+    }
+  })
+  .filter((tool): tool is NonNullable<typeof tool> => tool !== null);
+
+const article = {
+  '@context': 'https://schema.org',
+  '@type': 'Article',
+  headline: data.title,
+  description: data.description,
+  datePublished: data.date.toISOString(),
+  dateModified: data.lastReviewed.toISOString(),
+  author: { '@type': 'Person', name: data.author },
+  publisher: {
+    '@type': 'Organization',
+    name: SITE.name,
+    url: SITE.origin,
+  },
+  mainEntityOfPage: {
+    '@type': 'WebPage',
+    '@id': new URL(`/guides/${guide.id}/`, SITE.origin).toString(),
+  },
+};
+
+const faqPage = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: data.faq.map((item) => ({
+    '@type': 'Question',
+    name: item.q,
+    acceptedAnswer: { '@type': 'Answer', text: item.a },
+  })),
+};
+---
+
+<Base
+  title={data.title}
+  description={data.description}
+  path={`/guides/${guide.id}/`}
+  ogType="article"
+  jsonLd={[article, faqPage]}
+>
+  <div class="container">
+    <div class="page-head">
+      <nav class="breadcrumb" aria-label="Breadcrumb">
+        <a href="/">Home</a>
+        <span aria-hidden="true">/</span>
+        <a href="/guides/">Guides</a>
+        <span aria-hidden="true">/</span>
+        <span>{data.group}</span>
+      </nav>
+      <h1>{data.title}</h1>
+      <p class="page-head__lede">{data.description}</p>
+      <div class="reviewed-line" style="margin-top: var(--space-5);">
+        <span>Published {data.date.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}</span>
+        <span aria-hidden="true">·</span>
+        <span>Last reviewed {data.lastReviewed.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}</span>
+        <span aria-hidden="true">·</span>
+        <span>{data.readingMinutes} min read</span>
+        <span aria-hidden="true">·</span>
+        <span>By <a href="/editorial-team/">{data.author}</a></span>
+      </div>
+    </div>
+
+    <div class="prose">
+      <Content />
+    </div>
+
+    <AdSlot placement="in-article" />
+
+    <SourceList
+      sources={data.sources}
+      title="Sources"
+      note="These are the primary sources behind the figures and the method in this guide."
+    />
+
+    {
+      relatedTools.length > 0 && (
+        <section class="section-sm">
+          <h2>Calculators behind this guide</h2>
+          <div class="grid grid--2" style="margin-top: var(--space-5);">
+            {relatedTools.map((tool) => (
+              <a class="tile" href={`/tools/${tool.slug}/`}>
+                <span class="tile__title">{tool.name}</span>
+                <span class="tile__text">{tool.short}</span>
+                <span class="tile__meta">Calculate →</span>
+              </a>
+            ))}
+          </div>
+        </section>
+      )
+    }
+
+    <section class="section-sm">
+      <h2>Common questions</h2>
+      <div style="margin-top: var(--space-5);">
+        <Faq items={data.faq} />
+      </div>
+    </section>
+
+    <AdSlot placement="footer" />
+  </div>
+</Base>

@@ -1,0 +1,32 @@
+# dependencies
+node_modules/
+.pnpm-store/
+
+# build output
+dist/
+.astro/
+.output/
+
+# environment — real values never enter the repo
+.env
+.env.*
+!.env.example
+
+# logs
+*.log
+npm-debug.log*
+pnpm-debug.log*
+
+# OS / editor
+.DS_Store
+.idea/
+.vscode/*
+!.vscode/extensions.json
+
+# coverage artifacts
+coverage/
+*.lcov
+
+# Superdesign scratch output (design-system.md and init/ are kept on purpose)
+.superdesign/tmp/
+.superdesign/*.json

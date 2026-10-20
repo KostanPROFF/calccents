@@ -1,0 +1,92 @@
+---
+import Base from '../layouts/Base.astro';
+import { SITE } from '../config/site.ts';
+---
+
+<Base
+  title="Terms"
+  description="The terms under which this site is published, what its calculators do and do not cover, and the limits of what it can promise."
+  path="/terms/"
+>
+  <div class="container">
+    <div class="page-head">
+      <nav class="breadcrumb" aria-label="Breadcrumb">
+        <a href="/">Home</a>
+        <span aria-hidden="true">/</span>
+        <span>Terms</span>
+      </nav>
+      <h1>Terms of use</h1>
+      <p class="page-head__lede">
+        Plain terms for a site that publishes calculations rather than
+        recommendations.
+      </p>
+    </div>
+
+    <div class="prose">
+      <h2>What this site provides</h2>
+      <p>
+        {SITE.name} publishes calculators and written explanations of the
+        arithmetic behind them. The calculators apply published formulas to
+        values you supply and return the result together with the working.
+        That is the whole service.
+      </p>
+
+      <h2>What this site does not provide</h2>
+      <p>
+        Nothing here is financial, tax, legal or investment advice, and nothing
+        here is a recommendation to buy, sell, hold, rent, own, refinance or
+        sign anything. A result reflects the inputs you entered and the
+        formula on the page. Change an input and the result changes; that is
+        what makes it a calculation rather than a conclusion.
+      </p>
+      <p>
+        A calculator cannot see your finances, your income, your credit, your
+        time horizon or your risk tolerance, and it does not try to guess at
+        them. Two people with the same inputs and different circumstances will
+        reach different conclusions, and the calculator is not in a position
+        to say which of them is right.
+      </p>
+
+      <h2>Figures, sources and dates</h2>
+      <p>
+        Where a figure comes from an outside source, the page links to that
+        source and gives the date it was read. Outside data changes: tax
+        thresholds, published rates and official statistics are all revised.
+        A figure on a page is accurate as of the review date on that page and
+        no longer, and the review date is there so you can see how old it is.
+      </p>
+
+      <h2>Errors</h2>
+      <p>
+        The calculations are implemented once, in one place, and tested. Even
+        so, a mistake is possible. If you find one, the
+        <a href="/contact/">contact page</a> explains how to report it, and
+        reported defects are fixed and the review date updated.
+      </p>
+
+      <h2>Advertising</h2>
+      <p>
+        The site is funded by display advertising. Advertisements are served by
+        a third party and are not under the site's control. Advertisements are
+        labelled and separated from the site's own content. No advertiser
+        pays for a page, a placement, a placement in a search result, or a
+        mention of a product in a guide.
+      </p>
+
+      <h2>Use of the site</h2>
+      <p>
+        The site is published for personal use. You may read it, print it and
+        link to it. You may not republish substantial parts of the guides as
+        your own work, or use the calculators to build a product that competes
+        with the site.
+      </p>
+
+      <h2>Changes</h2>
+      <p>
+        These terms may change as the site changes. The review date below is
+        the date this text was last read.
+      </p>
+      <p class="muted-block">Last reviewed: 20 October 2026.</p>
+    </div>
+  </div>
+</Base>

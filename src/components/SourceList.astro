@@ -1,0 +1,32 @@
+---
+interface Props {
+  sources: { label: string; url: string }[];
+  title?: string;
+  note?: string;
+}
+
+const { sources, title = 'Sources and assumptions', note } = Astro.props;
+---
+
+<section class="section-sm">
+  <h2>{title}</h2>
+  {
+    note && (
+      <p class="text-secondary" style="margin-top: var(--space-3); max-width: 68ch;">
+        {note}
+      </p>
+    )
+  }
+  <ol class="sources" style="margin-top: var(--space-4);">
+    {
+      sources.map((source, index) => (
+        <li>
+          <span class="sources__index">[{index + 1}]</span>
+          <a href={source.url} rel="nofollow noopener" target="_blank">
+            {source.label}
+          </a>
+        </li>
+      ))
+    }
+  </ol>
+</section>

@@ -1,0 +1,45 @@
+---
+/**
+ * Ad slot.
+ *
+ * Renders nothing at all until the AdSense publisher ID and a slot ID are
+ * configured. That is deliberate: an <ins> element on a page that has no
+ * publisher content behind it is one of the reasons sites get rejected.
+ * Once configured, the real ad markup appears and the loader script in
+ * Base.astro picks it up.
+ *
+ * The prop is called "placement" rather than "slot" on purpose. "slot" is
+ * reserved by Astro: on a component that is a direct child of another
+ * component, `slot="x"` means "render me into the parent's x slot", and a
+ * parent without that named slot drops the component silently. A prop named
+ * "slot" therefore loses ad slots on some pages and keeps them on others,
+ * which is a very expensive kind of quiet.
+ */
+interface Props {
+  placement: 'result' | 'in-article' | 'footer';
+}
+
+const { placement } = Astro.props;
+
+const client = import.meta.env.PUBLIC_ADSENSE_CLIENT;
+const slotIds = {
+  result: import.meta.env.PUBLIC_ADSENSE_SLOT_RESULT,
+  'in-article': import.meta.env.PUBLIC_ADSENSE_SLOT_IN_ARTICLE,
+  footer: import.meta.env.PUBLIC_ADSENSE_SLOT_FOOTER,
+};
+
+const slotId = slotIds[placement];
+const enabled = Boolean(client && slotId);
+---
+
+{
+  enabled && (
+    <ins
+      class="adsbygoogle"
+      data-ad-client={client}
+      data-ad-slot={slotId}
+      data-ad-format="auto"
+      data-full-width-responsive="true"
+    />
+  )
+}

@@ -1,0 +1,114 @@
+---
+title: "The Math Behind Extra Mortgage Payments"
+description: "How an extra principal payment shortens a loan, why the scheduled payment does not change, and what the effect looks like over different horizons."
+date: 2026-10-04
+lastReviewed: 2026-10-20
+author: "Kostan Proff"
+reviewedBy: "Kostan Proff"
+group: "Home and mortgages"
+readingMinutes: 7
+sources:
+  - label: "CFPB — Mortgage payment calculation"
+    url: "https://www.consumerfinance.gov/ask-cfpb/"
+  - label: "HUD — Helping American Homeowners"
+    url: "https://www.hud.gov/helping_american_homeowners"
+relatedTools:
+  - "mortgage-payment"
+faq:
+  - q: "Do extra payments reduce the monthly payment?"
+    a: "No. The scheduled payment stays the same and the loan finishes sooner. Some lenders will recast the payment downwards if you ask, but that is a separate arrangement rather than a consequence of the extra payment itself."
+  - q: "Where does the extra payment go?"
+    a: "To principal. Interest for the month is covered by the scheduled payment first, and the extra money reduces the balance, which lowers the interest charged the following month."
+  - q: "How much does an extra payment actually save?"
+    a: "Run it in the calculator and read the difference in total interest. The figure depends on the rate, the term and the size of the extra payment, and the effect grows with the size of the extra payment."
+  - q: "Is it better to pay extra or to invest the money?"
+    a: "That is a question about the return available on the money elsewhere, and about your own circumstances. The calculator shows what the extra payment does to the loan; it does not model the alternative use of the cash."
+  - q: "Can extra payments go beyond principal?"
+    a: "Lenders usually apply the extra amount to principal by default, and the early payoff figures in the calculator assume that. Some contracts contain language about how extra payments are applied, and it is worth reading."
+  - q: "What happens if I make a large one-off payment?"
+    a: "The same mechanism applies, with a larger step. The calculator's extra payment field is a monthly amount, and the payoff date it produces is the month the balance reaches zero."
+---
+
+Extra mortgage payments get described in two ways. One says they save
+thousands of dollars. The other says they are a waste. Both are describing
+the same arithmetic, and the arithmetic is worth looking at directly.
+
+The <a href="/tools/mortgage-payment/">mortgage payment calculator</a> has an
+extra payment field for exactly this reason: the effect is easy to see once
+it is computed rather than asserted.
+
+## The mechanism
+
+A mortgage payment covers interest first and principal second. That rule does
+not change when you pay more.
+
+So when you add $200 to a scheduled payment:
+
+1. The scheduled portion still covers that month's interest and the same
+   principal slice it always did.
+2. The extra $200 goes entirely to principal.
+3. The balance is now $200 lower.
+4. Next month, the interest is charged on a balance that is $200 lower, so
+   the interest charge is $200 × (monthly rate) lower.
+5. That small saving is now available for principal, because the scheduled
+   payment is unchanged.
+
+Step four is where the compounding lives. The saving is small per month and
+it is permanent, and it repeats. Over a long enough horizon, extra payments
+remove more interest than the extra cash would have paid directly, even
+though the extra cash is what caused the difference.
+
+## Why the payment does not change
+
+This surprises people. The scheduled payment stays exactly as it was, because
+the amortization schedule was built around that number. What changes is the
+number of payments. The loan ends sooner.
+
+The effect on the monthly budget is therefore a temporary one: the extra
+amount is paid for as long as the loan lasts, and then stops. The payoff
+date in the calculator's results is the direct measure of how long that
+lasts.
+
+## Reading the payoff date
+
+The payoff date is the number to watch, and it moves in a way that is easy
+to misjudge.
+
+An extra payment that looks large relative to the loan amount can move the
+payoff date only a few months. The reason is that a loan is already
+front-loaded with interest: most of the interest has been paid by the time
+the balance is finally paid off, and shortening the tail removes less than
+the proportional share of the loan suggests.
+
+The same extra payment applied to a shorter-term loan does more, because
+more of that loan's interest is still ahead of it. The same extra payment
+applied early does more than the same payment applied late, because the
+balance it reduces is larger at the start.
+
+The calculator lets you change the extra payment and watch the payoff date
+and the total interest move. Running it at $0, $100, $200 and $500 is a
+faster way to understand the shape of the effect than any rule of thumb.
+
+## What it does not tell you
+
+The extra payment calculation is about the loan and nothing else. It does
+not model:
+
+- **The alternative use of the money.** Whether $200 a month is better spent
+  reducing a loan or sitting in an account is a question about returns, and
+  the arithmetic of the loan does not answer it.
+- **Tax treatment.** Interest and principal are treated differently for tax
+  purposes in many situations, and that difference is not in the calculation.
+- **Prepayment penalties.** Most conventional mortgages do not carry them,
+  and the calculation does not include any.
+- **Changes of plans.** A loan that is paid off early releases cash flow
+  earlier, and what that cash flow is then used for is outside the model.
+
+## A note on how lenders apply the payment
+
+The calculation assumes the extra amount goes to principal, which is the
+standard treatment. The mechanics of an unscheduled principal payment are
+governed by the note and the servicing rules that go with it, and those are
+worth reading before making a large one-off payment. The behaviour in the
+calculator matches the common case, and the payoff date it reports is the
+month the balance reaches zero.

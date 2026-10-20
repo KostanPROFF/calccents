@@ -1,0 +1,123 @@
+---
+title: "Compound Interest vs Simple Interest"
+description: "The difference between simple and compound interest, worked through with the same numbers, and why the gap widens the longer money stays put."
+date: 2026-10-08
+lastReviewed: 2026-10-20
+author: "Kostan Proff"
+reviewedBy: "Kostan Proff"
+group: "Investing"
+readingMinutes: 6
+sources:
+  - label: "Investor.gov — Compound interest"
+    url: "https://www.investor.gov/introduction-investing/investing-basics/glossary/compound-interest"
+  - label: "Federal Reserve — H.15 selected interest rates"
+    url: "https://www.federalreserve.gov/releases/h15/"
+  - label: "IRS — Traditional IRAs and the growth of a retirement account"
+    url: "https://www.irs.gov/retirement-plans/traditional-iras"
+relatedTools:
+  - "compound-interest"
+faq:
+  - q: "What is simple interest?"
+    a: "Interest calculated on the original principal only, at the original rate, for the whole period. It does not grow: a $10,000 balance at 5 percent simple earns $500 a year for as long as it stays there."
+  - q: "What is compound interest?"
+    a: "Interest calculated on the balance, which includes interest already credited. Each period's interest is charged on a slightly larger base than the last, so the growth is not linear."
+  - q: "How big is the difference?"
+    a: "On a short horizon it is small. On $10,000 at 7 percent over 30 years, simple interest gives $31,000 and compound interest gives $76,123. The gap is the entire argument for leaving money alone."
+  - q: "Where do I actually meet simple interest?"
+    a: "Short-term consumer loans often use it, and some older savings arrangements did. It is also the mental model most people have, which is part of why compound interest is surprising."
+  - q: "Does compound interest work against me anywhere?"
+    a: "On credit cards and other revolving balances, where the interest is charged on the balance including previous interest. The same mechanism that works in your favour works in reverse."
+  - q: "Is the doubling rule reliable?"
+    a: "The rule of 70 is a useful approximation: divide 70 by the annual rate to get the years to double. At 7 percent that is about ten years. The calculator shows the actual figure rather than the approximation."
+---
+
+Simple interest and compound interest are the same idea computed two
+different ways, and the difference between them is one of the largest gaps
+in ordinary arithmetic.
+
+Simple interest charges interest on the original amount. Compound interest
+charges interest on the original amount plus the interest already credited.
+That is the whole difference.
+
+## The same numbers, two answers
+
+Take $10,000 at 7 percent over 30 years.
+
+**Simple interest** pays 7 percent of the original $10,000 every year: $700
+a year, unchanged, for thirty years. The final balance is $31,000.
+
+**Compound interest**, compounded annually, starts at $10,000 and grows. The
+final balance is $76,123.
+
+The gap is $45,123 on a $10,000 starting balance, and it comes entirely from
+the fact that compound interest is charged on a growing base.
+
+The
+<a href="/tools/compound-interest/">compound interest calculator</a> runs the
+second case. To see the first, set the rate to zero and note that the
+balance then grows by the deposits alone — the simple-interest case is the
+same projection with the interest switched off.
+
+## Why the gap widens rather than stays constant
+
+The growth is not linear. In a simple-interest account, each year adds the
+same amount. In a compound-interest account, each year adds slightly more
+than the year before, because the base has grown.
+
+Three effects are worth separating, because they behave differently:
+
+**The interest on interest.** The largest effect, and the one that requires
+the longest time to become significant. Over a year it is barely visible;
+over thirty years it is most of the balance.
+
+**The contribution effect.** A regular monthly contribution is itself a
+form of compounding, because each contribution earns interest for the rest
+of the period. The contribution made in month one earns interest for the
+whole horizon; the one made in the last month earns almost none. This is
+why the tool lets you switch the contribution between the start and the end
+of the month.
+
+**The frequency effect.** Same nominal rate, more frequent compounding, more
+money. The effective annual rate is what makes this visible: 7 percent
+compounded monthly is 7.229 percent, and 7.229 percent is the rate you are
+actually earning.
+
+## The doubling approximation
+
+The rule of 70 is a shortcut: divide 70 by the annual rate to get the years
+it takes for money to double. At 7 percent that is ten years; at 3 percent,
+23 years.
+
+It is an approximation, and the reason it is needed at all is that the exact
+doubling time depends on the compounding frequency. The rule of 70 assumes
+annual compounding. With monthly compounding, 7 percent doubles a little
+sooner than ten years.
+
+The calculator is the way to check it. Run thirty years at 7 percent with no
+contributions, and compare the final balance with twice the starting
+balance. The approximation is close; the exact figure is on the screen.
+
+## Where the same mechanism runs the other way
+
+Compound interest is not a favour granted by finance. It is a property of
+the arithmetic, and it applies to balances owed as well as balances earned.
+
+On a revolving credit card balance, the interest is charged on the balance
+including previous interest. Paying only the minimum on a card is the
+compound interest calculation running in reverse, with a rate that is high
+enough to make the effect quick.
+
+The same is true of unpaid interest on some other arrangements. What
+determines the direction is only which side of the balance you are on.
+
+## A note on the rates involved
+
+The Federal Reserve publishes the H.15 selected interest rates, which is the
+reference series for what savings products have actually paid. The Internal
+Revenue Service publishes the rules for the accounts where growth is
+deferred, and the Investor.gov glossary defines the terms used here.
+
+None of those is a forecast of what a rate will be. The calculator uses
+whatever rate you enter, held constant for the whole horizon, because a
+projection that changes the rate according to some assumed future path is a
+different kind of claim from arithmetic.

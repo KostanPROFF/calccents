@@ -1,0 +1,66 @@
+---
+import Base from '../layouts/Base.astro';
+import AdSlot from '../components/AdSlot.astro';
+import { SITE } from '../config/site.ts';
+---
+
+<Base
+  title="Contact"
+  description="How to reach the site about a wrong figure, a broken link, a missing topic or an advertising problem."
+  path="/contact/"
+>
+  <div class="container">
+    <div class="page-head">
+      <nav class="breadcrumb" aria-label="Breadcrumb">
+        <a href="/">Home</a>
+        <span aria-hidden="true">/</span>
+        <span>Contact</span>
+      </nav>
+      <h1>Contact</h1>
+      <p class="page-head__lede">
+        One address, read by a person. Replies take a few days, usually longer
+        in the first weeks after a page is published.
+      </p>
+    </div>
+
+    <div class="prose">
+      <p>
+        Email <a href={`mailto:${SITE.email}`}>{SITE.email}</a>.
+      </p>
+
+      <h2>What is worth writing about</h2>
+      <ul>
+        <li>
+          <strong>A wrong number.</strong> If a figure on a page does not match
+          your own calculation, send the inputs you used and the figure you
+          got. That is a defect and it will be looked at.
+        </li>
+        <li>
+          <strong>A broken or dead source link.</strong> Sources are checked on
+          a schedule, but a link can rot between checks.
+        </li>
+        <li>
+          <strong>A topic that is missing.</strong> Guides are written around
+          the arithmetic readers find hardest, so a gap is usually a gap in
+          that arithmetic.
+        </li>
+        <li>
+          <strong>An advertising problem.</strong> An advertisement that
+          misleads, breaks the page, or covers content is worth reporting. The
+          site is funded by display advertising, so this kind of report is
+          taken seriously.
+        </li>
+      </ul>
+
+      <h2>What happens next</h2>
+      <p>
+        A reported figure is checked against the source, and the page changes
+        if the figure was wrong. The review date on the page moves when the
+        content is checked, whether or not anything changed, so the date tells
+        you when a person last read the page.
+      </p>
+    </div>
+
+    <AdSlot placement="footer" />
+  </div>
+</Base>

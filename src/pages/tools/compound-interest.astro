@@ -1,0 +1,299 @@
+---
+import ToolShell from '../../components/ToolShell.astro';
+import ResultPanel from '../../components/ResultPanel.astro';
+import AdSlot from '../../components/AdSlot.astro';
+import { getTool } from '../../config/tools.ts';
+
+const tool = getTool('compound-interest');
+
+const sources = [
+  {
+    label: 'SEC — Investor.gov: compound interest and the cost of fees',
+    url: 'https://www.investor.gov/introduction-investing/investing-basics/glossary/compound-interest',
+  },
+  {
+    label: 'BLS — Consumer Price Index (for the inflation-adjusted figures)',
+    url: 'https://www.bls.gov/cpi/',
+  },
+  {
+    label: 'Federal Reserve — Time deposit and savings rate data',
+    url: 'https://www.federalreserve.gov/releases/h15/',
+  },
+  {
+    label: 'IRS — Compound interest and the growth of a traditional IRA',
+    url: 'https://www.irs.gov/retirement-plans/traditional-iras',
+  },
+];
+
+const limits = [
+  'It does not predict a return. The rate you enter is used exactly as entered for the whole period; no historical average, no forecast and no market data feed this page.',
+  'It does not model taxes, fees or account charges. A real account\'s balance will differ by whatever the provider takes.',
+  'It does not model market volatility. Real balances fall in years when real markets fall, and no fixed rate captures that.',
+  'It does not tell you how to invest or whether to save. It projects a number under the assumptions you supply.',
+];
+
+const faq = [
+  {
+    q: 'Why can the compounding frequency only be 1, 2, 3, 4, 6 or 12?',
+    a: 'Because the contributions here are made monthly, and the calculator keeps the compounding period and the contribution period the same. Any frequency that divides twelve keeps that arithmetic exact rather than approximate. In practice those six cover daily-to-yearly compounding against monthly deposits.',
+  },
+  {
+    q: 'What is the difference between the nominal and the effective annual rate?',
+    a: 'The nominal rate is the number on the account: 7 %. The effective rate is what the balance actually earns once a year of compounding is applied, so 7 % compounded monthly is 7.229 %. The page shows both, because the difference matters over long periods.',
+  },
+  {
+    q: 'What does the real value mean?',
+    a: 'It is the final balance expressed in the purchasing power of the starting year. The calculation divides the nominal balance by the inflation rate compounded over the same period, which shows how much of the balance is real growth and how much is the same dollars going further.',
+  },
+  {
+    q: 'Does the timing of the contribution change the result?',
+    a: 'Yes, and the page shows both. A contribution made at the start of each period earns interest for that whole period, so it ends with more than the same contribution made at the end. The difference is small per payment but compounds over decades.',
+  },
+  {
+    q: 'What happens at a zero interest rate?',
+    a: 'The balance grows by the contributions alone, with no interest. The calculator handles this case explicitly rather than dividing by zero, which is why the figure is exactly the deposits made.',
+  },
+  {
+    q: 'Is a regular contribution required?',
+    a: 'No. Setting the monthly contribution to zero turns the calculation into a plain compound interest projection on the starting balance, which is the right model for a lump sum already invested.',
+  },
+];
+
+const relatedGuides = [
+  { slug: 'compound-interest-calculator-explained', title: 'Compound interest calculator explained' },
+  { slug: 'compound-vs-simple-interest', title: 'Compound interest vs simple interest' },
+  { slug: 'how-compounding-frequency-changes-results', title: 'How compounding frequency changes the result' },
+  { slug: 'inflation-and-real-returns-explained', title: 'Inflation and real returns explained' },
+  { slug: 'understanding-apr', title: 'Understanding APR and the annual percentage rate' },
+];
+---
+
+<ToolShell
+  tool={tool}
+  faq={faq}
+  sources={sources}
+  limits={limits}
+  reviewedOn="20 October 2026"
+  relatedGuides={relatedGuides}
+  methodNote="The projection runs one period at a time, so the yearly table is produced by the same arithmetic that produces the final figure."
+>
+  <form class="card" id="compound-form" novalidate slot="calculator">
+    <div class="input-group">
+      <label class="field" for="ci-principal">
+        <span class="field__label">
+          Starting balance
+          <span class="field__hint">today</span>
+        </span>
+        <span class="field__control">
+          <span class="field__prefix" aria-hidden="true">$</span>
+          <input class="input input--prefixed" id="ci-principal" type="number"
+            inputmode="decimal" step="500" min="0" value="10000" />
+        </span>
+      </label>
+      <label class="field" for="ci-contribution">
+        <span class="field__label">
+          Monthly contribution
+          <span class="field__hint">added each month</span>
+        </span>
+        <span class="field__control">
+          <span class="field__prefix" aria-hidden="true">$</span>
+          <input class="input input--prefixed" id="ci-contribution" type="number"
+            inputmode="decimal" step="50" min="0" value="500" />
+        </span>
+      </label>
+    </div>
+
+    <div class="input-group">
+      <label class="field" for="ci-rate">
+        <span class="field__label">
+          Interest rate
+          <span class="field__hint">annual, nominal</span>
+        </span>
+        <span class="field__control">
+          <input class="input" id="ci-rate" type="number" inputmode="decimal" step="0.01"
+            min="0" max="30" value="7" />
+          <span class="field__suffix" aria-hidden="true">%</span>
+        </span>
+      </label>
+      <label class="field" for="ci-years">
+        <span class="field__label">Time</span>
+        <span class="field__control">
+          <input class="input" id="ci-years" type="number" inputmode="numeric"
+            step="1" min="1" max="60" value="10" />
+          <span class="field__suffix" aria-hidden="true">years</span>
+        </span>
+      </label>
+    </div>
+
+    <div class="input-group">
+      <label class="field" for="ci-frequency">
+        <span class="field__label">Compounding</span>
+        <span class="field__control">
+          <select class="input" id="ci-frequency">
+            <option value="12" selected>Monthly</option>
+            <option value="4">Quarterly</option>
+            <option value="2">Twice a year</option>
+            <option value="1">Annually</option>
+            <option value="6">Every two months</option>
+            <option value="3">Every four months</option>
+          </select>
+        </span>
+      </label>
+      <label class="field" for="ci-timing">
+        <span class="field__label">Contribution timing</span>
+        <span class="field__control">
+          <select class="input" id="ci-timing">
+            <option value="end" selected>End of the month</option>
+            <option value="begin">Start of the month</option>
+          </select>
+        </span>
+      </label>
+    </div>
+
+    <label class="field" for="ci-inflation">
+      <span class="field__label">
+        Inflation
+        <span class="field__hint">annual, for the real-value figure</span>
+      </span>
+      <span class="field__control">
+        <input class="input" id="ci-inflation" type="number" inputmode="decimal" step="0.1"
+          min="0" max="30" value="2.5" />
+        <span class="field__suffix" aria-hidden="true">%</span>
+      </span>
+    </label>
+
+    <details style="margin-top: var(--space-6);">
+      <summary class="text-sm" style="cursor: pointer; color: var(--text-secondary);">
+        See the year-by-year balance
+      </summary>
+      <div class="table-wrap" style="margin-top: var(--space-4);">
+        <table class="table">
+          <thead>
+            <tr>
+              <th scope="col">Year</th>
+              <th scope="col">Balance</th>
+              <th scope="col">Contributed</th>
+              <th scope="col">Interest</th>
+              <th scope="col">In today's dollars</th>
+            </tr>
+          </thead>
+          <tbody id="compound-body"></tbody>
+        </table>
+      </div>
+    </details>
+  </form>
+
+  <div slot="result">
+    <ResultPanel
+      headlineId="ci-future-value"
+      headlineLabel="Balance at the end of the period"
+      headline="—"
+      stats={[
+        { id: 'ci-contributions', label: 'Total contributions', value: '—' },
+        { id: 'ci-interest', label: 'Interest earned', value: '—' },
+        { id: 'ci-real', label: "In today's dollars", value: '—' },
+        { id: 'ci-ear', label: 'Effective annual rate', value: '—' },
+        { id: 'ci-real-rate', label: 'Real annual rate', value: '—' },
+        { id: 'ci-years-out', label: 'Horizon', value: '—' },
+      ]}
+      note="The balance is in the dollars you entered. The inflation-adjusted figure converts it to the purchasing power of the starting year."
+    />
+    <p class="muted-block" style="margin-top: var(--space-4);">
+      The rate you enter is used exactly as entered for the whole period. This
+      page does not look up a market rate.
+    </p>
+    <AdSlot placement="result" />
+  </div>
+
+  <div slot="method">
+    <p>
+      The projection advances one compounding period at a time. In each period
+      the balance earns interest at the period rate, and then the contribution
+      for that period is added — at the end of the period or the start of it,
+      depending on the setting. Running the periods in sequence rather than
+      using one closed expression is what produces the year-by-year table, and
+      the final balance is the same either way.
+    </p>
+    <p>
+      In closed form the same result is:
+    </p>
+    <p>
+      <strong>FV = P(1 + r)ⁿ + PMT · ((1 + r)ⁿ − 1) / r</strong>
+    </p>
+    <p>
+      where <strong>P</strong> is the starting balance, <strong>r</strong> is
+      the annual rate divided by the number of compounding periods per year,
+      <strong>n</strong> is the number of periods, and <strong>PMT</strong> is
+      the contribution made in each period. A contribution made at the start of
+      the period earns interest for that whole period, so the contribution
+      term is multiplied by (1 + r) in that case.
+    </p>
+    <p>
+      The real figures come from two adjustments. The effective annual rate is
+      (1 + r) raised to the number of periods per year, which is what a 7 %
+      nominal rate actually becomes once a year of monthly compounding is
+      applied. The real rate divides the nominal rate by the inflation factor,
+      and the balance in today's dollars is the nominal balance divided by
+      inflation compounded over the same period.
+    </p>
+  </div>
+</ToolShell>
+
+<script>
+  import { projectCompoundInterest } from '../../lib/calc/compound.ts';
+  import { formatCurrency, formatPercent } from '../../lib/calc/money.ts';
+  import { numberValue, setText } from '../../lib/client/dom.ts';
+
+  const ids = [
+    'ci-principal',
+    'ci-contribution',
+    'ci-rate',
+    'ci-years',
+    'ci-frequency',
+    'ci-timing',
+    'ci-inflation',
+  ];
+
+  function recalculate(): void {
+    const years = Math.max(0, numberValue('ci-years', 10));
+    const timingSelect = document.getElementById('ci-timing') as HTMLSelectElement | null;
+    const timing = timingSelect?.value === 'begin' ? 'begin' : 'end';
+
+    const result = projectCompoundInterest({
+      principal: Math.max(0, numberValue('ci-principal')),
+      monthlyContribution: Math.max(0, numberValue('ci-contribution')),
+      annualRatePercent: Math.max(0, numberValue('ci-rate')),
+      years,
+      compoundsPerYear: Math.max(1, numberValue('ci-frequency', 12)),
+      inflationPercent: Math.max(0, numberValue('ci-inflation')),
+      contributionTiming: timing,
+    });
+
+    setText('ci-future-value', formatCurrency(result.futureValue));
+    setText('ci-contributions', formatCurrency(result.totalContributions));
+    setText('ci-interest', formatCurrency(result.totalInterest));
+    setText('ci-real', formatCurrency(result.realValue));
+    setText('ci-ear', formatPercent(result.effectiveAnnualRatePercent, 3));
+    setText('ci-real-rate', formatPercent(result.realAnnualRatePercent, 3));
+    setText('ci-years-out', `${result.years} years`);
+
+    const body = document.getElementById('compound-body');
+    if (body) {
+      body.innerHTML = result.yearly
+        .map(
+          (row) =>
+            `<tr><td>${row.year}</td><td>${formatCurrency(row.balance)}</td>` +
+            `<td>${formatCurrency(row.contributed)}</td>` +
+            `<td>${formatCurrency(row.earned)}</td>` +
+            `<td>${formatCurrency(row.realBalance)}</td></tr>`,
+        )
+        .join('');
+    }
+  }
+
+  for (const id of ids) {
+    document.getElementById(id)?.addEventListener('input', recalculate);
+    document.getElementById(id)?.addEventListener('change', recalculate);
+  }
+  recalculate();
+</script>

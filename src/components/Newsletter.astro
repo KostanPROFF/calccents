@@ -1,0 +1,29 @@
+---
+/**
+ * Newsletter signup. Renders nothing when no provider is configured, so the
+ * site ships without a third-party form until one is set up.
+ */
+const form = import.meta.env.PUBLIC_BUTTONDOWN_FORM;
+---
+
+{
+  form && (
+    <form class="newsletter" action={form} method="post" target="popupwindow">
+      <label class="sr-only" for="newsletter-email">
+        Email address
+      </label>
+      <input
+        class="input newsletter__input"
+        id="newsletter-email"
+        type="email"
+        name="email"
+        placeholder="you@example.com"
+        autocomplete="email"
+        required
+      />
+      <button class="btn btn--primary" type="submit">
+        Subscribe
+      </button>
+    </form>
+  )
+}

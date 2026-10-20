@@ -1,0 +1,47 @@
+---
+import Base from '../layouts/Base.astro';
+import AdSlot from '../components/AdSlot.astro';
+---
+
+<Base
+  title="Page not found"
+  description="That page does not exist on this site. Here is where everything actually lives."
+  path="/404"
+  noindex
+>
+  <div class="container">
+    <div class="page-head">
+      <h1>Page not found</h1>
+      <p class="page-head__lede">
+        That URL does not exist here. Everything the site publishes is one of
+        the three calculators, the guides behind them, or the pages that
+        explain where the numbers come from.
+      </p>
+    </div>
+
+    <div class="grid grid--2">
+      <a class="tile" href="/tools/">
+        <span class="tile__title">Calculators</span>
+        <span class="tile__text">Mortgage payment, rent versus buying, compound interest.</span>
+        <span class="tile__meta">Open →</span>
+      </a>
+      <a class="tile" href="/guides/">
+        <span class="tile__title">Guides</span>
+        <span class="tile__text">The arithmetic behind each calculator, in detail.</span>
+        <span class="tile__meta">Open →</span>
+      </a>
+      <a class="tile" href="/sources/">
+        <span class="tile__title">Sources</span>
+        <span class="tile__text">Every primary source the site relies on.</span>
+        <span class="tile__meta">Open →</span>
+      </a>
+      <a class="tile" href="/contact/">
+        <span class="tile__title">Contact</span>
+        <span class="tile__text">Tell us what is missing or wrong.</span>
+        <span class="tile__meta">Open →</span>
+      </a>
+    </div>
+
+    <AdSlot placement="footer" />
+  </div>
+</Base>

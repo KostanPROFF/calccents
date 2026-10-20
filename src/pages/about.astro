@@ -1,0 +1,107 @@
+---
+import Base from '../layouts/Base.astro';
+import AdSlot from '../components/AdSlot.astro';
+import { SITE } from '../config/site.ts';
+---
+
+<Base
+  title="About"
+  description="What this site is, how it is built, and the rules it follows so that every number on it can be checked."
+  path="/about/"
+>
+  <div class="container">
+    <div class="page-head">
+      <nav class="breadcrumb" aria-label="Breadcrumb">
+        <a href="/">Home</a>
+        <span aria-hidden="true">/</span>
+        <span>About</span>
+      </nav>
+      <h1>About {SITE.name}</h1>
+      <p class="page-head__lede">
+        {SITE.name} publishes financial calculators and the explanations behind
+        them. It is a small site with a narrow purpose: produce a number you can
+        check, and show you the working that produced it.
+      </p>
+    </div>
+
+    <div class="prose">
+      <h2>What this site is</h2>
+      <p>
+        Three calculators, fifteen guides, and the primary sources behind both.
+        The calculators take numbers you supply and apply a published formula:
+        the amortization formula for a mortgage, a month-by-month cash
+        comparison for renting against buying, and the compound interest
+        formula for a savings balance.
+      </p>
+      <p>
+        The site is funded by display advertising. That shapes how it is built.
+        Pages load quickly and carry little JavaScript, because a page that
+        loads fast keeps the reader long enough to see the advertising, and
+        because a page that loads fast is the one people come back to. No
+        calculator asks for an email address, and no result is gated.
+      </p>
+
+      <h2>What this site is not</h2>
+      <p>
+        It is not a brokerage, it does not accept applications, and it does not
+        earn a commission from anyone who clicks anything. There are no
+        sponsored placements, no affiliate links and no lead forms. The
+        advertising is display advertising and nothing else, which means the
+        only thing a reader's visit pays for is the reader's attention.
+      </p>
+      <p>
+        No tool here evaluates your circumstances. A mortgage calculator that
+        returned "put down 20 percent" would be wrong most of the time,
+        because the right answer depends on things the page cannot see:
+        your other savings, your job, your tolerance for a bad month. So every
+        tool computes and stops there.
+      </p>
+
+      <h2>The rules the site follows</h2>
+      <ul>
+        <li>
+          <strong>Every tool states its limits.</strong> Under each result
+          there is a block listing what the tool does not do, in the same words
+          on every page.
+        </li>
+        <li>
+          <strong>Every figure that comes from somewhere has a source.</strong>
+          Guides link to the primary source and carry the date the data was
+          read. The site's own arithmetic is shown in full.
+        </li>
+        <li>
+          <strong>Every page carries a review date.</strong> A guide that has
+          not been looked at in a long time says so.
+        </li>
+        <li>
+          <strong>AI drafts, human review.</strong> Drafting tools help with
+          the words. Every published page has been read by a person who
+          checked the arithmetic, the units and the claims.
+        </li>
+      </ul>
+
+      <h2>How the calculators work</h2>
+      <p>
+        The arithmetic runs in your browser. There is no server that receives
+        the numbers you type, and nothing about a calculation is sent to
+        anyone. The formulas are implemented once, in one place, and covered
+        by unit tests that check them against known published loan figures and
+        against the invariants the mathematics requires — that a schedule
+        sums to the amount borrowed, that a loan closes at exactly zero, that
+        an interest-free balance grows by the deposits alone.
+      </p>
+
+      <h2>Corrections</h2>
+      <p>
+        If a figure is wrong, a source link is dead or a page contradicts
+        itself, that is a defect and it should be fixed. The
+        <a href="/contact/">contact page</a> says how to report one, and every
+        correction results in a changed review date rather than a silent edit.
+      </p>
+    </div>
+
+    <AdSlot placement="in-article" />
+
+    <AdSlot placement="footer" />
+  </div>
+</Base>

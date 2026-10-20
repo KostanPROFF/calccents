@@ -1,0 +1,32 @@
+---
+import { SITE } from '../config/site.ts';
+
+interface Props {
+  currentPath: string;
+}
+
+const { currentPath } = Astro.props;
+
+function isCurrent(href: string): boolean {
+  if (href === '/') return currentPath === '/';
+  return currentPath.startsWith(href);
+}
+---
+
+<header class="site-header">
+  <div class="container site-header__inner">
+    <a class="brand" href="/">
+      <span class="brand__mark" aria-hidden="true">C</span>
+      {SITE.name}
+    </a>
+    <nav class="site-nav" aria-label="Primary">
+      {
+        SITE.nav.map((item) => (
+          <a href={item.href} aria-current={isCurrent(item.href) ? 'page' : undefined}>
+            {item.label}
+          </a>
+        ))
+      }
+    </nav>
+  </div>
+</header>

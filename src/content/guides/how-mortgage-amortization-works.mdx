@@ -1,0 +1,125 @@
+---
+title: "How Mortgage Amortization Works"
+description: "Why early mortgage payments are mostly interest, how the balance moves month by month, and what happens to the split as the loan ages over time."
+date: 2026-10-02
+lastReviewed: 2026-10-20
+author: "Kostan Proff"
+reviewedBy: "Kostan Proff"
+group: "Home and mortgages"
+readingMinutes: 8
+sources:
+  - label: "CFPB — Mortgage payment calculation"
+    url: "https://www.consumerfinance.gov/ask-cfpb/"
+  - label: "HUD — Helping American Homeowners"
+    url: "https://www.hud.gov/helping_american_homeowners"
+relatedTools:
+  - "mortgage-payment"
+faq:
+  - q: "Why is so little of my early payment going to the principal?"
+    a: "Because interest is charged on the balance still outstanding, and in the early months that balance is almost the whole loan. As the balance falls, the interest charge falls with it and more of the same payment goes to principal."
+  - q: "Does amortization mean I pay more than I borrowed?"
+    a: "Yes, on a fixed-rate loan with no extra payments. You pay the amount borrowed plus the interest, which is what the total interest figure on the calculator represents."
+  - q: "How much of a typical 30-year loan is paid off in the first five years?"
+    a: "On a 30-year loan, most borrowers have paid off well under half of the balance by the five-year mark, despite having made five years of payments. The exact figure depends on the rate and the term, and the calculator's amortization table shows it for any loan."
+  - q: "Does a shorter loan amortize differently?"
+    a: "The mechanism is identical, but the interest is charged on a smaller balance for less time, so a 15-year loan has far less interest in total. The per-month split changes faster as well."
+  - q: "What is a negative amortization loan?"
+    a: "A loan where the payment is smaller than the interest being charged, so the balance grows. It happens when a payment is deferred or recast to a lower amount. It is not what the calculator models, which assumes the scheduled payment covers the interest."
+  - q: "Can I see the amortization schedule for my own loan?"
+    a: "Yes. The calculator produces the schedule for any loan, and a guide explains how to read each column of it."
+---
+
+Amortization is the process by which a mortgage is repaid, and it produces
+one of the most counter-intuitive results in personal finance: a thirty-year
+loan is not thirty years of paying it off. It is about a decade of paying it
+off, followed by two decades of paying for the privilege of having paid it
+off.
+
+The mechanism is simple enough to hold in your head, which is worth doing
+before looking at any schedule.
+
+## Interest first, always
+
+Every mortgage payment has two parts, and the order in which they are applied
+is fixed by the contract:
+
+1. Interest is charged on the balance outstanding at the start of the month.
+2. The payment is applied to that interest.
+3. Whatever remains of the payment reduces the principal.
+
+The balance for the next month is the balance for this month, less the
+principal that was paid. That is the entire rule.
+
+The consequence follows immediately. In month one, the balance is the full
+amount borrowed, so the interest charge is at its largest, and the payment —
+which was set to cover that interest plus a small slice of principal — is
+almost entirely interest. As the balance falls, the interest charge falls
+with it, and the same payment starts covering more principal.
+
+## The arithmetic of a single month
+
+The interest charge for a month is:
+
+**interest = balance × (annual rate ÷ 12)**
+
+Take a $360,000 loan at 6.5 percent. The monthly rate is 0.54167 percent.
+In the first month, the interest is $360,000 × 0.0054167 = $1,950. The
+scheduled payment on a 30-year term is $1,986. The difference, $36, is what
+reduces the principal in the first month. It is a rounding error against the
+balance.
+
+A year later, the balance has fallen to roughly $357,500. The interest
+charge is now about $1,936, and the principal portion has grown to about
+$50. Three years in, the principal portion is around $80 a month. It is still
+small. It is also growing, and the growth accelerates, which is the whole
+story.
+
+## The two curves
+
+A useful way to picture a mortgage is as two curves moving against each
+other. The balance curve starts high and falls slowly at first, then steeply,
+then flattens as it approaches zero. The cumulative interest curve starts at
+zero, rises quickly, and then rises more slowly, because the interest charge
+is applied to a shrinking balance.
+
+The first curve is the one people think about. The second is the one that
+determines the total cost, and the gap between them is the total interest.
+
+At the five-year mark on a typical 30-year loan, a little under a fifth of
+the balance is gone and roughly a quarter of the total interest has already
+been paid. At the fifteen-year mark, most of the balance is gone. This is
+why the exact year matters: "how much have I paid off" and "how much have I
+paid in interest" are very different questions, and the amortization table
+answers both.
+
+## Why the last payment is different
+
+A monthly payment has to be a fixed number of cents, and a loan with an
+interest rate and a term of whole months does not divide evenly. The
+rounding leaves a small balance outstanding at the end.
+
+The final payment is adjusted to clear it. This is not a special feature of
+any lender; it is arithmetic. The <a href="/tools/mortgage-payment/">mortgage
+payment calculator</a> on this site does the same thing, and the adjustment
+is visible in the last row of the schedule.
+
+## The accelerated path
+
+The amortization schedule is also the argument for extra payments, and the
+argument is mechanical rather than motivational. An extra payment reduces
+the principal. A smaller principal means a smaller interest charge next
+month, which means more of the next payment is available for principal. The
+effect compounds in exactly the same way the loan does.
+
+The scheduled payment does not change. The loan simply ends sooner, and the
+interest that would have been charged on a balance that no longer exists is
+never charged. The total interest figure in the calculator drops as the extra
+payment rises, and the payoff date moves forward.
+
+## What amortization does not cover
+
+The schedule covers the loan. It does not cover property tax, insurance,
+HOA fees, maintenance, or the effect of inflation on a payment that runs for
+three decades. Those are running costs rather than loan costs, and they are
+handled separately in the guides on property tax and on the total cost of a
+mortgage.

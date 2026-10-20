@@ -1,0 +1,50 @@
+---
+import { SITE } from '../config/site.ts';
+---
+
+<footer class="site-footer">
+  <div class="container">
+    <div class="site-footer__grid">
+      <div>
+        <a class="brand" href="/">
+          <span class="brand__mark" aria-hidden="true">C</span>
+          {SITE.name}
+        </a>
+        <p class="text-sm text-muted" style="margin-top: var(--space-3); max-width: 34ch;">
+          {SITE.tagline}. Every formula is written out, every assumption belongs
+          to you.
+        </p>
+      </div>
+      <div>
+        <h2>Calculators</h2>
+        <ul>
+          <li><a href="/tools/mortgage-payment/">Mortgage payment</a></li>
+          <li><a href="/tools/rent-vs-buy/">Rent vs buy</a></li>
+          <li><a href="/tools/compound-interest/">Compound interest</a></li>
+        </ul>
+      </div>
+      <div>
+        <h2>Site</h2>
+        <ul>
+          {
+            SITE.footer
+              .filter((item) => !item.href.startsWith('/tools/'))
+              .map((item) => (
+                <li>
+                  <a href={item.href}>{item.label}</a>
+                </li>
+              ))
+          }
+        </ul>
+      </div>
+    </div>
+    <p class="site-footer__note">
+      {SITE.name} publishes calculations and explanations, not financial advice.
+      The tools show the arithmetic behind a number and the assumptions behind
+      the arithmetic. They do not evaluate your situation and they do not
+      recommend a course of action. Every figure a tool produces depends on the
+      inputs you supply — read the assumptions before you rely on any result.
+      © {SITE.founded}–{new Date().getFullYear()} {SITE.name}.
+    </p>
+  </div>
+</footer>

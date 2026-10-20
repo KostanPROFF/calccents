@@ -1,0 +1,98 @@
+---
+import { SITE } from '../config/site.ts';
+import Nav from '../components/Nav.astro';
+import Footer from '../components/Footer.astro';
+import '../styles/global.css';
+
+interface Props {
+  title: string;
+  description: string;
+  /** Path of the current page, used for the canonical URL. */
+  path: string;
+  /** Structured data objects rendered as JSON-LD. */
+  jsonLd?: Record<string, unknown>[];
+  ogType?: 'website' | 'article';
+  noindex?: boolean;
+}
+
+const {
+  title,
+  description,
+  path,
+  jsonLd = [],
+  ogType = 'website',
+  noindex = false,
+} = Astro.props;
+
+const canonical = new URL(path, SITE.origin).toString();
+const fullTitle = path === '/' ? `${SITE.name} — ${SITE.tagline}` : `${title} | ${SITE.name}`;
+
+const adsenseClient = import.meta.env.PUBLIC_ADSENSE_CLIENT;
+const gaId = import.meta.env.PUBLIC_GA_ID;
+---
+
+<!doctype html>
+<html lang={SITE.lang}>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{fullTitle}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+    {noindex && <meta name="robots" content="noindex, nofollow" />}
+
+    <meta property="og:type" content={ogType} />
+    <meta property="og:site_name" content={SITE.name} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="sitemap" href="/sitemap-index.xml" />
+
+    {
+      jsonLd.map((schema) => (
+        <script type="application/ld+json" set:html={JSON.stringify(schema)} />
+      ))
+    }
+
+    {
+      gaId && (
+        <script
+          is:inline
+          async
+          src={`https://www.googletagmanager.com/gtag/js?id=${gaId}`}
+        />
+      )
+    }
+    {
+      gaId && (
+        <script is:inline
+          set:html={`window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','${gaId}');`}
+        />
+      )
+    }
+  </head>
+  <body>
+    <a class="skip-link" href="#main">Skip to content</a>
+    <Nav currentPath={Astro.url.pathname} />
+    <main id="main">
+      <slot />
+    </main>
+    <Footer />
+
+    {
+      adsenseClient && (
+        <script
+          is:inline
+          async
+          src={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${adsenseClient}`}
+          crossorigin="anonymous"
+        />
+      )
+    }
+  </body>
+</html>

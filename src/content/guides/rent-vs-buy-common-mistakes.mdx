@@ -1,0 +1,143 @@
+---
+title: "Common Mistakes in Rent vs Buy Comparisons"
+description: "The assumptions that quietly swing a rent versus buy comparison, from ignoring maintenance and transaction costs to treating appreciation as a promise."
+date: 2026-10-06
+lastReviewed: 2026-10-20
+author: "Kostan Proff"
+reviewedBy: "Kostan Proff"
+group: "Renting and owning"
+readingMinutes: 7
+sources:
+  - label: "CFPB — Mortgages and consumer tools"
+    url: "https://www.consumerfinance.gov/consumer-tools/mortgages/"
+  - label: "HUD — Helping American Homeowners"
+    url: "https://www.hud.gov/helping_american_homeowners"
+  - label: "FRED — House Price Index for the United States"
+    url: "https://fred.stlouisfed.org/series/HPINUS"
+relatedTools:
+  - "rent-vs-buy"
+faq:
+  - q: "Which assumption moves the answer most?"
+    a: "The home price assumption over the horizon, followed by the maintenance allowance. The rent and the rate matter, but the value path and the running costs of owning are where the comparison usually turns."
+  - q: "Should appreciation be included at all?"
+    a: "It has to be included, because equity is part of the comparison, but it should be treated as an assumption rather than a forecast. Run the calculation with zero, with a negative figure and with a positive figure, and see how much the answer moves."
+  - q: "Why is the maintenance allowance always debated?"
+    a: "Because it is a real cost that appears in no statement and varies enormously between houses and between years. Too small and owning looks better than it is; too large and it looks worse. Setting it as an explicit input, with a number you can defend, is better than leaving it out."
+  - q: "What about the return on the down payment?"
+    a: "The down payment is money that is not available for anything else while it sits in the house, so a full comparison has to account for what it could have earned. Most simple comparisons leave it out, which is one of the biggest gaps."
+  - q: "Does the comparison handle selling after a few years?"
+    a: "Yes. Set the horizon to the number of years you expect to stay, and the tool reports the value, the equity and the selling costs at the end of it."
+  - q: "Is a short horizon realistic?"
+    a: "It is realistic for many people, who move for work or family reasons long before thirty years. A short horizon is the strongest argument in the comparison for renting, and it is worth running the calculation at both five and thirty years."
+---
+
+Most rent versus buy comparisons are not wrong because of the arithmetic.
+They are wrong because of the assumptions, and the assumptions are usually
+made silently.
+
+The <a href="/tools/rent-vs-buy/">rent versus buy calculator</a> on this site
+makes each assumption an explicit input, so the effect of changing it is
+visible rather than buried. This guide covers the ones that most often swing
+the answer.
+
+## Treating appreciation as a promise
+
+The most consequential error, because it works in one direction. A comparison
+that assumes the home rises at 3 percent a year and omits the possibility of
+a fall produces an answer that is not true in the case that matters most.
+
+The number is an assumption, and a reasonable one can be supported with data:
+the Federal Reserve Bank of St. Louis publishes long-run house price indices
+that are a reasonable starting point for calibration. But the spread between
+good and bad decades is enormous, and the arithmetic of a five-year horizon
+is entirely different from the arithmetic of thirty years.
+
+The fix is to run the calculation more than once: with the appreciation at
+zero, then with it positive, then with it negative. If the answer changes
+completely, the answer was never really about rent versus buying. It was
+about a house price forecast.
+
+## Forgetting that owning has running costs
+
+Rent is one number. Owning is a mortgage payment, plus property tax, plus
+insurance, plus HOA, plus maintenance.
+
+Maintenance is the one that gets left out, because it is the one that does
+not arrive with a bill attached to it. Roofs, appliances, water heaters and
+paint do not show up on any statement, and they do not appear in a
+comparison that only lists mortgage and tax.
+
+The right treatment is a percentage of the purchase price per year, entered
+as an explicit number that can be argued about. A percentage of the price is
+not a claim about a particular house; it is a rough proxy for the fact that
+a building ages.
+
+## Leaving the down payment out of the comparison
+
+The down payment is cash that leaves the savings account. A complete
+comparison asks what that cash would otherwise have earned, and compares that
+against what putting it in the house produced.
+
+Most simple comparisons do not do this, and the omission is large. A
+twenty-percent down payment on a $450,000 house is $90,000 — money that is
+gone from savings for the duration, and money whose alternative use is
+part of the decision.
+
+The rent versus buy calculator on this site does not model the return on the
+down payment either. It reports the cash outlay and the equity built, which
+is the part of the comparison the arithmetic can establish. The rest is a
+judgement about returns.
+
+## Using a headline rent and a headline price
+
+Rents and prices are quoted in a way that flatters one side of the
+comparison. A building with a nice apartment and a bad building five minutes
+away can carry the same monthly rent; a house with a good kitchen and a
+house with a bad roof can carry the same price. The comparison treats them as
+interchangeable, and they are not.
+
+## Comparing over a horizon that does not match the plan
+
+A thirty-year horizon is a poor assumption for a person who expects to move
+in four years, and a four-year horizon is a poor assumption for a person who
+buys to stay. The horizon is the most powerful lever in the whole comparison
+after the appreciation input, because the upfront cost of buying is
+amortised over the years you stay.
+
+Running the calculation at five years and at thirty years, with everything
+else the same, shows this clearly.
+
+## Comparing the monthly number instead of the total
+
+The monthly comparison is the same error that appears in mortgage
+comparisons. A rent of $2,400 against an ownership cost of $2,150 makes
+renting look more expensive, and it may be, month by month. Over the
+horizon, with the equity accounted for, the ordering can be different. The
+crossover month exists precisely because the monthly answer and the total
+answer disagree for a long time.
+
+## Ignoring the exit
+
+Both paths have one, and they are different. Renting has a deposit, a notice
+period and the cost of moving. Owning has selling costs, a market that may
+be softer than it was, and a mortgage that has to be paid off or assumed by
+the next buyer.
+
+The calculator reports selling costs at the end of the horizon, because they
+are a real and often significant figure. It does not model the risk of
+selling into a weaker market, which is a fact about the future rather than
+about the arithmetic.
+
+## A practical order of operations
+
+If you are running the comparison for real, this order tends to expose the
+assumptions that matter:
+
+1. Get the actual price, the actual rent, the actual tax rate and the actual
+   insurance quote for the specific properties.
+2. Run the calculation with a flat house price, and record the crossover.
+3. Run it again with a negative price change, and again with a positive one.
+4. Run it at your likely horizon and at thirty years.
+5. Look at how much the crossover month moves across those runs. If it moves
+   a great deal, the decision rests on the assumptions rather than on the
+   arithmetic, and that is worth knowing before anyone draws a conclusion.

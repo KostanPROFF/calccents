@@ -1,0 +1,123 @@
+---
+title: "Estimating Property Tax and Home Insurance"
+description: "Where property tax and homeowners insurance estimates come from, which inputs drive them, and why your own figures usually beat any published average."
+date: 2026-10-05
+lastReviewed: 2026-10-20
+author: "Kostan Proff"
+reviewedBy: "Kostan Proff"
+group: "Home and mortgages"
+readingMinutes: 6
+sources:
+  - label: "HUD — Housing costs and homebuyer assistance"
+    url: "https://www.hud.gov/helping_american_homeowners"
+  - label: "CFPB — Mortgages and consumer tools"
+    url: "https://www.consumerfinance.gov/consumer-tools/mortgages/"
+  - label: "BLS — Consumer Price Index"
+    url: "https://www.bls.gov/cpi/"
+relatedTools:
+  - "mortgage-payment"
+  - "rent-vs-buy"
+faq:
+  - q: "How is property tax calculated?"
+    a: "A local government assesses the property and applies a rate to the assessed value. The assessed value is not always the purchase price: it is often capped at a percentage of the price or set by a separate assessment formula, which is why the first bill can differ from the purchase price times a rate."
+  - q: "Why is my tax bill different from the purchase price times a rate?"
+    a: "Three things can move it. Assessed value may be capped below the price, the millage can change from year to year, and the timing of reassessments means the first bill can reflect a partial year."
+  - q: "What drives homeowners insurance?"
+    a: "The replacement cost of the structure, the location, the deductible, the coverage limits and the claims history at that address. The replacement cost is the biggest component, and it moves with construction costs."
+  - q: "Does the insurance change if I rebuild?"
+    a: "It can. A rebuild that raises the value of the structure can raise the replacement cost and therefore the premium. Coverage limits set at the original purchase price can also become inadequate after a rebuild."
+  - q: "Can I use a national average instead?"
+    a: "The averages on this site are only there to make the first estimate. Property tax varies enormously between jurisdictions, and a national average can be off by a factor of several in either direction. The calculator treats both figures as inputs you set."
+  - q: "Do these costs change the payment?"
+    a: "They are part of PITI, so they are usually collected monthly into escrow. The annual amount is what the calculator reports; the monthly figure is the annual amount divided by twelve."
+---
+
+Two of the four parts of a mortgage payment are not set by the loan at all.
+Property tax comes from a local government and homeowners insurance comes
+from an insurer, and both are estimates until the first bill arrives.
+
+The <a href="/tools/mortgage-payment/">mortgage payment calculator</a> takes
+both as inputs, because a national average is a starting point at best. Here
+is where each number actually comes from.
+
+## Property tax
+
+Property tax is an annual amount calculated as a rate applied to an assessed
+value. The structure is simple; the complications are all in the two
+variables.
+
+**The rate** is set locally, expressed in mills or as a percentage of
+assessed value. It varies enormously between jurisdictions. A millage in one
+state can be several times the millage in another, and within a single
+county it can differ by a factor of two or more between neighbouring
+townships.
+
+**The assessed value** is not the purchase price. This is the detail that
+catches people out on their first bill. Many jurisdictions cap the assessed
+value at a percentage of the price, others use a separate mass appraisal
+formula, and some reassess on a cycle. The result is that the first tax bill
+is often lower than price times a rate, and that the figure rises later as
+reassessments catch up.
+
+Property tax is also re-rated periodically. Rates can change between years,
+and a reassessment can change the value the rate is applied to without the
+house changing at all.
+
+The HUD and CFPB housing resources both describe this structure, and they
+are the right place to look for how a specific jurisdiction works.
+
+## Homeowners insurance
+
+The premium is built from several inputs, and the largest is one people
+often miss: the **replacement cost** of the structure.
+
+Replacement cost is what it would cost to rebuild the house, not what the
+house is worth or what it cost. If construction costs rise faster than house
+prices, the replacement cost rises faster than the purchase price, and so
+does the premium. That is one reason insurance is a cost that does not track
+the property's market value.
+
+The other inputs are the location (weather, fire risk, crime rates, and the
+cost of claims in that area), the deductible, the coverage limits, and the
+claims history of the address.
+
+Two consequences are worth knowing before a purchase. A rebuild can raise the
+replacement cost and therefore the premium. And coverage limits set at the
+original purchase price can become inadequate after a rebuild, which turns
+into a shortfall at claim time.
+
+## How to get better estimates
+
+The order that works best is short:
+
+1. **The tax assessor.** The local assessor's office publishes the assessed
+   value and the applicable rate for a specific address. That gives an
+   estimate grounded in the actual jurisdiction rather than in a national
+   average.
+2. **An insurance quote for the specific address.** Quotes are free, and the
+   number is produced by the model that will actually price the policy. Ask
+   for the replacement cost figure, not only the premium.
+3. **The lender's escrow estimate.** Once a loan is in place, the lender
+   computes an escrow payment based on its own figures. It is not a promise
+   for the following year, and it will move when the tax bill and the
+   insurance renewal arrive.
+
+## Why the calculator asks for these separately
+
+Tax and insurance are annual amounts, and the monthly payment shows them
+divided by twelve. The division is a timing convenience, not a discount:
+over a year the same total is paid either way. What changes month to month
+is which month a tax bill lands in, and escrow exists to smooth that out.
+
+Separating them in the calculator also makes the running cost visible. A
+payment that is 60 percent principal and interest and 40 percent tax and
+insurance behaves very differently from one that is 90 percent principal and
+interest, and the two are not comparable without that split.
+
+## What changes over time
+
+Both figures are estimates at the moment you make them, and both are subject
+to revision. The inflation data published by the Bureau of Labor Statistics
+is the reference for the construction costs behind replacement cost, and the
+tax rate is a matter of local policy. Neither is fixed for the life of a
+thirty-year loan.

@@ -1,0 +1,92 @@
+---
+import Base from '../layouts/Base.astro';
+import { SITE } from '../config/site.ts';
+---
+
+<Base
+  title="Privacy"
+  description="What this site collects, what it does not collect, and which advertising and analytics providers appear on the pages."
+  path="/privacy/"
+>
+  <div class="container">
+    <div class="page-head">
+      <nav class="breadcrumb" aria-label="Breadcrumb">
+        <a href="/">Home</a>
+        <span aria-hidden="true">/</span>
+        <span>Privacy</span>
+      </nav>
+      <h1>Privacy</h1>
+      <p class="page-head__lede">
+        The short version: the numbers you type into a calculator stay in your
+        browser, and the site sets no cookies of its own.
+      </p>
+    </div>
+
+    <div class="prose">
+      <h2>What the calculators do with your input</h2>
+      <p>
+        Nothing. The arithmetic runs in your browser using JavaScript that is
+        downloaded with the page. The values you enter are not transmitted
+        anywhere, are not stored, and are not visible to the site or to
+        anyone else. Closing the tab discards them.
+      </p>
+
+      <h2>Cookies</h2>
+      <p>
+        {SITE.name} sets no cookies. The site's own analytics use a cookieless
+        provider that records an aggregate page view with no identifier that
+        could be used to follow you between sites.
+      </p>
+
+      <h2>Advertising</h2>
+      <p>
+        The site is funded by display advertising served by Google AdSense.
+        Google and its partners may set cookies or use similar technologies to
+        serve and measure advertising, and may use them to serve ads based on
+        your prior visits to this or other websites. You can review and change
+        your choices at
+        <a href="https://myadcenter.google.com/adsense" rel="nofollow noopener" target="_blank">
+          Google Ads Settings
+        </a>, and Google's own explanation of how it uses data from sites and
+        apps that use its services is at
+        <a
+          href="https://policies.google.com/technologies/partner-sites"
+          rel="nofollow noopener"
+          target="_blank"
+          >policies.google.com</a
+        >.
+      </p>
+
+      <h2>Analytics</h2>
+      <p>
+        Aggregate page views are recorded with a cookieless analytics provider
+        that is served from the same domain as the site. The data used is
+        limited to the page, the referring source and a coarse country or city
+        level location. It is used to count visits and to find out which pages
+        are read.
+      </p>
+
+      <h2>Newsletter</h2>
+      <p>
+        If you subscribe to the newsletter, the address you enter is stored by
+        the email provider so that the newsletter can be sent. That address is
+        used for the newsletter and for nothing else, and every issue carries
+        an unsubscribe link.
+      </p>
+
+      <h2>Third-party links</h2>
+      <p>
+        Guides link to primary sources — government agencies, the SEC, the
+        Federal Reserve. Those sites have their own privacy policies, which
+        this site does not control and has not read on your behalf.
+      </p>
+
+      <h2>Changes</h2>
+      <p>
+        If the providers above change, this page changes with them. The date at
+        the bottom of the page is the date this text was last reviewed.
+      </p>
+      <p class="muted-block">Last reviewed: 20 October 2026.</p>
+    </div>
+  </div>
+</Base>
