@@ -36,10 +36,14 @@ pnpm check        # astro check — types and templates
 pnpm test         # unit tests with coverage thresholds enforced
 pnpm lint         # advisory-language lint + internal link check
 pnpm build        # static build into dist/
+pnpm lint:ads     # no AdSense code in the build without a publisher ID
+pnpm lint:ids     # no duplicate DOM ids in the built HTML
 pnpm verify       # all of the above, in the order CI runs them
 ```
 
-Node 22.22 or newer is required. `pnpm` 12 is the tested version.
+Node 22.22 or newer is required. `pnpm` 12 is the tested version. pnpm 12
+blocks install scripts by default; `pnpm-workspace.yaml` allows the two that
+are needed (`esbuild` for the Astro toolchain, `workerd` for wrangler).
 
 ## Layout
 
@@ -55,6 +59,12 @@ src/
 ├─ layouts/Base.astro      document shell
 ├─ pages/                  routes
 └─ styles/global.css       design tokens and every component style
+
+scripts/
+├─ lint-advisory.ts        YMYL guardrail, plus its own test suite
+├─ check-links.ts          internal link resolution
+├─ check-ads.ts            AdSense gating, both directions
+└─ check-dom-ids.ts        duplicate id detection in the built HTML
 ```
 
 ## Content model
@@ -150,13 +160,23 @@ those markets earns a fraction of the same page view.
 
 ## Verification gates
 
-`pnpm verify` runs four gates, and all four block a deployment:
+`pnpm verify` runs six gates, and all six block a deployment:
 
 1. `astro check` — no type or template errors.
 2. Unit tests — 90 % line coverage, 90 % function coverage and 85 % branch
-   coverage over `src/lib/calc/`, enforced by the Node test runner.
+   coverage over `src/lib/calc/`, enforced by the Node test runner. The test
+   suite also covers the advisory linter itself, pinning the sentences it must
+   reject and the sentences it must accept.
 3. Linters — zero advisory-language findings, zero broken internal links.
 4. `astro build` — the site builds.
+5. Ad gating — the built HTML and JS contain no AdSense code while no
+   publisher ID is configured, and no page carries more than three slots.
+6. DOM ids — every id in the built HTML appears exactly once.
+
+The last two gates exist because the build proves the code compiles, not that
+it behaves. A result cell and an input field that shared an id once left the
+monthly rent figure stuck on a placeholder while every test still passed; the
+duplicate-id gate now catches that class of defect before it ships.
 
 The calculation engine is tested against published loan figures and against
 the invariants the mathematics requires: a schedule sums to the amount
@@ -175,3 +195,17 @@ closed-form formula at every compounding frequency.
 - The domain, the Cloudflare account and the AdSense account are all still
   outstanding, and they are the only things between this repository and a
   live site.
+- The brand and the domain are placeholders. `Calccents` and `calccents.com`
+  live in `src/config/site.ts` and change in one place.
+
+## Current state
+
+The repository builds clean and every gate passes: 28 pages, 84 tests, 99.23 %
+line coverage over the calculation engine, zero advisory findings, zero broken
+links, zero duplicate ids, and no AdSense code in the output.
+
+The site has been checked in a browser at desktop and narrow widths: the
+three calculators compute, the results update as the inputs change, the
+amortization table fills, and the console is free of errors. The mortgage and
+compound interest figures were checked against independently calculated values
+and agree to the cent.
