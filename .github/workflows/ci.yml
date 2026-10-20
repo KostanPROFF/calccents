@@ -104,19 +104,21 @@ jobs:
           PUBLIC_GA_ID: ${{ vars.PUBLIC_GA_ID }}
           PUBLIC_BUTTONDOWN_FORM: ${{ vars.PUBLIC_BUTTONDOWN_FORM }}
 
-      # The deploy is skipped until the two Cloudflare secrets exist. This
-      # keeps the pipeline green on every push until then, and it starts
-      # deploying by itself the moment they are added.
+      # The deploy is skipped until the two Cloudflare secrets exist. The
+      # check lives in the shell rather than in an `if:` expression, because
+      # the secrets context is not available in step conditions and GitHub
+      # rejects the whole workflow file if it appears there. This keeps the
+      # pipeline green on every push until the secrets are added, and the
+      # next push deploys on its own.
       - name: Deploy
-        if: ${{ secrets.CLOUDFLARE_API_TOKEN != '' && secrets.CLOUDFLARE_ACCOUNT_ID != '' }}
-        run: pnpm exec wrangler pages deploy dist --project-name=calccents --branch=main
+        run: |
+          if [ -z "$CLOUDFLARE_API_TOKEN" ] || [ -z "$CLOUDFLARE_ACCOUNT_ID" ]; then
+            echo "::notice::Deployment skipped: CLOUDFLARE_API_TOKEN and CLOUDFLARE_ACCOUNT_ID are not set."
+            echo "::notice::Add them under Settings -> Secrets and variables -> Actions -> Repository secrets."
+            echo "::notice::The next push to main will deploy automatically."
+            exit 0
+          fi
+          pnpm exec wrangler pages deploy dist --project-name=calccents --branch=main
         env:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-
-      - name: Report skipped deployment
-        if: ${{ secrets.CLOUDFLARE_API_TOKEN == '' || secrets.CLOUDFLARE_ACCOUNT_ID == '' }}
-        run: |
-          echo "::notice::Deployment skipped: CLOUDFLARE_API_TOKEN and CLOUDFLARE_ACCOUNT_ID are not set."
-          echo "::notice::Add them under Settings -> Secrets and variables -> Actions -> Repository secrets."
-          echo "::notice::The next push to main will deploy automatically."
