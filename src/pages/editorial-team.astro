@@ -18,30 +18,68 @@ import { SITE } from '../config/site.ts';
       </nav>
       <h1>Editorial team</h1>
       <p class="page-head__lede">
-        A small site publishes a small number of pages, and every one of them
-        carries a name against it. This page says who does what and what the
-        review checks.
+        This site has one author, and that author also reviews what they write.
+        This page says who that is, what the review checks, and what you can
+        check for yourself.
       </p>
     </div>
 
     <div class="grid grid--2" style="margin-bottom: var(--space-12);">
       <div class="card">
-        <p class="eyebrow" style="color: var(--text-muted);">Author</p>
+        <p class="eyebrow" style="color: var(--text-muted);">Author and reviewer</p>
         <h2 class="card__title" style="margin-top: var(--space-2);">
           {SITE.author.name}
         </h2>
         <p class="card__body">{SITE.author.bio}</p>
+        <p class="card__body" style="margin-top: var(--space-3);">
+          {
+            SITE.author.links.map((link) => (
+              <a href={link.href} rel="me noopener">
+                {link.label}
+              </a>
+            ))
+          }
+        </p>
       </div>
       <div class="card">
-        <p class="eyebrow" style="color: var(--text-muted);">Reviewer</p>
+        <p class="eyebrow" style="color: var(--text-muted);">What you can check</p>
         <h2 class="card__title" style="margin-top: var(--space-2);">
-          {SITE.reviewer.name}
+          The arithmetic is public
         </h2>
-        <p class="card__body">{SITE.reviewer.bio}</p>
+        <p class="card__body">
+          The code behind every calculator is in a public repository, with the
+          formulas it implements, the unit tests that check them against known
+          published figures, and the checks that block a release with a broken
+          page. You do not have to take the numbers on trust, and you do not
+          have to ask.
+        </p>
+        <p class="card__body" style="margin-top: var(--space-3);">
+          <a href={SITE.repository} rel="noopener">Open the repository</a>
+        </p>
       </div>
     </div>
 
     <div class="prose">
+      <h2>Why there is only one name on this page</h2>
+      <p>
+        Plenty of sites list a writing team and a separate review team. This
+        one does not, because there is not one. The person whose name is above
+        writes the guides, checks the arithmetic, and publishes the result.
+        Where a page says who wrote it, that is who wrote it.
+      </p>
+      <p>
+        A second name would be easy to invent and there is no honest way to do
+        it. If a site says a reviewer checked something, the honest version of
+        that claim is a person who did check it. So the site says what is
+        actually true and backs it with something a reader can inspect: the
+        source of every figure, the formula behind it, and the code that
+        applies it, in public.
+      </p>
+      <p>
+        If an outside reviewer is added later, their name appears on the pages
+        they actually reviewed and nowhere else.
+      </p>
+
       <h2>What the review checks</h2>
       <p>
         Before a guide is published, the reviewer works through the same list
@@ -82,6 +120,15 @@ import { SITE } from '../config/site.ts';
         checked by a person, and no page goes live without the review above.
         A tool that produced a plausible number is exactly the kind of thing
         this process exists to catch.
+      </p>
+      <p>
+        The check that catches it is not only human. The calculation engine
+        has unit tests that run on every change and block a release if a
+        figure moves: the schedule has to sum to the amount borrowed, the loan
+        has to close at exactly zero, and the period-by-period projection has
+        to agree with the closed-form formula at every compounding frequency.
+        A passage of prose cannot fail that way. A formula can, and when it
+        does, the build stops.
       </p>
 
       <h2>Review dates</h2>

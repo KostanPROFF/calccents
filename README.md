@@ -232,9 +232,17 @@ closed-form formula at every compounding frequency.
 
 ## Known gaps and next steps
 
-- A second reviewer has not been added; the editorial team page currently
-  names the same person as author and reviewer. This is the weakest point in
-  the trust story and should be fixed before the site scales.
+- The site has one author, and that author also reviews what they write. This
+  is stated plainly on the editorial page rather than papered over with a
+  second name, because a fabricated reviewer on an open-source site is a
+  liability rather than a credential. If an outside reviewer is added, their
+  name goes on the pages they actually reviewed — the schema already supports
+  a per-guide `reviewedBy`, and the byline prints it only when it differs
+  from the author.
+- The author's bio is deliberately short. It says what the person does, not
+  what they are qualified to do; a real credential, a link to a professional
+  profile, and a sentence on why this person is the right one to publish
+  financial arithmetic would strengthen the E-E-A-T signal.
 - Net pay, debt payoff and tax calculators are planned but not built. They
   need reference data with dates, which is a different kind of work from the
   pure-arithmetic tools here.

@@ -27,6 +27,36 @@ const {
 const canonical = new URL(path, SITE.origin).toString();
 const fullTitle = path === '/' ? `${SITE.name} — ${SITE.tagline}` : `${title} | ${SITE.name}`;
 
+/**
+ * The site and its author, described on every page.
+ *
+ * A one-person site has to be explicit about who is behind it: the same
+ * structured data that names a publisher on a large site names the person
+ * here, with a link to the profile that can be checked.
+ */
+const organization = {
+  '@context': 'https://schema.org',
+  '@type': 'Organization',
+  name: SITE.name,
+  url: SITE.origin,
+  description: SITE.description,
+  foundingDate: SITE.founded,
+  email: SITE.email,
+  logo: new URL('/favicon.svg', SITE.origin).toString(),
+  sameAs: [SITE.repository, ...SITE.author.links.map((link) => link.href)],
+};
+
+const person = {
+  '@context': 'https://schema.org',
+  '@type': 'Person',
+  name: SITE.author.name,
+  jobTitle: SITE.author.role,
+  description: SITE.author.bio,
+  url: new URL('/editorial-team/', SITE.origin).toString(),
+  worksFor: { '@type': 'Organization', name: SITE.name },
+  sameAs: SITE.author.links.map((link) => link.href),
+};
+
 const adsenseClient = import.meta.env.PUBLIC_ADSENSE_CLIENT;
 const gaId = import.meta.env.PUBLIC_GA_ID;
 ---
@@ -54,7 +84,7 @@ const gaId = import.meta.env.PUBLIC_GA_ID;
     <link rel="sitemap" href="/sitemap-index.xml" />
 
     {
-      jsonLd.map((schema) => (
+      [...jsonLd, organization, person].map((schema) => (
         <script type="application/ld+json" set:html={JSON.stringify(schema)} />
       ))
     }

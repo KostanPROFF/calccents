@@ -36,12 +36,22 @@ const article = {
   description: data.description,
   datePublished: data.date.toISOString(),
   dateModified: data.lastReviewed.toISOString(),
-  author: { '@type': 'Person', name: data.author },
+  author: {
+    '@type': 'Person',
+    name: data.author,
+    sameAs: SITE.author.links.map((link) => link.href),
+  },
   publisher: {
     '@type': 'Organization',
     name: SITE.name,
     url: SITE.origin,
   },
+  // Only present when the review was done by somebody other than the
+  // author. A reviewer the same person as the author is not a fact worth
+  // putting in structured data.
+  ...(data.reviewedBy !== data.author
+    ? { reviewedBy: { '@type': 'Person', name: data.reviewedBy } }
+    : {}),
   mainEntityOfPage: {
     '@type': 'WebPage',
     '@id': new URL(`/guides/${guide.id}/`, SITE.origin).toString(),
@@ -85,6 +95,17 @@ const faqPage = {
         <span>{data.readingMinutes} min read</span>
         <span aria-hidden="true">·</span>
         <span>By <a href="/editorial-team/">{data.author}</a></span>
+        {
+          // The reviewer is only named when it is somebody other than the
+          // author. A second name on the same page would claim a review
+          // that happened separately, and this site does not claim that.
+          data.reviewedBy !== data.author && (
+            <>
+              <span aria-hidden="true">·</span>
+              <span>Reviewed by <a href="/editorial-team/">{data.reviewedBy}</a></span>
+            </>
+          )
+        }
       </div>
     </div>
 

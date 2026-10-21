@@ -80,6 +80,16 @@ import { SITE } from '../config/site.ts';
         </li>
       </ul>
 
+      <h2>Who runs this</h2>
+      <p>
+        {SITE.author.name}. {SITE.author.bio} The
+        <a href="/editorial-team/">editorial page</a> sets out what the review
+        checks before a page goes live, and the
+        <a href={SITE.repository} rel="noopener">code is public</a> — the
+        formulas, the unit tests and the checks that block a release with a
+        broken page.
+      </p>
+
       <h2>How the calculators work</h2>
       <p>
         The arithmetic runs in your browser. There is no server that receives
