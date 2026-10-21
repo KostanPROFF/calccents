@@ -109,8 +109,7 @@ jobs:
 
           if echo "$existing" | grep -q "^CNAME|${DOMAIN}|"; then
             echo "The CNAME already exists, leaving it alone."
-          else
-            echo "Creating CNAME ${DOMAIN} -> ${PROJECT}.pages.dev"
+          else            echo "Creating CNAME ${DOMAIN} -> ${PROJECT}.pages.dev"
             curl -sS -X POST "https://api.cloudflare.com/client/v4/zones/${zone}/dns_records" \
               -H 'Content-Type: application/json' \
               -H "Authorization: Bearer ${CLOUDFLARE_API_TOKEN}" \
@@ -135,7 +134,9 @@ jobs:
           existing=$(curl -sS "https://api.cloudflare.com/client/v4/zones/${zone}/dns_records?name=www" \
             -H "Authorization: Bearer ${CLOUDFLARE_API_TOKEN}" \
             | node -e 'let r="";process.stdin.on("data",c=>r+=c).on("end",()=>{const rs=JSON.parse(r).result??[];console.log(rs.map(x=>`${x.type}|${x.name}|${x.content}`).join("\n"));});')
-          if echo "$existing" | grep -q "CNAME|www|"; then
+          # The API returns names fully qualified, so the check looks for
+          # "CNAME|www.calccents.com|" and not for a bare "www".
+          if echo "$existing" | grep -q "^CNAME|www\.${DOMAIN}|"; then
             echo "The www record already exists."
           else
             echo "Creating CNAME www -> ${DOMAIN}"
