@@ -150,7 +150,7 @@ jobs:
           # one canonical address, one set of signals.
           have_rule=$(curl -sS "https://api.cloudflare.com/client/v4/zones/${zone}/rulesets/phases/http_request_redirect/entrypoint" \
             -H "Authorization: Bearer ${CLOUDFLARE_API_TOKEN}" \
-            | node -e 'let r="";process.stdin.on("data",c=>r+=c).on("end",()=>{const b=JSON.parse(r);console.log(b.success&&b.result?.rules?.some(x=>JSON.stringify(x).includes("www.calccents.com"))?"yes":"no");});')
+            | node -e 'let r="";process.stdin.on("data",c=>r+=c).on("end",()=>{const b=JSON.parse(r);console.log(b.success&&b.result?.rules?.some(x=>JSON.stringify(x).includes("www.${DOMAIN}"))?"yes":"no");});')
           if [ "$have_rule" = "yes" ]; then
             echo "The www redirect already exists."
           else
@@ -161,6 +161,37 @@ jobs:
               -d "{\"name\": \"Redirect www to the apex domain\", \"kind\": \"zone\", \"phase\": \"http_request_redirect\", \"rules\": [{\"action\": \"redirect\", \"action_parameters\": {\"from\": {\"value\": {\"http_request\": {\"host\": {\"matches\": \"www.${DOMAIN}\"}}}}, \"to\": {\"value\": {\"url\": {\"value\": \"https://${DOMAIN}\"}}, \"preserve_query_string\": true}, \"status_code\": 301}, \"conditions\": [], \"description\": \"Send www to the apex domain\"}]}" \
               | node -e 'let r="";process.stdin.on("data",c=>r+=c).on("end",()=>{const b=JSON.parse(r);if(!b.success){console.log("The redirect could not be created, www will still serve the site directly.");for(const e of b.errors??[])console.error(`  ${e.code}: ${e.message}`);return;}console.log("redirect created");});'
           fi
+
+      - name: Attach www to the Pages project
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          DOMAIN: ${{ inputs.domain }}
+          PROJECT: ${{ inputs.project }}
+        run: |
+          set -euo pipefail
+          # Cloudflare Pages answers 522 for a hostname the project does not
+          # know, so www has to be a custom domain of its own. The redirect
+          # above is the nicer form of this, but it needs a token with the
+          # zone rulesets permission; without it the site is served at both
+          # addresses and the canonical tag points at the apex either way.
+          response=$(curl -sS -X POST \
+            "https://api.cloudflare.com/client/v4/accounts/${CLOUDFLARE_ACCOUNT_ID}/pages/projects/${PROJECT}/domains" \
+            -H 'Content-Type: application/json' \
+            -H "Authorization: Bearer ${CLOUDFLARE_API_TOKEN}" \
+            -d "{\"name\": \"www.${DOMAIN}\"}")
+          echo "$response" | node -e '
+            let raw = "";
+            process.stdin.on("data", (c) => (raw += c)).on("end", () => {
+              const body = JSON.parse(raw);
+              if (!body.success) {
+                const codes = (body.errors ?? []).map((e) => `${e.code}: ${e.message}`).join("; ");
+                console.log(`www attach returned: ${codes || "unknown error"}`);
+                return;
+              }
+              console.log(`attached: ${body.result.name} (${body.result.status})`);
+            });
+          '
 
       - name: Show the final records
         env:
