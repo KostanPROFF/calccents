@@ -123,13 +123,36 @@ Until those two secrets exist, the deploy step is skipped and the pipeline
 reports why; the rest of CI still runs. The first push after the secrets are
 added deploys on its own, with no further action.
 
-Attach the custom domain to the Pages project in the Cloudflare dashboard. The
-canonical origin in `src/config/site.ts` and the generated `robots.txt` and
-`sitemap-index.xml` already point at `calccents.com`.
-
 The build is fully static, so there is no server to run, patch or pay for.
 Rollback is a matter of promoting an earlier deployment from the Cloudflare
 Pages dashboard.
+
+### The domain
+
+The site lives at **https://calccents.com**. The domain zone and the Pages
+project are in the same Cloudflare account, so `.github/workflows/attach-domain.yml`
+sets the whole thing up:
+
+```bash
+gh workflow run attach-domain.yml -f domain=calccents.com
+```
+
+It attaches the apex domain to the Pages project, creates the CNAME to the
+project's `pages.dev` hostname if it is missing, points `www` at the apex and
+waits for the domain to answer with a 200.
+
+Two things about that workflow are worth knowing:
+
+- The Pages attach API registers the custom domain but does not create the
+  DNS record. Without the record the domain sits in `initializing` forever,
+  which is why the workflow creates the CNAME itself.
+- Cloudflare Pages answers `522` for a hostname the project does not know, so
+  `www` has to be attached to the project too, not only pointed at it.
+
+The workflow also tries to create a 301 redirect from `www` to the apex. That
+call needs a token with the zone rulesets permission; with the Pages and DNS
+permissions alone it is skipped, and the site is served at both addresses
+instead. The canonical tag on every page points at the apex either way.
 
 ## Turning on advertising
 
@@ -215,20 +238,26 @@ closed-form formula at every compounding frequency.
 - Net pay, debt payoff and tax calculators are planned but not built. They
   need reference data with dates, which is a different kind of work from the
   pure-arithmetic tools here.
-- The domain, the Cloudflare account and the AdSense account are all still
-  outstanding, and they are the only things between this repository and a
-  live site.
+- The AdSense account is the last thing standing between the site and its
+  first advertisement. Apply with the site at its final address.
+- The newsletter form is hidden until a Buttondown form URL is configured, so
+  there is no email list yet.
+- The `www` to apex redirect needs a Cloudflare token with the zone rulesets
+  permission. Until then both addresses serve the site.
 - The brand and the domain are placeholders. `Calccents` and `calccents.com`
   live in `src/config/site.ts` and change in one place.
 
 ## Current state
 
+The site is live at **https://calccents.com**, deployed from `main` by GitHub
+Actions, with `www.calccents.com` pointing at the same place.
+
 The repository builds clean and every gate passes: 28 pages, 84 tests, 99.23 %
 line coverage over the calculation engine, zero advisory findings, zero broken
 links, zero duplicate ids, and no AdSense code in the output.
 
-The site has been checked in a browser at desktop and narrow widths: the
-three calculators compute, the results update as the inputs change, the
-amortization table fills, and the console is free of errors. The mortgage and
-compound interest figures were checked against independently calculated values
-and agree to the cent.
+The site has been checked in a browser at desktop and narrow widths, on the
+live domain as well as locally: the three calculators compute, the results
+update as the inputs change, the amortization table fills, and the console is
+free of errors. The mortgage and compound interest figures were checked
+against independently calculated values and agree to the cent.
