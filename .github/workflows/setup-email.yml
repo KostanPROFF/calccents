@@ -1,15 +1,18 @@
 name: Set up contact email
 
-# Sets up hello@calccents.com so the contact page is not pointing at an
-# address nobody receives.
+# The contact address is already wired up: Cloudflare Email Routing on the
+# zone forwards hello@calccents.com to info@constantinecs.com, which is a
+# real mailbox. This workflow exists to report that state and to make
+# changes to it without the dashboard.
 #
-# The zone is on Cloudflare, so Email Routing is the free way to do this:
-# mail for the domain is forwarded to a real inbox. The API is used here
-# rather than the dashboard because it is repeatable and because the result
-# is written down here.
+# Run with no arguments to report the current state:
+#   gh workflow run setup-email.yml
 #
-# Run: gh workflow run setup-email.yml -f destination=you@example.com
-# Leave the destination empty to only report the current state.
+# Run with a destination to add another one:
+#   gh workflow run setup-email.yml -f destination=you@example.com
+#
+# Note that Email Routing receives only. To send as hello@calccents.com,
+# the domain needs a mailbox with sending, not a forward.
 
 on:
   workflow_dispatch:

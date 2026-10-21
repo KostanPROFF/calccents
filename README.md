@@ -136,7 +136,6 @@ sets the whole thing up:
 ```bash
 gh workflow run attach-domain.yml -f domain=calccents.com
 ```
-
 It attaches the apex domain to the Pages project, creates the CNAME to the
 project's `pages.dev` hostname if it is missing, points `www` at the apex and
 waits for the domain to answer with a 200.
@@ -153,6 +152,32 @@ The workflow also tries to create a 301 redirect from `www` to the apex. That
 call needs a token with the zone rulesets permission; with the Pages and DNS
 permissions alone it is skipped, and the site is served at both addresses
 instead. The canonical tag on every page points at the apex either way.
+
+### The contact address
+
+`hello@calccents.com` is the address the contact page and the structured
+data publish. It is not a placeholder: Cloudflare Email Routing is enabled on
+the zone, and a rule forwards mail for that address to
+`info@constantinecs.com`, a real mailbox. The catch-all rule is off, so
+nothing but the addresses named here can reach the site.
+
+The chain, in the order a message takes it:
+
+| Layer | What it is |
+|---|---|
+| MX | `route1/2/3.mx.cloudflare.net` |
+| SPF | `include:_spf.mx.cloudflare.net` |
+| Routing | `hello@calccents.com` → `info@constantinecs.com` |
+| Destination | A mailbox on Purelymail, verified in 2024 |
+
+`gh workflow run setup-email.yml` reports all of it, and adds a destination
+address when one is needed.
+
+Email Routing only receives. A reply to a reader therefore goes out from the
+addressing domain rather than from `calccents.com`, which is fine for a
+contact form but is not the same as having a mailbox on this domain. Adding
+`calccents.com` to the existing Purelymail account would give the site a
+mailbox that both sends and receives under its own name.
 
 ## Turning on advertising
 
