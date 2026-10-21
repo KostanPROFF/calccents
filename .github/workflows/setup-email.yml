@@ -1,0 +1,171 @@
+name: Set up contact email
+
+# Sets up hello@calccents.com so the contact page is not pointing at an
+# address nobody receives.
+#
+# The zone is on Cloudflare, so Email Routing is the free way to do this:
+# mail for the domain is forwarded to a real inbox. The API is used here
+# rather than the dashboard because it is repeatable and because the result
+# is written down here.
+#
+# Run: gh workflow run setup-email.yml -f destination=you@example.com
+# Leave the destination empty to only report the current state.
+
+on:
+  workflow_dispatch:
+    inputs:
+      destination:
+        description: 'Real inbox that mail for the domain should be forwarded to'
+        required: false
+        default: ''
+        type: string
+      address:
+        description: 'The address on the domain that should receive the mail'
+        required: false
+        default: hello@calccents.com
+        type: string
+
+jobs:
+  setup:
+    name: Set up contact email
+    runs-on: ubuntu-latest
+    steps:
+      - name: Report the current state
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          DOMAIN: calccents.com
+        run: |
+          set -uo pipefail
+          zone=$(curl -sS "https://api.cloudflare.com/client/v4/zones?name=${DOMAIN}" \
+            -H "Authorization: Bearer ${CLOUDFLARE_API_TOKEN}" \
+            | node -e 'let r="";process.stdin.on("data",c=>r+=c).on("end",()=>{console.log(JSON.parse(r).result?.[0]?.id ?? "");});')
+          echo "zone id: ${zone}"
+
+          echo "--- email routing settings ---"
+          curl -sS "https://api.cloudflare.com/client/v4/zones/${zone}/email/routing" \
+            -H "Authorization: Bearer ${CLOUDFLARE_API_TOKEN}" \
+            | node -e '
+              let r = "";
+              process.stdin.on("data", (c) => (r += c)).on("end", () => {
+                const body = JSON.parse(r);
+                if (!body.success) {
+                  console.log(`unavailable: ${(body.errors ?? []).map((e) => e.message).join("; ")}`);
+                  return;
+                }
+                console.log(`enabled: ${body.result.enabled}`);
+                console.log(`status: ${body.result.status}`);
+              });
+            '
+
+          echo "--- destination addresses ---"
+          curl -sS "https://api.cloudflare.com/client/v4/accounts/${CLOUDFLARE_ACCOUNT_ID}/email/routing/addresses" \
+            -H "Authorization: Bearer ${CLOUDFLARE_API_TOKEN}" \
+            | node -e '
+              let r = "";
+              process.stdin.on("data", (c) => (r += c)).on("end", () => {
+                const body = JSON.parse(r);
+                if (!body.success) {
+                  console.log(`unavailable: ${(body.errors ?? []).map((e) => e.message).join("; ")}`);
+                  return;
+                }
+                if (body.result.length === 0) console.log("none yet");
+                for (const address of body.result) {
+                  console.log(`${address.email} — verified: ${address.verified ?? "no"}`);
+                }
+              });
+            '
+
+          echo "--- routing rules ---"
+          curl -sS "https://api.cloudflare.com/client/v4/zones/${zone}/email/routing/rules" \
+            -H "Authorization: Bearer ${CLOUDFLARE_API_TOKEN}" \
+            | node -e '
+              let r = "";
+              process.stdin.on("data", (c) => (r += c)).on("end", () => {
+                const body = JSON.parse(r);
+                if (!body.success) {
+                  console.log(`unavailable: ${(body.errors ?? []).map((e) => e.message).join("; ")}`);
+                  return;
+                }
+                if (body.result.length === 0) console.log("none yet");
+                for (const rule of body.result) {
+                  const to = rule.matchers?.find((m) => m.field === "to")?.value ?? "all";
+                  const forward = rule.actions?.[0]?.value?.[0] ?? rule.actions?.[0]?.type;
+                  console.log(`${to} -> ${forward} (enabled: ${rule.enabled})`);
+                }
+              });
+            '
+
+      - name: Add the destination address
+        if: ${{ inputs.destination != '' }}
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          DESTINATION: ${{ inputs.destination }}
+        run: |
+          set -uo pipefail
+          existing=$(curl -sS "https://api.cloudflare.com/client/v4/accounts/${CLOUDFLARE_ACCOUNT_ID}/email/routing/addresses" \
+            -H "Authorization: Bearer ${CLOUDFLARE_API_TOKEN}" \
+            | node -e 'let r="";process.stdin.on("data",c=>r+=c).on("end",()=>{console.log((JSON.parse(r).result??[]).map(a=>`${a.email}|${a.verified?"yes":"no"}`).join("\n"));});')
+          if echo "$existing" | grep -qi "^${DESTINATION}|"; then
+            echo "${DESTINATION} is already a destination."
+            echo "$existing" | grep -i "^${DESTINATION}|"
+            exit 0
+          fi
+          echo "Adding ${DESTINATION}. Cloudflare sends a verification email to it."
+          curl -sS -X POST "https://api.cloudflare.com/client/v4/accounts/${CLOUDFLARE_ACCOUNT_ID}/email/routing/addresses" \
+            -H 'Content-Type: application/json' \
+            -H "Authorization: Bearer ${CLOUDFLARE_API_TOKEN}" \
+            -d "{\"email\": \"${DESTINATION}\"}" \
+            | node -e 'let r="";process.stdin.on("data",c=>r+=c).on("end",()=>{const b=JSON.parse(r);if(!b.success){for(const e of b.errors??[])console.error(`  ${e.code}: ${e.message}`);process.exit(1);}console.log(`added: ${b.result.email} — verified: ${b.result.verified ?? "not yet"}`);});'
+          echo "::notice::Open the verification email Cloudflare sent to ${DESTINATION} and confirm it, then re-run this workflow."
+
+      - name: Enable the Email Routing DNS records
+        if: ${{ inputs.destination != '' }}
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          DOMAIN: calccents.com
+        run: |
+          set -uo pipefail
+          zone=$(curl -sS "https://api.cloudflare.com/client/v4/zones?name=${DOMAIN}" \
+            -H "Authorization: Bearer ${CLOUDFLARE_API_TOKEN}" \
+            | node -e 'let r="";process.stdin.on("data",c=>r+=c).on("end",()=>{console.log(JSON.parse(r).result?.[0]?.id ?? "");});')
+          curl -sS -X POST "https://api.cloudflare.com/client/v4/zones/${zone}/email/routing/dns" \
+            -H 'Content-Type: application/json' \
+            -H "Authorization: Bearer ${CLOUDFLARE_API_TOKEN}" -d '{}' \
+            | node -e 'let r="";process.stdin.on("data",c=>r+=c).on("end",()=>{const b=JSON.parse(r);if(!b.success){for(const e of b.errors??[])console.error(`  ${e.code}: ${e.message}`);process.exit(1);}console.log(`email routing DNS records created: ${(b.result??[]).length}`);});'
+
+      - name: Create the forwarding rule
+        if: ${{ inputs.destination != '' }}
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          DESTINATION: ${{ inputs.destination }}
+          ADDRESS: ${{ inputs.address }}
+        run: |
+          set -uo pipefail
+          zone=$(curl -sS "https://api.cloudflare.com/client/v4/zones?name=calccents.com" \
+            -H "Authorization: Bearer ${CLOUDFLARE_API_TOKEN}" \
+            | node -e 'let r="";process.stdin.on("data",c=>r+=c).on("end",()=>{console.log(JSON.parse(r).result?.[0]?.id ?? "");});')
+
+          verified=$(curl -sS "https://api.cloudflare.com/client/v4/accounts/${CLOUDFLARE_ACCOUNT_ID}/email/routing/addresses" \
+            -H "Authorization: Bearer ${CLOUDFLARE_API_TOKEN}" \
+            | node -e 'let r="";process.stdin.on("data",c=>r+=c).on("end",()=>{const a=(JSON.parse(r).result??[]).find(x=>x.email.toLowerCase()===process.env.DESTINATION.toLowerCase());console.log(a&&a.verified?"yes":"no");});')
+          if [ "$verified" != "yes" ]; then
+            echo "::warning::${DESTINATION} is not verified yet. Confirm the email Cloudflare sent, then re-run this workflow."
+            exit 0
+          fi
+
+          existing=$(curl -sS "https://api.cloudflare.com/client/v4/zones/${zone}/email/routing/rules" \
+            -H "Authorization: Bearer ${CLOUDFLARE_API_TOKEN}" \
+            | node -e 'let r="";process.stdin.on("data",c=>r+=c).on("end",()=>{console.log((JSON.parse(r).result??[]).map(x=>x.matchers?.find(m=>m.field==="to")?.value??"").join("\n"));});')
+          if echo "$existing" | grep -q "^${ADDRESS}$"; then
+            echo "A rule for ${ADDRESS} already exists."
+            exit 0
+          fi
+
+          curl -sS -X POST "https://api.cloudflare.com/client/v4/zones/${zone}/email/routing/rules" \
+            -H 'Content-Type: application/json' \
+            -H "Authorization: Bearer ${CLOUDFLARE_API_TOKEN}" \
+            -d "{\"actions\": [{\"type\": \"forward\", \"value\": [\"${DESTINATION}\"]}], \"matchers\": [{\"type\": \"literal\", \"field\": \"to\", \"value\": \"${ADDRESS}\"}], \"enabled\": true, \"name\": \"Forward ${ADDRESS}\", \"priority\": 0, \"source\": \"api\"}" \
+            | node -e 'let r="";process.stdin.on("data",c=>r+=c).on("end",()=>{const b=JSON.parse(r);if(!b.success){for(const e of b.errors??[])console.error(`  ${e.code}: ${e.message}`);process.exit(1);}console.log(`rule created: ${b.result.matchers[0].value} -> ${b.result.actions[0].value[0]}`);});'
