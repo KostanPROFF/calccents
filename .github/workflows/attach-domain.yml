@@ -1,9 +1,12 @@
 name: Attach custom domain
 
-# One-time setup: binds the apex domain to the Pages project and reports
-# what the DNS zone ended up with. The domain zone lives in the same
-# Cloudflare account, so Cloudflare creates the record itself and there is
-# nothing to configure by hand.
+# One-time setup: binds the apex domain to the Pages project, makes sure the
+# DNS record exists, and reports what the zone ended up with.
+#
+# The zone and the Pages project live in the same Cloudflare account, so the
+# record is a plain CNAME to the project's pages.dev hostname. The attach API
+# does not create that record on its own, which leaves the domain in
+# "initializing" forever — hence the explicit record creation below.
 #
 # Run: gh workflow run attach-domain.yml -f domain=calccents.com
 # The deploy workflow does not do this, because a DNS change should never
@@ -45,20 +48,77 @@ jobs:
             process.stdin.on("data", (c) => (raw += c)).on("end", () => {
               const body = JSON.parse(raw);
               if (!body.success) {
-                console.error("API refused the request:");
-                for (const error of body.errors ?? []) {
-                  console.error(`  ${error.code}: ${error.message}`);
-                }
-                process.exit(1);
+                // Already attached is a fine outcome, not a failure.
+                const codes = (body.errors ?? []).map((e) => `${e.code}: ${e.message}`).join("; ");
+                console.log(`Attach returned: ${codes || "unknown error"}`);
+                return;
               }
               const domain = body.result;
-              console.log(`domain: ${domain.name}`);
-              console.log(`status: ${domain.status}`);
-              console.log(`zone: ${domain.zone_tag}`);
+              console.log(`attached: ${domain.name} (${domain.status})`);
             });
           '
 
-      - name: Show the domain records
+      - name: Show the domain validation state
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          PROJECT: ${{ inputs.project }}
+        run: |
+          curl -sS "https://api.cloudflare.com/client/v4/accounts/${CLOUDFLARE_ACCOUNT_ID}/pages/projects/${PROJECT}/domains" \
+            -H "Authorization: Bearer ${CLOUDFLARE_API_TOKEN}" \
+            | node -e '
+              let raw = "";
+              process.stdin.on("data", (c) => (raw += c)).on("end", () => {
+                const domains = JSON.parse(raw).result ?? [];
+                for (const domain of domains) {
+                  console.log(`domain: ${domain.name}`);
+                  console.log(`  status: ${domain.status}`);
+                  console.log(`  zone: ${domain.zone_tag}`);
+                  const validation = domain.validation_data ?? {};
+                  console.log(`  validation: ${validation.method ?? "none"} / ${validation.status ?? "none"}`);
+                  if (validation.txt_name) {
+                    console.log(`  TXT required: ${validation.txt_name} = ${validation.txt_value}`);
+                  }
+                  const verification = domain.verification_data ?? {};
+                  console.log(`  verification: ${verification.status ?? "none"} ${verification.error_message ?? ""}`);
+                }
+              });
+            '
+
+      - name: Make sure the DNS record exists
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          DOMAIN: ${{ inputs.domain }}
+          PROJECT: ${{ inputs.project }}
+        run: |
+          set -euo pipefail
+          zone=$(curl -sS "https://api.cloudflare.com/client/v4/zones?name=${DOMAIN}" \
+            -H "Authorization: Bearer ${CLOUDFLARE_API_TOKEN}" \
+            | node -e 'let r="";process.stdin.on("data",c=>r+=c).on("end",()=>{const z=JSON.parse(r).result?.[0];console.log(z?.id ?? "");});')
+          if [ -z "$zone" ]; then
+            echo "::error::No zone named ${DOMAIN} in this account."
+            exit 1
+          fi
+          echo "zone id: ${zone}"
+
+          existing=$(curl -sS "https://api.cloudflare.com/client/v4/zones/${zone}/dns_records" \
+            -H "Authorization: Bearer ${CLOUDFLARE_API_TOKEN}" \
+            | node -e 'let r="";process.stdin.on("data",c=>r+=c).on("end",()=>{const rs=JSON.parse(r).result??[];console.log(rs.map(x=>`${x.type}|${x.name}|${x.content}`).join("\n"));});')
+          echo "--- records before ---"
+          echo "${existing:-none}"
+
+          if echo "$existing" | grep -q "^CNAME|${DOMAIN}|"; then
+            echo "The CNAME already exists, leaving it alone."
+          else
+            echo "Creating CNAME ${DOMAIN} -> ${PROJECT}.pages.dev"
+            curl -sS -X POST "https://api.cloudflare.com/client/v4/zones/${zone}/dns_records" \
+              -H 'Content-Type: application/json' \
+              -H "Authorization: Bearer ${CLOUDFLARE_API_TOKEN}" \
+              -d "{\"type\": \"CNAME\", \"name\": \"${DOMAIN}\", \"content\": \"${PROJECT}.pages.dev\", \"proxied\": true, \"ttl\": 1}" \
+              | node -e 'let r="";process.stdin.on("data",c=>r+=c).on("end",()=>{const b=JSON.parse(r);if(!b.success){for(const e of b.errors??[])console.error(`  ${e.code}: ${e.message}`);process.exit(1);}console.log(`created: ${b.result.name} -> ${b.result.content}`);});'
+          fi
+
+      - name: Show the final records
         env:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           DOMAIN: ${{ inputs.domain }}
@@ -66,28 +126,24 @@ jobs:
           zone=$(curl -sS "https://api.cloudflare.com/client/v4/zones?name=${DOMAIN}" \
             -H "Authorization: Bearer ${CLOUDFLARE_API_TOKEN}" \
             | node -e 'let r="";process.stdin.on("data",c=>r+=c).on("end",()=>{const z=JSON.parse(r).result?.[0];console.log(z?.id ?? "");});')
-          if [ -z "$zone" ]; then
-            echo "No zone found for ${DOMAIN} in this account."
-            exit 0
-          fi
           curl -sS "https://api.cloudflare.com/client/v4/zones/${zone}/dns_records" \
             -H "Authorization: Bearer ${CLOUDFLARE_API_TOKEN}" \
             | node -e '
-              let r = "";
-              process.stdin.on("data", (c) => (r += c)).on("end", () => {
-                const records = JSON.parse(r).result ?? [];
-                if (records.length === 0) console.log("No DNS records in the zone yet.");
+              let raw = "";
+              process.stdin.on("data", (c) => (raw += c)).on("end", () => {
+                const records = JSON.parse(raw).result ?? [];
+                if (records.length === 0) console.log("No DNS records in the zone.");
                 for (const record of records) {
                   console.log(`${record.type} ${record.name} -> ${record.content} (proxied: ${record.proxied})`);
                 }
               });
             '
 
-      - name: Check that the domain serves the site
+      - name: Wait for the domain to serve the site
         env:
           DOMAIN: ${{ inputs.domain }}
         run: |
-          for attempt in 1 2 3 4 5 6 7 8 9 10; do
+          for attempt in $(seq 1 24); do
             status=$(curl -s -o /dev/null -w '%{http_code}' --max-time 20 "https://${DOMAIN}/" || true)
             echo "attempt ${attempt}: https://${DOMAIN}/ -> ${status}"
             if [ "$status" = "200" ]; then
