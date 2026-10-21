@@ -1,0 +1,100 @@
+name: Attach custom domain
+
+# One-time setup: binds the apex domain to the Pages project and reports
+# what the DNS zone ended up with. The domain zone lives in the same
+# Cloudflare account, so Cloudflare creates the record itself and there is
+# nothing to configure by hand.
+#
+# Run: gh workflow run attach-domain.yml -f domain=calccents.com
+# The deploy workflow does not do this, because a DNS change should never
+# happen as a side effect of a code push.
+
+on:
+  workflow_dispatch:
+    inputs:
+      domain:
+        description: 'Apex domain to attach, e.g. calccents.com'
+        required: true
+        type: string
+      project:
+        description: 'Cloudflare Pages project name'
+        required: false
+        default: calccents
+        type: string
+
+jobs:
+  attach:
+    name: Attach domain
+    runs-on: ubuntu-latest
+    steps:
+      - name: Attach the domain
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          DOMAIN: ${{ inputs.domain }}
+          PROJECT: ${{ inputs.project }}
+        run: |
+          set -euo pipefail
+          response=$(curl -sS -X POST \
+            "https://api.cloudflare.com/client/v4/accounts/${CLOUDFLARE_ACCOUNT_ID}/pages/projects/${PROJECT}/domains" \
+            -H 'Content-Type: application/json' \
+            -H "Authorization: Bearer ${CLOUDFLARE_API_TOKEN}" \
+            -d "{\"name\": \"${DOMAIN}\"}")
+          echo "$response" | node -e '
+            let raw = "";
+            process.stdin.on("data", (c) => (raw += c)).on("end", () => {
+              const body = JSON.parse(raw);
+              if (!body.success) {
+                console.error("API refused the request:");
+                for (const error of body.errors ?? []) {
+                  console.error(`  ${error.code}: ${error.message}`);
+                }
+                process.exit(1);
+              }
+              const domain = body.result;
+              console.log(`domain: ${domain.name}`);
+              console.log(`status: ${domain.status}`);
+              console.log(`zone: ${domain.zone_tag}`);
+            });
+          '
+
+      - name: Show the domain records
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          DOMAIN: ${{ inputs.domain }}
+        run: |
+          zone=$(curl -sS "https://api.cloudflare.com/client/v4/zones?name=${DOMAIN}" \
+            -H "Authorization: Bearer ${CLOUDFLARE_API_TOKEN}" \
+            | node -e 'let r="";process.stdin.on("data",c=>r+=c).on("end",()=>{const z=JSON.parse(r).result?.[0];console.log(z?.id ?? "");});')
+          if [ -z "$zone" ]; then
+            echo "No zone found for ${DOMAIN} in this account."
+            exit 0
+          fi
+          curl -sS "https://api.cloudflare.com/client/v4/zones/${zone}/dns_records" \
+            -H "Authorization: Bearer ${CLOUDFLARE_API_TOKEN}" \
+            | node -e '
+              let r = "";
+              process.stdin.on("data", (c) => (r += c)).on("end", () => {
+                const records = JSON.parse(r).result ?? [];
+                if (records.length === 0) console.log("No DNS records in the zone yet.");
+                for (const record of records) {
+                  console.log(`${record.type} ${record.name} -> ${record.content} (proxied: ${record.proxied})`);
+                }
+              });
+            '
+
+      - name: Check that the domain serves the site
+        env:
+          DOMAIN: ${{ inputs.domain }}
+        run: |
+          for attempt in 1 2 3 4 5 6 7 8 9 10; do
+            status=$(curl -s -o /dev/null -w '%{http_code}' --max-time 20 "https://${DOMAIN}/" || true)
+            echo "attempt ${attempt}: https://${DOMAIN}/ -> ${status}"
+            if [ "$status" = "200" ]; then
+              echo "The domain is live."
+              exit 0
+            fi
+            sleep 20
+          done
+          echo "::warning::The domain did not answer with 200 within the retry window."
+          echo "Certificate issuance and DNS propagation can take a while; check again later."
