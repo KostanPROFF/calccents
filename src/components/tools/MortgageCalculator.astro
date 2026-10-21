@@ -1,0 +1,257 @@
+---
+/**
+ * The mortgage payment calculator.
+ *
+ * The form, the result panel and the method note are one component so the
+ * three language versions share a single implementation. Every label comes
+ * from the dictionary for the language the page is in.
+ */
+import ResultPanel from '../ResultPanel.astro';
+import AdSlot from '../AdSlot.astro';
+import { getUi } from '../../i18n/ui/index.ts';
+import { LOCALE_META, type Locale } from '../../i18n/locales.ts';
+
+interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+const ui = getUi(locale);
+const copy = ui.tool['mortgage-payment'];
+---
+
+<div>
+  <form class="card" id="mortgage-form" novalidate data-locale={LOCALE_META[locale].intl}>
+  <div class="input-group">
+    <label class="field" for="home-price">
+      <span class="field__label">{copy.fields.homePrice}</span>
+      <span class="field__control">
+        <span class="field__prefix" aria-hidden="true">$</span>
+        <input class="input input--prefixed" id="home-price" type="number"
+          inputmode="decimal" step="1000" min="0" value="450000" />
+      </span>
+    </label>
+    <label class="field" for="down-percent">
+      <span class="field__label">
+        {copy.fields.downPayment}
+        <span class="field__hint">{copy.fields.percentOfPrice}</span>
+      </span>
+      <span class="field__control">
+        <input class="input" id="down-percent" type="number" inputmode="decimal"
+          step="0.5" min="0" max="100" value="20" />
+        <span class="field__suffix" aria-hidden="true">%</span>
+      </span>
+    </label>
+  </div>
+
+  <div class="input-group">
+    <label class="field" for="rate">
+      <span class="field__label">
+        {copy.fields.interestRate}
+        <span class="field__hint">{copy.fields.annualFixed}</span>
+      </span>
+      <span class="field__control">
+        <input class="input" id="rate" type="number" inputmode="decimal" step="0.01"
+          min="0" max="20" value="6.5" />
+        <span class="field__suffix" aria-hidden="true">%</span>
+      </span>
+    </label>
+    <label class="field" for="term-years">
+      <span class="field__label">{copy.fields.loanTerm}</span>
+      <span class="field__control">
+        <select class="input" id="term-years">
+          <option value="30" selected>{copy.terms.years(30)}</option>
+          <option value="20">{copy.terms.years(20)}</option>
+          <option value="15">{copy.terms.years(15)}</option>
+          <option value="10">{copy.terms.years(10)}</option>
+        </select>
+      </span>
+    </label>
+  </div>
+
+  <div class="input-group">
+    <label class="field" for="tax-percent">
+      <span class="field__label">
+        {copy.fields.propertyTax}
+        <span class="field__hint">{copy.fields.percentOfPricePerYear}</span>
+      </span>
+      <span class="field__control">
+        <input class="input" id="tax-percent" type="number" inputmode="decimal"
+          step="0.01" min="0" max="10" value="1.1" />
+        <span class="field__suffix" aria-hidden="true">%</span>
+      </span>
+    </label>
+    <label class="field" for="insurance-annual">
+      <span class="field__label">
+        {copy.fields.homeInsurance}
+        <span class="field__hint">{copy.fields.perYear}</span>
+      </span>
+      <span class="field__control">
+        <span class="field__prefix" aria-hidden="true">$</span>
+        <input class="input input--prefixed" id="insurance-annual" type="number"
+          inputmode="decimal" step="50" min="0" value="1800" />
+      </span>
+    </label>
+  </div>
+
+  <div class="input-group">
+    <label class="field" for="hoa-monthly">
+      <span class="field__label">
+        {copy.fields.hoaFee}
+        <span class="field__hint">{copy.fields.perMonth}</span>
+      </span>
+      <span class="field__control">
+        <span class="field__prefix" aria-hidden="true">$</span>
+        <input class="input input--prefixed" id="hoa-monthly" type="number"
+          inputmode="decimal" step="25" min="0" value="0" />
+      </span>
+    </label>
+    <label class="field" for="extra-monthly">
+      <span class="field__label">
+        {copy.fields.extraPrincipal}
+        <span class="field__hint">{copy.fields.perMonth}</span>
+      </span>
+      <span class="field__control">
+        <span class="field__prefix" aria-hidden="true">$</span>
+        <input class="input input--prefixed" id="extra-monthly" type="number"
+          inputmode="decimal" step="25" min="0" value="0" />
+      </span>
+    </label>
+  </div>
+
+  <label class="field" for="start-month">
+    <span class="field__label">
+      {copy.fields.firstPayment}
+      <span class="field__hint">{copy.fields.month}</span>
+    </span>
+    <span class="field__control">
+      <input class="input" id="start-month" type="month" />
+    </span>
+  </label>
+
+  <details style="margin-top: var(--space-6);">
+    <summary class="text-sm" style="cursor: pointer; color: var(--text-secondary);">
+      {copy.fields.seeAmortization}
+    </summary>
+    <div class="table-wrap" style="margin-top: var(--space-4);">
+      <table class="table">
+        <thead>
+          <tr>
+            <th scope="col">{copy.table.year}</th>
+            <th scope="col">{copy.table.principal}</th>
+            <th scope="col">{copy.table.interest}</th>
+            <th scope="col">{copy.table.balance}</th>
+          </tr>
+        </thead>
+        <tbody id="amortization-body"></tbody>
+      </table>
+    </div>
+  </details>
+</form>
+</div>
+
+<div class="tool-panel">
+  <ResultPanel
+    headlineId="m-payment"
+    headlineLabel={copy.result.headlineLabel}
+    headline="—"
+    stats={[
+      { id: 'm-pi', label: copy.result.principalAndInterest, value: '—' },
+      { id: 'm-tax', label: copy.result.propertyTax, value: '—' },
+      { id: 'm-insurance', label: copy.result.insurance, value: '—' },
+      { id: 'm-hoa', label: copy.result.hoa, value: '—' },
+      { id: 'm-interest', label: copy.result.totalInterest, value: '—' },
+      { id: 'm-payoff', label: copy.result.paidOff, value: '—' },
+    ]}
+    note={copy.result.note}
+  />
+  <p class="muted-block" style="margin-top: var(--space-4);">
+    {copy.resultNote}
+  </p>
+  <AdSlot placement="result" />
+</div>
+
+<script>
+  import { buildAmortization } from '../../lib/calc/mortgage.ts';
+  import { formatCurrency, formatMonthYear, formatNumber } from '../../lib/calc/money.ts';
+  import { currentMonthValue, monthValue, numberValue, setText } from '../../lib/client/dom.ts';
+
+  const locale =
+    document.getElementById('mortgage-form')?.dataset.locale ?? 'en-US';
+
+  const startInput = document.getElementById('start-month') as HTMLInputElement | null;
+  if (startInput && !startInput.value) startInput.value = currentMonthValue();
+
+  const ids = [
+    'home-price',
+    'down-percent',
+    'rate',
+    'term-years',
+    'tax-percent',
+    'insurance-annual',
+    'hoa-monthly',
+    'extra-monthly',
+  ];
+
+  function recalculate(): void {
+    const homePrice = Math.max(0, numberValue('home-price'));
+    const downPercent = Math.min(100, Math.max(0, numberValue('down-percent', 20)));
+    const rate = Math.max(0, numberValue('rate'));
+    const termYears = Math.max(1, numberValue('term-years', 30));
+    const taxPercent = Math.max(0, numberValue('tax-percent'));
+    const insuranceAnnual = Math.max(0, numberValue('insurance-annual'));
+    const hoaMonthly = Math.max(0, numberValue('hoa-monthly'));
+    const extraMonthly = Math.max(0, numberValue('extra-monthly'));
+    const startDate = monthValue('start-month', new Date());
+
+    if (homePrice <= 0) {
+      setText('m-payment', '—');
+      for (const id of ['m-pi', 'm-tax', 'm-insurance', 'm-hoa', 'm-interest', 'm-payoff']) {
+        setText(id, '—');
+      }
+      return;
+    }
+
+    const downPayment = homePrice * (downPercent / 100);
+    const loanAmount = homePrice - downPayment;
+    const propertyTaxAnnual = homePrice * (taxPercent / 100);
+
+    const result = buildAmortization({
+      principal: loanAmount,
+      annualRatePercent: rate,
+      termYears,
+      propertyTaxAnnual,
+      homeownersInsuranceAnnual: insuranceAnnual,
+      hoaMonthly,
+      extraMonthlyPayment: extraMonthly,
+      startDate,
+    });
+
+    setText('m-payment', formatCurrency(result.monthlyPiti));
+    setText('m-pi', formatCurrency(result.monthlyPrincipalAndInterest));
+    setText('m-tax', formatCurrency(propertyTaxAnnual / 12));
+    setText('m-insurance', formatCurrency(insuranceAnnual / 12));
+    setText('m-hoa', formatCurrency(hoaMonthly));
+    setText('m-interest', formatCurrency(result.totalInterest));
+    setText('m-payoff', formatMonthYear(result.payoffDate, locale));
+
+    const body = document.getElementById('amortization-body');
+    if (body) {
+      body.innerHTML = result.yearly
+        .map(
+          (row) =>
+            `<tr><td>${row.year}</td><td>${formatCurrency(row.principalPaid)}</td>` +
+            `<td>${formatCurrency(row.interestPaid)}</td>` +
+            `<td>${formatNumber(row.yearEndBalance)}</td></tr>`,
+        )
+        .join('');
+    }
+  }
+
+  for (const id of ids) {
+    document.getElementById(id)?.addEventListener('input', recalculate);
+    document.getElementById(id)?.addEventListener('change', recalculate);
+  }
+  startInput?.addEventListener('input', recalculate);
+  recalculate();
+</script>

@@ -1,5 +1,7 @@
 ---
-import { SITE } from '../config/site.ts';
+import { getSite } from '../config/site.ts';
+import { getUi } from '../i18n/ui/index.ts';
+import { alternates, DEFAULT_LOCALE, LOCALE_META, localePath, type Locale } from '../i18n/locales.ts';
 import Nav from '../components/Nav.astro';
 import Footer from '../components/Footer.astro';
 import '../styles/global.css';
@@ -7,8 +9,10 @@ import '../styles/global.css';
 interface Props {
   title: string;
   description: string;
-  /** Path of the current page, used for the canonical URL. */
+  /** Path of the current page, including the locale prefix. */
   path: string;
+  /** The language this page is written in. */
+  locale: Locale;
   /** Structured data objects rendered as JSON-LD. */
   jsonLd?: Record<string, unknown>[];
   ogType?: 'website' | 'article';
@@ -19,13 +23,28 @@ const {
   title,
   description,
   path,
+  locale,
   jsonLd = [],
   ogType = 'website',
   noindex = false,
 } = Astro.props;
 
-const canonical = new URL(path, SITE.origin).toString();
-const fullTitle = path === '/' ? `${SITE.name} — ${SITE.tagline}` : `${title} | ${SITE.name}`;
+const site = getSite(locale);
+const ui = getUi(locale);
+
+const canonical = new URL(path, site.origin).toString();
+const fullTitle =
+  path === '/' ? `${site.name} — ${site.tagline}` : `${title} | ${site.name}`;
+
+/**
+ * The same page in the other languages.
+ *
+ * A translated page that does not say which other translations exist is a
+ * page that gets indexed twice and read in the wrong language, so every
+ * page carries the alternates. `x-default` points at the English version,
+ * which is the one written first and the one the other two were made from.
+ */
+const alternateLinks = alternates(path);
 
 /**
  * The site and its author, described on every page.
@@ -37,24 +56,24 @@ const fullTitle = path === '/' ? `${SITE.name} — ${SITE.tagline}` : `${title} 
 const organization = {
   '@context': 'https://schema.org',
   '@type': 'Organization',
-  name: SITE.name,
-  url: SITE.origin,
-  description: SITE.description,
-  foundingDate: SITE.founded,
-  email: SITE.email,
-  logo: new URL('/favicon.svg', SITE.origin).toString(),
-  sameAs: [SITE.repository, ...SITE.author.links.map((link) => link.href)],
+  name: site.name,
+  url: site.origin,
+  description: site.description,
+  foundingDate: site.founded,
+  email: site.email,
+  logo: new URL('/favicon.svg', site.origin).toString(),
+  sameAs: [site.repository, ...site.author.links.map((link) => link.href)],
 };
 
 const person = {
   '@context': 'https://schema.org',
   '@type': 'Person',
-  name: SITE.author.name,
-  jobTitle: SITE.author.role,
-  description: SITE.author.bio,
-  url: new URL('/editorial-team/', SITE.origin).toString(),
-  worksFor: { '@type': 'Organization', name: SITE.name },
-  sameAs: SITE.author.links.map((link) => link.href),
+  name: site.author.name,
+  jobTitle: site.author.role,
+  description: site.author.bio,
+  url: new URL(localePath(locale, '/editorial-team/'), site.origin).toString(),
+  worksFor: { '@type': 'Organization', name: site.name },
+  sameAs: site.author.links.map((link) => link.href),
 };
 
 const adsenseClient = import.meta.env.PUBLIC_ADSENSE_CLIENT;
@@ -62,7 +81,7 @@ const gaId = import.meta.env.PUBLIC_GA_ID;
 ---
 
 <!doctype html>
-<html lang={SITE.lang}>
+<html lang={site.lang}>
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -71,11 +90,40 @@ const gaId = import.meta.env.PUBLIC_GA_ID;
     <link rel="canonical" href={canonical} />
     {noindex && <meta name="robots" content="noindex, nofollow" />}
 
+    {
+      alternateLinks.map((alternate) => (
+        <link
+          rel="alternate"
+          hreflang={alternate.locale}
+          href={new URL(alternate.href, site.origin).toString()}
+        />
+      ))
+    }
+    <link
+      rel="alternate"
+      hreflang="x-default"
+      href={new URL(
+        alternateLinks.find((link) => link.locale === DEFAULT_LOCALE)?.href ?? '/',
+        site.origin,
+      ).toString()}
+    />
+
     <meta property="og:type" content={ogType} />
-    <meta property="og:site_name" content={SITE.name} />
+    <meta property="og:site_name" content={site.name} />
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
     <meta property="og:url" content={canonical} />
+    <meta property="og:locale" content={site.ogLocale} />
+    {
+      alternateLinks
+        .filter((alternate) => alternate.locale !== locale)
+        .map((alternate) => (
+          <meta
+            property="og:locale:alternate"
+            content={LOCALE_META[alternate.locale].ogLocale}
+          />
+        ))
+    }
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content={title} />
     <meta name="twitter:description" content={description} />
@@ -122,19 +170,20 @@ const gaId = import.meta.env.PUBLIC_GA_ID;
     }
     {
       gaId && (
-        <script is:inline
+        <script
+          is:inline
           set:html={`window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','${gaId}');`}
         />
       )
     }
   </head>
   <body>
-    <a class="skip-link" href="#main">Skip to content</a>
-    <Nav currentPath={Astro.url.pathname} />
+    <a class="skip-link" href="#main">{ui.ui.skipToContent}</a>
+    <Nav currentPath={Astro.url.pathname} locale={locale} />
     <main id="main">
       <slot />
     </main>
-    <Footer />
+    <Footer locale={locale} />
 
     {
       adsenseClient && (

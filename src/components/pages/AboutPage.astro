@@ -1,0 +1,84 @@
+---
+import Base from '../../layouts/Base.astro';
+import AdSlot from '../AdSlot.astro';
+import { getSite } from '../../config/site.ts';
+import { getUi, fill } from '../../i18n/ui/index.ts';
+import { localePath, type Locale } from '../../i18n/locales.ts';
+
+interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+const site = getSite(locale);
+const ui = getUi(locale);
+const copy = ui.about;
+
+/**
+ * The two paragraphs that carry a link.
+ *
+ * The link text is a separate string in the dictionary so a translator can
+ * read the sentence around it, and the link itself is added here so the
+ * translator never has to write markup.
+ */
+const whoBody = fill(copy.whoBody, {
+  name: site.author.name,
+  bio: site.author.bio,
+  whoEditorialLink: `<a href="${localePath(locale, '/editorial-team/')}">${copy.whoEditorialLink}</a>`,
+  whoCodeLink: `<a href="${site.repository}" rel="noopener">${copy.whoCodeLink}</a>`,
+});
+
+const correctionsBody = fill(copy.correctionsBody, {
+  contactLink: `<a href="${localePath(locale, '/contact/')}">${copy.contactLink}</a>`,
+});
+---
+
+<Base
+  title={copy.title}
+  description={copy.description}
+  path={localePath(locale, '/about/')}
+  locale={locale}
+>
+  <div class="container">
+    <div class="page-head">
+      <nav class="breadcrumb" aria-label={ui.ui.breadcrumb}>
+        <a href={localePath(locale, '/')}>{ui.ui.home}</a>
+        <span aria-hidden="true">/</span>
+        <span>{copy.title}</span>
+      </nav>
+      <h1>{fill(copy.heading, { name: site.name })}</h1>
+      <p class="page-head__lede">{fill(copy.lede, { name: site.name })}</p>
+    </div>
+
+    <div class="prose">
+      <h2>{copy.isHeading}</h2>
+      {copy.isBody.map((paragraph) => <p>{paragraph}</p>)}
+
+      <h2>{copy.isNotHeading}</h2>
+      {copy.isNotBody.map((paragraph) => <p>{paragraph}</p>)}
+
+      <h2>{copy.rulesHeading}</h2>
+      <ul>
+        {
+          copy.rules.map((rule) => (
+            <li>
+              <strong>{rule.label}</strong> {rule.body}
+            </li>
+          ))
+        }
+      </ul>
+
+      <h2>{copy.whoHeading}</h2>
+      <p set:html={whoBody} />
+
+      <h2>{copy.howHeading}</h2>
+      <p>{copy.howBody}</p>
+
+      <h2>{copy.correctionsHeading}</h2>
+      <p set:html={correctionsBody} />
+    </div>
+
+    <AdSlot placement="in-article" />
+    <AdSlot placement="footer" />
+  </div>
+</Base>

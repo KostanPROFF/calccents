@@ -1,47 +1,163 @@
 ---
 import Base from '../layouts/Base.astro';
 import AdSlot from '../components/AdSlot.astro';
+import { UI } from '../i18n/ui/index.ts';
+import { LOCALES, LOCALE_META, localePath } from '../i18n/locales.ts';
+
+/**
+ * The 404 page.
+ *
+ * Astro serves one 404 page for every unmatched URL, whatever prefix it
+ * carries, so the page is rendered in English and then switched to the
+ * language of the URL that was asked for. A reader who mistypes a Russian
+ * address gets the Russian page rather than an English one with a Russian
+ * link in it.
+ */
+const english = UI.en.notFound;
+
+const tiles = [
+  { href: '/tools/', key: 'calculators' },
+  { href: '/guides/', key: 'guides' },
+  { href: '/sources/', key: 'sources' },
+  { href: '/contact/', key: 'contact' },
+] as const;
+
+/** Every language's copy and links, inlined so the script can switch. */
+const translations = Object.fromEntries(
+  LOCALES.map((locale) => [
+    locale,
+    {
+      title: UI[locale].notFound.title,
+      description: UI[locale].notFound.description,
+      heading: UI[locale].notFound.heading,
+      lede: UI[locale].notFound.lede,
+      open: UI[locale].ui.open,
+      nav: UI[locale].nav,
+      navHrefs: {
+        tools: localePath(locale, '/tools/'),
+        guides: localePath(locale, '/guides/'),
+        sources: localePath(locale, '/sources/'),
+        about: localePath(locale, '/about/'),
+      },
+      tiles: tiles.map((tile) => ({
+        href: localePath(locale, tile.href),
+        title: UI[locale].notFound[tile.key].title,
+        text: UI[locale].notFound[tile.key].text,
+      })),
+    },
+  ]),
+);
 ---
 
 <Base
-  title="Page not found"
-  description="That page does not exist on this site. Here is where everything actually lives."
-  path="/404"
+  title={english.title}
+  description={english.description}
+  path="/404/"
+  locale="en"
   noindex
 >
   <div class="container">
     <div class="page-head">
-      <h1>Page not found</h1>
-      <p class="page-head__lede">
-        That URL does not exist here. Everything the site publishes is one of
-        the three calculators, the guides behind them, or the pages that
-        explain where the numbers come from.
-      </p>
+      <h1 data-not-found="heading">{english.heading}</h1>
+      <p class="page-head__lede" data-not-found="lede">{english.lede}</p>
     </div>
 
     <div class="grid grid--2">
-      <a class="tile" href="/tools/">
-        <span class="tile__title">Calculators</span>
-        <span class="tile__text">Mortgage payment, rent versus buying, compound interest.</span>
-        <span class="tile__meta">Open →</span>
-      </a>
-      <a class="tile" href="/guides/">
-        <span class="tile__title">Guides</span>
-        <span class="tile__text">The arithmetic behind each calculator, in detail.</span>
-        <span class="tile__meta">Open →</span>
-      </a>
-      <a class="tile" href="/sources/">
-        <span class="tile__title">Sources</span>
-        <span class="tile__text">Every primary source the site relies on.</span>
-        <span class="tile__meta">Open →</span>
-      </a>
-      <a class="tile" href="/contact/">
-        <span class="tile__title">Contact</span>
-        <span class="tile__text">Tell us what is missing or wrong.</span>
-        <span class="tile__meta">Open →</span>
-      </a>
+      {
+        tiles.map((tile, index) => (
+          <a class="tile" href={localePath('en', tile.href)} data-not-found-tile={index}>
+            <span class="tile__title">{english[tile.key].title}</span>
+            <span class="tile__text">{english[tile.key].text}</span>
+            <span class="tile__meta">{UI.en.ui.open}</span>
+          </a>
+        ))
+      }
     </div>
+
+    <script
+      type="application/json"
+      id="not-found-translations"
+      set:html={JSON.stringify(translations)}
+    />
+    <script
+      type="application/json"
+      id="not-found-locales"
+      set:html={JSON.stringify(
+        LOCALES.map((locale) => ({
+          code: locale,
+          htmlLang: LOCALE_META[locale].htmlLang,
+        })),
+      )}
+    />
 
     <AdSlot placement="footer" />
   </div>
 </Base>
+
+<script>
+  /**
+   * Switch the page to the language of the URL that was asked for.
+   *
+   * The page is rendered in English because Astro serves one 404 for the
+   * whole site. The copy for every language travels with the page as JSON,
+   * and the script below puts the right language on it.
+   */
+  const payload = document.getElementById('not-found-translations');
+  const localePayload = document.getElementById('not-found-locales');
+  if (payload?.textContent && localePayload?.textContent) {
+    const translations = JSON.parse(payload.textContent);
+    const locales = JSON.parse(localePayload.textContent) as {
+      code: string;
+      htmlLang: string;
+    }[];
+
+    const path = window.location.pathname;
+    const match = locales.find(
+      (locale) =>
+        locale.code !== 'en' &&
+        (path === `/${locale.code}` || path.startsWith(`/${locale.code}/`)),
+    );
+
+    if (match) {
+      const copy = translations[match.code];
+      if (copy) {
+        document.title = copy.title;
+        document.documentElement.lang = match.htmlLang;
+
+        const meta = document.querySelector('meta[name="description"]');
+        if (meta) meta.setAttribute('content', copy.description);
+
+        const heading = document.querySelector('[data-not-found="heading"]');
+        if (heading) heading.textContent = copy.heading;
+
+        const lede = document.querySelector('[data-not-found="lede"]');
+        if (lede) lede.textContent = copy.lede;
+
+        // The header is rendered in English too, because Astro serves one
+        // 404 for the whole site. A Russian reader should not land on a
+        // Russian page under an English menu.
+        const navLabels = copy.nav;
+        document.querySelectorAll<HTMLElement>('[data-not-found-nav]').forEach((link) => {
+          const key = link.dataset.notFoundNav as 'tools' | 'guides' | 'sources' | 'about';
+          const label = navLabels[key];
+          if (!label) return;
+          link.textContent = label;
+          link.setAttribute('href', copy.navHrefs?.[key] ?? link.getAttribute('href') ?? '/');
+        });
+
+        document.querySelectorAll<HTMLElement>('[data-not-found-tile]').forEach((tile) => {
+          const index = Number(tile.dataset.notFoundTile);
+          const entry = copy.tiles?.[index];
+          if (!entry) return;
+          tile.setAttribute('href', entry.href);
+          const title = tile.querySelector('.tile__title');
+          if (title) title.textContent = entry.title;
+          const text = tile.querySelector('.tile__text');
+          if (text) text.textContent = entry.text;
+          const meta = tile.querySelector('.tile__meta');
+          if (meta) meta.textContent = copy.open;
+        });
+      }
+    }
+  }
+</script>

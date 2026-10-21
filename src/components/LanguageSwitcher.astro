@@ -1,0 +1,125 @@
+---
+/**
+ * Language switcher.
+ *
+ * A globe button in the header that opens a small list of the languages the
+ * site is published in. Each entry links to the same page in that language,
+ * so a reader who changes the language halfway through a guide stays on the
+ * guide.
+ *
+ * The globe is an inline SVG because the site carries no icon library.
+ */
+import { LOCALE_META, LOCALES, localePath, stripLocale, type Locale } from '../i18n/locales.ts';
+import { getUi } from '../i18n/ui/index.ts';
+
+interface Props {
+  locale: Locale;
+  /** The path of the current page, used to keep the reader on the same page. */
+  currentPath: string;
+}
+
+const { locale, currentPath } = Astro.props;
+const ui = getUi(locale);
+const path = stripLocale(currentPath);
+---
+
+<div class="language-switcher" data-language-switcher>
+  <button
+    class="language-switcher__button"
+    type="button"
+    data-language-toggle
+    aria-label={ui.ui.language}
+    aria-expanded="false"
+    aria-controls="language-menu"
+  >
+    <svg
+      viewBox="0 0 24 24"
+      width="17"
+      height="17"
+      fill="none"
+      stroke="currentColor"
+      stroke-width="1.8"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+      aria-hidden="true"
+    >
+      <circle cx="12" cy="12" r="9"></circle>
+      <path d="M3 12h18"></path>
+      <path d="M12 3a14 14 0 0 1 0 18a14 14 0 0 1 0-18Z"></path>
+    </svg>
+  </button>
+
+  <div class="language-switcher__menu" id="language-menu" data-language-menu hidden>
+    {
+      LOCALES.map((code) => (
+        <a
+          class="language-switcher__option"
+          href={localePath(code, path)}
+          hreflang={LOCALE_META[code].htmlLang}
+          lang={LOCALE_META[code].htmlLang}
+          aria-current={code === locale ? 'true' : undefined}
+        >
+          <span>{LOCALE_META[code].nativeName}</span>
+          {code === locale && (
+            <svg
+              class="language-switcher__check"
+              viewBox="0 0 24 24"
+              width="14"
+              height="14"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2.2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              aria-hidden="true"
+            >
+              <path d="m4 12.5 5 5L20 6.5"></path>
+            </svg>
+          )}
+        </a>
+      ))
+    }
+  </div>
+</div>
+
+<script>
+  const switchers = document.querySelectorAll<HTMLElement>('[data-language-switcher]');
+
+  function close(switcher: HTMLElement): void {
+    const button = switcher.querySelector<HTMLButtonElement>('[data-language-toggle]');
+    const menu = switcher.querySelector<HTMLElement>('[data-language-menu]');
+    if (!button || !menu) return;
+    button.setAttribute('aria-expanded', 'false');
+    menu.hidden = true;
+  }
+
+  for (const switcher of switchers) {
+    const button = switcher.querySelector<HTMLButtonElement>('[data-language-toggle]');
+    const menu = switcher.querySelector<HTMLElement>('[data-language-menu]');
+    if (!button || !menu) continue;
+
+    button.addEventListener('click', () => {
+      const open = button.getAttribute('aria-expanded') === 'true';
+      for (const other of switchers) {
+        if (other !== switcher) close(other);
+      }
+      button.setAttribute('aria-expanded', open ? 'false' : 'true');
+      menu.hidden = open;
+    });
+
+    switcher.addEventListener('keydown', (event) => {
+      if (event.key === 'Escape') {
+        close(switcher);
+        button.focus();
+      }
+    });
+  }
+
+  document.addEventListener('click', (event) => {
+    const target = event.target;
+    if (!(target instanceof Element)) return;
+    for (const switcher of switchers) {
+      if (!switcher.contains(target)) close(switcher);
+    }
+  });
+</script>

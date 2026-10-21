@@ -78,3 +78,10 @@ test('formatMonthYear renders a readable month', () => {
   assert.equal(formatMonthYear(new Date(2026, 2, 15)), 'March 2026');
   assert.equal(formatMonthYear(new Date(2026, 11, 1)), 'December 2026');
 });
+
+test('formatMonthYear follows the language of the page', () => {
+  // The date is printed on the calculator result, and an English month name
+  // on a Russian page is a bug rather than a neutral label.
+  assert.equal(formatMonthYear(new Date(2026, 9, 1), 'ru-RU'), 'октябрь 2026 г.');
+  assert.equal(formatMonthYear(new Date(2026, 9, 1), 'es-ES'), 'octubre de 2026');
+});

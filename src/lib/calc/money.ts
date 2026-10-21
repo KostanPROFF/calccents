@@ -35,7 +35,16 @@ export function sum(values: number[]): number {
   return values.reduce((total, value) => total + value, 0);
 }
 
-/** Format a number as US dollars, e.g. 1234.5 -> "$1,234.50". */
+/**
+ * Format a number as US dollars, e.g. 1234.5 -> "$1,234.50".
+ *
+ * The format is the same in every language on purpose. The site calculates
+ * in US dollars for a US mortgage, and a reader in Russian or Spanish reads
+ * "$2,275.44" as the same figure the lender quotes. Writing it as
+ * "2 275,44 $" would change the decimal separator and the grouping, and a
+ * financial number that reads differently on two pages of the same site is
+ * a number nobody can check.
+ */
 export function formatCurrency(value: number, decimals = 2): string {
   if (!Number.isFinite(value)) return '—';
   return new Intl.NumberFormat('en-US', {
@@ -75,12 +84,18 @@ export function addMonths(date: Date, months: number): Date {
   return result;
 }
 
-/** Format a date as "March 2041". */
-export function formatMonthYear(date: Date): string {
-  return new Intl.DateTimeFormat('en-US', { month: 'long', year: 'numeric' }).format(date);
+/**
+ * Format a date as a month and a year, e.g. "March 2041".
+ *
+ * A date follows the language of the page it is on. "October 2056" on a
+ * Russian page is a bug, not a neutral label, so the locale is a parameter
+ * rather than a constant.
+ */
+export function formatMonthYear(date: Date, locale = 'en-US'): string {
+  return new Intl.DateTimeFormat(locale, { month: 'long', year: 'numeric' }).format(date);
 }
 
-/** Format a date as "March 2041" from a month offset, used for payoff dates. */
-export function formatMonthYearFrom(start: Date, months: number): string {
-  return formatMonthYear(addMonths(start, months));
+/** Format a date as a month and a year from a month offset, used for payoff dates. */
+export function formatMonthYearFrom(start: Date, months: number, locale = 'en-US'): string {
+  return formatMonthYear(addMonths(start, months), locale);
 }

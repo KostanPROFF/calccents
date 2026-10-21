@@ -1,0 +1,50 @@
+---
+import Base from '../../layouts/Base.astro';
+import AdSlot from '../AdSlot.astro';
+import { getUi } from '../../i18n/ui/index.ts';
+import { localePath, type Locale } from '../../i18n/locales.ts';
+
+interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+const ui = getUi(locale);
+const copy = ui.notFound;
+
+const tiles = [
+  { href: '/tools/', entry: copy.calculators },
+  { href: '/guides/', entry: copy.guides },
+  { href: '/sources/', entry: copy.sources },
+  { href: '/contact/', entry: copy.contact },
+];
+---
+
+<Base
+  title={copy.title}
+  description={copy.description}
+  path={localePath(locale, '/404/')}
+  locale={locale}
+  noindex
+>
+  <div class="container">
+    <div class="page-head">
+      <h1>{copy.heading}</h1>
+      <p class="page-head__lede">{copy.lede}</p>
+    </div>
+
+    <div class="grid grid--2">
+      {
+        tiles.map((tile) => (
+          <a class="tile" href={localePath(locale, tile.href)}>
+            <span class="tile__title">{tile.entry.title}</span>
+            <span class="tile__text">{tile.entry.text}</span>
+            <span class="tile__meta">{ui.ui.open}</span>
+          </a>
+        ))
+      }
+    </div>
+
+    <AdSlot placement="footer" />
+  </div>
+</Base>

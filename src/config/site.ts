@@ -1,22 +1,28 @@
 /**
- * Single source of truth for site identity.
+ * The facts about the site that do not change with the language.
  *
- * Every place that needs the brand name, the canonical origin, the author
- * or the reviewer reads from here. Changing the domain means editing this
- * file (and `.env`) — no other file hard-codes a URL.
+ * Everything that a reader sees and that differs between English, Russian
+ * and Spanish lives in `src/i18n/ui/`. What stays here is the identity: the
+ * name, the domain, the email address, the person behind it and the
+ * repository. Those are the same in every language.
  */
+
+import { getUi } from '../i18n/ui/index.ts';
+import { LOCALE_META, type Locale } from '../i18n/locales.ts';
 
 export const SITE = {
   name: 'Calccents',
   domain: 'calccents.com',
   origin: 'https://calccents.com',
-  lang: 'en',
-  locale: 'en_US',
-  tagline: 'Financial calculators that show their work',
-  description:
-    'Free financial calculators for mortgage payments, renting versus buying, and compound interest. Every formula is shown, every assumption belongs to you, and no page tells you what to do with the result.',
   email: 'hello@calccents.com',
   founded: '2026',
+  /**
+   * The date the legal pages were last reviewed.
+   *
+   * A date rather than a string, because the pages print it and a page in
+   * Russian should not print a date written the English way.
+   */
+  reviewedOn: new Date('2026-10-20T00:00:00Z'),
   /**
    * One person runs this site.
    *
@@ -29,28 +35,82 @@ export const SITE = {
    */
   author: {
     name: 'Kostan Proff',
-    role: 'Author and reviewer',
-    bio: 'Engineer by trade. Writes the guides, maintains the calculation engine, and checks every published figure against a primary source. The code that does the arithmetic is public, and the formulas are covered by unit tests that run on every change.',
     links: [{ label: 'GitHub', href: 'https://github.com/KostanPROFF' }],
   },
   /** The public repository, mentioned on the about and editorial pages. */
   repository: 'https://github.com/KostanPROFF/calccents',
-  nav: [
-    { href: '/tools/', label: 'Tools' },
-    { href: '/guides/', label: 'Guides' },
-    { href: '/sources/', label: 'Sources' },
-    { href: '/about/', label: 'About' },
-  ],
-  footer: [
-    { href: '/tools/', label: 'Calculators' },
-    { href: '/guides/', label: 'Guides' },
-    { href: '/sources/', label: 'Sources' },
-    { href: '/editorial-team/', label: 'Editorial team' },
-    { href: '/about/', label: 'About' },
-    { href: '/contact/', label: 'Contact' },
-    { href: '/privacy/', label: 'Privacy' },
-    { href: '/terms/', label: 'Terms' },
-  ],
 } as const;
 
-export type NavItem = (typeof SITE.nav)[number];
+export type NavItem = { href: string; label: string };
+
+/**
+ * The site identity for a given language.
+ *
+ * This is what the rest of the codebase reads, so a page never has to know
+ * whether a string comes from the config or from the dictionary.
+ */
+export interface SiteForLocale {
+  name: string;
+  domain: string;
+  origin: string;
+  email: string;
+  founded: string;
+  reviewedOn: Date;
+  tagline: string;
+  description: string;
+  /** The value for `<html lang>`. */
+  lang: string;
+  /** The value for `og:locale`. */
+  ogLocale: string;
+  /** The locale passed to `Intl`. */
+  intl: string;
+  author: {
+    name: string;
+    role: string;
+    bio: string;
+    links: readonly { label: string; href: string }[];
+  };
+  repository: string;
+  nav: NavItem[];
+  footer: NavItem[];
+}
+
+export function getSite(locale: Locale): SiteForLocale {
+  const ui = getUi(locale);
+  return {
+    name: SITE.name,
+    domain: SITE.domain,
+    origin: SITE.origin,
+    email: SITE.email,
+    founded: SITE.founded,
+    reviewedOn: SITE.reviewedOn,
+    tagline: ui.tagline,
+    description: ui.description,
+    lang: LOCALE_META[locale].htmlLang,
+    ogLocale: LOCALE_META[locale].ogLocale,
+    intl: LOCALE_META[locale].intl,
+    author: {
+      name: SITE.author.name,
+      role: ui.author.role,
+      bio: ui.author.bio,
+      links: SITE.author.links,
+    },
+    repository: SITE.repository,
+    nav: [
+      { href: '/tools/', label: ui.nav.tools },
+      { href: '/guides/', label: ui.nav.guides },
+      { href: '/sources/', label: ui.nav.sources },
+      { href: '/about/', label: ui.nav.about },
+    ],
+    footer: [
+      { href: '/tools/', label: ui.footer.calculatorsHeading },
+      { href: '/guides/', label: ui.footer.links.guides },
+      { href: '/sources/', label: ui.footer.links.sources },
+      { href: '/editorial-team/', label: ui.footer.links['editorial-team'] },
+      { href: '/about/', label: ui.footer.links.about },
+      { href: '/contact/', label: ui.footer.links.contact },
+      { href: '/privacy/', label: ui.footer.links.privacy },
+      { href: '/terms/', label: ui.footer.links.terms },
+    ],
+  };
+}

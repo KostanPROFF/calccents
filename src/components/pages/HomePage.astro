@@ -1,0 +1,200 @@
+---
+import Base from '../../layouts/Base.astro';
+import AdSlot from '../AdSlot.astro';
+import Newsletter from '../Newsletter.astro';
+import { getSite } from '../../config/site.ts';
+import { getTools } from '../../config/tools.ts';
+import { getUi } from '../../i18n/ui/index.ts';
+import { localePath, type Locale } from '../../i18n/locales.ts';
+import { getGuides, guideSlug } from '../../i18n/guides.ts';
+
+interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+const site = getSite(locale);
+const ui = getUi(locale);
+const tools = getTools(locale);
+
+const guides = await getGuides(locale);
+const featured = guides.slice(0, 5);
+
+const webSite = {
+  '@context': 'https://schema.org',
+  '@type': 'WebSite',
+  name: site.name,
+  url: site.origin,
+  description: site.description,
+  inLanguage: site.lang,
+};
+
+const organization = {
+  '@context': 'https://schema.org',
+  '@type': 'Organization',
+  name: site.name,
+  url: site.origin,
+  logo: new URL('/favicon.svg', site.origin).toString(),
+};
+---
+
+<Base
+  title={`${site.name} — ${site.tagline}`}
+  description={ui.home.description}
+  path={localePath(locale, '/')}
+  locale={locale}
+  jsonLd={[webSite, organization]}
+>
+  <section class="section-sm">
+    <div class="container" style="max-width: 720px; text-align: center;">
+      <p class="eyebrow">{ui.home.eyebrow}</p>
+      <h1 style="margin-top: var(--space-4); font-size: var(--text-4xl);">
+        {ui.home.heading}
+      </h1>
+      <p class="page-head__lede" style="margin-inline: auto;">
+        {ui.home.lede}
+      </p>
+      <div style="margin-top: var(--space-8);">
+        <a class="btn btn--primary" href={localePath(locale, '/tools/')}>
+          {ui.home.cta}
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <section class="section-sm">
+    <div class="container">
+      <p class="eyebrow" style="color: var(--text-muted);">{ui.home.calculatorsEyebrow}</p>
+      <h2 style="margin-top: var(--space-3); font-size: var(--text-2xl);">
+        {ui.home.calculatorsHeading}
+      </h2>
+      <div class="grid grid--3" style="margin-top: var(--space-8);">
+        {
+          tools.map((tool) => (
+            <a class="tile" href={localePath(locale, `/tools/${tool.slug}/`)}>
+              <span
+                class="brand__mark"
+                aria-hidden="true"
+                style="width: 2.25rem; height: 2.25rem; font-size: var(--text-base);"
+              >
+                {tool.group === 'home' ? '%' : '∑'}
+              </span>
+              <span class="tile__title">{tool.name}</span>
+              <span class="tile__text">{tool.short}</span>
+              <span class="tile__meta">{ui.ui.calculate}</span>
+            </a>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  <section class="section-sm">
+    <div class="container">
+      <div
+        class="card card--raised"
+        style="display: grid; grid-template-columns: 1.1fr 0.9fr; gap: var(--space-10); align-items: center;"
+      >
+        <div>
+          <h2 style="font-size: var(--text-2xl);">{ui.home.workHeading}</h2>
+          <ul
+            style="margin-top: var(--space-5); padding-left: var(--space-6); display: grid; gap: var(--space-3); color: var(--text-secondary);"
+          >
+            {ui.home.workPoints.map((point) => <li>{point}</li>)}
+          </ul>
+          <p style="margin-top: var(--space-6);">
+            <a href={localePath(locale, '/about/')}>{ui.home.workLink}</a>
+          </p>
+        </div>
+        <div class="card">
+          <p class="result__label">{ui.home.sampleMonthlyPayment}</p>
+          <p class="result__headline" style="font-size: var(--text-3xl);">$2,358.42</p>
+          <div class="stat-grid">
+            <div class="stat">
+              <p class="stat__label">{ui.home.samplePrincipalAndInterest}</p>
+              <p class="stat__value">$1,984.12</p>
+            </div>
+            <div class="stat">
+              <p class="stat__label">{ui.home.samplePropertyTax}</p>
+              <p class="stat__value">$280.00</p>
+            </div>
+            <div class="stat">
+              <p class="stat__label">{ui.home.sampleTotalInterest}</p>
+              <p class="stat__value">$446,031</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section-sm">
+    <div class="container">
+      <p class="eyebrow" style="color: var(--text-muted);">{ui.home.guidesEyebrow}</p>
+      <h2 style="margin-top: var(--space-3); font-size: var(--text-2xl);">
+        {ui.home.guidesHeading}
+      </h2>
+      <div style="margin-top: var(--space-6);">
+        {
+          featured.map((guide) => (
+            <a
+              class="guide-row"
+              href={localePath(locale, `/guides/${guideSlug(guide.id)}/`)}
+            >
+              <span class="guide-row__title">{guide.data.title}</span>
+              <span class="guide-row__meta">
+                {ui.ui.minRead.replace('{n}', String(guide.data.readingMinutes))}
+              </span>
+            </a>
+          ))
+        }
+      </div>
+      <p style="margin-top: var(--space-6);">
+        <a href={localePath(locale, '/guides/')}>{ui.ui.allGuides}</a>
+      </p>
+    </div>
+  </section>
+
+  <AdSlot placement="in-article" />
+
+  <section class="section-sm">
+    <div class="container" style="max-width: 720px;">
+      <h2 style="font-size: var(--text-xl);">{ui.home.newsletterHeading}</h2>
+      <p class="text-secondary" style="margin-top: var(--space-3);">
+        {ui.home.newsletterLede}
+      </p>
+      <div style="margin-top: var(--space-5);">
+        <Newsletter locale={locale} />
+      </div>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .guide-row {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: var(--space-6);
+    padding: var(--space-4) 0;
+    border-bottom: 1px solid var(--border-subtle);
+    text-decoration: none;
+    color: inherit;
+    transition: color var(--transition);
+  }
+
+  .guide-row:hover .guide-row__title {
+    color: var(--accent);
+  }
+
+  .guide-row__title {
+    color: var(--text);
+    font-weight: 500;
+  }
+
+  .guide-row__meta {
+    color: var(--text-muted);
+    font-size: var(--text-sm);
+    white-space: nowrap;
+  }
+</style>

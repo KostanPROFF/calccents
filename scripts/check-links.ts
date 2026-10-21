@@ -7,6 +7,13 @@
  * proposition is that its numbers can be checked, it is the kind of small
  * thing that decides whether the proposition is true.
  *
+ * The site is published in three languages, so the checker has to know about
+ * the locale prefix. A guide in `ru/` produces `/ru/guides/<slug>/`, and the
+ * links inside the Russian guides carry that prefix too. A link that points
+ * at the English page from a Russian guide is not broken, but it is a reader
+ * leaving their language, so the guide links are checked against the page
+ * in the same language.
+ *
  * Run: node scripts/check-links.ts
  */
 
@@ -71,14 +78,22 @@ const routes: Route[] = pageFiles.map((file) => ({
   file: relative(ROOT, file),
 }));
 
-/** Routes produced by the content collection, one per guide. */
+/**
+ * Routes produced by the content collection, one per guide per language.
+ *
+ * The English guides sit at the root of the collection and produce
+ * `/guides/<slug>/`. The Russian ones sit in `ru/` and produce
+ * `/ru/guides/<slug>/`.
+ */
 const guideFiles = collectFiles(join(ROOT, 'src', 'content', 'guides'), ['.mdx']);
 for (const file of guideFiles) {
-  const id = relative(join(ROOT, 'src', 'content', 'guides'), file)
-    .split(/[\\/]/)
-    .pop()!
-    .replace(/\.mdx$/, '');
-  routes.push({ pattern: `/guides/${id}/`, file: relative(ROOT, file) });
+  const parts = relative(join(ROOT, 'src', 'content', 'guides'), file).split(/[\\/]/);
+  const slug = (parts.pop() ?? '').replace(/\.mdx$/, '');
+  const prefix = parts.length === 0 ? '' : `/${parts.join('/')}`;
+  routes.push({
+    pattern: `${prefix}/guides/${slug}/`,
+    file: relative(ROOT, file),
+  });
 }
 
 /** Static files shipped from public/. */
@@ -132,6 +147,24 @@ const LINK_PATTERNS = [
   /\]\(([^)]+)\)/g,
 ];
 
+/**
+ * Links built through `localePath`.
+ *
+ * The components do not write their hrefs out: they ask for a path in a
+ * locale and the helper adds the prefix. Those calls are where most of the
+ * site's internal links live, so the checker resolves them and checks the
+ * result.
+ */
+const LOCALE_PATH_PATTERN = /localePath\(\s*'([a-z]{2})'\s*,\s*'([^']*)'/g;
+
+/** The same prefixing rule the site uses, so the checker cannot drift from it. */
+function prefixed(locale: string, path: string): string {
+  const clean = path.replace(/^\/+/, '').replace(/\/+$/, '');
+  const prefix = locale === 'en' ? '' : `/${locale}`;
+  if (!clean) return prefix || '/';
+  return `${prefix}/${clean}/`;
+}
+
 for (const file of sourceFiles) {
   const source = readFileSync(file, 'utf8');
   const rel = relative(ROOT, file);
@@ -147,6 +180,18 @@ for (const file of sourceFiles) {
       }
       match = pattern.exec(source);
     }
+  }
+
+  LOCALE_PATH_PATTERN.lastIndex = 0;
+  let localeMatch = LOCALE_PATH_PATTERN.exec(source);
+  while (localeMatch !== null) {
+    const locale = localeMatch[1] ?? 'en';
+    const path = localeMatch[2] ?? '/';
+    const href = prefixed(locale, path);
+    if (!matchesRoute(href)) {
+      broken.push({ file: rel, href });
+    }
+    localeMatch = LOCALE_PATH_PATTERN.exec(source);
   }
 }
 

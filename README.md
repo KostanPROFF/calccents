@@ -52,12 +52,24 @@ src/
 ├─ config/site.ts          site identity — the single source of truth
 ├─ config/tools.ts         registry of the three calculators
 ├─ content.config.ts       Zod schema for the guides collection
-├─ content/guides/*.mdx    15 guides
+├─ content/guides/         15 guides × 3 languages
+│  ├─ *.mdx                English, at the root
+│  ├─ ru/*.mdx             Russian
+│  └─ es/*.mdx             Spanish
+├─ i18n/
+│  ├─ locales.ts           the locale list, path helpers, date formatting
+│  ├─ guides.ts            reading the guides collection by language
+│  └─ ui/{en,ru,es}.ts     every user-visible string, one file per language
 ├─ lib/calc/               calculation engine + unit tests
 ├─ lib/client/dom.ts       browser helpers used by the page scripts
 ├─ components/             AdSlot, ToolShell, ResultPanel, Faq, SourceList, …
+├─ components/pages/       the page bodies, one component per page
+├─ components/tools/       the three calculator forms
 ├─ layouts/Base.astro      document shell
 ├─ pages/                  routes
+│  ├─ *.astro              English, at the root
+│  ├─ ru/**                Russian
+│  └─ es/**                Spanish
 └─ styles/global.css       design tokens and every component style
 
 scripts/
@@ -67,6 +79,38 @@ scripts/
 └─ check-dom-ids.ts        duplicate id detection in the built HTML
 ```
 
+## Languages
+
+The site is published in English, Russian and Spanish. English is the source
+language and lives at the root of the site, so every existing link keeps
+working; the other two live under `/ru/` and `/es/`.
+
+Astro's i18n routing expects the folder structure to match the URL structure,
+so the pages are not dynamic: `src/pages/about.astro` and
+`src/pages/ru/about.astro` are both thin wrappers around the same component
+with a different `locale`. `src/pages/ru/guides/[...slug].astro` collects the
+Russian guides and nothing else.
+
+Two rules keep this honest:
+
+- **Every reader-visible string lives in a dictionary.** `src/i18n/ui/en.ts`
+  is the reference, and `ru.ts` and `es.ts` have to match it key for key.
+  A renamed or missing key is a type error, not a blank space on the page.
+- **The guides are files.** A guide is an article, so it has its own file per
+  language, in `src/content/guides/<locale>/`. The URL segment is the same
+  in every language, which is what lets the language switcher keep a reader
+  on the same guide.
+
+Dates follow the language of the page. Currency does not: the site calculates
+in US dollars, so every figure is written the same way in every language, and
+a number that reads differently on two pages of one site is a number nobody
+can check.
+
+The YMYL guardrail has a rule set per language. A linter that only knew
+English would pass a Russian guide full of "вы должны покупать" without a
+word, so `scripts/lint-advisory.ts` carries English, Russian and Spanish
+rules, each with its own negation list, and each pinned by tests.
+
 ## Content model
 
 Every guide carries frontmatter that is validated at build time. A guide
@@ -75,12 +119,13 @@ build rather than shipping.
 
 ```yaml
 title: string            # 10–60 characters
-description: string      # 140–160 characters
+description: string      # 140–160 characters in English, 60–200 in the others
+locale: 'en' | 'ru' | 'es'
 date: date
 lastReviewed: date       # cannot be in the future
 author: string
 reviewedBy: string
-group: 'Home and mortgages' | 'Renting and owning' | 'Investing'
+group: 'home' | 'renting' | 'investing'
 readingMinutes: number
 sources:                 # at least one, each with a label and a URL
   - label: string
@@ -90,6 +135,11 @@ faq:                     # 5–8 pairs
   - q: string
     a: string
 ```
+
+The description length rule is stricter for English than for the
+translations. The 140 to 160 character window is a search-result rule written
+for English, and holding a Russian description to the same number of
+characters would push the translator into writing worse sentences.
 
 ## Environment variables
 
@@ -285,12 +335,20 @@ closed-form formula at every compounding frequency.
 The site is live at **https://calccents.com**, deployed from `main` by GitHub
 Actions, with `www.calccents.com` pointing at the same place.
 
-The repository builds clean and every gate passes: 28 pages, 84 tests, 99.23 %
-line coverage over the calculation engine, zero advisory findings, zero broken
-links, zero duplicate ids, and no AdSense code in the output.
+The repository builds clean and every gate passes: 82 pages, 105 tests, 99.23 %
+line coverage over the calculation engine, zero advisory findings in three
+languages, zero broken links, zero duplicate ids, and no AdSense code in the
+output.
 
 The site has been checked in a browser at desktop and narrow widths, on the
 live domain as well as locally: the three calculators compute, the results
 update as the inputs change, the amortization table fills, and the console is
 free of errors. The mortgage and compound interest figures were checked
-against independently calculated values and agree to the cent.
+against independently calculated values and agree to the cent. The same
+figures were checked in the Russian and Spanish pages and are identical, with
+the dates written the way the language writes them.
+
+The language switcher sits in the header next to the theme toggle and keeps a
+reader on the same page when they change language. Every page carries
+`hreflang` links for all three languages and an `x-default` pointing at the
+English one, and the sitemap lists the alternates.

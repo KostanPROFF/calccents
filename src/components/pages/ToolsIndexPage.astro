@@ -1,0 +1,67 @@
+---
+import Base from '../../layouts/Base.astro';
+import AdSlot from '../AdSlot.astro';
+import { getTools } from '../../config/tools.ts';
+import { getUi } from '../../i18n/ui/index.ts';
+import { localePath, type Locale } from '../../i18n/locales.ts';
+import { getGuides } from '../../i18n/guides.ts';
+
+interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+const ui = getUi(locale);
+const tools = getTools(locale);
+
+const guides = await getGuides(locale);
+const countFor = (slug: string) =>
+  guides.filter((guide) => guide.data.relatedTools.includes(slug)).length;
+---
+
+<Base
+  title={ui.toolsIndex.title}
+  description={ui.toolsIndex.description}
+  path={localePath(locale, '/tools/')}
+  locale={locale}
+>
+  <div class="container">
+    <div class="page-head">
+      <nav class="breadcrumb" aria-label={ui.ui.breadcrumb}>
+        <a href={localePath(locale, '/')}>{ui.ui.home}</a>
+        <span aria-hidden="true">/</span>
+        <span>{ui.nav.tools}</span>
+      </nav>
+      <h1>{ui.toolsIndex.heading}</h1>
+      <p class="page-head__lede">
+        {ui.toolsIndex.lede}
+      </p>
+    </div>
+
+    <div class="grid grid--2">
+      {
+        tools.map((tool) => (
+          <a class="tile" href={localePath(locale, `/tools/${tool.slug}/`)}>
+            <span class="badge">{tool.category}</span>
+            <span class="tile__title">{tool.name}</span>
+            <span class="tile__text">{tool.short}</span>
+            <span class="tile__meta">
+              {ui.ui.guidesCount(countFor(tool.slug))} · {ui.ui.calculate}
+            </span>
+          </a>
+        ))
+      }
+    </div>
+
+    <AdSlot placement="in-article" />
+
+    <section class="section-sm">
+      <h2>{ui.toolsIndex.whatTheseAre}</h2>
+      <div class="prose" style="margin-top: var(--space-4);">
+        {ui.toolsIndex.whatTheseAreBody.map((paragraph) => <p>{paragraph}</p>)}
+      </div>
+    </section>
+
+    <AdSlot placement="footer" />
+  </div>
+</Base>

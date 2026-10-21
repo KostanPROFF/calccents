@@ -1,0 +1,64 @@
+---
+import Base from '../../layouts/Base.astro';
+import AdSlot from '../AdSlot.astro';
+import { getUi } from '../../i18n/ui/index.ts';
+import { localePath, type Locale } from '../../i18n/locales.ts';
+
+interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+const ui = getUi(locale);
+const copy = ui.sourcesPage;
+---
+
+<Base
+  title={copy.title}
+  description={copy.description}
+  path={localePath(locale, '/sources/')}
+  locale={locale}
+>
+  <div class="container">
+    <div class="page-head">
+      <nav class="breadcrumb" aria-label={ui.ui.breadcrumb}>
+        <a href={localePath(locale, '/')}>{ui.ui.home}</a>
+        <span aria-hidden="true">/</span>
+        <span>{copy.title}</span>
+      </nav>
+      <h1>{copy.heading}</h1>
+      <p class="page-head__lede">{copy.lede}</p>
+    </div>
+
+    <div class="prose">
+      <h2>{copy.whyHeading}</h2>
+      {copy.whyBody.map((paragraph) => <p>{paragraph}</p>)}
+
+      <h2>{copy.howHeading}</h2>
+      <ul>
+        {
+          copy.how.map((item) => (
+            <li>
+              <strong>{item.label}</strong> {item.body}
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+
+    <ol class="sources" style="margin-top: var(--space-8);">
+      {
+        copy.sources.map((source, index) => (
+          <li>
+            <span class="sources__index">[{index + 1}]</span>
+            <a href={source.url} rel="nofollow noopener" target="_blank">
+              {source.label}
+            </a>
+          </li>
+        ))
+      }
+    </ol>
+
+    <AdSlot placement="footer" />
+  </div>
+</Base>

@@ -3,36 +3,65 @@
  * The frame every calculator page shares: breadcrumb, heading, the two
  * column calculator area, the method, the limits, the sources and the FAQ.
  * A tool that does not use this shell does not match the site's structure.
+ *
+ * The shell picks the calculator component itself rather than taking it as a
+ * slot. Astro drops a child that carries a `slot` attribute the parent does
+ * not define, so nesting a calculator that fills its own named slots inside
+ * another component silently loses the form and the result panel. Letting
+ * the shell own the choice keeps the calculator a plain component with two
+ * root elements: the form and the result panel, which are the two columns
+ * of the layout.
  */
 import Base from '../layouts/Base.astro';
 import AdSlot from './AdSlot.astro';
 import AdAdvice from './AdAdvice.astro';
 import SourceList from './SourceList.astro';
 import Faq from './Faq.astro';
-import { SITE } from '../config/site.ts';
-import type { ToolDefinition } from '../config/tools.ts';
+import MortgageCalculator from './tools/MortgageCalculator.astro';
+import RentVsBuyCalculator from './tools/RentVsBuyCalculator.astro';
+import CompoundInterestCalculator from './tools/CompoundInterestCalculator.astro';
+import { getSite } from '../config/site.ts';
+import { getTool, type ToolSlug } from '../config/tools.ts';
+import { getUi } from '../i18n/ui/index.ts';
+import { formatDate, localePath, type Locale } from '../i18n/locales.ts';
+import { getGuides, guideSlug } from '../i18n/guides.ts';
 
 interface Props {
-  tool: ToolDefinition;
-  faq: { q: string; a: string }[];
-  sources: { label: string; url: string }[];
-  limits: string[];
-  reviewedOn: string;
-  relatedGuides?: { slug: string; title: string }[];
-  methodNote?: string;
+  slug: ToolSlug;
+  locale: Locale;
 }
 
-const {
-  tool,
-  faq,
-  sources,
-  limits,
-  reviewedOn,
-  relatedGuides = [],
-  methodNote,
-} = Astro.props;
+const { slug, locale } = Astro.props;
 
-const path = `/tools/${tool.slug}/`;
+const site = getSite(locale);
+const ui = getUi(locale);
+const tool = getTool(slug, locale);
+const copy = ui.tool[slug];
+const reviewedOn = formatDate(tool.reviewedOn, locale);
+
+const CALCULATORS = {
+  'mortgage-payment': MortgageCalculator,
+  'rent-vs-buy': RentVsBuyCalculator,
+  'compound-interest': CompoundInterestCalculator,
+} as const;
+
+const Calculator = CALCULATORS[slug];
+
+/**
+ * The related guides, named in the language the page is in.
+ *
+ * The title comes from the guide itself when the guide exists in this
+ * language. Otherwise the dictionary's title is used, so a page in a
+ * language that is not finished yet still links somewhere sensible.
+ */
+const guides = await getGuides(locale);
+const bySlug = new Map(guides.map((guide) => [guideSlug(guide.id), guide]));
+const relatedGuides = copy.relatedGuides.map((entry) => ({
+  slug: entry.slug,
+  title: bySlug.get(entry.slug)?.data.title ?? entry.title,
+}));
+
+const path = localePath(locale, `/tools/${slug}/`);
 
 const softwareApplication = {
   '@context': 'https://schema.org',
@@ -41,19 +70,19 @@ const softwareApplication = {
   description: tool.description,
   applicationCategory: 'FinanceApplication',
   operatingSystem: 'Any',
-  url: new URL(path, SITE.origin).toString(),
+  url: new URL(path, site.origin).toString(),
   isAccessibleForFree: true,
   publisher: {
     '@type': 'Organization',
-    name: SITE.name,
-    url: SITE.origin,
+    name: site.name,
+    url: site.origin,
   },
 };
 
 const faqPage = {
   '@context': 'https://schema.org',
   '@type': 'FAQPage',
-  mainEntity: faq.map((item) => ({
+  mainEntity: copy.faq.map((item) => ({
     '@type': 'Question',
     name: item.q,
     acceptedAnswer: { '@type': 'Answer', text: item.a },
@@ -65,60 +94,95 @@ const faqPage = {
   title={tool.title}
   description={tool.description}
   path={path}
+  locale={locale}
   jsonLd={[softwareApplication, faqPage]}
 >
   <div class="container">
     <div class="page-head">
-      <nav class="breadcrumb" aria-label="Breadcrumb">
-        <a href="/">Home</a>
+      <nav class="breadcrumb" aria-label={ui.ui.breadcrumb}>
+        <a href={localePath(locale, '/')}>{ui.ui.home}</a>
         <span aria-hidden="true">/</span>
-        <a href="/tools/">Tools</a>
+        <a href={localePath(locale, '/tools/')}>{ui.nav.tools}</a>
         <span aria-hidden="true">/</span>
         <span>{tool.name}</span>
       </nav>
       <h1>{tool.title}</h1>
       <p class="page-head__lede">{tool.description}</p>
       <div class="reviewed-line" style="margin-top: var(--space-5);">
-        <span>Last checked: {reviewedOn}</span>
+        <span>{ui.ui.lastChecked}: {reviewedOn}</span>
         <span aria-hidden="true">·</span>
-        <span>By <a href="/editorial-team/">{SITE.author.name}</a></span>
+        <span>
+          {ui.ui.by} <a href={localePath(locale, '/editorial-team/')}>{site.author.name}</a>
+        </span>
         <span aria-hidden="true">·</span>
-        <a href="/sources/">Where the numbers come from</a>
+        <a href={localePath(locale, '/sources/')}>{ui.ui.whereNumbersComeFrom}</a>
       </div>
     </div>
 
     <div class="tool-layout">
-      <div>
-        <slot name="calculator" />
-      </div>
-      <div class="tool-panel">
-        <slot name="result" />
-      </div>
+      <Calculator locale={locale} />
     </div>
 
     <section class="section-sm">
-      <h2>How this is calculated</h2>
-      {methodNote && <p class="text-muted">{methodNote}</p>}
+      <h2>{ui.ui.howThisIsCalculated}</h2>
+      {copy.methodNote && <p class="text-muted">{copy.methodNote}</p>}
       <div class="prose" style="margin-top: var(--space-4);">
-        <slot name="method" />
+        {
+          slug === 'mortgage-payment' && (
+            <>
+              <p>{copy.method[0]}</p>
+              <p>
+                <strong>{copy.formula}</strong>
+              </p>
+              <p>{copy.method[1]}</p>
+              <p>{copy.method[2]}</p>
+              <p>{copy.method[3]}</p>
+            </>
+          )
+        }
+        {
+          slug === 'rent-vs-buy' && (
+            <>
+              <p>{copy.method[0]}</p>
+              <p>{copy.method[1]}</p>
+              <p>
+                <strong>{copy.formula}</strong>
+              </p>
+              <p>{copy.method[2]}</p>
+            </>
+          )
+        }
+        {
+          slug === 'compound-interest' && (
+            <>
+              <p>{copy.method[0]}</p>
+              <p>{copy.method[1]}</p>
+              <p>
+                <strong>{copy.formula}</strong>
+              </p>
+              <p>{copy.method[2]}</p>
+              <p>{copy.method[3]}</p>
+            </>
+          )
+        }
       </div>
     </section>
 
-    <AdAdvice items={limits} />
+    <AdAdvice items={copy.limits} locale={locale} />
 
     <AdSlot placement="in-article" />
 
-    <SourceList sources={sources} />
+    <SourceList sources={copy.sources} locale={locale} />
 
     {
       relatedGuides.length > 0 && (
         <section class="section-sm">
-          <h2>Guides that go deeper</h2>
+          <h2>{ui.ui.guidesThatGoDeeper}</h2>
           <div class="grid grid--2" style="margin-top: var(--space-5);">
             {relatedGuides.map((guide) => (
-              <a class="tile" href={`/guides/${guide.slug}/`}>
+              <a class="tile" href={localePath(locale, `/guides/${guide.slug}/`)}>
                 <span class="tile__title">{guide.title}</span>
-                <span class="tile__text text-muted">Read the guide</span>
+                <span class="tile__text text-muted">{ui.ui.readTheGuide}</span>
               </a>
             ))}
           </div>
@@ -127,9 +191,9 @@ const faqPage = {
     }
 
     <section class="section-sm">
-      <h2>Common questions</h2>
+      <h2>{ui.ui.commonQuestions}</h2>
       <div style="margin-top: var(--space-5);">
-        <Faq items={faq} />
+        <Faq items={copy.faq} />
       </div>
     </section>
 

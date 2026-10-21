@@ -1,0 +1,309 @@
+---
+/**
+ * The rent versus buy calculator.
+ *
+ * The form, the result panel and the method note are one component so the
+ * three language versions share a single implementation. Every label comes
+ * from the dictionary for the language the page is in.
+ */
+import ResultPanel from '../ResultPanel.astro';
+import AdSlot from '../AdSlot.astro';
+import { getUi } from '../../i18n/ui/index.ts';
+import type { Locale } from '../../i18n/locales.ts';
+
+interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+const ui = getUi(locale);
+const copy = ui.tool['rent-vs-buy'];
+---
+
+<div>
+  <form
+  class="card"
+  id="rent-buy-form"
+  novalidate
+  data-not-within-horizon={copy.script.notWithinHorizon}
+  data-month-label={copy.script.month}
+>
+  <p class="eyebrow" style="color: var(--text-muted);">{copy.sections.theHome}</p>
+  <div class="input-group">
+    <label class="field" for="rb-home-price">
+      <span class="field__label">{copy.fields.purchasePrice}</span>
+      <span class="field__control">
+        <span class="field__prefix" aria-hidden="true">$</span>
+        <input class="input input--prefixed" id="rb-home-price" type="number"
+          inputmode="decimal" step="5000" min="0" value="450000" />
+      </span>
+    </label>
+    <label class="field" for="rb-down-percent">
+      <span class="field__label">
+        {copy.fields.downPayment}
+        <span class="field__hint">{copy.fields.percentOfPrice}</span>
+      </span>
+      <span class="field__control">
+        <input class="input" id="rb-down-percent" type="number" inputmode="decimal"
+          step="0.5" min="0" max="100" value="20" />
+        <span class="field__suffix" aria-hidden="true">%</span>
+      </span>
+    </label>
+  </div>
+
+  <div class="input-group">
+    <label class="field" for="rb-rate">
+      <span class="field__label">
+        {copy.fields.mortgageRate}
+        <span class="field__hint">{copy.fields.annualFixed}</span>
+      </span>
+      <span class="field__control">
+        <input class="input" id="rb-rate" type="number" inputmode="decimal" step="0.01"
+          min="0" max="20" value="6.5" />
+        <span class="field__suffix" aria-hidden="true">%</span>
+      </span>
+    </label>
+    <label class="field" for="rb-term">
+      <span class="field__label">{copy.fields.loanTerm}</span>
+      <span class="field__control">
+        <select class="input" id="rb-term">
+          <option value="30" selected>{copy.terms.years(30)}</option>
+          <option value="20">{copy.terms.years(20)}</option>
+          <option value="15">{copy.terms.years(15)}</option>
+        </select>
+      </span>
+    </label>
+  </div>
+
+  <p class="eyebrow" style="color: var(--text-muted); margin-top: var(--space-6);">
+    {copy.sections.theRent}
+  </p>
+  <div class="input-group">
+    <label class="field" for="rb-rent">
+      <span class="field__label">{copy.fields.monthlyRent}</span>
+      <span class="field__control">
+        <span class="field__prefix" aria-hidden="true">$</span>
+        <input class="input input--prefixed" id="rb-rent" type="number"
+          inputmode="decimal" step="25" min="0" value="2400" />
+      </span>
+    </label>
+    <label class="field" for="rb-renters-insurance">
+      <span class="field__label">
+        {copy.fields.rentersInsurance}
+        <span class="field__hint">{copy.fields.perMonth}</span>
+      </span>
+      <span class="field__control">
+        <span class="field__prefix" aria-hidden="true">$</span>
+        <input class="input input--prefixed" id="rb-renters-insurance" type="number"
+          inputmode="decimal" step="5" min="0" value="20" />
+      </span>
+    </label>
+  </div>
+
+  <p class="eyebrow" style="color: var(--text-muted); margin-top: var(--space-6);">
+    {copy.sections.runningCosts}
+  </p>
+  <div class="input-group">
+    <label class="field" for="rb-tax-percent">
+      <span class="field__label">
+        {copy.fields.propertyTax}
+        <span class="field__hint">{copy.fields.percentOfPricePerYear}</span>
+      </span>
+      <span class="field__control">
+        <input class="input" id="rb-tax-percent" type="number" inputmode="decimal"
+          step="0.01" min="0" max="10" value="1.1" />
+        <span class="field__suffix" aria-hidden="true">%</span>
+      </span>
+    </label>
+    <label class="field" for="rb-insurance">
+      <span class="field__label">
+        {copy.fields.homeInsurance}
+        <span class="field__hint">{copy.fields.perYear}</span>
+      </span>
+      <span class="field__control">
+        <span class="field__prefix" aria-hidden="true">$</span>
+        <input class="input input--prefixed" id="rb-insurance" type="number"
+          inputmode="decimal" step="50" min="0" value="1800" />
+      </span>
+    </label>
+  </div>
+
+  <div class="input-group">
+    <label class="field" for="rb-hoa">
+      <span class="field__label">
+        {copy.fields.hoaFee}
+        <span class="field__hint">{copy.fields.perMonth}</span>
+      </span>
+      <span class="field__control">
+        <span class="field__prefix" aria-hidden="true">$</span>
+        <input class="input input--prefixed" id="rb-hoa" type="number" inputmode="decimal"
+          step="25" min="0" value="0" />
+      </span>
+    </label>
+    <label class="field" for="rb-maintenance">
+      <span class="field__label">
+        {copy.fields.maintenance}
+        <span class="field__hint">{copy.fields.percentOfPricePerYear}</span>
+      </span>
+      <span class="field__control">
+        <input class="input" id="rb-maintenance" type="number" inputmode="decimal"
+          step="0.1" min="0" max="10" value="1" />
+        <span class="field__suffix" aria-hidden="true">%</span>
+      </span>
+    </label>
+  </div>
+
+  <p class="eyebrow" style="color: var(--text-muted); margin-top: var(--space-6);">
+    {copy.sections.assumptions}
+  </p>
+  <div class="input-group">
+    <label class="field" for="rb-appreciation">
+      <span class="field__label">
+        {copy.fields.annualChangeInValue}
+        <span class="field__hint">{copy.fields.negativeModelsAFall}</span>
+      </span>
+      <span class="field__control">
+        <input class="input" id="rb-appreciation" type="number" inputmode="decimal"
+          step="0.1" min="-20" max="20" value="3" />
+        <span class="field__suffix" aria-hidden="true">%</span>
+      </span>
+    </label>
+    <label class="field" for="rb-horizon">
+      <span class="field__label">{copy.fields.compareOver}</span>
+      <span class="field__control">
+        <select class="input" id="rb-horizon">
+          <option value="5" selected>{copy.terms.years(5)}</option>
+          <option value="10">{copy.terms.years(10)}</option>
+          <option value="15">{copy.terms.years(15)}</option>
+          <option value="30">{copy.terms.years(30)}</option>
+        </select>
+      </span>
+    </label>
+  </div>
+
+  <div class="input-group">
+    <label class="field" for="rb-closing">
+      <span class="field__label">
+        {copy.fields.closingCosts}
+        <span class="field__hint">{copy.fields.percentOfPriceOnce}</span>
+      </span>
+      <span class="field__control">
+        <input class="input" id="rb-closing" type="number" inputmode="decimal"
+          step="0.1" min="0" max="15" value="2.5" />
+        <span class="field__suffix" aria-hidden="true">%</span>
+      </span>
+    </label>
+    <label class="field" for="rb-selling">
+      <span class="field__label">
+        {copy.fields.sellingCosts}
+        <span class="field__hint">{copy.fields.percentOfFinalValue}</span>
+      </span>
+      <span class="field__control">
+        <input class="input" id="rb-selling" type="number" inputmode="decimal"
+          step="0.1" min="0" max="15" value="6" />
+        <span class="field__suffix" aria-hidden="true">%</span>
+      </span>
+    </label>
+  </div>
+</form>
+</div>
+
+<div class="tool-panel">
+  <ResultPanel
+    headlineId="rb-headline"
+    headlineLabel={copy.result.headlineLabel}
+    headline="—"
+    stats={[
+      { id: 'rb-out-rent', label: copy.result.monthlyRent, value: '—' },
+      { id: 'rb-own', label: copy.result.monthlyOwnership, value: '—' },
+      { id: 'rb-upfront', label: copy.result.upfrontOutlay, value: '—' },
+      { id: 'rb-equity', label: copy.result.equityBuilt, value: '—' },
+      { id: 'rb-home-value', label: copy.result.homeValueAtHorizon, value: '—' },
+      { id: 'rb-breakeven', label: copy.result.crossover, value: '—' },
+    ]}
+    note={copy.result.note}
+  />
+  <p class="muted-block" style="margin-top: var(--space-4);">
+    {copy.resultNote}
+  </p>
+  <AdSlot placement="result" />
+</div>
+
+<script>
+  import { compareRentAndBuy } from '../../lib/calc/rentVsBuy.ts';
+  import { formatCurrency } from '../../lib/calc/money.ts';
+  import { numberValue, setText } from '../../lib/client/dom.ts';
+
+  const copy = document.getElementById('rent-buy-form')?.dataset;
+  const ids = [
+    'rb-home-price',
+    'rb-down-percent',
+    'rb-rate',
+    'rb-term',
+    'rb-rent',
+    'rb-renters-insurance',
+    'rb-tax-percent',
+    'rb-insurance',
+    'rb-hoa',
+    'rb-maintenance',
+    'rb-appreciation',
+    'rb-horizon',
+    'rb-closing',
+    'rb-selling',
+  ];
+
+  function recalculate(): void {
+    const homePrice = Math.max(0, numberValue('rb-home-price'));
+    if (homePrice <= 0) {
+      for (const id of [
+        'rb-headline',
+        'rb-out-rent',
+        'rb-own',
+        'rb-upfront',
+        'rb-equity',
+        'rb-home-value',
+        'rb-breakeven',
+      ]) {
+        setText(id, '—');
+      }
+      return;
+    }
+
+    const result = compareRentAndBuy({
+      homePrice,
+      downPaymentPercent: Math.min(100, Math.max(0, numberValue('rb-down-percent', 20))),
+      mortgageRatePercent: Math.max(0, numberValue('rb-rate')),
+      mortgageTermYears: Math.max(1, numberValue('rb-term', 30)),
+      monthlyRent: Math.max(0, numberValue('rb-rent')),
+      annualPropertyTaxPercent: Math.max(0, numberValue('rb-tax-percent')),
+      annualInsurance: Math.max(0, numberValue('rb-insurance')),
+      monthlyHoa: Math.max(0, numberValue('rb-hoa')),
+      annualMaintenancePercent: Math.max(0, numberValue('rb-maintenance')),
+      annualAppreciationPercent: numberValue('rb-appreciation'),
+      sellingCostPercent: Math.max(0, numberValue('rb-selling')),
+      closingCostPercent: Math.max(0, numberValue('rb-closing')),
+      rentersInsuranceMonthly: Math.max(0, numberValue('rb-renters-insurance')),
+      horizonYears: Math.max(1, numberValue('rb-horizon', 5)),
+      startDate: new Date(),
+    });
+
+    setText('rb-headline', formatCurrency(result.monthlyDifference));
+    setText('rb-out-rent', formatCurrency(result.monthlyRentTotal));
+    setText('rb-own', formatCurrency(result.monthlyOwnership));
+    setText('rb-upfront', formatCurrency(result.upfrontCost));
+    setText('rb-equity', formatCurrency(result.equityAtHorizon));
+    setText('rb-home-value', formatCurrency(result.homeValueAtHorizon));
+    setText(
+      'rb-breakeven',
+      result.breakEvenMonth === null
+        ? (copy?.notWithinHorizon ?? 'Not within the horizon')
+        : (copy?.monthLabel?.replace('{n}', String(result.breakEvenMonth)) ??
+          `Month ${result.breakEvenMonth}`),    );
+  }
+
+  for (const id of ids) {
+    document.getElementById(id)?.addEventListener('input', recalculate);
+    document.getElementById(id)?.addEventListener('change', recalculate);
+  }
+  recalculate();
+</script>

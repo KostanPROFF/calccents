@@ -1,0 +1,159 @@
+---
+import { render } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+import AdSlot from '../AdSlot.astro';
+import Faq from '../Faq.astro';
+import SourceList from '../SourceList.astro';
+import { getSite } from '../../config/site.ts';
+import { getUi } from '../../i18n/ui/index.ts';
+import { formatDate, localePath, type Locale } from '../../i18n/locales.ts';
+import { guideSlug, type GuideEntry } from '../../i18n/guides.ts';
+import { getTool, isToolSlug } from '../../config/tools.ts';
+
+interface Props {
+  guide: GuideEntry;
+  locale: Locale;
+}
+
+const { guide, locale } = Astro.props;
+const { Content } = await render(guide);
+const data = guide.data;
+
+const site = getSite(locale);
+const ui = getUi(locale);
+
+const slug = guideSlug(guide.id);
+const path = localePath(locale, `/guides/${slug}/`);
+
+const relatedTools = data.relatedTools
+  .filter(isToolSlug)
+  .map((toolSlug) => getTool(toolSlug, locale));
+
+const article = {
+  '@context': 'https://schema.org',
+  '@type': 'Article',
+  headline: data.title,
+  description: data.description,
+  datePublished: data.date.toISOString(),
+  dateModified: data.lastReviewed.toISOString(),
+  inLanguage: site.lang,
+  author: {
+    '@type': 'Person',
+    name: data.author,
+    sameAs: site.author.links.map((link) => link.href),
+  },
+  publisher: {
+    '@type': 'Organization',
+    name: site.name,
+    url: site.origin,
+  },
+  // Only present when the review was done by somebody other than the
+  // author. A reviewer the same person as the author is not a fact worth
+  // putting in structured data.
+  ...(data.reviewedBy !== data.author
+    ? { reviewedBy: { '@type': 'Person', name: data.reviewedBy } }
+    : {}),
+  mainEntityOfPage: {
+    '@type': 'WebPage',
+    '@id': new URL(path, site.origin).toString(),
+  },
+};
+
+const faqPage = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: data.faq.map((item) => ({
+    '@type': 'Question',
+    name: item.q,
+    acceptedAnswer: { '@type': 'Answer', text: item.a },
+  })),
+};
+---
+
+<Base
+  title={data.title}
+  description={data.description}
+  path={path}
+  locale={locale}
+  ogType="article"
+  jsonLd={[article, faqPage]}
+>
+  <div class="container">
+    <div class="page-head">
+      <nav class="breadcrumb" aria-label={ui.ui.breadcrumb}>
+        <a href={localePath(locale, '/')}>{ui.ui.home}</a>
+        <span aria-hidden="true">/</span>
+        <a href={localePath(locale, '/guides/')}>{ui.nav.guides}</a>
+        <span aria-hidden="true">/</span>
+        <span>{ui.guidesIndex.groups[data.group]}</span>
+      </nav>
+      <h1>{data.title}</h1>
+      <p class="page-head__lede">{data.description}</p>
+      <div class="reviewed-line" style="margin-top: var(--space-5);">
+        <span>{ui.ui.published} {formatDate(data.date, locale)}</span>
+        <span aria-hidden="true">·</span>
+        <span>{ui.ui.lastReviewed} {formatDate(data.lastReviewed, locale)}</span>
+        <span aria-hidden="true">·</span>
+        <span>{ui.ui.minRead.replace('{n}', String(data.readingMinutes))}</span>
+        <span aria-hidden="true">·</span>
+        <span>
+          {ui.ui.by}{' '}
+          <a href={localePath(locale, '/editorial-team/')}>{data.author}</a>
+        </span>
+        {
+          // The reviewer is only named when it is somebody other than the
+          // author. A second name on the same page would claim a review
+          // that happened separately, and this site does not claim that.
+          data.reviewedBy !== data.author && (
+            <>
+              <span aria-hidden="true">·</span>
+              <span>
+                {ui.ui.reviewedBy}{' '}
+                <a href={localePath(locale, '/editorial-team/')}>{data.reviewedBy}</a>
+              </span>
+            </>
+          )
+        }
+      </div>
+    </div>
+
+    <div class="prose">
+      <Content />
+    </div>
+
+    <AdSlot placement="in-article" />
+
+    <SourceList
+      sources={data.sources}
+      locale={locale}
+      title={ui.guide.sourcesTitle}
+      note={ui.guide.sourcesNote}
+    />
+
+    {
+      relatedTools.length > 0 && (
+        <section class="section-sm">
+          <h2>{ui.ui.calculatorsBehindThisGuide}</h2>
+          <div class="grid grid--2" style="margin-top: var(--space-5);">
+            {relatedTools.map((tool) => (
+              <a class="tile" href={localePath(locale, `/tools/${tool.slug}/`)}>
+                <span class="tile__title">{tool.name}</span>
+                <span class="tile__text">{tool.short}</span>
+                <span class="tile__meta">{ui.ui.calculate}</span>
+              </a>
+            ))}
+          </div>
+        </section>
+      )
+    }
+
+    <section class="section-sm">
+      <h2>{ui.ui.commonQuestions}</h2>
+      <div style="margin-top: var(--space-5);">
+        <Faq items={data.faq} />
+      </div>
+    </section>
+
+    <AdSlot placement="footer" />
+  </div>
+</Base>

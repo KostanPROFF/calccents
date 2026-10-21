@@ -1,0 +1,71 @@
+---
+import Base from '../../layouts/Base.astro';
+import AdSlot from '../AdSlot.astro';
+import { getSite } from '../../config/site.ts';
+import { getUi, fill } from '../../i18n/ui/index.ts';
+import { formatDate, localePath, type Locale } from '../../i18n/locales.ts';
+
+interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+const site = getSite(locale);
+const ui = getUi(locale);
+const copy = ui.privacy;
+
+const cookiesBody = fill(copy.cookiesBody, { name: site.name });
+
+const advertisingBody = fill(copy.advertisingBody, {
+  adsSettingsLink: `<a href="https://adssettings.google.com/" rel="noopener">${copy.adsSettingsLink}</a>`,
+  policiesLink: `<a href="https://policies.google.com/technologies/ads" rel="noopener">${copy.policiesLink}</a>`,
+});
+---
+
+<Base
+  title={copy.title}
+  description={copy.description}
+  path={localePath(locale, '/privacy/')}
+  locale={locale}
+>
+  <div class="container">
+    <div class="page-head">
+      <nav class="breadcrumb" aria-label={ui.ui.breadcrumb}>
+        <a href={localePath(locale, '/')}>{ui.ui.home}</a>
+        <span aria-hidden="true">/</span>
+        <span>{copy.title}</span>
+      </nav>
+      <h1>{copy.heading}</h1>
+      <p class="page-head__lede">{copy.lede}</p>
+    </div>
+
+    <div class="prose">
+      <h2>{copy.calculatorsHeading}</h2>
+      <p>{copy.calculatorsBody}</p>
+
+      <h2>{copy.cookiesHeading}</h2>
+      <p set:html={cookiesBody} />
+
+      <h2>{copy.advertisingHeading}</h2>
+      <p set:html={advertisingBody} />
+
+      <h2>{copy.analyticsHeading}</h2>
+      <p>{copy.analyticsBody}</p>
+
+      <h2>{copy.newsletterHeading}</h2>
+      <p>{copy.newsletterBody}</p>
+
+      <h2>{copy.thirdPartyHeading}</h2>
+      <p>{copy.thirdPartyBody}</p>
+
+      <h2>{copy.changesHeading}</h2>
+      <p>{copy.changesBody}</p>
+
+      <p class="text-muted">
+        {fill(copy.lastReviewed, { date: formatDate(site.reviewedOn, locale) })}
+      </p>
+    </div>
+
+    <AdSlot placement="footer" />
+  </div>
+</Base>

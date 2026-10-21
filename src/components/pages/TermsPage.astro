@@ -1,0 +1,69 @@
+---
+import Base from '../../layouts/Base.astro';
+import AdSlot from '../AdSlot.astro';
+import { getSite } from '../../config/site.ts';
+import { getUi, fill } from '../../i18n/ui/index.ts';
+import { formatDate, localePath, type Locale } from '../../i18n/locales.ts';
+
+interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+const site = getSite(locale);
+const ui = getUi(locale);
+const copy = ui.terms;
+
+const providesBody = fill(copy.providesBody, { name: site.name });
+const errorsBody = fill(copy.errorsBody, {
+  contactLink: `<a href="${localePath(locale, '/contact/')}">${copy.contactLink}</a>`,
+});
+---
+
+<Base
+  title={copy.title}
+  description={copy.description}
+  path={localePath(locale, '/terms/')}
+  locale={locale}
+>
+  <div class="container">
+    <div class="page-head">
+      <nav class="breadcrumb" aria-label={ui.ui.breadcrumb}>
+        <a href={localePath(locale, '/')}>{ui.ui.home}</a>
+        <span aria-hidden="true">/</span>
+        <span>{copy.title}</span>
+      </nav>
+      <h1>{copy.heading}</h1>
+      <p class="page-head__lede">{copy.lede}</p>
+    </div>
+
+    <div class="prose">
+      <h2>{copy.providesHeading}</h2>
+      <p set:html={providesBody} />
+
+      <h2>{copy.notProvidesHeading}</h2>
+      {copy.notProvidesBody.map((paragraph) => <p>{paragraph}</p>)}
+
+      <h2>{copy.figuresHeading}</h2>
+      <p>{copy.figuresBody}</p>
+
+      <h2>{copy.errorsHeading}</h2>
+      <p set:html={errorsBody} />
+
+      <h2>{copy.advertisingHeading}</h2>
+      <p>{copy.advertisingBody}</p>
+
+      <h2>{copy.useHeading}</h2>
+      <p>{copy.useBody}</p>
+
+      <h2>{copy.changesHeading}</h2>
+      <p>{copy.changesBody}</p>
+
+      <p class="text-muted">
+        {fill(copy.lastReviewed, { date: formatDate(site.reviewedOn, locale) })}
+      </p>
+    </div>
+
+    <AdSlot placement="footer" />
+  </div>
+</Base>

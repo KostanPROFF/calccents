@@ -82,3 +82,72 @@ describe('advisory linter — scope of the rule set', () => {
     assert.equal(flagged('We do not advise buying more than one property.'), false);
   });
 });
+
+/**
+ * The site is published in three languages, and a guardrail that only knows
+ * English would pass a Russian guide full of "вы должны покупать" without a
+ * word. These cases pin the other two rule sets.
+ */
+function flaggedIn(sentence: string, locale: 'ru' | 'es'): boolean {
+  return findAdvisoryHits(sentence, '<text>', locale).length > 0;
+}
+
+describe('advisory linter — Russian', () => {
+  const violations: [string, string][] = [
+    ['directive', 'Вы должны купить дом до роста ставок.'],
+    ['dative directive', 'Вам следует инвестировать в недвижимость.'],
+    ['negated directive is still a directive', 'Вы не должны покупать жильё.'],
+    ['first-person recommendation', 'Мы рекомендуем рефинансировать кредит.'],
+    ['worth-it verdict', 'Стоит покупать жильё, если ставки вырастут.'],
+    ['option verdict', 'Лучший вариант — купить квартиру.'],
+    ['consider directive', 'Подумайте о покупке жилья.'],
+  ];
+
+  for (const [label, sentence] of violations) {
+    it(`rejects a Russian ${label}`, () => {
+      assert.equal(flaggedIn(sentence, 'ru'), true, `expected a finding in: ${sentence}`);
+    });
+  }
+
+  const allowed: [string, string][] = [
+    ['negated directive', 'Калькулятор не говорит вам, что вы должны делать.'],
+    ['negated verdict', 'Никто не говорит, что нужно покупать.'],
+    ['factual comparison', 'Аренда обходится в месяц дешевле, чем владение.'],
+  ];
+
+  for (const [label, sentence] of allowed) {
+    it(`accepts a Russian ${label}`, () => {
+      assert.equal(flaggedIn(sentence, 'ru'), false, `unexpected finding in: ${sentence}`);
+    });
+  }
+});
+
+describe('advisory linter — Spanish', () => {
+  const violations: [string, string][] = [
+    ['directive', 'Deberías comprar una vivienda antes de que suban los tipos.'],
+    ['impersonal directive', 'Hay que invertir en una casa.'],
+    ['first-person recommendation', 'Te recomendamos refinanciar el préstamo.'],
+    ['worth-it verdict', 'Vale la pena comprar el piso.'],
+    ['best-option verdict', 'La mejor opción es comprar.'],
+    ['consider directive', 'Considera comprar una vivienda.'],
+  ];
+
+  for (const [label, sentence] of violations) {
+    it(`rejects a Spanish ${label}`, () => {
+      assert.equal(flaggedIn(sentence, 'es'), true, `expected a finding in: ${sentence}`);
+    });
+  }
+
+  const allowed: [string, string][] = [
+    ['negated directive', 'La calculadora no te dice qué hacer con el resultado.'],
+    ['noun infinitive', 'Alquilar y comprar son dos regímenes distintos para lo mismo.'],
+    ['editorial statement', 'Una guía que recomienda una acción se reescribe.'],
+    ['factual comparison', 'Alquilar cuesta menos al mes que comprar en este escenario.'],
+  ];
+
+  for (const [label, sentence] of allowed) {
+    it(`accepts a Spanish ${label}`, () => {
+      assert.equal(flaggedIn(sentence, 'es'), false, `unexpected finding in: ${sentence}`);
+    });
+  }
+});

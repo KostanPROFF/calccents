@@ -1,0 +1,222 @@
+---
+/**
+ * The compound interest calculator.
+ *
+ * The form, the result panel and the method note are one component so the
+ * three language versions share a single implementation. Every label comes
+ * from the dictionary for the language the page is in.
+ */
+import ResultPanel from '../ResultPanel.astro';
+import AdSlot from '../AdSlot.astro';
+import { getUi } from '../../i18n/ui/index.ts';
+import type { Locale } from '../../i18n/locales.ts';
+
+interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+const ui = getUi(locale);
+const copy = ui.tool['compound-interest'];
+---
+
+<div>
+  <form
+  class="card"
+  id="compound-form"
+  novalidate
+  data-years-one={copy.script.yearsOne}
+  data-years-other={copy.script.yearsOther}
+>
+  <div class="input-group">
+    <label class="field" for="ci-principal">
+      <span class="field__label">
+        {copy.fields.startingBalance}
+        <span class="field__hint">{copy.fields.today}</span>
+      </span>
+      <span class="field__control">
+        <span class="field__prefix" aria-hidden="true">$</span>
+        <input class="input input--prefixed" id="ci-principal" type="number"
+          inputmode="decimal" step="500" min="0" value="10000" />
+      </span>
+    </label>
+    <label class="field" for="ci-contribution">
+      <span class="field__label">
+        {copy.fields.monthlyContribution}
+        <span class="field__hint">{copy.fields.addedEachMonth}</span>
+      </span>
+      <span class="field__control">
+        <span class="field__prefix" aria-hidden="true">$</span>
+        <input class="input input--prefixed" id="ci-contribution" type="number"
+          inputmode="decimal" step="50" min="0" value="500" />
+      </span>
+    </label>
+  </div>
+
+  <div class="input-group">
+    <label class="field" for="ci-rate">
+      <span class="field__label">
+        {copy.fields.interestRate}
+        <span class="field__hint">{copy.fields.annualNominal}</span>
+      </span>
+      <span class="field__control">
+        <input class="input" id="ci-rate" type="number" inputmode="decimal" step="0.01"
+          min="0" max="30" value="7" />
+        <span class="field__suffix" aria-hidden="true">%</span>
+      </span>
+    </label>
+    <label class="field" for="ci-years">
+      <span class="field__label">{copy.fields.time}</span>
+      <span class="field__control">
+        <input class="input" id="ci-years" type="number" inputmode="numeric"
+          step="1" min="1" max="60" value="10" />
+        <span class="field__suffix" aria-hidden="true">{copy.fields.years}</span>
+      </span>
+    </label>
+  </div>
+
+  <div class="input-group">
+    <label class="field" for="ci-frequency">
+      <span class="field__label">{copy.fields.compounding}</span>
+      <span class="field__control">
+        <select class="input" id="ci-frequency">
+          <option value="12" selected>{copy.frequencies.monthly}</option>
+          <option value="4">{copy.frequencies.quarterly}</option>
+          <option value="2">{copy.frequencies.twiceAYear}</option>
+          <option value="1">{copy.frequencies.annually}</option>
+          <option value="6">{copy.frequencies.everyTwoMonths}</option>
+          <option value="3">{copy.frequencies.everyFourMonths}</option>
+        </select>
+      </span>
+    </label>
+    <label class="field" for="ci-timing">
+      <span class="field__label">{copy.fields.contributionTiming}</span>
+      <span class="field__control">
+        <select class="input" id="ci-timing">
+          <option value="end" selected>{copy.timing.endOfMonth}</option>
+          <option value="begin">{copy.timing.startOfMonth}</option>
+        </select>
+      </span>
+    </label>
+  </div>
+
+  <label class="field" for="ci-inflation">
+    <span class="field__label">
+      {copy.fields.inflation}
+      <span class="field__hint">{copy.fields.annualForRealValue}</span>
+    </span>
+    <span class="field__control">
+      <input class="input" id="ci-inflation" type="number" inputmode="decimal" step="0.1"
+        min="0" max="30" value="2.5" />
+      <span class="field__suffix" aria-hidden="true">%</span>
+    </span>
+  </label>
+
+  <details style="margin-top: var(--space-6);">
+    <summary class="text-sm" style="cursor: pointer; color: var(--text-secondary);">
+      {copy.fields.seeBalance}
+    </summary>
+    <div class="table-wrap" style="margin-top: var(--space-4);">
+      <table class="table">
+        <thead>
+          <tr>
+            <th scope="col">{copy.table.year}</th>
+            <th scope="col">{copy.table.balance}</th>
+            <th scope="col">{copy.table.contributed}</th>
+            <th scope="col">{copy.table.interest}</th>
+            <th scope="col">{copy.table.inTodaysDollars}</th>
+          </tr>
+        </thead>
+        <tbody id="compound-body"></tbody>
+      </table>
+    </div>
+  </details>
+</form>
+</div>
+
+<div class="tool-panel">
+  <ResultPanel
+    headlineId="ci-future-value"
+    headlineLabel={copy.result.headlineLabel}
+    headline="—"
+    stats={[
+      { id: 'ci-contributions', label: copy.result.totalContributions, value: '—' },
+      { id: 'ci-interest', label: copy.result.interestEarned, value: '—' },
+      { id: 'ci-real', label: copy.result.inTodaysDollars, value: '—' },
+      { id: 'ci-ear', label: copy.result.effectiveAnnualRate, value: '—' },
+      { id: 'ci-real-rate', label: copy.result.realAnnualRate, value: '—' },
+      { id: 'ci-years-out', label: copy.result.horizon, value: '—' },
+    ]}
+    note={copy.result.note}
+  />
+  <p class="muted-block" style="margin-top: var(--space-4);">
+    {copy.resultNote}
+  </p>
+  <AdSlot placement="result" />
+</div>
+
+<script>
+  import { projectCompoundInterest } from '../../lib/calc/compound.ts';
+  import { formatCurrency, formatPercent } from '../../lib/calc/money.ts';
+  import { numberValue, setText } from '../../lib/client/dom.ts';
+
+  const form = document.getElementById('compound-form');
+  const yearsOne = form?.dataset.yearsOne ?? '1 year';
+  const yearsOther = form?.dataset.yearsOther ?? '{n} years';
+
+  const ids = [
+    'ci-principal',
+    'ci-contribution',
+    'ci-rate',
+    'ci-years',
+    'ci-frequency',
+    'ci-timing',
+    'ci-inflation',
+  ];
+
+  function recalculate(): void {
+    const years = Math.max(0, numberValue('ci-years', 10));
+    const timingSelect = document.getElementById('ci-timing') as HTMLSelectElement | null;
+    const timing = timingSelect?.value === 'begin' ? 'begin' : 'end';
+
+    const result = projectCompoundInterest({
+      principal: Math.max(0, numberValue('ci-principal')),
+      monthlyContribution: Math.max(0, numberValue('ci-contribution')),
+      annualRatePercent: Math.max(0, numberValue('ci-rate')),
+      years,
+      compoundsPerYear: Math.max(1, numberValue('ci-frequency', 12)),
+      inflationPercent: Math.max(0, numberValue('ci-inflation')),
+      contributionTiming: timing,
+    });
+
+    setText('ci-future-value', formatCurrency(result.futureValue));
+    setText('ci-contributions', formatCurrency(result.totalContributions));
+    setText('ci-interest', formatCurrency(result.totalInterest));
+    setText('ci-real', formatCurrency(result.realValue));
+    setText('ci-ear', formatPercent(result.effectiveAnnualRatePercent, 3));
+    setText('ci-real-rate', formatPercent(result.realAnnualRatePercent, 3));
+    setText(
+      'ci-years-out',
+      result.years === 1 ? yearsOne : yearsOther.replace('{n}', String(result.years)),
+    );
+
+    const body = document.getElementById('compound-body');
+    if (body) {
+      body.innerHTML = result.yearly
+        .map(
+          (row) =>
+            `<tr><td>${row.year}</td><td>${formatCurrency(row.balance)}</td>` +
+            `<td>${formatCurrency(row.contributed)}</td>` +
+            `<td>${formatCurrency(row.earned)}</td>` +
+            `<td>${formatCurrency(row.realBalance)}</td></tr>`,
+        )
+        .join('');
+    }
+  }
+
+  for (const id of ids) {
+    document.getElementById(id)?.addEventListener('input', recalculate);
+    document.getElementById(id)?.addEventListener('change', recalculate);
+  }
+  recalculate();
+</script>

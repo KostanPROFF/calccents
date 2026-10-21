@@ -1,36 +1,61 @@
 ---
-import { SITE } from '../config/site.ts';
+import { getSite } from '../config/site.ts';
+import { getUi } from '../i18n/ui/index.ts';
+import { localePath, type Locale } from '../i18n/locales.ts';
 import ThemeToggle from './ThemeToggle.astro';
+import LanguageSwitcher from './LanguageSwitcher.astro';
 
 interface Props {
   currentPath: string;
+  locale: Locale;
 }
 
-const { currentPath } = Astro.props;
+const { currentPath, locale } = Astro.props;
+const site = getSite(locale);
+const ui = getUi(locale);
 
 function isCurrent(href: string): boolean {
   if (href === '/') return currentPath === '/';
   return currentPath.startsWith(href);
 }
+
+/**
+ * The key a nav item is known by.
+ *
+ * The 404 page is rendered once for the whole site and switches to the
+ * language of the URL that was asked for, so it needs to find the nav
+ * links by name rather than by position.
+ */
+function navKey(href: string): string {
+  return href.replace(/^\//, '').replace(/\/$/, '');
+}
 ---
 
 <header class="site-header">
   <div class="container site-header__inner">
-    <a class="brand" href="/">
+    <a class="brand" href={localePath(locale, '/')}>
       <span class="brand__mark" aria-hidden="true">C</span>
-      {SITE.name}
+      <span class="brand__name">{site.name}</span>
     </a>
     <div class="site-header__actions">
-      <nav class="site-nav" aria-label="Primary">
+      <nav class="site-nav" aria-label={ui.ui.primaryNav}>
         {
-          SITE.nav.map((item) => (
-            <a href={item.href} aria-current={isCurrent(item.href) ? 'page' : undefined}>
-              {item.label}
-            </a>
-          ))
+          site.nav.map((item) => {
+            const href = localePath(locale, item.href);
+            return (
+              <a
+                href={href}
+                data-not-found-nav={navKey(item.href)}
+                aria-current={isCurrent(href) ? 'page' : undefined}
+              >
+                {item.label}
+              </a>
+            );
+          })
         }
       </nav>
-      <ThemeToggle />
+      <LanguageSwitcher locale={locale} currentPath={currentPath} />
+      <ThemeToggle locale={locale} />
     </div>
   </div>
 </header>

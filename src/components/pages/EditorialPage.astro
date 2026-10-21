@@ -1,0 +1,96 @@
+---
+import Base from '../../layouts/Base.astro';
+import AdSlot from '../AdSlot.astro';
+import { getSite } from '../../config/site.ts';
+import { getUi, fill } from '../../i18n/ui/index.ts';
+import { localePath, type Locale } from '../../i18n/locales.ts';
+
+interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+const site = getSite(locale);
+const ui = getUi(locale);
+const copy = ui.editorial;
+
+const correctionsBody = fill(copy.correctionsBody, {
+  contactLink: `<a href="${localePath(locale, '/contact/')}">${copy.contactLink}</a>`,
+});
+---
+
+<Base
+  title={copy.title}
+  description={copy.description}
+  path={localePath(locale, '/editorial-team/')}
+  locale={locale}
+>
+  <div class="container">
+    <div class="page-head">
+      <nav class="breadcrumb" aria-label={ui.ui.breadcrumb}>
+        <a href={localePath(locale, '/')}>{ui.ui.home}</a>
+        <span aria-hidden="true">/</span>
+        <span>{copy.title}</span>
+      </nav>
+      <h1>{copy.heading}</h1>
+      <p class="page-head__lede">{copy.lede}</p>
+    </div>
+
+    <div class="grid grid--2" style="margin-bottom: var(--space-12);">
+      <div class="card">
+        <p class="eyebrow" style="color: var(--text-muted);">{copy.authorEyebrow}</p>
+        <h2 class="card__title" style="margin-top: var(--space-2);">
+          {site.author.name}
+        </h2>
+        <p class="card__body">{site.author.bio}</p>
+        <p class="card__body" style="margin-top: var(--space-3);">
+          {
+            site.author.links.map((link) => (
+              <a href={link.href} rel="me noopener">
+                {link.label}
+              </a>
+            ))
+          }
+        </p>
+      </div>
+      <div class="card">
+        <p class="eyebrow" style="color: var(--text-muted);">{copy.checkEyebrow}</p>
+        <h2 class="card__title" style="margin-top: var(--space-2);">
+          {copy.checkHeading}
+        </h2>
+        <p class="card__body">{copy.checkBody}</p>
+        <p class="card__body" style="margin-top: var(--space-3);">
+          <a href={site.repository} rel="noopener">{copy.openRepository}</a>
+        </p>
+      </div>
+    </div>
+
+    <div class="prose">
+      <h2>{copy.oneNameHeading}</h2>
+      {copy.oneNameBody.map((paragraph) => <p>{paragraph}</p>)}
+
+      <h2>{copy.reviewHeading}</h2>
+      <p>{copy.reviewIntro}</p>
+      <ul>
+        {
+          copy.review.map((item) => (
+            <li>
+              <strong>{item.label}</strong> {item.body}
+            </li>
+          ))
+        }
+      </ul>
+
+      <h2>{copy.toolsHeading}</h2>
+      {copy.toolsBody.map((paragraph) => <p>{paragraph}</p>)}
+
+      <h2>{copy.datesHeading}</h2>
+      <p>{copy.datesBody}</p>
+
+      <h2>{copy.correctionsHeading}</h2>
+      <p set:html={correctionsBody} />
+    </div>
+
+    <AdSlot placement="footer" />
+  </div>
+</Base>
