@@ -381,8 +381,9 @@ a:hover {
   display: none;
 }
 
-/* The icon shows the theme that is active, and the attribute is set before
-   the first paint, so the right one is there from the first frame. */
+/* The icon shows the theme the button switches to, the same one the label
+   names. The theme attribute is set before the first paint, so the right
+   icon is there from the first frame. */
 [data-theme='light'] .theme-toggle__icon--sun {
   display: none;
 }
