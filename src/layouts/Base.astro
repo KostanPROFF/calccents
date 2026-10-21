@@ -83,6 +83,28 @@ const gaId = import.meta.env.PUBLIC_GA_ID;
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
     <link rel="sitemap" href="/sitemap-index.xml" />
 
+    <!--
+      The theme is chosen before the first paint, so a reader never sees a
+      flash of the wrong colours. A stored choice wins; otherwise the
+      operating system decides.
+    -->
+    <script is:inline>
+      (function () {
+        var theme = 'dark';
+        try {
+          var stored = localStorage.getItem('calccents-theme');
+          if (stored === 'light' || stored === 'dark') {
+            theme = stored;
+          } else if (window.matchMedia('(prefers-color-scheme: light)').matches) {
+            theme = 'light';
+          }
+        } catch (error) {
+          theme = 'dark';
+        }
+        document.documentElement.dataset.theme = theme;
+      })();
+    </script>
+
     {
       [...jsonLd, organization, person].map((schema) => (
         <script type="application/ld+json" set:html={JSON.stringify(schema)} />

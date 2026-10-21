@@ -1,5 +1,6 @@
 ---
 import { SITE } from '../config/site.ts';
+import ThemeToggle from './ThemeToggle.astro';
 
 interface Props {
   currentPath: string;
@@ -19,14 +20,17 @@ function isCurrent(href: string): boolean {
       <span class="brand__mark" aria-hidden="true">C</span>
       {SITE.name}
     </a>
-    <nav class="site-nav" aria-label="Primary">
-      {
-        SITE.nav.map((item) => (
-          <a href={item.href} aria-current={isCurrent(item.href) ? 'page' : undefined}>
-            {item.label}
-          </a>
-        ))
-      }
-    </nav>
+    <div class="site-header__actions">
+      <nav class="site-nav" aria-label="Primary">
+        {
+          SITE.nav.map((item) => (
+            <a href={item.href} aria-current={isCurrent(item.href) ? 'page' : undefined}>
+              {item.label}
+            </a>
+          ))
+        }
+      </nav>
+      <ThemeToggle />
+    </div>
   </div>
 </header>

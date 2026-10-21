@@ -1,0 +1,86 @@
+---
+/**
+ * Theme toggle.
+ *
+ * The site ships a dark theme and a light one. Which one a reader gets is
+ * their call: the choice is kept in localStorage, and a reader who has
+ * never chosen follows the operating system, which is what people expect
+ * from a site like this.
+ *
+ * The button shows the theme that is currently active, and its label says
+ * what it is going to do. The icons are plain inline SVG because the site
+ * carries no icon library and one kilobyte of dependency is not worth a
+ * sun.
+ */
+---
+
+<button class="theme-toggle" type="button" data-theme-toggle aria-label="Switch theme">
+  <svg
+    class="theme-toggle__icon theme-toggle__icon--sun"
+    viewBox="0 0 24 24"
+    width="17"
+    height="17"
+    fill="none"
+    stroke="currentColor"
+    stroke-width="1.8"
+    stroke-linecap="round"
+    aria-hidden="true"
+  >
+    <circle cx="12" cy="12" r="4"></circle>
+    <path
+      d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"
+    ></path>
+  </svg>
+  <svg
+    class="theme-toggle__icon theme-toggle__icon--moon"
+    viewBox="0 0 24 24"
+    width="17"
+    height="17"
+    fill="none"
+    stroke="currentColor"
+    stroke-width="1.8"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+    aria-hidden="true"
+  >
+    <path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8Z"></path>
+  </svg>
+</button>
+
+<script>
+  const STORAGE_KEY = 'calccents-theme';
+
+  type Theme = 'light' | 'dark';
+
+  function currentTheme(): Theme {
+    return document.documentElement.dataset.theme === 'light' ? 'light' : 'dark';
+  }
+
+  function applyTheme(theme: Theme): void {
+    document.documentElement.dataset.theme = theme;
+    const next: Theme = theme === 'light' ? 'dark' : 'light';
+    for (const button of document.querySelectorAll<HTMLButtonElement>('[data-theme-toggle]')) {
+      button.setAttribute('aria-label', `Switch to ${next} theme`);
+      button.setAttribute('title', `Switch to ${next} theme`);
+    }
+  }
+
+  // The pre-paint script in the document head has already chosen a theme.
+  // This brings the button's label in step with it.
+  applyTheme(currentTheme());
+
+  document.addEventListener('click', (event) => {
+    const target = event.target;
+    if (!(target instanceof Element)) return;
+    const button = target.closest<HTMLButtonElement>('[data-theme-toggle]');
+    if (!button) return;
+
+    const next: Theme = currentTheme() === 'light' ? 'dark' : 'light';
+    applyTheme(next);
+    try {
+      localStorage.setItem(STORAGE_KEY, next);
+    } catch {
+      // A browser that refuses storage still gets the theme for this visit.
+    }
+  });
+</script>
