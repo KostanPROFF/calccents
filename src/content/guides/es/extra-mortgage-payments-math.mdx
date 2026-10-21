@@ -1,0 +1,119 @@
+---
+title: "Las matemáticas de los pagos adicionales de hipoteca"
+description: "Cómo un pago adicional de capital acorta un préstamo, por qué la cuota programada no cambia y qué aspecto tiene el efecto en distintos horizontes."
+locale: "es"
+date: 2026-10-04
+lastReviewed: 2026-10-20
+author: "Kostan Proff"
+reviewedBy: "Kostan Proff"
+group: "home"
+readingMinutes: 7
+sources:
+  - label: "CFPB — Cálculo de la cuota de hipoteca"
+    url: "https://www.consumerfinance.gov/ask-cfpb/"
+  - label: "HUD — Ayuda a los propietarios de viviendas en Estados Unidos"
+    url: "https://www.hud.gov/helping_american_homeowners"
+relatedTools:
+  - "mortgage-payment"
+faq:
+  - q: "¿Los pagos adicionales reducen la cuota mensual?"
+    a: "No. La cuota programada se queda igual y el préstamo termina antes. Algunos prestamistas recalculan la cuota a la baja si se les pide, pero eso es un acuerdo aparte y no una consecuencia del pago adicional en sí."
+  - q: "¿A dónde va el pago adicional?"
+    a: "A capital. Los intereses del mes los cubre primero la cuota programada, y el dinero extra reduce el saldo, lo que baja los intereses cobrados al mes siguiente."
+  - q: "¿Cuánto ahorra realmente un pago adicional?"
+    a: "Se ejecuta en la calculadora y se lee la diferencia en el total de intereses. La cifra depende del tipo, del plazo y del tamaño del pago adicional, y el efecto crece con el tamaño del pago adicional."
+  - q: "Pagar de más o invertir el dinero: qué dice la aritmética"
+    a: "Es una cuestión sobre la rentabilidad disponible del dinero en otro sitio, y sobre tus propias circunstancias. La calculadora muestra qué le hace el pago adicional al préstamo; no modela el uso alternativo del efectivo."
+  - q: "¿Pueden los pagos adicionales ir más allá del capital?"
+    a: "Por defecto, los prestamistas aplican el importe extra al capital, y las cifras de cancelación anticipada de la calculadora dan por supuesto ese tratamiento. Algunos contratos incluyen cláusulas sobre cómo se aplican los pagos adicionales, y esas forman parte del contrato."
+  - q: "¿Qué ocurre si hago un pago puntual grande?"
+    a: "Se aplica el mismo mecanismo, con un paso más grande. El campo de pago adicional de la calculadora es un importe mensual, y la fecha de cancelación que produce es el mes en que el saldo llega a cero."
+---
+
+Los pagos adicionales de hipoteca se describen de dos maneras. Una dice que
+ahorran miles de dólares. La otra dice que son un desperdicio. Las dos
+describen la misma aritmética, y la aritmética merece mirarse de frente.
+
+La <a href="/es/tools/mortgage-payment/">calculadora de cuota de
+hipoteca</a> tiene un campo de pago adicional exactamente por eso: el
+efecto se ve con facilidad una vez calculado, en lugar de afirmado.
+
+## El mecanismo
+
+Una cuota de hipoteca cubre primero los intereses y después el capital.
+Esa regla no cambia cuando se paga más.
+
+Así que, cuando se añaden $200 a una cuota programada:
+
+1. La parte programada sigue cubriendo los intereses de ese mes y la misma
+   porción de capital de siempre.
+2. Los $200 extra van íntegros a capital.
+3. El saldo queda $200 más bajo.
+4. Al mes siguiente, los intereses se cobran sobre un saldo que es $200 más
+   bajo, así que el cargo de intereses es $200 × (tipo mensual) más bajo.
+5. Ese pequeño ahorro queda ahora disponible para capital, porque la cuota
+   programada no ha cambiado.
+
+El paso cuatro es donde vive la capitalización. El ahorro es pequeño cada
+mes y es permanente, y se repite. Con un horizonte suficientemente largo,
+los pagos adicionales retiran más intereses de los que el efectivo extra
+habría pagado directamente, aunque el efectivo extra es lo que provocó la
+diferencia.
+
+## Por qué la cuota no cambia
+
+Esto sorprende. La cuota programada se queda exactamente como estaba,
+porque el cuadro de amortización se construyó alrededor de esa cifra. Lo
+que cambia es el número de cuotas. El préstamo termina antes.
+
+El efecto sobre el presupuesto mensual es, por tanto, temporal: el importe
+extra se paga mientras dure el préstamo, y luego cesa. La fecha de
+cancelación en los resultados de la calculadora es la medida directa de
+cuánto dura eso.
+
+## Cómo leer la fecha de cancelación
+
+La fecha de cancelación es la cifra que más se mueve, y lo hace de una
+forma fácil de estimar mal.
+
+Un pago adicional que parece grande respecto al importe del préstamo puede
+mover la fecha de cancelación solo unos meses. La razón es que un préstamo
+ya va adelantado en intereses: la mayor parte de los intereses ya se ha
+pagado cuando por fin se cancela el saldo, y acortar la cola retira menos
+de lo que sugiere la parte proporcional del préstamo.
+
+El mismo pago adicional aplicado a un préstamo de plazo más corto hace
+más, porque aún queda por delante más interés de ese préstamo. El mismo
+pago adicional aplicado pronto hace más que el mismo pago aplicado tarde,
+porque el saldo que reduce es mayor al principio.
+
+La calculadora deja cambiar el pago adicional y observar cómo se mueven la
+fecha de cancelación y el total de intereses. Ejecutarla con $0, $100,
+$200 y $500 es una forma más rápida de entender la forma del efecto que
+cualquier regla empírica.
+
+## Lo que no te dice
+
+El cálculo del pago adicional tiene que ver con el préstamo y con nada
+más. No modela:
+
+- **El uso alternativo del dinero.** Si $200 al mes rendirán más reduciendo
+  un préstamo o quedarse en una cuenta es una cuestión de rentabilidad, y
+  la aritmética del préstamo no contesta a eso.
+- **El tratamiento fiscal.** En muchas situaciones los intereses y el
+  capital tienen un tratamiento fiscal distinto, y esa diferencia no está
+  en el cálculo.
+- **Las penalizaciones por cancelación anticipada.** La mayoría de las
+  hipotecas convencionales no las tienen, y el cálculo no incluye ninguna.
+- **Los cambios de plan.** Un préstamo cancelado antes libera flujo de caja
+  antes, y el uso que se da después a ese flujo de caja queda fuera del
+  modelo.
+
+## Una nota sobre cómo aplican los prestamistas el pago
+
+El cálculo supone que el importe extra va a capital, que es el tratamiento
+habitual. La mecánica de un pago de capital no programado la rigen el pagaré
+y las reglas de servicing que lo acompañan, y su texto es la referencia para
+lo que ocurre en un pago puntual grande. El comportamiento de la calculadora
+se ajusta al caso común, y la fecha de cancelación que muestra es el mes en
+que el saldo llega a cero.

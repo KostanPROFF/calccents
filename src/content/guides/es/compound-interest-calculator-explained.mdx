@@ -1,0 +1,147 @@
+---
+title: "Calculadora de interés compuesto explicada"
+description: "Cómo se construye la proyección de interés compuesto, qué significan las tasas nominal, efectiva y real, y dónde la aritmética deja de ser sencilla."
+locale: "es"
+date: 2026-10-01
+lastReviewed: 2026-10-20
+author: "Kostan Proff"
+reviewedBy: "Kostan Proff"
+group: "investing"
+readingMinutes: 8
+sources:
+  - label: "Investor.gov — Interés compuesto"
+    url: "https://www.investor.gov/introduction-investing/investing-basics/glossary/compound-interest"
+  - label: "Investor.gov — Comisiones y gastos"
+    url: "https://www.investor.gov/"
+  - label: "Federal Reserve — Tasas de interés seleccionadas H.15"
+    url: "https://www.federalreserve.gov/releases/h15/"
+  - label: "BLS — Índice de precios al consumidor"
+    url: "https://www.bls.gov/cpi/"
+relatedTools:
+  - "compound-interest"
+faq:
+  - q: "¿Por qué la frecuencia de capitalización tiene que dividir a doce?"
+    a: "Porque en esta herramienta las aportaciones son mensuales, y el cálculo mantiene idénticos el periodo de capitalización y el periodo de aportación. Cualquier frecuencia que divida a doce mantiene esa aritmética exacta en lugar de aproximada. Las seis opciones cubren desde la anual hasta la de cada dos meses."
+  - q: "¿Cuál es la diferencia entre el tipo nominal y el efectivo?"
+    a: "El tipo nominal es el número que se declara: 7 por ciento. El tipo anual efectivo es lo que el saldo gana realmente una vez aplicado un año de capitalización, que, con capitalización mensual, es 7.229 por ciento. En horizontes largos la diferencia no es un detalle de redondeo."
+  - q: "¿Qué significa la cifra de valor real?"
+    a: "Es el saldo final expresado en el poder adquisitivo del año inicial. El saldo nominal se divide por la inflación capitalizada en el mismo periodo, lo que separa el crecimiento real del hecho de que los mismos dólares lleguen más lejos."
+  - q: "¿La herramienta modela comisiones o impuestos?"
+    a: "No. El saldo de una cuenta real difiere en lo que cobre el proveedor, y esos cobros suelen ser un porcentaje del saldo, lo que hace que la diferencia también se capitalice."
+  - q: "¿Es obligatorio aportar de forma periódica?"
+    a: "No. Poner la aportación mensual en cero da una proyección de interés compuesto simple sobre el saldo inicial, que es el modelo que corresponde a un capital ya invertido."
+  - q: "¿Por qué la tabla año por año coincide con la cifra final?"
+    a: "Porque la proyección avanza un periodo cada vez en lugar de saltar a un resultado en forma cerrada. El saldo final es la última fila de la tabla, y eso es también lo que hace que la tabla sea fiable."
+---
+
+El interés compuesto es una de las pocas ideas de las finanzas que se
+enuncian con facilidad y cuesta de verdad sentir. La
+<a href="/es/tools/compound-interest/">calculadora de interés compuesto</a>
+de este sitio existe para hacer visible la aritmética, porque la aritmética
+es lo que lo distingue de una regla empírica.
+
+La regla empírica dice: el interés es interés sobre el interés. La
+aritmética dice: esto es lo que le ocurre a tu saldo, mes a mes, al tipo
+que has escrito.
+
+## Qué hace la herramienta
+
+Se le da un saldo inicial, una aportación mensual, un tipo anual, un número
+de años, una frecuencia de capitalización y una tasa de inflación. Avanza
+un periodo de capitalización cada vez.
+
+En cada periodo suma el interés devengado sobre el saldo actual, y luego
+añade la aportación de ese periodo —al principio o al final, según el
+ajuste—. Repite hasta alcanzar el horizonte.
+
+El orden importa. Una aportación hecha al principio de un periodo devenga
+intereses durante todo ese periodo, así que termina valiendo más que la
+misma aportación hecha al final. La diferencia por pago es pequeña. La
+diferencia a lo largo de treinta años no.
+
+## La forma cerrada
+
+El mismo resultado se puede escribir como una sola expresión:
+
+**FV = P(1 + r)ⁿ + PMT · ((1 + r)ⁿ − 1) / r**
+
+Donde **P** es el saldo inicial, **r** es el tipo anual dividido entre el
+número de periodos de capitalización por año, **n** es el número de periodos
+y **PMT** es la aportación hecha en cada periodo.
+
+Cuando las aportaciones se hacen al principio de cada periodo, el término de
+la aportación se multiplica por (1 + r), porque esas aportaciones devengan un
+periodo extra de intereses.
+
+La calculadora recorre los periodos uno a uno en vez de evaluar esta
+expresión una sola vez, y el motivo es la tabla año por año: para producir
+una tabla hacen falta todos los saldos intermedios, y la secuencia los
+produce sin coste. Los dos métodos coinciden hasta el céntimo, lo que ya de
+por sí sirve como comprobación: el motor de cálculo se contrasta
+precisamente con esa coincidencia.
+
+Con un tipo de cero la fórmula degenera, porque dividir por r no está
+definido. El cálculo trata ese caso de forma explícita en lugar de dejar
+que produzca una división por cero: sin intereses, el saldo crece solo con
+los depósitos, que es exactamente lo que ocurre.
+
+## Nominal, efectiva y real
+
+En los resultados aparecen tres tasas, y son fáciles de confundir.
+
+La **tasa nominal** es el número de la cuenta: 7 por ciento. Es el número
+que se cita, y es el que escribes.
+
+La **tasa anual efectiva** es lo que el saldo gana realmente a lo largo de
+un año una vez aplicada la capitalización: (1 + r) elevado al número de
+periodos por año, menos uno. Para un 7 por ciento capitalizado mensualmente
+son 7.229 por ciento. El regulador del inversor explica la distinción en
+su glosario, y la diferencia entre ambas es un efecto de capitalización que
+tiene un valor monetario en horizontes largos.
+
+La **tasa real** le resta la inflación a la tasa nominal:
+
+**real rate = (1 + nominal) / (1 + inflation) − 1**
+
+Es la tasa que describe cuánto poder de compra guarda el saldo. Con un 7
+por ciento nominal y un 2.5 por ciento de inflación, la tasa real es de
+aproximadamente 4.44 por ciento, y el saldo de la columna de valor real de
+la calculadora es el saldo nominal dividido por la inflación capitalizada en
+el mismo periodo.
+
+## La cuestión de la frecuencia
+
+Capitalizar más a menudo, con el mismo tipo nominal, produce un saldo
+mayor. El tipo nominal no cambia; el efectivo sí, y el tipo efectivo es lo
+que hace la capitalización.
+
+La herramienta ofrece seis frecuencias, y son exactamente las que dividen
+a doce. La restricción no es arbitraria: las aportaciones son mensuales, y
+mantener el periodo de capitalización idéntico al periodo de aportación
+mantiene exacta la aritmética. La capitalización mensual con depósitos
+mensuales es el caso habitual, y las demás cubren cuentas que abonan
+trimestralmente, dos veces al año o anualmente.
+
+## Lo que esta proyección deja fuera
+
+- **Comisiones.** Un cargo de la cuenta suele ser un porcentaje del saldo,
+  así que también se capitaliza. Las páginas de Investor.gov sobre
+  comisiones y gastos explican las estructuras en detalle.
+- **Impuestos.** El tratamiento de una cuenta de jubilación y de las
+  ganancias de inversión depende del tipo de cuenta y de la persona. El
+  Internal Revenue Service publica las reglas de las cuentas que administra.
+- **Volatilidad.** Un saldo de inversión real cae en los años en que caen
+  los mercados. Un tipo fijo no puede representar eso, y la herramienta no
+  lo intenta.
+- **Cambios en las aportaciones.** Aumentar una aportación con el tiempo, o
+  detenerla a mitad de camino, queda fuera del modelo. La aportación es
+  constante a lo largo del horizonte.
+
+## Una regla empírica, comprobada
+
+La regla empírica dice que el dinero se duplica cada tantos años,
+aproximadamente, a un tipo dado. Eso se contrasta con la herramienta. Con
+30 años al 7 por ciento y sin aportaciones, el resultado se compara con el
+saldo inicial; con la misma cuenta y una aportación, se observa cómo
+cambia el tiempo de duplicación. La herramienta existe para que la regla
+empírica se pueda comprobar en lugar de creerse.

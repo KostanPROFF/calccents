@@ -1,0 +1,133 @@
+---
+title: "Cómo la frecuencia de capitalización cambia los resultados"
+description: "Qué ocurre con un saldo cuando los intereses se abonan a diario, mensual, trimestral o anualmente, y cómo leer el tipo anual efectivo que produce."
+locale: "es"
+date: 2026-10-09
+lastReviewed: 2026-10-20
+author: "Kostan Proff"
+reviewedBy: "Kostan Proff"
+group: "investing"
+readingMinutes: 6
+sources:
+  - label: "Investor.gov — Interés compuesto"
+    url: "https://www.investor.gov/introduction-investing/investing-basics/glossary/compound-interest"
+  - label: "Federal Reserve — Tasas de interés seleccionadas H.15"
+    url: "https://www.federalreserve.gov/releases/h15/"
+  - label: "IRS — IRAs Tradicionales"
+    url: "https://www.irs.gov/retirement-plans/traditional-iras"
+relatedTools:
+  - "compound-interest"
+faq:
+  - q: "¿Por qué una capitalización más frecuente produce más dinero?"
+    a: "Porque el mismo tipo nominal se aplica más a menudo a un saldo que ha tenido menos tiempo de crecer. Una capitalización más frecuente significa que los intereses se acreditan antes, y cuanto antes se acreditan antes empiezan a generar intereses a su vez."
+  - q: "¿Qué es el tipo anual efectivo?"
+    a: "El tipo que produce el mismo resultado a lo largo de un año que el tipo nominal capitalizado con la frecuencia declarada. Es (1 + r) elevado al número de periodos por año, menos uno. Para un 7 por ciento capitalizado mensualmente es 7.229 por ciento."
+  - q: "¿Cuánta diferencia supone?"
+    a: "A lo largo de un año, casi ninguna: un 7 por ciento capitalizado mensualmente es 7.229 por ciento frente a un 7 por ciento capitalizado anualmente, una diferencia de unos $22 sobre un saldo de $10,000. A lo largo de treinta años la diferencia está en los miles."
+  - q: "¿Se puede capitalizar a diario?"
+    a: "No en esta herramienta. Aquí las aportaciones son mensuales, y el cálculo mantiene idénticos el periodo de capitalización y el periodo de aportación, así que la frecuencia tiene que dividir a doce."
+  - q: "¿Depende del proveedor la frecuencia de la cuenta?"
+    a: "A menudo sí, y suele constar en las condiciones de la cuenta. Una cuenta de ahorro que acredita intereses mensualmente y otra que los acredita a diario son productos distintos con el mismo tipo anunciado."
+  - q: "¿Es lo mismo una frecuencia mayor que un tipo mayor?"
+    a: "No. El tipo nominal es el número declarado y la frecuencia cambia en qué se convierte. Dos cuentas con el mismo tipo nominal y frecuencias distintas no son el mismo producto, y el tipo anual efectivo es la forma de compararlas."
+---
+
+Dos cuentas que anuncian ambas «7 por ciento» no son necesariamente la misma
+cuenta. El tipo nominal es el número, y la frecuencia de capitalización
+decide en qué se convierte ese número.
+
+La diferencia a lo largo de un año es pequeña. A lo largo de treinta años
+no, y la aritmética que hay detrás merece comprenderse en lugar de
+estimarse.
+
+## Por qué importa la frecuencia
+
+El mecanismo es un efecto de calendario. Los intereses acreditados
+mensualmente se acreditan antes que los acreditados anualmente, y un interés
+acreditado antes ha tenido más tiempo para generar intereses a su vez.
+
+En concreto: con capitalización anual, los intereses del año entero caen en
+una fecha, al final. Con capitalización mensual, un doceavo de los intereses
+anuales cae al final de cada mes y empieza a generar intereses de inmediato.
+El interés extra es pequeño, pero se gana durante mucho tiempo.
+
+## El tipo anual efectivo
+
+La forma de comparar dos frecuencias es el tipo anual efectivo: el tipo
+que produce el mismo resultado a lo largo de un año que el tipo declarado
+capitalizado con la frecuencia declarada.
+
+**EAR = (1 + r)ⁿ − 1**
+
+Donde **r** es el tipo anual nominal dividido entre el número de periodos por
+año, y **n** es el número de periodos por año.
+
+Al 7 por ciento:
+
+| Frecuencia | Tipo anual efectivo |
+|---|---|
+| Anualmente | 7.000% |
+| Dos veces al año | 7.122% |
+| Cada cuatro meses | 7.165% |
+| Trimestralmente | 7.186% |
+| Cada dos meses | 7.207% |
+| Mensualmente | 7.229% |
+
+La secuencia es monótona, y los saltos se hacen más pequeños a medida que
+aumenta la frecuencia, que es el punto práctico: duplicar la frecuencia por
+primera vez vale más que duplicarla por última vez.
+
+La <a href="/es/tools/compound-interest/">calculadora de interés
+compuesto</a> calcula el tipo efectivo directamente, y se muestra en los
+resultados junto al tipo nominal para que ambos puedan compararse.
+
+## Cuánta diferencia supone
+
+La forma útil de mirarlo es comparar el total, no el tipo.
+
+Sobre $10,000 al 7 por ciento durante un año, la capitalización mensual
+produce $10,722.90 frente a $10,700.00 con capitalización anual. La
+diferencia es de $22.90, que por sí sola no sostiene ninguna decisión.
+
+Durante treinta años y sin aportaciones adicionales, los mismos $10,000 se
+convierten en $76,123 con capitalización mensual y en $75,624 con
+capitalización anual: una diferencia de $499. Con una aportación mensual de
+$500 en el mismo periodo, los saldos y la diferencia crecen mucho más,
+porque las aportaciones también devengan intereses al tipo efectivo más
+alto.
+
+El patrón es constante: la brecha entre dos frecuencias es pequeña en los
+primeros años y se ensancha de forma sostenida, porque la propia brecha se
+capitaliza.
+
+## Por qué esta herramienta ofrece seis frecuencias
+
+La herramienta ofrece la anual, la de dos veces al año, la de cada cuatro
+meses, la trimestral, la de cada dos meses y la mensual. La razón es que
+aquí las aportaciones son mensuales, y el cálculo mantiene idénticos el
+periodo de capitalización y el periodo de aportación.
+
+Cualquier frecuencia que divida a doce mantiene esa aritmética exacta en
+lugar de aproximada. Las frecuencias que no dividen a doce obligarían a
+repartir una aportación entre dos periodos de capitalización, lo que
+introduce una convención de redondeo que es un artefacto del modelo y no una
+característica del producto.
+
+## Lo que esto no es
+
+Esto es una comparación de dos condiciones de crédito, no una comparación de
+dos productos. Dos cuentas con el mismo tipo nominal y la misma frecuencia
+pueden ser muy distintas, por las comisiones, los saldos mínimos, los
+límites de retiradas y el tratamiento fiscal de la cuenta.
+
+Las páginas de Investor.gov sobre comisiones y gastos, y sobre tipos de
+cuenta, describen esas diferencias. La serie H.15 de la Federal Reserve
+registra lo que han pagado realmente los productos de ahorro, lo que sirve
+para comprobar si un tipo cotizado está dentro de un rango verosímil.
+
+## Una prueba práctica
+
+Se toma un tipo de la serie H.15, se introduce en la calculadora con
+capitalización anual y luego con capitalización mensual, y se lee la
+diferencia en el saldo final. Esa diferencia es el valor de la acreditación
+más frecuente, y es una cifra y no una regla empírica.

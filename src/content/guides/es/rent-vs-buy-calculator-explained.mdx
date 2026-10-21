@@ -1,0 +1,153 @@
+---
+title: "Calculadora de alquiler frente a compra explicada"
+description: "Cómo se construye la comparación entre alquiler y compra, qué significa realmente el mes de cruce y qué costes quedan del todo fuera del cálculo."
+locale: "es"
+date: 2026-10-01
+lastReviewed: 2026-10-20
+author: "Kostan Proff"
+reviewedBy: "Kostan Proff"
+group: "renting"
+readingMinutes: 9
+sources:
+  - label: "CFPB — Hipotecas y herramientas para el consumidor"
+    url: "https://www.consumerfinance.gov/consumer-tools/mortgages/"
+  - label: "HUD — Ayuda a los propietarios de viviendas en Estados Unidos"
+    url: "https://www.hud.gov/helping_american_homeowners"
+  - label: "BLS — Índice de precios al consumidor"
+    url: "https://www.bls.gov/cpi/"
+  - label: "FRED — Índice de precios de la vivienda en Estados Unidos"
+    url: "https://fred.stlouisfed.org/series/HPINUS"
+relatedTools:
+  - "rent-vs-buy"
+  - "mortgage-payment"
+faq:
+  - q: "¿Por qué la herramienta no dice cuál de las dos opciones sale ganando?"
+    a: "Porque la respuesta depende de cosas que la aritmética no puede ver: tus otros ahorros, tus ingresos, cuánto tiempo planeas quedarte y cuánta incertidumbre puedes absorber. La comparación produce un mes de cruce, que es un hecho sobre los números, y el juicio queda en tus manos."
+  - q: "¿Qué es el coste neto de la propiedad?"
+    a: "Es el efectivo que has pagado por la vivienda, incluidos el pago inicial y los gastos de cierre, menos el patrimonio acumulado, que es el valor actual de la vivienda menos el saldo pendiente. Una cifra negativa significa que has acumulado más patrimonio del que has pagado."
+  - q: "¿Por qué el mantenimiento es un porcentaje del precio?"
+    a: "Las reparaciones no aparecen en ningún extracto, pero llegan. Expresar el mantenimiento como un porcentaje del precio de compra cada año lo mantiene visible junto a los demás costes recurrentes, en lugar de dejar que desaparezca dentro de la comparación."
+  - q: "¿Aparecen los costes de venta en las cifras mensuales?"
+    a: "No. Los costes de venta se pagan una vez, el día de la venta, así que se informan aparte al final del horizonte y no repartidos entre los meses que lo preceden."
+  - q: "¿Y si baja el precio de la vivienda?"
+    a: "Se introduce una variación anual negativa y el valor baja cada mes. El patrimonio se encoge, el mes de cruce se aleja o desaparece por completo, y el coste neto de la propiedad sube. La herramienta gestiona un mercado a la baja sin tratamiento especial."
+  - q: "¿Es realista un horizonte de 30 años?"
+    a: "El horizonte es un insumo. Un horizonte más corto favorece el alquiler, porque el coste inicial de la compra se recupera a lo largo de más años, y un horizonte más largo favorece la propiedad. La herramienta permite fijar 5, 10, 15 o 30 años para que el efecto de esa elección se vea."
+---
+
+El alquiler y la compra son dos regímenes distintos para lo mismo de
+fondo: un techo sobre la cabeza y un sitio donde trabajar. La
+<a href="/es/tools/rent-vs-buy/">calculadora de alquiler frente a
+compra</a> los compara en efectivo y en patrimonio, y ahí se detiene.
+
+No produce un veredicto, y la razón merece enunciarse antes que la
+aritmética. Un veredicto dependería de hechos que la página no puede ver
+—qué otros ahorros tienes, cuán estable es tu ingresos, cuánto tiempo
+planeas quedarte en el sitio, cuánto te molestaría un mal mes—. Esos
+insumos cambian la respuesta sin cambiar nada de la aritmética.
+
+## Dos libros, mes a mes
+
+La comparación lleva dos libros de flujos de efectivo en paralelo.
+
+El **libro del alquiler** suma tu renta mensual y tu seguro de inquilino.
+Eso es todo. No hay fianza que recuperar, ni mantenimiento, ni coste de
+transacción al final.
+
+El **libro de la propiedad** suma:
+
+- La cuota de hipoteca, tomada de la fórmula de amortización estándar
+- El impuesto predial, como porcentaje del precio de compra por año
+- El seguro de hogar, como cifra anual dividida entre doce
+- Cualquier cuota de HOA o de condominio
+- Una reserva para mantenimiento, como porcentaje del precio de compra por
+  año
+- El pago inicial y los gastos de cierre, en el primer mes
+
+La reserva de mantenimiento es la que se discute. Las reparaciones no
+aparecen en un acta de cierre, pero llegan, y llegan haya o no una hipoteca
+pegada. Excluirlas favorece a la propiedad; tratarlas como enormes la
+favorece en sentido contrario. Expresarlas como un porcentaje del precio de
+compra cada año las deja junto a los demás costes recurrentes, donde se
+pueden discutir en condiciones.
+
+## El patrimonio es la parte que se pasa por alto
+
+Llevar los libros de efectivo por sí solos produce una imagen incompleta,
+porque la propiedad pone un activo en el balance mientras el alquiler no.
+
+Así que la calculadora sigue dos cifras más cada mes:
+
+- **Valor de la vivienda**, que crece o mengua cada mes al tipo anual que
+  escribes
+- **Saldo pendiente del préstamo**, tomado del cuadro de amortización
+
+Su diferencia es el patrimonio:
+
+**patrimonio = valor de la vivienda − saldo pendiente del préstamo**
+
+El **coste neto de la propiedad** es entonces el efectivo que has pagado,
+menos ese patrimonio:
+
+**coste neto = pago inicial + gastos de cierre + todos los costes mensuales de la propiedad − patrimonio**
+
+Esta es la cifra que puede compararse con el alquiler que se habría pagado
+en el mismo periodo. Al principio, el coste neto de la propiedad es alto,
+porque se ha pagado una suma inicial grande y se ha acumulado muy poco
+patrimonio. A medida que pasan los años y el saldo baja, el coste neto cae,
+y en algún momento cae por debajo del alquiler.
+
+## El mes de cruce
+
+Ese punto es el mes de cruce, y es el número más útil que produce la
+herramienta. Es el primer mes en el que:
+
+**coste neto de la propiedad < alquiler total pagado en los mismos meses**
+
+El mes de cruce se lee con cuidado. Antes del cruce, el alquiler ha costado menos en
+efectivo. Después, la propiedad ha costado menos una vez contado el
+patrimonio. Ninguno de los dos lados de esa línea es un veredicto; es
+el punto donde se cortan las dos rectas del gráfico, y la posición de ese
+cruce depende por completo de los insumos.
+
+El cruce se retrasa cuando el alquiler es bajo respecto al precio de
+compra, cuando el tipo es alto, cuando el horizonte es corto y cuando el
+supuesto de revalorización es bajo o negativo. No llega nunca cuando el
+alquiler es pequeño respecto al precio de compra, y esa es la razón
+aritmética por la que una compra al contado en un mercado caro puede ser la
+opción más cara a cinco años.
+
+## Lo que queda fuera a propósito
+
+La comparación cubre el efectivo y el patrimonio. No cubre:
+
+- **El impuesto por una venta.** Cualquier ganancia y la exención que puede
+  aplicársele quedan fuera del alcance de la herramienta.
+- **La deducción por intereses de hipoteca.** Si eso vale algo depende de tu
+  tipo marginal y de tus circunstancias.
+- **Los costes de transacción de la compra.** Los gastos de cierre entran
+  como porcentaje del precio; el detalle de qué cubren está en la guía sobre
+  gastos de cierre.
+- **La diferente calidad de la vivienda.** Un piso en alquiler no es el mismo
+  edificio que una compra en otro barrio, y ninguna fórmula captura eso.
+- **La opción de mudarse.** El alquiler deja un contrato; la compra deja
+  una hipoteca. Ambos tienen sus propios costes de salida, y ninguno aparece
+  aquí.
+
+## Una nota sobre el insumo de revalorización
+
+La variación anual de valor que escribes se aplica cada mes a lo largo de
+todo el horizonte, en ambos sentidos si el número es negativo. No hay
+ninguna previsión detrás, y ningún promedio histórico sustituye al valor que
+escribes.
+
+Eso importa, porque el supuesto es una de las palancas más potentes de toda
+la comparación. Un precio de vivienda que sube un 3 por ciento al año y otro
+que sube un 1 por ciento producen cifras de patrimonio materialmente
+distintas a cinco años, y los dos son supuestos plausibles y no hechos sobre
+el futuro.
+
+La Federal Reserve Bank of St. Louis publica series de precios de vivienda a
+largo plazo que sirven para calibrar el insumo, y la Bureau of Labor
+Statistics publica los datos de inflación que están detrás de los ajustes a
+valor real en el resto del sitio. Ninguna de las dos es una predicción.

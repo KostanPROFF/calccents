@@ -1,0 +1,158 @@
+---
+title: "Calculadora de cuota de hipoteca explicada"
+description: "Cómo se calcula la cuota mensual de una hipoteca, qué añade PITI y qué muestra el cuadro de amortización sobre los primeros años del préstamo."
+locale: "es"
+date: 2026-10-01
+lastReviewed: 2026-10-20
+author: "Kostan Proff"
+reviewedBy: "Kostan Proff"
+group: "home"
+readingMinutes: 9
+sources:
+  - label: "CFPB — ¿Cómo calculo mi cuota de hipoteca?"
+    url: "https://www.consumerfinance.gov/ask-cfpb/"
+  - label: "Freddie Mac — Encuesta sobre el mercado de hipotecas primarias"
+    url: "https://www.freddiemac.com/pmms"
+  - label: "HUD — Comprar una vivienda"
+    url: "https://www.hud.gov/helping_american_homeowners"
+  - label: "BLS — Índice de precios al consumidor"
+    url: "https://www.bls.gov/cpi/"
+relatedTools:
+  - "mortgage-payment"
+faq:
+  - q: "¿Por qué mi cuota difiere de la del prestamista?"
+    a: "Los prestamistas cotizan la cuota al céntimo más cercano y luego ajustan la última. Algunos incluyen además el escrow de impuestos y seguro, lo que cambia el calendario pero no la cantidad anual. La calculadora muestra la cifra de capital e intereses y luego suma impuestos, seguro y HOA como líneas separadas, para que cada parte se vea."
+  - q: "¿La calculadora incluye el seguro de hipoteca?"
+    a: "No. El seguro privado de hipoteca depende de la relación entre el préstamo y el valor y del perfil crediticio que hay detrás, y se cancela según un calendario que depende del préstamo original. Está entre las cosas que este cálculo deja fuera."
+  - q: "¿Qué es el escrow y cambia el total?"
+    a: "El escrow es la cuenta en la que el prestamista cobra los impuestos y las primas del seguro, por lo general en cuotas mensuales. Cambia cuándo se recoge el dinero, no cuánto se recoge a lo largo de un año, así que el coste anual es lo que muestra la calculadora."
+  - q: "¿El tipo de la página está en vivo?"
+    a: "No. El tipo que escribes es el tipo que se usa. Nada en la página está conectado a un flujo de mercado, y aquí no aparece ninguna oferta de prestamistas."
+  - q: "¿Por qué la última cuota difiere ligeramente?"
+    a: "La cuota mensual se redondea al céntimo más cercano, lo que deja un pequeño resto al final del plazo. La última cuota se ajusta para que el préstamo se cierre exactamente en cero, igual que hace un prestamista con la última cuota."
+  - q: "¿Se pueden comparar dos préstamos con esta calculadora?"
+    a: "Se ejecuta un préstamo, se anotan las cifras y se ejecuta el segundo. Las dos ejecuciones ocurren por separado, así que no se guarda nada entre ellas ni se transmite nada al sitio."
+---
+
+Una cuota de hipoteca es un número con cuatro partes, y la razón por la que
+dos personas pueden citar cuotas distintas para la misma casa suele ser que
+están contando partes distintas.
+
+La <a href="/es/tools/mortgage-payment/">calculadora de cuota de
+hipoteca</a> de este sitio separa esas partes. La cifra de capital e
+intereses sale de la aritmética. El impuesto predial, el seguro y cualquier
+cuota de HOA salen de ti, porque la calculadora no tiene forma de saber qué
+cobra tu evaluador ni tu aseguradora. Mostrarlos por separado es más útil
+que mostrar un total único, porque el total solo es tan bueno como su
+componente menos visible.
+
+## La fórmula de la cuota
+
+La cuota mensual programada es la fórmula de amortización estándar:
+
+**M = P · r(1 + r)ⁿ / ((1 + r)ⁿ − 1)**
+
+Donde:
+
+- **P** es el importe prestado, no el precio de la casa. Con una casa de
+  $450,000 y un 20 por ciento de pago inicial, P es $360,000.
+- **r** es el tipo de interés anual dividido entre doce. Un tipo del 6.5 por
+  ciento se convierte en 0.0054166… al mes.
+- **n** es el número de cuotas mensuales. Un plazo de 30 años son 360
+  cuotas.
+
+La fórmula merece leerse una vez, porque explica algo que de otro modo
+parece arbitrario: la cuota no depende de cuánto se pide prestado en
+proporción a cuánto se pide prestado. Si se pide el doble, se paga
+aproximadamente el doble, no el cuádruple. Lo que cambia con el tamaño del
+préstamo es el total de intereses, que crece más deprisa que la cuota.
+
+La Consumer Financial Protection Bureau expone la misma fórmula en su guía
+hipotecaria, y las tablas de amortización ampliamente usadas en el sector
+están construidas a partir de ella.
+
+## Por qué la cuota se mantiene constante mientras el reparto cambia
+
+La fórmula produce una cuota constante. Lo que no es constante es de qué está
+hecha. En el primer mes, casi todo son intereses, porque el saldo sigue
+siendo el importe completo prestado. En el último mes, casi todo es capital,
+porque el saldo se ha reducido hasta casi cero.
+
+La mecánica es sencilla. Cada mes:
+
+1. Los intereses se cobran sobre el saldo pendiente al comienzo del mes.
+2. La cuota cubre primero esos intereses.
+3. Lo que sobre reduce el saldo.
+4. Los intereses del mes siguiente se cobran sobre el saldo más pequeño.
+
+La consecuencia es que un préstamo a 30 años se devuelve mucho más rápido de
+lo que parece. En la marca de los cinco años sigue pendiente buena parte
+del saldo, y para entonces ya se ha pagado una parte apreciable del total de
+intereses. Este es el hecho más contraintuitivo de las hipotecas, y es la
+razón por la que el cuadro de amortización año por año merece leerse una
+vez.
+
+## Qué añade PITI
+
+La cuota que cobran los prestamistas suele ser PITI:
+
+- **Capital** — la parte que devuelve el préstamo.
+- **Intereses** — el coste de pedirlo prestado.
+- **Impuestos** — el impuesto predial, que normalmente se cobra cada mes en
+  el escrow.
+- **Seguro** — el seguro de hogar, que también suele cobrarse en el escrow.
+
+El impuesto y el seguro son cantidades anuales divididas entre doce a
+efectos de visualización. La división es una comodidad de calendario, no un
+descuento: a lo largo de un año se paga el mismo total de cualquier manera.
+Lo que cambia de un mes a otro es en qué mes cae una factura de impuestos, y
+el escrow está pensado para suavizar eso.
+
+Las cuotas de HOA quedan fuera de PITI pero dentro de la salida mensual de
+un piso en régimen de comunidad o de una casa en una urbanización planificada.
+Se introducen aparte por el mismo motivo: la cifra depende por completo del
+inmueble.
+
+## Pagos adicionales
+
+Un pago adicional aplicado a capital reduce el saldo sobre el que se cobran
+los intereses del mes siguiente. La cuota programada no cambia; el préstamo
+simplemente termina antes, y en total se pagan menos intereses.
+
+Esto merece entenderse mecánicamente y no en abstracto. Un pago adicional de
+$200 en un préstamo de $360,000 al 6.5 por ciento no son $200 de intereses
+ahorrados: son $200 de capital retirado, y luego los intereses de cada mes
+siguiente se cobran sobre un saldo que es $200 más bajo, y luego $200 más
+bajo otra vez. El ahorro se capitaliza igual que el préstamo.
+
+## Lo que el cálculo deja fuera
+
+Una cuota es una parte del coste de una vivienda. La calculadora deja fuera
+a propósito:
+
+- **El seguro de hipoteca**, que depende de la relación entre el préstamo y
+  el valor y del historial crediticio que hay detrás, y se cancela según su
+  propio calendario.
+- **Los puntos y las comisiones de apertura**, que se pagan en el cierre y
+  pueden incorporarse al tipo a efectos de comparación, pero no forman parte
+  de la cuota.
+- **Los gastos de cierre**, que son objeto de otra guía.
+- **El calendario del escrow**, que decide qué mes carga con una cuota
+  mayor.
+- **La inflación**, que cambia lo que significa la cuota respecto a tus
+  ingresos, pero no lo que es.
+
+Cada una de esas cosas es un número real. Sacarlas de la cifra de la cuota
+es lo que permite contrastar esa cifra con una tabla publicada.
+
+## Comprobar el resultado
+
+Para confirmar una cifra por separado, se toman el importe prestado, el tipo
+y el número de cuotas, y se resuelve la fórmula a mano o con una hoja de
+cálculo. Si la respuesta de la calculadora y la propia coinciden, es
+probable que ambas sean correctas. Si no coinciden, las causas más probables
+son una definición distinta del importe del préstamo, un tipo introducido
+como decimal en lugar de porcentaje, o un plazo en años donde la fórmula
+espera meses.
+
+Esa comprobación es el motivo entero de mostrar el desarrollo.

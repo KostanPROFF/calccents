@@ -1,0 +1,139 @@
+---
+title: "Intercambios entre tipo y plazo de una hipoteca"
+description: "Cómo el tipo y el plazo mueven juntos la cuota de una hipoteca, qué cuesta un plazo más corto en cuota y qué ahorra en total, y cómo leer ese intercambio."
+locale: "es"
+date: 2026-10-12
+lastReviewed: 2026-10-20
+author: "Kostan Proff"
+reviewedBy: "Kostan Proff"
+group: "home"
+readingMinutes: 7
+sources:
+  - label: "Freddie Mac — Encuesta sobre el mercado de hipotecas primarias"
+    url: "https://www.freddiemac.com/pmms"
+  - label: "CFPB — Cálculo de la cuota de hipoteca"
+    url: "https://www.consumerfinance.gov/ask-cfpb/"
+  - label: "Fannie Mae — Investigación y análisis"
+    url: "https://www.fanniemae.com/research-and-insights"
+relatedTools:
+  - "mortgage-payment"
+faq:
+  - q: "¿Por qué un plazo más corto cuesta tanto más al mes?"
+    a: "Porque el saldo baja más rápido, así que hay menos tiempo para que los intereses se acumulen sobre él. La cuota sube y el total de intereses baja, y el tamaño del movimiento depende del tipo."
+  - q: "¿Cuánto cambia el total el plazo?"
+    a: "Muchísimo en un préstamo a 30 años. Pasar de 30 años a 15 suele eliminar alrededor de la mitad del total de intereses. En un préstamo a 15 años, el plazo restante es una parte menor del saldo original y el efecto es correspondientemente menor."
+  - q: "¿Importa más el tipo que el plazo?"
+    a: "En un préstamo largo, un cambio de un punto porcentual en el tipo vale más que un cambio de cinco años en el plazo. En un préstamo corto, el efecto del plazo crece y el del tipo se encoge, porque hay menos tiempo para que ninguno de los dos se acumule."
+  - q: "¿Qué es una reducción de tipo?"
+    a: "Una reducción temporal del tipo durante el primer año o el primero dos del préstamo, con la diferencia pagada en el cierre o incorporada al tipo después. Cambia las primeras cuotas en lugar de la forma del préstamo."
+  - q: "Pagar un punto para bajar el tipo: cómo se calcula"
+    a: "Es un cálculo de equilibrio. El punto tiene que amortizarse con la reducción de tipo dentro del periodo en que se mantiene el préstamo, y la aritmética se ejecuta sin dificultad con la calculadora de cuotas."
+  - q: "¿Cómo se modela un tipo variable?"
+    a: "Un tipo variable tiene un tipo inicial y un calendario, y la cuota se mueve cuando se mueve el índice. Las calculadoras de este sitio modelan tipos fijos, porque una proyección a tipo fijo es una proyección y una proyección a tipo variable es un conjunto de escenarios."
+---
+
+Una hipoteca tiene dos mandos que mueven la cuota, y tiran en direcciones
+opuestas en cuanto se mira el coste total. El tipo y el plazo tienen que
+leerse juntos, porque el efecto de uno depende de dónde está puesto el otro.
+
+La <a href="/es/tools/mortgage-payment/">calculadora de cuota de
+hipoteca</a> tiene los dos insumos exactamente por eso: se cambia uno y se
+deja el otro quieto, y el resultado muestra el tamaño del intercambio.
+
+## El tipo y el plazo mueven la cuota a la vez
+
+**Un tipo más bajo baja la cuota.** De forma directa e inmediata, en todas
+las cuotas del préstamo.
+
+**Un plazo más largo baja la cuota.** También de forma directa, y por el
+mismo motivo: el saldo se amortiza más despacio, así que se cobra menos
+interés cada año.
+
+Las dos cosas bajan la cuota, y las dos suben el coste total. Esa es la
+forma del intercambio: la cifra mensual y la cifra de toda la vida se
+mueven en direcciones opuestas.
+
+## Las cifras de un préstamo típico
+
+Tomemos $360,000 al 6.5 por ciento.
+
+| Plazo | Capital e intereses mensuales | Total de intereses |
+|---|---|---|
+| 30 años | $1,986 | unos $355,000 |
+| 20 años | $2,528 | unos $246,000 |
+| 15 años | $3,108 | unos $201,000 |
+
+Pasar de 30 años a 15 años sube la cuota un 56 por ciento y elimina
+alrededor del 43 por ciento de los intereses. La asimetría es el punto:
+acortar el plazo cuesta mucha cuota mensual y ahorra una cantidad moderada
+de intereses totales.
+
+## El efecto del tipo es mayor en un préstamo largo
+
+Al cambiar el tipo sobre los mismos $360,000, el efecto depende del plazo.
+
+A 30 años, pasar de un 6.5 por ciento a un 7.5 por ciento cambia la cuota
+mensual en unos $90 y el total de intereses en unos $60,000. A 15 años, el
+mismo cambio de tipo mueve la cuota en unos $110 y el total de intereses en
+unos $30,000.
+
+El tipo actúa sobre el saldo mientras el saldo está pendiente. Un préstamo
+largo mantiene el saldo pendiente durante el doble de tiempo, así que la
+misma diferencia de tipos tiene el doble de margen para actuar.
+
+Lo que significa que los dos mandos no tienen la misma potencia en todos los
+ajustes. En un préstamo a treinta años, manda el tipo. En un préstamo a
+quince años, el plazo pesa relativamente más. La regla empírica —un punto
+porcentual de tipo vale más que cinco años de plazo— se cumple en los
+préstamos largos que casi todo el mundo contrata.
+
+## Por qué la primera década decide el total
+
+Un préstamo a 30 años pasa su primera década con un saldo que apenas se
+mueve, y esa década es donde se cobra casi todo el interés. Por eso el
+cambio de plazo de arriba parece tan drástico: acortar el plazo no solo
+reduce el tipo al que se cobran los intereses, sino que quita años de la
+parte delantera del préstamo, donde el saldo es más alto.
+
+También explica por qué un pago adicional tiene tanto efecto. Reduce el
+saldo sobre el que se cobran los intereses del mes siguiente, y lo hace
+pronto, cuando el saldo es más grande.
+
+## Puntos, reducciones de tipo y la forma del inicio del préstamo
+
+Dos características habituales cambian las primeras cuotas sin cambiar el
+préstamo de fondo.
+
+Un **punto de descuento** es un 1 por ciento del importe del préstamo
+pagado en el cierre a cambio de un tipo más bajo. El intercambio tiene un
+periodo de equilibrio, y la aritmética consiste en comparar la comisión con
+la diferencia en el total de intereses durante el tiempo que se mantiene el
+préstamo.
+
+Una **reducción de tipo** baja el tipo el primer año o el primero dos y
+luego se restablece, normalmente al índice más un margen. Cambia las
+primeras cuotas en lugar de la forma del préstamo, y se modela por
+separado en lugar de como un tipo.
+
+## Leer el contexto de mercado
+
+la Encuesta sobre el mercado de hipotecas primarias de Freddie Mac publica la serie de tipos
+que más se usa como referencia, y las páginas de investigación de Fannie Mae
+llevan el comentario equivalente sobre el mercado hipotecario. Ninguna de
+las dos es una oferta para un prestatario concreto.
+
+Los tipos de este sitio no están conectados a ningún flujo de mercado. El
+número que escribes es el número que se usa, constante durante todo el
+plazo, y eso es lo que convierte la comparación entre dos tipos en una
+comparación aritmética limpia y no en una previsión.
+
+## La comparación que se puede ejecutar
+
+Las dos opciones pasan por la calculadora con todo lo demás igual, y se leen
+cuatro cifras: la cuota mensual, el total de intereses, el coste total de
+la vivienda y la fecha de cancelación. Después, cada una se ejecuta con un
+pago adicional, porque el plazo y el tipo cambian cuánto vale un pago
+adicional.
+
+Esa es toda la decisión expresada como aritmética. Lo que vale en una vida
+concreta es otra pregunta, y una que ninguna calculadora puede responder.

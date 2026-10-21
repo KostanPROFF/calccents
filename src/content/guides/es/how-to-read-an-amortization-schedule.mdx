@@ -1,0 +1,129 @@
+---
+title: "Cómo leer un cuadro de amortización"
+description: "Cada columna del cuadro de amortización de una hipoteca explicada, desde el reparto de la cuota hasta el último pago ajustado que cancela el préstamo."
+locale: "es"
+date: 2026-10-13
+lastReviewed: 2026-10-20
+author: "Kostan Proff"
+reviewedBy: "Kostan Proff"
+group: "home"
+readingMinutes: 6
+sources:
+  - label: "CFPB — Cálculo de la cuota de hipoteca"
+    url: "https://www.consumerfinance.gov/ask-cfpb/"
+  - label: "HUD — Ayuda a los propietarios de viviendas en Estados Unidos"
+    url: "https://www.hud.gov/helping_american_homeowners"
+relatedTools:
+  - "mortgage-payment"
+faq:
+  - q: "¿Qué columnas tiene un cuadro de amortización?"
+    a: "Normalmente: el número de cuota, el importe de la cuota, la parte de intereses, la parte de capital y el saldo pendiente. Un cuadro con una columna de capital extra muestra el importe adicional aplicado por encima de la cuota programada."
+  - q: "¿Por qué la primera cuota es casi todo intereses?"
+    a: "Porque los intereses se cobran sobre el saldo pendiente al comienzo del mes, y en el primer mes ese saldo es el importe completo prestado. La parte de capital es lo que queda de la cuota después de esos intereses."
+  - q: "¿Por qué la última cuota es distinta?"
+    a: "La cuota mensual es un número fijo de céntimos, y la aritmética deja un pequeño resto al final del plazo. La última cuota se ajusta para cancelarlo, que es práctica habitual."
+  - q: "¿El cuadro incluye impuestos y seguro?"
+    a: "Normalmente no. Un cuadro de amortización puro cubre el préstamo. Las cantidades de escrow aparecen en el recibo de pagos, y el impuesto predial y el seguro son costes anuales divididos en cuotas mensuales, no importes amortizados."
+  - q: "¿Qué muestra la columna de interés acumulado?"
+    a: "El total de intereses cobrados hasta ese punto del préstamo. Es la cifra que hace visibles los primeros años: buena parte del total de intereses se cobra mucho antes de que el saldo sea pequeño."
+  - q: "¿Sirve un cuadro para ver el efecto de un pago adicional?"
+    a: "Sí. El cuadro se recalcula mes a mes, así que un pago adicional acorta todo el cuadro y la última fila se acerca. Es la forma más clara de ver el efecto de un cambio."
+---
+
+Un cuadro de amortización es el préstamo escrito mes a mes. Parece un muro
+de números, y es la respuesta más directa que existe a la pregunta «cuánto
+me está costando realmente este préstamo», porque muestra cada dólar, en
+orden, con el saldo después de cada pago.
+
+Así se lee uno.
+
+## Las columnas
+
+Un cuadro típico tiene cinco o seis columnas.
+
+**Número de cuota.** El mes, contado desde el primer pago.
+
+**Importe de la cuota.** El total pagado ese mes. Es la misma cifra en casi
+todos los meses, y ese es el sentido de la amortización: la cuota es
+constante y solo cambia su composición.
+
+**Intereses.** Los intereses cobrados ese mes. Son el saldo al comienzo
+del mes multiplicado por el tipo mensual. La columna empieza alta y baja.
+
+**Capital.** La parte de la cuota que reduce el saldo. Es la cuota menos los
+intereses, y empieza pequeña y crece. Intereses más capital igualan la
+cuota, y eso se puede comprobar en cualquier cuadro que te entreguen.
+
+**Extra.** Cualquier importe pagado por encima de la cuota programada,
+aplicado a capital. Es cero en la mayoría de los cuadros y aparece en el
+que se construye en la calculadora cuando se usa el campo de pago adicional.
+
+**Saldo.** Lo que queda pendiente después de ese pago. Esta es la columna
+que cuenta la historia.
+
+## Las tres formas que muestra la tabla
+
+**La columna de intereses baja.** No porque cambie el tipo, sino porque se
+reduce el saldo sobre el que se cobra.
+
+**La columna de capital sube.** No porque alguna decisión asigne más cuota a
+esa parte, sino porque los intereses se comen menos de la cuota.
+
+**La columna de saldo es la interesante.** Baja despacio al principio, luego
+más deprisa, y luego se aplana al acercarse a cero. La parte empinada está
+al final, al revés de lo que espera casi todo el mundo, y es la razón por
+la que un préstamo a treinta años se devuelve mucho más rápido de lo que
+parece.
+
+## La columna de interés acumulado
+
+Si un cuadro tiene una columna que acumula el interés en lugar de mostrarlo
+mes a mes, es la columna que más información aporta. Contesta a la pregunta
+que la mensual no puede: ¿cuánto del coste ya he pagado?
+
+En un préstamo típico a treinta años, alrededor de una cuarta parte del
+total de intereses se cobra en los primeros cinco años, y la mayor parte se
+cobra en la primera década. Verlo en una sola columna es una experiencia
+distinta a sumar a mano las cifras mensuales de intereses.
+
+## Por qué la última fila es distinta
+
+La cuota es un número fijo de céntimos, y un préstamo no se divide de forma
+exacta en céntimos enteros a lo largo de un número fijo de meses. Al final
+queda un pequeño saldo pendiente.
+
+La última cuota se ajusta para cancelarlo. No es una anomalía ni un error;
+es lo que pasa siempre que se redondea una cuota. La calculadora de este
+sitio ajusta la última cuota por el mismo motivo, y la última fila de su
+cuadro es la que confirma que el préstamo se cierra exactamente en cero.
+
+## Lo que no hay en un cuadro
+
+Un cuadro de amortización puro cubre el préstamo y nada más.
+
+**El impuesto predial y el seguro** no se amortizan. Son costes anuales
+divididos en cuotas mensuales, y aparecen en el recibo de pagos y no en el
+cuadro. Un cuadro que los incluye está mostrando el escrow, no la
+amortización.
+
+**Los honorarios** no están. Los gastos de cierre, los puntos y el seguro
+de hipoteca van aparte de la aritmética del préstamo.
+
+**La inflación** tampoco. Un cuadro es un conjunto de cifras nominales, lo
+que es correcto para un préstamo a tipo fijo y no describe qué compra esas
+cifras.
+
+## Usar un cuadro para probar un cambio
+
+El uso más práctico de un cuadro es la comparación. Se cambia un insumo y
+se lee qué ocurre:
+
+- Se añaden $200 al mes de capital extra y se mira caer el número de filas.
+- Se cambia el plazo de 30 años a 15 y se mira cómo la columna de intereses
+  empieza mucho más abajo.
+- Se cambia el tipo y se mira cómo la columna de intereses empieza mucho
+  más arriba y todo el cuadro se estira.
+
+La <a href="/es/tools/mortgage-payment/">calculadora de cuota de
+hipoteca</a> produce la versión año por año de esta tabla, y la guía de
+amortización explica el mecanismo detrás de cada columna.

@@ -1,0 +1,147 @@
+---
+title: "Errores comunes en comparaciones entre alquiler y compra"
+description: "Los supuestos que alteran en silencio la comparación entre alquiler y compra: el mantenimiento, los costes de venta y una revalorización tomada por promesa."
+locale: "es"
+date: 2026-10-06
+lastReviewed: 2026-10-20
+author: "Kostan Proff"
+reviewedBy: "Kostan Proff"
+group: "renting"
+readingMinutes: 7
+sources:
+  - label: "CFPB — Hipotecas y herramientas para el consumidor"
+    url: "https://www.consumerfinance.gov/consumer-tools/mortgages/"
+  - label: "HUD — Ayuda a los propietarios de viviendas en Estados Unidos"
+    url: "https://www.hud.gov/helping_american_homeowners"
+  - label: "FRED — Índice de precios de la vivienda en Estados Unidos"
+    url: "https://fred.stlouisfed.org/series/HPINUS"
+relatedTools:
+  - "rent-vs-buy"
+faq:
+  - q: "¿Qué supuesto mueve más la respuesta?"
+    a: "El supuesto del precio de la vivienda a lo largo del horizonte, seguido de la reserva de mantenimiento. La renta y el tipo importan, pero la trayectoria del valor y los costes recurrentes de la propiedad son donde la comparación suele dar la vuelta."
+  - q: "¿Cómo se trata la revalorización?"
+    a: "Tiene que incluirse, porque el patrimonio forma parte de la comparación, pero se trata como un supuesto y no como una previsión. El cálculo se ejecuta con cero, con una cifra negativa y con una cifra positiva, y se observa cuánto se mueve la respuesta."
+  - q: "¿Por qué la reserva de mantenimiento se discute siempre?"
+    a: "Porque es un coste real que no aparece en ningún extracto y varía enormemente entre casas y entre años. Si queda pequeña, la propiedad parece mejor de lo que es; si queda grande, parece peor. Fijarla como un insumo explícito, con una cifra defendible, funciona mejor que dejarla fuera."
+  - q: "¿Y la rentabilidad del pago inicial?"
+    a: "El pago inicial es dinero que no está disponible para nada más mientras está en la casa, así que una comparación completa tiene que recoger lo que habría rendido. La mayoría de las comparaciones sencillas lo dejan fuera, y ese es uno de los huecos más grandes."
+  - q: "¿La comparación contempla la venta a los pocos años?"
+    a: "Sí. El horizonte se fija en el número de años que se espera quedarse, y la herramienta informa del valor, del patrimonio y de los costes de venta al final de ese periodo."
+  - q: "¿Es realista un horizonte corto?"
+    a: "Lo es para mucha gente, que se muda por motivos de trabajo o familiares mucho antes de los treinta años. Un horizonte corto es el argumento más fuerte a favor del alquiler, y el cálculo se ejecuta a cinco y a treinta años."
+---
+
+La mayoría de las comparaciones entre alquiler y compra no son erróneas por
+culpa de la aritmética. Son erróneas por culpa de los supuestos, y los
+supuestos se suelen hacer en silencio.
+
+La <a href="/es/tools/rent-vs-buy/">calculadora de alquiler frente a
+compra</a> de este sitio convierte cada supuesto en un insumo explícito,
+de modo que el efecto de cambiarlo se ve en lugar de quedar enterrado. Esta
+guía cubre los que más suelen alterar la respuesta.
+
+## Tratar la revalorización como una promesa
+
+El error más consecuente, porque funciona en una sola dirección. Una
+comparación que supone que la vivienda sube un 3 por ciento al año y omite
+la posibilidad de una bajada produce una respuesta que no es cierta en el
+caso que más importa.
+
+El número es un supuesto, y un supuesto razonable puede apoyarse en datos:
+la Federal Reserve Bank of St. Louis publica índices de precios de vivienda
+a largo plazo que son un punto de partida razonable para calibrar. Pero la
+distancia entre las décadas buenas y las malas es enorme, y la aritmética de
+un horizonte de cinco años es completamente distinta de la de treinta años.
+
+La forma de resolverlo es ejecutar el cálculo más de una vez: con la
+revalorización en cero, luego positiva, luego negativa. Si la respuesta
+cambia por completo, nunca estuvo realmente sobre el alquiler frente a la
+compra. Estaba sobre una previsión del precio de la vivienda.
+
+## Olvidar que la propiedad tiene costes recurrentes
+
+El alquiler es un número. La propiedad es una cuota de hipoteca, más
+impuesto predial, más seguro, más HOA, más mantenimiento.
+
+El mantenimiento es el que se deja fuera, porque es el que no llega con una
+factura adjunta. Tejados, electrodomésticos, calentadores de agua y
+pintura no aparecen en ningún extracto, y no salen en una comparación que
+solo liste hipoteca e impuestos.
+
+El tratamiento correcto es un porcentaje del precio de compra por año,
+introducido como una cifra explícita que se pueda discutir. Un porcentaje
+del precio no es una afirmación sobre una casa concreta; es un sustituto
+tosco del hecho de que un edificio envejece.
+
+## Dejar el pago inicial fuera de la comparación
+
+El pago inicial es efectivo que sale de la cuenta de ahorros. Una comparación
+completa pregunta qué habría rendido ese efectivo por otra parte, y lo
+compara con lo que produjo meterlo en la casa.
+
+La mayoría de las comparaciones sencillas no lo hacen, y la omisión es
+grande. Un pago inicial del veinte por ciento en una casa de $450,000 son
+$90,000: dinero que desaparece del ahorro durante todo el periodo, y dinero
+cuyo uso alternativo forma parte de la decisión.
+
+La calculadora de alquiler frente a compra de este sitio tampoco modela la
+rentabilidad del pago inicial. Informa del desembolso en efectivo y del
+patrimonio acumulado, que es la parte de la comparación que la aritmética
+puede establecer. El resto es un juicio sobre rentabilidades.
+
+## Usar una renta de titular y un precio de titular
+
+Las rentas y los precios se cotizan de una forma que favorece a un lado de
+la comparación. Un edificio con un piso pequeño y un edificio malo a cinco
+minutos pueden tener la misma renta mensual; una casa con una cocina buena y
+una casa con un tejado malo pueden tener el mismo precio. La comparación los
+trata como intercambiables, y no lo son.
+
+## Comparar con un horizonte que no encaja con el plan
+
+Un horizonte de treinta años es un mal supuesto para quien piensa mudarse en
+cuatro años, y un horizonte de cuatro años es un mal supuesto para quien
+compra para quedarse. El horizonte es la palanca más potente de toda la
+comparación después del insumo de revalorización, porque el coste inicial de
+la compra se amortiza a lo largo de los años que te quedas.
+
+Ejecutar el cálculo a cinco años y a treinta años, con todo lo demás igual,
+lo deja claro.
+
+## Comparar la cifra mensual en lugar del total
+
+La comparación mensual es el mismo error que aparece en las comparaciones de
+hipotecas. Una renta de $2,400 frente a un coste de propiedad de $2,150
+hace que el alquiler parezca más caro, y mes a mes puede serlo. A lo largo
+del horizonte, con el patrimonio contado, el orden puede cambiar. El mes de
+cruce existe precisamente porque la respuesta mensual y la respuesta total
+discrepan durante mucho tiempo.
+
+## Ignorar la salida
+
+Los dos caminos tienen una, y son distintas. El alquiler tiene fianza,
+preaviso y el coste de la mudanza. La propiedad tiene los costes de venta,
+un mercado que puede estar más flojo que antes, y una hipoteca que queda
+pendiente de saldar o que asume el siguiente comprador.
+
+La calculadora informa de los costes de venta al final del horizonte, porque
+son una cifra real y a menudo significativa. No modela el riesgo de una venta
+en un mercado más débil, que es un hecho sobre el futuro y no sobre la
+aritmética.
+
+## Un orden práctico de trabajo
+
+Si la comparación se hace en serio, este orden tiende a sacar a la luz los
+supuestos que importan:
+
+1. Reunir el precio real, la renta real, el tipo impositivo real y la
+   cotización real del seguro para los inmuebles concretos.
+2. Ejecutar el cálculo con un precio de vivienda plano, y anotar el cruce.
+3. Ejecutarlo de nuevo con una variación de precio negativa, y otra vez con
+   una positiva.
+4. Ejecutarlo con el horizonte probable y con treinta años.
+5. Observar cuánto se mueve el mes de cruce entre esas ejecuciones. Si se
+   mueve mucho, la decisión descansa en los supuestos y no en la
+   aritmética, y eso cambia la lectura del resultado, antes de que nadie saque una
+   conclusión.

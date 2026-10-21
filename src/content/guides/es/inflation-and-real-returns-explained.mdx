@@ -1,0 +1,128 @@
+---
+title: "Inflación y rentabilidad real explicadas"
+description: "Por qué una rentabilidad nominal y una real son números distintos, cómo pasar de una a otra y qué significa eso para un saldo de ahorro con el tiempo."
+locale: "es"
+date: 2026-10-10
+lastReviewed: 2026-10-20
+author: "Kostan Proff"
+reviewedBy: "Kostan Proff"
+group: "investing"
+readingMinutes: 7
+sources:
+  - label: "BLS — Índice de precios al consumidor"
+    url: "https://www.bls.gov/cpi/"
+  - label: "BLS — Tablas de datos del IPC"
+    url: "https://www.bls.gov/data/"
+  - label: "Investor.gov — Interés compuesto e inflación"
+    url: "https://www.investor.gov/introduction-investing/investing-basics/glossary/compound-interest"
+relatedTools:
+  - "compound-interest"
+faq:
+  - q: "¿Qué es el tipo real?"
+    a: "El tipo que describe el cambio en el poder de compra en lugar del cambio en el número de la cuenta. Es el tipo nominal ajustado por la inflación: (1 + nominal) / (1 + inflation) − 1."
+  - q: "¿Qué es la ecuación de Fisher?"
+    a: "La relación entre el tipo nominal, el tipo real y la inflación: (1 + nominal) = (1 + real) × (1 + inflation). Es la razón por la que el tipo real no es simplemente el tipo nominal menos la inflación."
+  - q: "¿Basta con restar la inflación al tipo nominal?"
+    a: "Como aproximación se queda cerca, y con poca inflación la diferencia es pequeña. Con un 7 por ciento nominal y un 2.5 por ciento de inflación, la resta da 4.5 por ciento y la cifra exacta es 4.39 por ciento."
+  - q: "¿Qué medida de inflación se usa?"
+    a: "El Índice de precios al consumidor es la medida general de referencia. La elección importa en un horizonte largo porque el índice que se ajusta a tu propio gasto es el que describe tu propio poder de compra."
+  - q: "¿Afecta la inflación a una cuota de hipoteca fija?"
+    a: "No cambia la cuota, que la fija el pagaré. Cambia qué compra la cuota, y de ahí sale el razonamiento aritmético a favor de amortizar de forma anticipada un préstamo a tipo fijo cuando el coste real de la deuda es alto."
+  - q: "¿Está garantizada una rentabilidad real?"
+    a: "No. Una rentabilidad real es un cálculo sobre números supuestos, y la cifra de inflación utilizada es en sí misma histórica. El cálculo muestra lo que produce la aritmética con los insumos dados."
+---
+
+Una rentabilidad del 7 por ciento suena a un buen año hasta que se pregunta
+qué se podía adquirir con ella. Si los precios subieron un 2.5 por ciento
+en el mismo periodo, el dinero creció un 7 por ciento y cada uno de esos
+dólares daba algo menos que un año antes.
+
+La <a href="/es/tools/compound-interest/">calculadora de interés
+compuesto</a> muestra las dos cifras, porque una proyección que solo enseña
+el número nominal describe un saldo en lugar de describir lo que vale ese
+saldo.
+
+## Dos números distintos
+
+**Nominal** es el tipo de la cuenta: 7 por ciento. Es el número del
+extracto, y es lo que hace el saldo de la cuenta.
+
+**Real** es el tipo después de la inflación: lo que el saldo vale realmente
+en poder de compra. Es el número que describe si el dinero ganó o perdió
+terreno.
+
+Los dos no son lo mismo, y la relación entre ellos es la ecuación de
+Fisher:
+
+**(1 + nominal) = (1 + real) × (1 + inflation)**
+
+Despejando el tipo real:
+
+**real = (1 + nominal) / (1 + inflation) − 1**
+
+Con un 7 por ciento nominal y un 2.5 por ciento de inflación, el tipo real
+es 4.39 por ciento, no el 4.5 por ciento que da la resta simple. La
+diferencia es pequeña a estos tipos y crece a tipos más altos, y por eso la fórmula exacta
+no es un detalle.
+
+## Un ejemplo calculado
+
+La columna de valor real de la calculadora hace la misma conversión sobre el
+saldo en lugar de sobre el tipo. Un saldo de $10,000 al 7 por ciento con
+$500 al mes durante 10 años termina en algo más de $92,000 en términos
+nominales. Con un 2.5 por ciento de inflación, ese mismo saldo en el poder
+de compra del año inicial anda en torno a algo más de $72,000.
+
+La cifra nominal dice que la cuenta tiene $92,000. La cifra real dice que
+tiene lo que compraban $72,000 hace diez años. Las dos son ciertas, y
+contestan a preguntas distintas. La primera es sobre la cuenta. La segunda
+es sobre tu vida.
+
+## Qué cifra de inflación usar
+
+La Bureau of Labor Statistics publica el Índice de precios al consumidor,
+que es la medida general de referencia del cambio de precios, junto con las
+tablas de datos que lo sustentan y una calculadora para periodos concretos.
+
+Para un horizonte largo, la elección del índice importa más de lo que la
+gente espera, porque el índice que se ajusta a tu propio gasto es el que
+describe tu propio poder de compra. El IPC general sigue una cesta de
+bienes y servicios que compran los hogares típicos, y es el valor por
+defecto en la mayoría de los cálculos, incluido el de este sitio.
+
+## Inflación y deudas a tipo fijo
+
+La relación va en sentido contrario con una hipoteca a tipo fijo. Una cuota
+fija durante treinta años se encoge en términos reales a medida que suben
+los precios. El prestatario devuelve el préstamo con dinero que vale menos
+cada año que el dinero con el que lo pidió prestado.
+
+Ese es el razonamiento aritmético que hay detrás de amortizar de forma
+anticipada un préstamo a tipo fijo cuando los tipos reales son altos, y se
+trata de aritmética y no de opinión. También explica por qué un préstamo a
+tipo fijo es una obligación fija en términos nominales y menguante en
+términos reales.
+
+## Inflación y las cifras de las herramientas
+
+La calculadora de interés compuesto aplica la tasa de inflación al saldo y
+produce la columna de valor real. La calculadora de alquiler frente a
+compra no ajusta por inflación, porque compara dos series de flujos de
+efectivo a lo largo de un horizonte, y el ajuste por inflación se aplicaría
+tanto a la serie del alquiler como a la de la propiedad; la herramienta deja
+la decisión sobre cómo tratar la inflación fuera del cálculo y lo dice.
+
+La calculadora de hipotecas tampoco ajusta por inflación, por el mismo
+motivo. Una cuota dentro de treinta años es un número fijo de dólares, y lo
+que vale ese número es una cuestión sobre el futuro y no sobre el
+préstamo.
+
+## Lo que no es una rentabilidad real
+
+Una rentabilidad real es un cálculo sobre números supuestos. El tipo de
+inflación usado es histórico, se supone que el tipo nominal es constante, y
+se supone que las aportaciones son constantes. Cada uno de esos supuestos es
+razonable para una proyección y falso para el futuro, y el resultado se lee como «bajo estos supuestos» y no como una predicción.
+
+El sentido de mostrar la cifra real no es la predicción. Es que un número
+sin ella está incompleto.

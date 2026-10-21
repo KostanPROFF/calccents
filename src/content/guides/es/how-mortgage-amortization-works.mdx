@@ -1,0 +1,128 @@
+---
+title: "Cómo funciona la amortización de una hipoteca"
+description: "Por qué los primeros pagos de una hipoteca son casi intereses, cómo se mueve el saldo mes a mes y qué pasa con el reparto a medida que el préstamo envejece."
+locale: "es"
+date: 2026-10-02
+lastReviewed: 2026-10-20
+author: "Kostan Proff"
+reviewedBy: "Kostan Proff"
+group: "home"
+readingMinutes: 8
+sources:
+  - label: "CFPB — Cálculo de la cuota de hipoteca"
+    url: "https://www.consumerfinance.gov/ask-cfpb/"
+  - label: "HUD — Ayuda a los propietarios de viviendas en Estados Unidos"
+    url: "https://www.hud.gov/helping_american_homeowners"
+relatedTools:
+  - "mortgage-payment"
+faq:
+  - q: "¿Por qué va tan poco de mis primeros pagos al capital?"
+    a: "Porque los intereses se cobran sobre el saldo que queda pendiente, y en los primeros meses ese saldo es casi el préstamo entero. A medida que el saldo baja, el cargo de intereses baja con él y más de la misma cuota va al capital."
+  - q: "¿Significa la amortización que devuelvo más de lo que tomé prestado?"
+    a: "Sí, en un préstamo a tipo fijo sin pagos adicionales. Se devuelve el importe prestado más los intereses, que es lo que representa la cifra de total de intereses de la calculadora."
+  - q: "¿Cuánto se ha devuelto de un préstamo típico a 30 años en los primeros cinco años?"
+    a: "En un préstamo a 30 años, la mayoría de los prestatarios ha devuelto bastante menos de la mitad del saldo en la marca de los cinco años, pese a haber pagado cinco años de cuotas. La cifra exacta depende del tipo y del plazo, y el cuadro de amortización de la calculadora la muestra para cualquier préstamo."
+  - q: "¿Se amortiza de otra forma un préstamo más corto?"
+    a: "El mecanismo es idéntico, pero los intereses se cobran sobre un saldo menor durante menos tiempo, así que un préstamo a 15 años tiene mucho menos interés en total. El reparto mensual también cambia más rápido."
+  - q: "¿Qué es un préstamo con amortización negativa?"
+    a: "Un préstamo en el que la cuota es menor que los intereses que se cobran, de modo que el saldo crece. Ocurre cuando una cuota se aplaza o se recalcula a la baja. No es lo que modela la calculadora, que supone que la cuota programada cubre los intereses."
+  - q: "¿Se puede ver el cuadro de amortización de mi propio préstamo?"
+    a: "Sí. La calculadora genera el cuadro para cualquier préstamo, y una guía explica cómo leer cada una de sus columnas."
+---
+
+La amortización es el proceso por el que se devuelve una hipoteca, y produce
+uno de los resultados más contraintuitivos de las finanzas personales: un
+préstamo a treinta años no son treinta años devolviéndolo. Son unos diez años
+devolviéndolo, seguidos de veinte años pagando por el privilegio de haberlo
+devuelto.
+
+El mecanismo es lo bastante sencillo como para tenerlo en la cabeza, y tenerlo
+en la cabeza ayuda antes de mirar cualquier cuadro.
+
+## Primero los intereses, siempre
+
+Cada cuota de hipoteca tiene dos partes, y el orden en que se aplican lo fija
+el contrato:
+
+1. Los intereses se cobran sobre el saldo pendiente al comienzo del mes.
+2. La cuota se aplica a esos intereses.
+3. Lo que quede de la cuota reduce el capital.
+
+El saldo del mes siguiente es el saldo de este mes menos el capital pagado.
+Esa es toda la regla.
+
+La consecuencia se sigue de inmediato. En el primer mes, el saldo es el
+importe completo prestado, así que el cargo de intereses es el mayor, y la
+cuota —que se fijó para cubrir esos intereses más una porción pequeña de
+capital— es casi todo intereses. A medida que el saldo baja, el cargo de
+intereses baja con él, y la misma cuota empieza a cubrir más capital.
+
+## La aritmética de un solo mes
+
+El cargo de intereses de un mes es:
+
+**interés = saldo × (tipo anual ÷ 12)**
+
+Tomemos un préstamo de $360,000 al 6.5 por ciento. El tipo mensual es
+0.54167 por ciento. En el primer mes, el interés es $360,000 × 0.0054167 =
+$1,950. La cuota programada a un plazo de 30 años es $1,986. La diferencia,
+$36, es lo que reduce el capital en el primer mes. Frente al saldo, es un
+error de redondeo.
+
+Un año después, el saldo ha bajado a unos $357,500. El cargo de intereses es
+ahora de unos $1,936, y la parte de capital ha crecido hasta unos $50. Al
+cabo de tres años, la parte de capital anda en unos $80 al mes. Sigue siendo
+pequeña. También está creciendo, y el crecimiento se acelera, que es toda la
+historia.
+
+## Las dos curvas
+
+Una forma útil de visualizar una hipoteca es como dos curvas que se mueven
+en direcciones opuestas. La curva del saldo empieza alta y baja despacio al
+principio, luego de golpe, y luego se aplana al acercarse a cero. La curva
+del interés acumulado empieza en cero, sube deprisa y después sube más
+despacio, porque el cargo de intereses se aplica a un saldo que se reduce.
+
+La primera curva es en la que piensa la gente. La segunda es la que
+determina el coste total, y la distancia entre ambas es el total de
+intereses.
+
+En la marca de los cinco años de un préstamo típico a 30 años, se ha ido un
+poco menos de la quinta parte del saldo y ya se ha pagado alrededor de la
+cuarta parte del total de intereses. En la marca de los quince años, se ha
+ido la mayor parte del saldo. Por eso importa el año exacto: «cuánto he
+devuelto» y «cuánto he pagado en intereses» son preguntas muy distintas, y el
+cuadro de amortización responde a las dos.
+
+## Por qué la última cuota es distinta
+
+Una cuota mensual tiene que ser un número fijo de céntimos, y un préstamo
+con un tipo de interés y un plazo de meses enteros no se divide de forma
+exacta. El redondeo deja un pequeño saldo pendiente al final.
+
+La última cuota se ajusta para cancelarlo. No es una característica especial
+de ningún prestamista; es aritmética. La
+<a href="/es/tools/mortgage-payment/">calculadora de cuota de hipoteca</a>
+de este sitio hace lo mismo, y el ajuste se ve en la última fila del cuadro.
+
+## La vía acelerada
+
+El cuadro de amortización es también el argumento a favor de los pagos
+adicionales, y el argumento es mecánico y no motivacional. Un pago adicional
+reduce el capital. Un capital menor significa un cargo de intereses menor al
+mes siguiente, lo que significa que de la siguiente cuota queda más
+disponible para capital. El efecto se capitaliza exactamente igual que el
+préstamo.
+
+La cuota programada no cambia. El préstamo simplemente termina antes, y los
+intereses que se habrían cobrado sobre un saldo que ya no existe no se cobran
+nunca. La cifra de total de intereses de la calculadora baja a medida que
+sube el pago adicional, y la fecha de cancelación se adelanta.
+
+## Lo que la amortización no cubre
+
+El cuadro cubre el préstamo. No cubre el impuesto predial, el seguro, las
+cuotas de HOA, el mantenimiento ni el efecto de la inflación sobre una cuota
+que dura tres décadas. Son costes recurrentes y no costes del préstamo, y
+se tratan por separado en las guías sobre el impuesto predial y sobre el
+coste total de una hipoteca.
