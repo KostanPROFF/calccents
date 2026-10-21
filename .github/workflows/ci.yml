@@ -120,6 +120,10 @@ jobs:
             echo "::notice::The next push to main will deploy automatically."
             exit 0
           fi
+          # The project does not have to exist beforehand. Creating it here
+          # means the pipeline works from nothing but the two secrets.
+          pnpm exec wrangler pages project create calccents --production-branch main \
+            || echo "::notice::Project calccents already exists, continuing."
           pnpm exec wrangler pages deploy dist --project-name=calccents --branch=main
         env:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}

@@ -113,10 +113,11 @@ The build runs in GitHub Actions and the finished `dist/` is uploaded to
 Cloudflare Pages with `wrangler`. Cloudflare never builds the site itself, so
 its own project settings stay empty — every variable lives in GitHub.
 
-1. Create a free Cloudflare account, then a Pages project named `calccents`.
+1. Create a free Cloudflare account.
 2. Add two GitHub repository **secrets**: `CLOUDFLARE_API_TOKEN` and
    `CLOUDFLARE_ACCOUNT_ID`.
-3. Push to `main`. The workflow verifies the build and then deploys `dist/`.
+3. Push to `main`. The workflow verifies the build, creates the Cloudflare
+   Pages project `calccents` if it does not exist yet, and deploys `dist/`.
 
 Until those two secrets exist, the deploy step is skipped and the pipeline
 reports why; the rest of CI still runs. The first push after the secrets are
