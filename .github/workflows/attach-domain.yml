@@ -118,6 +118,50 @@ jobs:
               | node -e 'let r="";process.stdin.on("data",c=>r+=c).on("end",()=>{const b=JSON.parse(r);if(!b.success){for(const e of b.errors??[])console.error(`  ${e.code}: ${e.message}`);process.exit(1);}console.log(`created: ${b.result.name} -> ${b.result.content}`);});'
           fi
 
+      - name: Point www at the apex
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          DOMAIN: ${{ inputs.domain }}
+        run: |
+          set -euo pipefail
+          zone=$(curl -sS "https://api.cloudflare.com/client/v4/zones?name=${DOMAIN}" \
+            -H "Authorization: Bearer ${CLOUDFLARE_API_TOKEN}" \
+            | node -e 'let r="";process.stdin.on("data",c=>r+=c).on("end",()=>{const z=JSON.parse(r).result?.[0];console.log(z?.id ?? "");});')
+          if [ -z "$zone" ]; then
+            echo "No zone, skipping the www alias."
+            exit 0
+          fi
+
+          existing=$(curl -sS "https://api.cloudflare.com/client/v4/zones/${zone}/dns_records?name=www" \
+            -H "Authorization: Bearer ${CLOUDFLARE_API_TOKEN}" \
+            | node -e 'let r="";process.stdin.on("data",c=>r+=c).on("end",()=>{const rs=JSON.parse(r).result??[];console.log(rs.map(x=>`${x.type}|${x.name}|${x.content}`).join("\n"));});')
+          if echo "$existing" | grep -q "CNAME|www|"; then
+            echo "The www record already exists."
+          else
+            echo "Creating CNAME www -> ${DOMAIN}"
+            curl -sS -X POST "https://api.cloudflare.com/client/v4/zones/${zone}/dns_records" \
+              -H 'Content-Type: application/json' \
+              -H "Authorization: Bearer ${CLOUDFLARE_API_TOKEN}" \
+              -d "{\"type\": \"CNAME\", \"name\": \"www\", \"content\": \"${DOMAIN}\", \"proxied\": true, \"ttl\": 1}" \
+              | node -e 'let r="";process.stdin.on("data",c=>r+=c).on("end",()=>{const b=JSON.parse(r);if(!b.success){for(const e of b.errors??[])console.error(`  ${e.code}: ${e.message}`);return;}console.log(`created: ${b.result.name} -> ${b.result.content}`);});'
+          fi
+
+          # A redirect is better than a second host serving the same pages:
+          # one canonical address, one set of signals.
+          have_rule=$(curl -sS "https://api.cloudflare.com/client/v4/zones/${zone}/rulesets/phases/http_request_redirect/entrypoint" \
+            -H "Authorization: Bearer ${CLOUDFLARE_API_TOKEN}" \
+            | node -e 'let r="";process.stdin.on("data",c=>r+=c).on("end",()=>{const b=JSON.parse(r);console.log(b.success&&b.result?.rules?.some(x=>JSON.stringify(x).includes("www.calccents.com"))?"yes":"no");});')
+          if [ "$have_rule" = "yes" ]; then
+            echo "The www redirect already exists."
+          else
+            echo "Creating the www to apex redirect"
+            curl -sS -X POST "https://api.cloudflare.com/client/v4/zones/${zone}/rulesets" \
+              -H 'Content-Type: application/json' \
+              -H "Authorization: Bearer ${CLOUDFLARE_API_TOKEN}" \
+              -d "{\"name\": \"Redirect www to the apex domain\", \"kind\": \"zone\", \"phase\": \"http_request_redirect\", \"rules\": [{\"action\": \"redirect\", \"action_parameters\": {\"from\": {\"value\": {\"http_request\": {\"host\": {\"matches\": \"www.${DOMAIN}\"}}}}, \"to\": {\"value\": {\"url\": {\"value\": \"https://${DOMAIN}\"}}, \"preserve_query_string\": true}, \"status_code\": 301}, \"conditions\": [], \"description\": \"Send www to the apex domain\"}]}" \
+              | node -e 'let r="";process.stdin.on("data",c=>r+=c).on("end",()=>{const b=JSON.parse(r);if(!b.success){console.log("The redirect could not be created, www will still serve the site directly.");for(const e of b.errors??[])console.error(`  ${e.code}: ${e.message}`);return;}console.log("redirect created");});'
+          fi
+
       - name: Show the final records
         env:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
