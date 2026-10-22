@@ -9,7 +9,7 @@ export const es = {
 
   author: {
     role: 'Autor y revisor',
-    bio: 'Ingeniero de formación. Escribe las guías, mantiene el motor de cálculo y contrasta cada cifra publicada con una fuente primaria. El código que hace la aritmética es público, y las fórmulas están cubiertas por pruebas unitarias que se ejecutan en cada cambio.',
+    bio: 'Trabaja en infraestructura de TI —nubes, CI/CD, infraestructura como código—, donde un cambio que no se puede verificar no llega a producción. Mantener las nubes en orden y los pipelines de entrega rápidos es el trabajo del día a día; el mismo criterio recorre todo este sitio. La aritmética vive en un solo sitio, las fórmulas están cubiertas por pruebas unitarias que las contrastan con cifras de préstamos publicadas, y toda cifra externa lleva su fuente y la fecha en que se consultó. Escribe las guías, mantiene el motor de cálculo y revisa cada cifra publicada. Aquí no se le dice al lector qué hacer.',
   },
 
   nav: {

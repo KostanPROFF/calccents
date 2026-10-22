@@ -34,7 +34,7 @@ export const en = {
 
   author: {
     role: 'Author and reviewer',
-    bio: 'Engineer by trade. Writes the guides, maintains the calculation engine, and checks every published figure against a primary source. The code that does the arithmetic is public, and the formulas are covered by unit tests that run on every change.',
+    bio: 'Works in IT infrastructure — cloud, CI/CD, infrastructure as code — where a change that cannot be verified does not ship. Keeping cloud environments lean and delivery pipelines fast is the day job; the same standard runs through this site. The arithmetic lives in one place, the formulas are covered by unit tests that check them against published loan figures, and every figure that comes from outside carries its source and the date it was read. Writes the guides, maintains the calculation engine, and reviews every published figure. Nothing here tells the reader what to do.',
   },
 
   nav: {

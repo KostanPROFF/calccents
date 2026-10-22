@@ -45,10 +45,13 @@ const correctionsBody = fill(copy.correctionsBody, {
         <p class="card__body">{site.author.bio}</p>
         <p class="card__body" style="margin-top: var(--space-3);">
           {
-            site.author.links.map((link) => (
-              <a href={link.href} rel="me noopener">
-                {link.label}
-              </a>
+            site.author.links.map((link, index) => (
+              <>
+                {index > 0 && <span aria-hidden="true"> · </span>}
+                <a href={link.href} rel="me noopener">
+                  {link.label}
+                </a>
+              </>
             ))
           }
         </p>

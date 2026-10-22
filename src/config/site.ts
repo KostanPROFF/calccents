@@ -35,7 +35,10 @@ export const SITE = {
    */
   author: {
     name: 'Kostan Proff',
-    links: [{ label: 'GitHub', href: 'https://github.com/KostanPROFF' }],
+    links: [
+      { label: 'GitHub', href: 'https://github.com/KostanPROFF' },
+      { label: 'LinkedIn', href: 'https://www.linkedin.com/in/tetiana-goncharko/' },
+    ],
   },
   /** The public repository, mentioned on the about and editorial pages. */
   repository: 'https://github.com/KostanPROFF/calccents',
