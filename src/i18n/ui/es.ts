@@ -486,7 +486,7 @@ export const es = {
         insurance: 'Seguro',
         hoa: 'HOA',
         totalInterest: 'Intereses totales',
-        paidOff: 'Cancelado',
+        paidOff: 'Último pago',
         note: 'Capital, intereses, impuesto sobre la propiedad, seguro y HOA, con los números que introdujiste.',
       },
       resultNote:
@@ -562,10 +562,10 @@ export const es = {
       title: 'Calculadora de alquiler o compra: compara el coste real',
       description:
         'Compara el alquiler y la propiedad con los números: coste mensual, desembolso inicial, patrimonio y el mes en que se cruzan los dos caminos. Sin veredicto, solo la aritmética.',
-      short: 'Coste mensual, desembolso inicial, acumulación de patrimonio y mes de cruce.',
+      short: 'Coste mensual, desembolso inicial, acumulación de patrimonio y mes de equilibrio.',
       category: 'Vivienda',
       methodNote:
-        'La comparación es de salida de efectivo y de patrimonio. No produce ningún veredicto a propósito: el mes de cruce es un dato sobre los números que introdujiste, no una recomendación.',
+        'La comparación es de salida de efectivo y de patrimonio. No produce ningún veredicto a propósito: el mes de equilibrio es un dato sobre los números que introdujiste, no una recomendación.',
       sections: {
         theHome: 'La vivienda',
         theRent: 'El alquiler',
@@ -606,26 +606,26 @@ export const es = {
         upfrontOutlay: 'Desembolso inicial',
         equityBuilt: 'Patrimonio acumulado',
         homeValueAtHorizon: 'Valor de la vivienda en el horizonte',
-        crossover: 'Punto de cruce',
+        crossover: 'Mes de equilibrio',
         note: 'La propiedad incluye hipoteca, impuesto sobre la propiedad, seguro, HOA y mantenimiento. El patrimonio es el valor de la vivienda menos el saldo pendiente del préstamo.',
       },
       resultNote:
-        'El punto de cruce es el primer mes en que el coste neto de ser propietario —el efectivo pagado menos el patrimonio acumulado— baja del coste en efectivo de alquilar. Es un dato sobre estos números, no una recomendación.',
+        'El mes de equilibrio es el primer mes en que el coste neto de ser propietario —el efectivo pagado menos el patrimonio acumulado— baja del coste en efectivo de alquilar. Es un dato sobre estos números, no una recomendación.',
       method: [
         'Cada mes la calculadora lleva dos libros en paralelo. El libro del alquiler suma tu alquiler y el seguro del inquilino. El libro de la propiedad suma el pago de la hipoteca de la fórmula estándar de amortización, el impuesto sobre la propiedad, el seguro, la HOA y la reserva de mantenimiento, más la entrada y los gastos de cierre en el primer mes.',
         'Junto al segundo libro, la calculadora sigue el valor de la vivienda, que crece o mengua cada mes al tipo anual que introdujiste, y el saldo pendiente del préstamo. La diferencia entre ambos es tu patrimonio:',
-        'El coste neto de ser propietario es el efectivo que has pagado, menos el patrimonio que has acumulado. El mes de cruce es el primer mes en que esa cifra es menor que el alquiler que habrías pagado en el mismo periodo. Los gastos de venta se apartan y se informan al final del horizonte, porque no se pagan hasta que vendes.',
+        'El coste neto de ser propietario es el efectivo que has pagado, menos el patrimonio que has acumulado. El mes de equilibrio es el primer mes en que esa cifra es menor que el alquiler que habrías pagado en el mismo periodo. Los gastos de venta se apartan y se informan al final del horizonte, porque no se pagan hasta que vendes.',
       ],
       formula: 'patrimonio = valor de la vivienda − saldo pendiente del préstamo',
       limits: [
-        'No dice qué opción es mejor para ti. Los dos caminos se comparan con los números que introduces y se informa del mes de cruce, nada más.',
+        'No dice qué opción es mejor para ti. Los dos caminos se comparan con los números que introduces y se informa del mes de equilibrio, nada más.',
         'No modela el tratamiento fiscal de una venta, la deducción de los intereses de la hipoteca ni la depreciación de un inmueble con el tiempo.',
         'No cotiza un préstamo concreto. El tipo de interés que introduces es el tipo que se usa; la página no lleva cotizaciones en vivo ni información de entidades prestamistas.',
         'No pronostica los precios de la vivienda. La variación anual del valor que introduces se aplica mes a mes durante todo el horizonte, en ambos sentidos si introduces un número negativo.',
       ],
       faq: [
         {
-          q: '¿Qué significa el mes de cruce?',
+          q: '¿Qué significa el mes de equilibrio?',
           a: 'Es el primer mes en que el coste neto de ser propietario —el efectivo que has pagado, menos el patrimonio que has acumulado— es menor que el efectivo que habrías pagado en alquiler durante el mismo periodo. Antes de ese punto, alquilar ha costado menos en efectivo. Después, ser propietario ha costado menos una vez que se cuenta el patrimonio.',
         },
         {

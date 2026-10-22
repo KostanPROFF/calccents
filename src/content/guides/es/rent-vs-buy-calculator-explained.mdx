@@ -1,6 +1,6 @@
 ---
 title: "Calculadora de alquiler frente a compra explicada"
-description: "Cómo se construye la comparación entre alquiler y compra, qué significa realmente el mes de cruce y qué costes quedan del todo fuera del cálculo."
+description: "Cómo se construye la comparación entre alquiler y compra, qué significa realmente el mes de equilibrio y qué costes quedan del todo fuera del cálculo."
 locale: "es"
 date: 2026-10-01
 lastReviewed: 2026-10-20
@@ -22,7 +22,7 @@ relatedTools:
   - "mortgage-payment"
 faq:
   - q: "¿Por qué la herramienta no dice cuál de las dos opciones sale ganando?"
-    a: "Porque la respuesta depende de cosas que la aritmética no puede ver: tus otros ahorros, tus ingresos, cuánto tiempo planeas quedarte y cuánta incertidumbre puedes absorber. La comparación produce un mes de cruce, que es un hecho sobre los números, y el juicio queda en tus manos."
+    a: "Porque la respuesta depende de cosas que la aritmética no puede ver: tus otros ahorros, tus ingresos, cuánto tiempo planeas quedarte y cuánta incertidumbre puedes absorber. La comparación produce un mes de equilibrio, que es un hecho sobre los números, y el juicio queda en tus manos."
   - q: "¿Qué es el coste neto de la propiedad?"
     a: "Es el efectivo que has pagado por la vivienda, incluidos el pago inicial y los gastos de cierre, menos el patrimonio acumulado, que es el valor actual de la vivienda menos el saldo pendiente. Una cifra negativa significa que has acumulado más patrimonio del que has pagado."
   - q: "¿Por qué el mantenimiento es un porcentaje del precio?"
@@ -30,7 +30,7 @@ faq:
   - q: "¿Aparecen los costes de venta en las cifras mensuales?"
     a: "No. Los costes de venta se pagan una vez, el día de la venta, así que se informan aparte al final del horizonte y no repartidos entre los meses que lo preceden."
   - q: "¿Y si baja el precio de la vivienda?"
-    a: "Se introduce una variación anual negativa y el valor baja cada mes. El patrimonio se encoge, el mes de cruce se aleja o desaparece por completo, y el coste neto de la propiedad sube. La herramienta gestiona un mercado a la baja sin tratamiento especial."
+    a: "Se introduce una variación anual negativa y el valor baja cada mes. El patrimonio se encoge, el mes de equilibrio se aleja o desaparece por completo, y el coste neto de la propiedad sube. La herramienta gestiona un mercado a la baja sin tratamiento especial."
   - q: "¿Es realista un horizonte de 30 años?"
     a: "El horizonte es un insumo. Un horizonte más corto favorece el alquiler, porque el coste inicial de la compra se recupera a lo largo de más años, y un horizonte más largo favorece la propiedad. La herramienta permite fijar 5, 10, 15 o 30 años para que el efecto de esa elección se vea."
 ---
@@ -97,20 +97,20 @@ porque se ha pagado una suma inicial grande y se ha acumulado muy poco
 patrimonio. A medida que pasan los años y el saldo baja, el coste neto cae,
 y en algún momento cae por debajo del alquiler.
 
-## El mes de cruce
+## El mes de equilibrio
 
-Ese punto es el mes de cruce, y es el número más útil que produce la
+Ese punto es el mes de equilibrio, y es el número más útil que produce la
 herramienta. Es el primer mes en el que:
 
 **coste neto de la propiedad < alquiler total pagado en los mismos meses**
 
-El mes de cruce se lee con cuidado. Antes del cruce, el alquiler ha costado menos en
-efectivo. Después, la propiedad ha costado menos una vez contado el
-patrimonio. Ninguno de los dos lados de esa línea es un veredicto; es
-el punto donde se cortan las dos rectas del gráfico, y la posición de ese
-cruce depende por completo de los insumos.
+El mes de equilibrio se lee con cuidado. Antes de ese punto, el alquiler ha
+costado menos en efectivo. Después, la propiedad ha costado menos una vez
+contado el patrimonio. Ninguno de los dos lados de esa línea es un veredicto;
+es el punto donde se cortan las dos rectas del gráfico, y la posición de ese
+punto de equilibrio depende por completo de los insumos.
 
-El cruce se retrasa cuando el alquiler es bajo respecto al precio de
+El punto de equilibrio se retrasa cuando el alquiler es bajo respecto al precio de
 compra, cuando el tipo es alto, cuando el horizonte es corto y cuando el
 supuesto de revalorización es bajo o negativo. No llega nunca cuando el
 alquiler es pequeño respecto al precio de compra, y esa es la razón
