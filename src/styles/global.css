@@ -757,7 +757,18 @@ a:hover {
   display: flex;
   align-items: baseline;
   justify-content: space-between;
-  gap: var(--space-3);
+  /*
+    The hint sits at the right of the label when there is room and drops to
+    its own line when there is not.
+
+    The labels are translated, and the Spanish and Russian ones are longer
+    than the English ones. Without the wrap, a flex row with
+    `justify-content: space-between` pushes the second item off the left
+    edge of its column, and a hint that overflows its field is a hint
+    nobody can read.
+  */
+  flex-wrap: wrap;
+  gap: var(--space-1) var(--space-3);
   margin-bottom: var(--space-2);
   font-size: var(--text-sm);
   font-weight: 500;
@@ -765,6 +776,7 @@ a:hover {
 }
 
 .field__hint {
+  margin-left: auto;
   font-size: var(--text-xs);
   color: var(--text-muted);
   font-weight: 400;
@@ -870,6 +882,8 @@ a:hover {
 }
 
 .stat {
+  display: flex;
+  flex-direction: column;
   padding: var(--space-4);
   background: var(--surface-inset);
   border: 1px solid var(--border-subtle);
@@ -884,8 +898,16 @@ a:hover {
   font-weight: 600;
 }
 
+/*
+  The value sits at the bottom of the tile.
+
+  A label that wraps onto a second line — and the Spanish and Russian ones
+  are longer than the English ones — would otherwise push the number down
+  and the numbers of a row would not line up with each other.
+*/
 .stat__value {
-  margin-top: var(--space-1);
+  margin-top: auto;
+  padding-top: var(--space-1);
   font-size: var(--text-lg);
   font-weight: 600;
   font-variant-numeric: tabular-nums;
