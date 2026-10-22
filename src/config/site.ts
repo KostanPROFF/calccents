@@ -39,6 +39,19 @@ export const SITE = {
   },
   /** The public repository, mentioned on the about and editorial pages. */
   repository: 'https://github.com/KostanPROFF/calccents',
+  /**
+   * The AdSense publisher ID.
+   *
+   * It is a fact about the site, not a setting, so it lives here with the
+   * name and the domain rather than in an environment variable. The meta
+   * tag in the document head carries it, which is how AdSense confirms the
+   * site belongs to the account when the application is reviewed.
+   *
+   * This is not what turns the ads on. The ad code itself is gated on
+   * environment variables, so the site can carry the ownership tag while
+   * still shipping without a single ad request.
+   */
+  adsensePublisherId: 'ca-pub-5321511632415174',
 } as const;
 
 export type NavItem = { href: string; label: string };
@@ -71,6 +84,7 @@ export interface SiteForLocale {
     links: readonly { label: string; href: string }[];
   };
   repository: string;
+  adsensePublisherId: string;
   nav: NavItem[];
   footer: NavItem[];
 }
@@ -96,6 +110,7 @@ export function getSite(locale: Locale): SiteForLocale {
       links: SITE.author.links,
     },
     repository: SITE.repository,
+    adsensePublisherId: SITE.adsensePublisherId,
     nav: [
       { href: '/tools/', label: ui.nav.tools },
       { href: '/guides/', label: ui.nav.guides },

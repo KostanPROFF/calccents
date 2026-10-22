@@ -231,12 +231,43 @@ mailbox that both sends and receives under its own name.
 
 ## Turning on advertising
 
-1. Apply for AdSense once the site is live at its final address.
-2. Create three display ad units: one for the result panel, one for the
-   in-article position, one for the footer.
-3. Add the publisher ID and the three slot IDs as GitHub repository
-   **variables** — not secrets, because every one of them is embedded in the
-   public HTML — and push again.
+The AdSense account exists and the publisher ID is
+`ca-pub-5321511632415174`. It is recorded in `src/config/site.ts` and printed
+in every page head as the ownership tag AdSense checks when it reviews the
+application:
+
+```html
+<meta name="google-adsense-account" content="ca-pub-5321511632415174" />
+```
+
+That tag carries no ad code and makes no request to anyone. The loader script
+and the ad units are gated on environment variables and stay off until the
+account is approved.
+
+To switch the ads on:
+
+1. Create three display ad units in the AdSense dashboard: one for the
+   result panel, one for the in-article position, one for the footer. Note
+   each slot ID.
+2. Set the four variables as GitHub repository **variables** — not secrets,
+   because every one of them is embedded in the public HTML:
+
+   ```bash
+   gh variable set PUBLIC_ADSENSE_CLIENT          --body "ca-pub-5321511632415174"
+   gh variable set PUBLIC_ADSENSE_SLOT_RESULT      --body "<slot id>"
+   gh variable set PUBLIC_ADSENSE_SLOT_IN_ARTICLE  --body "<slot id>"
+   gh variable set PUBLIC_ADSENSE_SLOT_FOOTER      --body "<slot id>"
+   ```
+
+3. Push anything. The deploy job builds with the variables, runs
+   `check-ads.ts --auto` against the build that is about to ship, and
+   publishes it.
+
+The automatic gate is the part that matters. It reads the four variables and
+works out what the build should contain: all four set means ads on, none set
+means ads off, and some but not all stops the deploy. A site with a loader
+script and no ad units, or with ad units and no publisher, is the
+half-configured state that gets an application rejected.
 
 | Variable | Where it goes |
 |---|---|

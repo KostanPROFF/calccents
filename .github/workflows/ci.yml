@@ -106,6 +106,21 @@ jobs:
           PUBLIC_GA_ID: ${{ vars.PUBLIC_GA_ID }}
           PUBLIC_BUTTONDOWN_FORM: ${{ vars.PUBLIC_BUTTONDOWN_FORM }}
 
+      # The build that ships has to match the configuration.
+      #
+      # The verify job proves both states build cleanly. This one proves
+      # that the build about to be published is in the state the
+      # variables describe: all four ad variables set means ads on, none
+      # set means ads off, and a partial configuration stops the deploy
+      # rather than shipping a loader script with no ad units.
+      - name: Ad gating check for the build that ships
+        run: node scripts/check-ads.ts --auto
+        env:
+          PUBLIC_ADSENSE_CLIENT: ${{ vars.PUBLIC_ADSENSE_CLIENT }}
+          PUBLIC_ADSENSE_SLOT_RESULT: ${{ vars.PUBLIC_ADSENSE_SLOT_RESULT }}
+          PUBLIC_ADSENSE_SLOT_IN_ARTICLE: ${{ vars.PUBLIC_ADSENSE_SLOT_IN_ARTICLE }}
+          PUBLIC_ADSENSE_SLOT_FOOTER: ${{ vars.PUBLIC_ADSENSE_SLOT_FOOTER }}
+
       # The deploy is skipped until the two Cloudflare secrets exist. The
       # check lives in the shell rather than in an `if:` expression, because
       # the secrets context is not available in step conditions and GitHub

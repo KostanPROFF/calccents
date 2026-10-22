@@ -129,6 +129,16 @@ const gaId = import.meta.env.PUBLIC_GA_ID;
     <meta name="twitter:description" content={description} />
 
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+
+    <!--
+      The AdSense ownership tag.
+
+      This tells Google which publisher account this site belongs to, which
+      is how the application is reviewed. It carries no ad code and makes no
+      request to anyone: the loader script and the ad units are gated on
+      environment variables and stay off until the account is approved.
+    -->
+    <meta name="google-adsense-account" content={site.adsensePublisherId} />
     <link rel="sitemap" href="/sitemap-index.xml" />
 
     <!--
