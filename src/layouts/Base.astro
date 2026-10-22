@@ -76,7 +76,15 @@ const person = {
   sameAs: site.author.links.map((link) => link.href),
 };
 
-const adsenseClient = import.meta.env.PUBLIC_ADSENSE_CLIENT;
+/**
+ * The AdSense publisher ID.
+ *
+ * The account exists, so the ID is a fact about the site and lives in the
+ * config with the name and the domain. The environment variable overrides
+ * it, which is what the CI build with dummy IDs uses to prove the ad path
+ * still works.
+ */
+const adsenseClient = import.meta.env.PUBLIC_ADSENSE_CLIENT || site.adsensePublisherId;
 const gaId = import.meta.env.PUBLIC_GA_ID;
 ---
 
@@ -129,6 +137,25 @@ const gaId = import.meta.env.PUBLIC_GA_ID;
     <meta name="twitter:description" content={description} />
 
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+
+    <!--
+      The AdSense loader.
+
+      AdSense asks for this script on every page and asks for it in the
+      head, so it starts downloading in parallel with the rest of the
+      document instead of after it. The script on its own is what turns on
+      auto ads: Google decides where the units go.
+
+      The hand-placed units in the tool pages are a separate mechanism. They
+      stay off until their slot IDs are configured, so a page never carries
+      both auto ads and manual units unless both are switched on on purpose.
+    -->
+    <script
+      is:inline
+      async
+      src={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${adsenseClient}`}
+      crossorigin="anonymous"
+    ></script>
 
     <!--
       The AdSense ownership tag.
@@ -194,16 +221,5 @@ const gaId = import.meta.env.PUBLIC_GA_ID;
       <slot />
     </main>
     <Footer locale={locale} />
-
-    {
-      adsenseClient && (
-        <script
-          is:inline
-          async
-          src={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${adsenseClient}`}
-          crossorigin="anonymous"
-        />
-      )
-    }
   </body>
 </html>

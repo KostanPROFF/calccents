@@ -232,42 +232,60 @@ mailbox that both sends and receives under its own name.
 ## Turning on advertising
 
 The AdSense account exists and the publisher ID is
-`ca-pub-5321511632415174`. It is recorded in `src/config/site.ts` and printed
-in every page head as the ownership tag AdSense checks when it reviews the
-application:
+`ca-pub-5321511632415174`. It is recorded in `src/config/site.ts` and used in
+two places in every page head: the ownership tag AdSense checks when it
+reviews the application, and the loader script it asks for.
 
 ```html
 <meta name="google-adsense-account" content="ca-pub-5321511632415174" />
+<script
+  async
+  src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5321511632415174"
+  crossorigin="anonymous"
+></script>
 ```
 
-That tag carries no ad code and makes no request to anyone. The loader script
-and the ad units are gated on environment variables and stay off until the
-account is approved.
+The loader script itself is on every page, in the head, and it is what turns
+on **auto ads**: Google decides where the units go and places them itself.
+The site therefore makes an ad request on every page from the moment it is
+deployed, and it shows no ad until the account is approved.
 
-To switch the ads on:
+The site also has three hand-placed positions: one in the result panel, one
+in the article, one at the foot of the page. They are a second mechanism,
+separate from auto ads, and they render nothing until their slot IDs are
+configured. To use them:
 
 1. Create three display ad units in the AdSense dashboard: one for the
    result panel, one for the in-article position, one for the footer. Note
    each slot ID.
-2. Set the four variables as GitHub repository **variables** — not secrets,
+2. **Turn auto ads off in the dashboard.** A page carrying auto ads and
+   hand-placed units at the same time has twice as many ads as it should,
+   and that is the kind of thing that lowers the click-through rate rather
+   than raising it.
+3. Set the three slot IDs as GitHub repository **variables** — not secrets,
    because every one of them is embedded in the public HTML:
 
    ```bash
-   gh variable set PUBLIC_ADSENSE_CLIENT          --body "ca-pub-5321511632415174"
    gh variable set PUBLIC_ADSENSE_SLOT_RESULT      --body "<slot id>"
    gh variable set PUBLIC_ADSENSE_SLOT_IN_ARTICLE  --body "<slot id>"
    gh variable set PUBLIC_ADSENSE_SLOT_FOOTER      --body "<slot id>"
    ```
 
-3. Push anything. The deploy job builds with the variables, runs
+4. Push anything. The deploy job builds with the variables, runs
    `check-ads.ts --auto` against the build that is about to ship, and
    publishes it.
 
-The automatic gate is the part that matters. It reads the four variables and
-works out what the build should contain: all four set means ads on, none set
-means ads off, and some but not all stops the deploy. A site with a loader
-script and no ad units, or with ad units and no publisher, is the
-half-configured state that gets an application rejected.
+`PUBLIC_ADSENSE_CLIENT` is not needed. The publisher ID is in the config
+with the name and the domain, and the variable is only an override for the
+CI build that uses dummy IDs.
+
+The automatic gate is the part that matters. It reads the three slot
+variables and works out what the build should contain: all three set means
+the hand-placed units are rendered, none set means they are not, and some
+but not all stops the deploy. The gate also checks that the units point at
+the same publisher account as the loader script, because a mismatch there
+serves ads from an account that is not this site's and the symptom is an
+empty box rather than an error.
 
 | Variable | Where it goes |
 |---|---|

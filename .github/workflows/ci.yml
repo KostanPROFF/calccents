@@ -39,10 +39,12 @@ jobs:
       - name: Linters
         run: pnpm lint
 
-      # The ad gate has two directions and both are worth proving. This build
-      # carries dummy IDs so the slots render, which is what the site will
-      # look like once the AdSense account is approved.
-      - name: Build with advertising enabled
+      # The ad gate has two states and both are worth proving. The loader
+      # script is on every page in both of them, because that is what turns
+      # on auto ads. What changes is the hand-placed units: this build
+      # carries dummy slot IDs so they render, which is what the site looks
+      # like once the units are configured.
+      - name: Build with the ad units enabled
         run: pnpm build
         env:
           PUBLIC_ADSENSE_CLIENT: ca-pub-0000000000000000
@@ -50,10 +52,11 @@ jobs:
           PUBLIC_ADSENSE_SLOT_IN_ARTICLE: 2222222222
           PUBLIC_ADSENSE_SLOT_FOOTER: 3333333333
 
-      - name: Ad gating check with advertising enabled
-        run: node scripts/check-ads.ts --expect-on
+      - name: Ad gating check with the ad units enabled
+        run: node scripts/check-ads.ts --expect-slots
 
-      # This is the build that ships: no publisher ID, so no ad code at all.
+      # This is the build that ships: the loader script, and no ad units,
+      # because no slot IDs are configured.
       - name: Build
         run: pnpm build
 
