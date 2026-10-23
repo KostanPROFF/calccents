@@ -19,8 +19,13 @@ export function numberValue(id: string, fallback = 0): number {
   return Number.isFinite(parsed) ? parsed : fallback;
 }
 
-/** Read a `type="month"` input as a date on the first day of that month. */
-export function monthValue(id: string, fallback: Date): Date {
+/** Read the selected value of a `<select>`. */
+export function selectValue(id: string, fallback = ''): string {
+  const element = document.getElementById(id) as HTMLSelectElement | null;
+  return element ? element.value : fallback;
+}
+
+/** Read a `type="month"` input as a date on the first day of that month. */export function monthValue(id: string, fallback: Date): Date {
   const element = document.getElementById(id) as HTMLInputElement | null;
   if (!element || !element.value) return fallback;
   const parsed = new Date(`${element.value}-01T00:00:00`);

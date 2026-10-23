@@ -3,7 +3,7 @@ import Base from '../../layouts/Base.astro';
 import AdSlot from '../AdSlot.astro';
 import Newsletter from '../Newsletter.astro';
 import { getSite } from '../../config/site.ts';
-import { getTools } from '../../config/tools.ts';
+import { getTools, toolIcon } from '../../config/tools.ts';
 import { getUi } from '../../i18n/ui/index.ts';
 import { localePath, type Locale } from '../../i18n/locales.ts';
 import { getGuides, guideSlug } from '../../i18n/guides.ts';
@@ -77,7 +77,7 @@ const organization = {
                 aria-hidden="true"
                 style="width: 2.25rem; height: 2.25rem; font-size: var(--text-base);"
               >
-                {tool.group === 'home' ? '%' : '∑'}
+                {toolIcon(tool.group)}
               </span>
               <span class="tile__title">{tool.name}</span>
               <span class="tile__text">{tool.short}</span>

@@ -1,0 +1,132 @@
+---
+title: "Debt Payoff Calculator: Avalanche and Snowball"
+description: "How the debt payoff calculator models several debts at once, what the avalanche and snowball orders differ in, and what the comparison between them measures."
+locale: "en"
+date: 2026-10-23
+lastReviewed: 2026-10-23
+author: "Kostan Proff"
+reviewedBy: "Tetiana Goncharko"
+group: "home"
+readingMinutes: 8
+sources:
+  - label: "CFPB — Ask CFPB, consumer questions and answers"
+    url: "https://www.consumerfinance.gov/ask-cfpb/"
+  - label: "CFPB — Credit card tools and consumer guidance"
+    url: "https://www.consumerfinance.gov/consumer-tools/credit-cards/"
+relatedTools:
+  - "debt-payoff"
+faq:
+  - q: "What does the debt payoff calculator compare?"
+    a: "Three runs over the same debts: minimum payments only, the avalanche order with the extra payment, and the snowball order with the same extra payment. For each run it reports the months to debt-free, the total interest paid, and the interest saved against the minimums-only run."
+  - q: "Which order costs less in interest?"
+    a: "The avalanche order, which puts the extra money on the highest interest rate first. The calculator reports the gap between the two orders as a dollar figure rather than as a verdict, because the size of that gap depends on the balances and rates entered."
+  - q: "Which order clears the first debt sooner?"
+    a: "The snowball order, which starts with the smallest balance. The month in which each debt is cleared is reported separately for each order, so the first account to reach zero is visible in the results."
+  - q: "Is interest charged daily or monthly?"
+    a: "Monthly, on the balance at the start of the month. Many credit cards accrue interest daily and compound it daily, and the calculator does not model that difference."
+  - q: "What happens when a debt is paid off?"
+    a: "It stops taking its minimum payment, and that amount joins the money available for the debts still open. This is what makes a payoff order accelerate as the smaller balances disappear."
+  - q: "What does the extra payment field do?"
+    a: "It adds a monthly amount to the sum of the minimum payments, and the calculator applies it to the debt that the selected order points at. The comparison of the three runs holds the extra payment constant so that only the order changes."
+  - q: "Are late fees and tax effects included?"
+    a: "No. Late fees, balance-transfer fees and the tax treatment of deductible interest all sit outside the model."
+---
+
+Several debts at once do not add up the way a single balance does. A card at
+18% and a personal loan at 7% both take a payment every month, and the order
+in which those payments are applied changes what the same money costs in
+interest. The <a href="/tools/debt-payoff/">debt payoff calculator</a> runs
+that comparison directly.
+
+## The month-by-month model
+
+The calculator simulates the debts one month at a time, and the steps of the
+simulation are the same every month.
+
+Interest for the month is charged on the balance at the start of the month and
+is added to that balance. A $10,000 balance at 18% carries $150 of interest in
+the month, and the balance to work against is $10,150.
+
+The money available that month is the sum of every minimum payment plus
+whatever extra payment was entered. Each debt covers its own interest first
+and its principal second. Only what is left after that moves on to the next
+debt.
+
+When a debt reaches zero it stops taking a minimum payment, and that minimum
+joins the money available for the debts that are still open. A $200 minimum
+that becomes $200 of extra principal is what makes a payoff order accelerate
+rather than merely rearrange the payments.
+
+A single debt shows the same arithmetic in its simplest form. A $10,000
+balance at 18% with a $200 minimum payment is cleared in 94 months, and about
+$8,622 of interest is paid along the way. The balance falls by $50 in the
+first month, because $150 of interest is added and $200 goes out, and by a
+little more in each month after that, because the interest is charged on a
+balance that is going down.
+
+## Avalanche and snowball
+
+The question the calculator asks is which debt the extra money goes to first.
+
+The avalanche order starts with the highest interest rate. The debt that
+costs the most to carry is paid down first, and that is where the smaller
+total interest comes from.
+
+The snowball order starts with the smallest balance. The smallest debt is
+cleared first and its minimum payment joins the monthly budget sooner, so the
+first account reaches zero earlier even though more interest is paid overall.
+
+The two orders make different things visible. One shows the smallest number
+of dollars at the end of the run, the other shows the first balance gone.
+
+## What the comparison shows
+
+The calculator runs three simulations and places them next to each other.
+
+The first is the minimums-only run: every minimum payment and no extra money.
+It is the baseline the other two are measured against.
+
+The second is the avalanche run with the extra payment added. The third is the
+snowball run with the same extra payment added. For each one the calculator
+reports the months until every debt is cleared, the total interest paid, and
+the interest saved against the minimums-only baseline.
+
+Those two savings figures are the comparison the tool exists to produce, and
+they answer different questions. The avalanche figure is the smaller of the
+two, and the snowball figure is the larger. What sits between them is the
+price of clearing the smallest account first, expressed in dollars of interest.
+
+The gap depends on the numbers entered. With a single debt the two orders
+are identical. With debts of similar rates and similar balances the two
+orders come out close to each other. The gap widens when a large balance
+carries a high rate and a small one carries a low rate.
+
+There is one case where the baseline does not exist. When the minimum payments
+are smaller than the interest the debts charge in a month, the balance does not
+fall: the interest is added, the payment covers part of it, and what is left
+grows the balance again. On the minimums alone the debts are never cleared,
+so there is no finished schedule to measure the other two runs against. The
+calculator leaves the interest-saved figures empty and says so on the page
+rather than printing a number made of a hundred years of interest that never
+ends. The avalanche and snowball runs still finish, and their months and
+total interest are the figures that describe the debts.
+
+## What the model leaves out
+
+The model is monthly and plain, and several things sit outside it.
+
+Variable interest rates are held at the level that was entered for every month
+of the run.
+
+Late fees and balance-transfer fees are not part of the arithmetic.
+
+Credit card interest is often accrued daily and compounded daily, while the
+calculator applies monthly accrual, so the cost of a card balance comes out
+lower than it is billed.
+
+Interest on some debts is tax deductible, and that tax effect is not in the
+calculation.
+
+A payment that does not arrive stops the simulation rather than being carried
+as a delinquency, so the figures describe the schedule as it was scheduled
+rather than as it turned out.

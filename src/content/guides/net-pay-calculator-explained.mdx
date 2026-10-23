@@ -1,0 +1,158 @@
+---
+title: "How Take-Home Pay Is Calculated"
+description: "The order the money leaves a wage: pre-tax deductions, 2026 federal brackets, Social Security, Medicare, state tax, effective versus marginal rate."
+locale: "en"
+date: 2026-10-23
+lastReviewed: 2026-10-23
+author: "Kostan Proff"
+reviewedBy: "Tetiana Goncharko"
+group: "home"
+readingMinutes: 8
+sources:
+  - label: "IRS — Rev. Proc. 2025-32, 2026 inflation adjustments"
+    url: "https://www.irs.gov/irb/2025-45_IRB"
+  - label: "Social Security Administration — 2026 wage base and COLA"
+    url: "https://www.ssa.gov/cola/"
+  - label: "Social Security Administration — Publication 15, Employer's Tax Guide"
+    url: "https://www.ssa.gov/pubs/EN-05-10035.pdf"
+  - label: "IRS — Tax Topic 511, Withholding"
+    url: "https://www.irs.gov/taxtopics/tc511"
+relatedTools:
+  - "net-pay"
+faq:
+  - q: "Why is the take-home amount not the gross pay minus one tax rate?"
+    a: "Because more than one rate applies, and each one applies to a different base. Federal income tax is progressive, so the rate rises with taxable income. Social Security and Medicare are flat rates on wages, each with its own ceiling. The result is a number that no single percentage describes, and the calculator shows the components separately."
+  - q: "Why is the effective rate lower than the marginal rate?"
+    a: "The marginal rate is the rate the next dollar of taxable income is taxed at, so it sits in the bracket the income has reached. The effective rate divides the total tax by the whole gross pay, and most of that gross is taxed at lower rates or not taxed at all, because the standard deduction and any pre-tax deductions come out first."
+  - q: "Does a 401(k) contribution reduce the taxes on the rest of the pay?"
+    a: "In the calculation, yes. A 401(k), HSA or FSA contribution is subtracted before the wages are taxed, so it reduces the base for federal income tax, for Social Security and for Medicare at the same time. The take-home amount is then lower by the contribution itself, and the tax on the rest is lower too."
+  - q: "When does the Additional Medicare Tax start?"
+    a: "At wages above $200,000 for a single filer, a married filer filing separately, or a head of household, and above $250,000 for married filing jointly. The rate is 0.9% on the excess, and those thresholds are not indexed for inflation, so they have been the same since 2013."
+  - q: "How does an hourly rate become a year of pay?"
+    a: "The calculator multiplies the rate by 2,080 hours, which is 40 hours a week over 52 weeks. It does the same for the other periods: 12 months, 52 weeks and 260 working days. These are conventions rather than entitlements, and a reader paid on a different number can work with their own."
+  - q: "Why does the state tax figure differ from what the state collects?"
+    a: "The calculator applies a single rate to the whole of taxable income. Most states have progressive rates, so a single percentage overstates what a progressive state would take and matches a flat-rate state exactly. The rate entered on the page is the only state-specific input in the whole calculation."
+  - q: "Does this show what is withheld from each paycheque?"
+    a: "No. This is the tax for the year, computed from the annual figures. Withholding is what the employer sends to the IRS during the year, and it is set by the withholding method on the W-4, so the amount on a single paycheque can differ from a twelfth of the annual figure."
+---
+
+A paycheque carries one number. The number on the offer letter is a different
+one, and the gap between them is built from a short list of rules that can be
+written down exactly.
+
+The <a href="/tools/net-pay/">net pay calculator</a> works through those rules
+in the order they apply to a wage, using the figures for tax year 2026.
+
+## The order the money comes out
+
+A wage arrives as a single gross amount. From there the money leaves in a
+fixed sequence.
+
+1. Pre-tax deductions come out first. A 401(k) contribution, an HSA
+   contribution and an FSA contribution are taken out of the wage before
+   anything else, and the payroll taxes are charged on what is left.
+2. The standard deduction comes out of the remaining wages. For 2026 it is
+   $16,100 for a single filer, $32,200 for married filing jointly and $24,150
+   for head of household. What is left is taxable income, and that is the
+   amount the federal brackets are applied to.
+3. Federal income tax is computed on taxable income.
+4. Social Security is charged at 6.2% on the wages, up to the taxable maximum
+   of $184,500 for 2026.
+5. Medicare is charged at 1.45% on all wages, with no ceiling.
+6. The Additional Medicare Tax is charged at 0.9% on the wages above the
+   threshold for the filing status.
+7. State income tax is applied at the rate entered on the page.
+
+What survives those steps is the take-home amount, and the calculator divides
+it by the number of periods in the year to get the figure per period.
+
+The wages that the payroll taxes are charged on are the ones left after the
+pre-tax deductions, before the standard deduction. That distinction matters:
+the standard deduction reduces federal income tax and state tax, while Social
+Security and Medicare are charged on the larger base.
+
+## The federal brackets
+
+Federal income tax is not a single rate. For 2026, a single filer's taxable
+income falls into these brackets:
+
+- 10% on the first $12,400
+- 12% from $12,400 to $50,400
+- 22% from $50,400 to $105,700
+- 24% from $105,700 to $201,775
+- 32% from $201,775 to $256,225
+- 35% from $256,225 to $640,600
+- 37% above $640,600
+
+The IRS publishes each bracket as a fixed amount of tax plus a percentage of
+the excess over the bottom of the bracket, and the calculator computes it the
+same way. A single filer with $50,400 of taxable income owes $1,240, which is
+the tax at the bottom of the 12% bracket, and nothing more. At $60,000 the same
+filer owes $1,240 plus 12% of the $9,600 above $50,400, which comes to
+$2,392.
+
+These brackets and the standard deduction come from Rev. Proc. 2025-32,
+published in Internal Revenue Bulletin 2025-45 on 3 November 2025.
+
+## Social Security, Medicare and the state rate
+
+Social Security is a 6.2% charge on wages up to a taxable maximum, which is
+$184,500 for 2026. Wages above that ceiling are not charged again, which
+means the marginal rate on Social Security is 6.2% up to the ceiling and zero
+above it.
+
+Medicare is a 1.45% charge on all wages, with no ceiling at all. On top of it
+sits the Additional Medicare Tax: 0.9% on wages above $200,000 for a single
+filer, a married filer filing separately or a head of household, and above
+$250,000 for married filing jointly. Those thresholds are not indexed for
+inflation, so they have stayed at the same numbers since 2013. The Social
+Security Administration's Publication 15 sets out both the rates and the
+thresholds.
+
+The state income tax in the calculator is the rate entered on the page,
+applied to taxable income. That is a simplification, and a deliberate one:
+most states tax at progressive rates, so a single percentage applied to the
+whole of taxable income sits above what a progressive state would collect and
+matches a flat-rate state exactly. The rate on the page is the only
+state-specific input in the calculation.
+
+## Why the effective rate sits below the marginal rate
+
+The two rates in the results answer different questions. The marginal rate is
+the rate the next dollar of taxable income is taxed at, so it belongs to the
+bracket the income has already reached. The effective rate divides the total
+tax by the whole gross pay, so it blends every bracket the income touched,
+the part of the gross that was never taxed at all, and the deductions that
+came out before the tax was computed.
+
+Take a single filer with $60,000 of gross pay, no pre-tax deductions and a
+5% state rate. The total tax is $11,805: $5,020 federal, $3,720 Social
+Security, $870 Medicare and $2,195 state. The effective rate is 19.68%. The
+marginal rate is 12%, because the taxable income of $43,900 sits in the 12%
+bracket. Most of that $60,000 was taxed at 10% or at 12%, and $16,100 of it
+was not taxed at all, so the average lands below the rate that the next dollar
+would meet.
+
+Adding a $5,000 401(k) contribution to the same case shows the same effect
+from the other direction. The taxable wages fall to $55,000, the federal tax
+falls to $4,420, Social Security to $3,410 and Medicare to $797.50, and the
+effective rate drops to 17.62%. The take-home amount falls as well, because
+the $5,000 left the wage before the taxes were computed.
+
+## What the calculation leaves out
+
+The figure on the page is the tax for the year, computed from annual numbers.
+Several things sit outside it.
+
+- **Credits.** No tax credits are applied, so the tax shown is the liability
+  before credits.
+- **Itemised deductions.** The standard deduction is used, and the calculator
+  does not model a deduction that depends on what a reader actually paid.
+- **Local taxes.** City, county and school income taxes are not part of it.
+- **Withholding per paycheque.** Withholding is set on the W-4 and is what
+  the employer remits during the year, so one paycheque can differ from a
+  twelfth of the annual total. IRS Tax Topic 511 describes how withholding is
+  calculated.
+- **Benefits that are not in the wage.** An employer contribution to health
+  insurance or a retirement plan does not appear in the gross pay the reader
+  types, so it does not appear in the result either.

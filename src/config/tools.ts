@@ -13,12 +13,19 @@
 import { getUi } from '../i18n/ui/index.ts';
 import type { Locale } from '../i18n/locales.ts';
 
-export const TOOL_SLUGS = ['mortgage-payment', 'rent-vs-buy', 'compound-interest'] as const;
+export const TOOL_SLUGS = [
+  'mortgage-payment',
+  'rent-vs-buy',
+  'compound-interest',
+  'net-pay',
+  'income-tax',
+  'debt-payoff',
+] as const;
 
 export type ToolSlug = (typeof TOOL_SLUGS)[number];
 
 /** The grouping a tool belongs to. It picks the icon, not the wording. */
-export type ToolGroup = 'home' | 'investing';
+export type ToolGroup = 'home' | 'investing' | 'pay' | 'debt';
 
 export interface ToolDefinition {
   /** URL segment, also used as the key in `relatedTools`. */
@@ -44,14 +51,40 @@ export interface ToolDefinition {
   reviewedOn: Date;
 }
 
-const GROUPS: Record<ToolSlug, ToolGroup> = {
-  'mortgage-payment': 'home',
-  'rent-vs-buy': 'home',
-  'compound-interest': 'investing',
+/**
+ * The grouping and the date each calculator was last checked.
+ *
+ * The dates are per tool, not per site: the three pay and tax calculators
+ * were built against the 2026 tax figures and checked on the day those
+ * figures were read, while the three older ones were checked earlier.
+ */
+const META: Record<ToolSlug, { group: ToolGroup; reviewedOn: Date }> = {
+  'mortgage-payment': { group: 'home', reviewedOn: new Date('2026-10-20T00:00:00Z') },
+  'rent-vs-buy': { group: 'home', reviewedOn: new Date('2026-10-20T00:00:00Z') },
+  'compound-interest': { group: 'investing', reviewedOn: new Date('2026-10-20T00:00:00Z') },
+  'net-pay': { group: 'pay', reviewedOn: new Date('2026-10-23T00:00:00Z') },
+  'income-tax': { group: 'pay', reviewedOn: new Date('2026-10-23T00:00:00Z') },
+  'debt-payoff': { group: 'debt', reviewedOn: new Date('2026-10-23T00:00:00Z') },
 };
 
-/** All three calculators were last checked on the same day. */
-const REVIEWED_ON = new Date('2026-10-20T00:00:00Z');
+/**
+ * The glyph that marks a calculator on a card.
+ *
+ * It is a character rather than an icon: the site carries no icon font and
+ * no icon library, and a glyph is one byte of markup instead of a request.
+ */
+export function toolIcon(group: ToolGroup): string {
+  switch (group) {
+    case 'home':
+      return '%';
+    case 'investing':
+      return '∑';
+    case 'pay':
+      return '$';
+    case 'debt':
+      return '≡';
+  }
+}
 
 export function getTools(locale: Locale): ToolDefinition[] {
   const ui = getUi(locale);
@@ -64,8 +97,8 @@ export function getTools(locale: Locale): ToolDefinition[] {
       description: copy.description,
       short: copy.short,
       category: copy.category,
-      group: GROUPS[slug],
-      reviewedOn: REVIEWED_ON,
+      group: META[slug].group,
+      reviewedOn: META[slug].reviewedOn,
     };
   });
 }

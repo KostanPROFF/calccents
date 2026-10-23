@@ -121,11 +121,17 @@ export function alternates(path: string): { locale: Locale; href: string }[] {
  *
  * The guide pages print publication and review dates, and a date written the
  * English way reads strangely in Russian and looks wrong in Spanish.
+ *
+ * Every date in the project is a calendar day and nothing more: a review
+ * happened on the 23rd, not at 00:00 on the 23rd. The dates are therefore
+ * read in UTC, so a reader west of Greenwich does not see the day before
+ * the one the site is actually claiming.
  */
 export function formatDate(date: Date, locale: Locale): string {
   return date.toLocaleDateString(LOCALE_META[locale].intl, {
     year: 'numeric',
     month: 'long',
     day: 'numeric',
+    timeZone: 'UTC',
   });
 }

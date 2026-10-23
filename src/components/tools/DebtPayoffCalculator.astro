@@ -1,0 +1,374 @@
+---
+import { getUi } from '../../i18n/ui/index.ts';
+import ResultPanel from '../ResultPanel.astro';
+import AdSlot from '../AdSlot.astro';
+import type { Locale } from '../../i18n/locales.ts';
+
+interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+const ui = getUi(locale);
+const copy = ui.tool['debt-payoff'];
+---
+
+<div>
+  <form class="card" id="debt-form" novalidate>
+    <div class="debt-rows" id="debt-rows">
+      <div class="debt-row" data-debt-row>
+        <label class="field">
+          <span class="field__label">{copy.fields.debtName}</span>
+          <span class="field__control">
+            <input class="input" data-field="name" type="text" value="" />
+          </span>
+        </label>
+        <label class="field">
+          <span class="field__label">{copy.fields.balance}</span>
+          <span class="field__control">
+            <span class="field__prefix" aria-hidden="true">$</span>
+            <input class="input input--prefixed" data-field="balance" type="number"
+              inputmode="decimal" step="100" min="0" value="12000" />
+          </span>
+        </label>
+        <label class="field">
+          <span class="field__label">{copy.fields.rate}</span>
+          <span class="field__control">
+            <input class="input" data-field="rate" type="number" inputmode="decimal"
+              step="0.01" min="0" max="100" value="19.99" />
+            <span class="field__suffix" aria-hidden="true">%</span>
+          </span>
+        </label>
+        <label class="field">
+          <span class="field__label">{copy.fields.minimum}</span>
+          <span class="field__control">
+            <span class="field__prefix" aria-hidden="true">$</span>
+            <input class="input input--prefixed" data-field="minimum" type="number"
+              inputmode="decimal" step="10" min="0" value="120" />
+          </span>
+        </label>
+        <button type="button" class="debt-row__remove" data-action="remove"
+          aria-label={copy.fields.removeDebt}>
+          &times;
+        </button>
+      </div>
+    </div>
+
+    <button type="button" class="btn" id="debt-add" style="margin-top: var(--space-4);">
+      {copy.fields.addDebt}
+    </button>
+
+    <label class="field" for="debt-extra" style="margin-top: var(--space-6);">
+      <span class="field__label">
+        {copy.fields.extraPayment}
+        <span class="field__hint">{copy.fields.extraPaymentHint}</span>
+      </span>
+      <span class="field__control">
+        <span class="field__prefix" aria-hidden="true">$</span>
+        <input class="input input--prefixed" id="debt-extra" type="number"
+          inputmode="decimal" step="25" min="0" value="300" />
+      </span>
+    </label>
+  </form>
+</div>
+
+<div class="tool-panel">
+  <ResultPanel
+    headlineId="dp-saved"
+    headlineLabel={copy.result.headlineLabel}
+    headline="—"
+    stats={[
+      { id: 'dp-avalanche-saved', label: `${copy.result.avalanche} — ${copy.result.interestSaved}`, value: '—' },
+      { id: 'dp-avalanche-months', label: `${copy.result.avalanche} — ${copy.result.monthsToFree}`, value: '—' },
+      { id: 'dp-avalanche-interest', label: `${copy.result.avalanche} — ${copy.result.totalInterest}`, value: '—' },
+      { id: 'dp-snowball-saved', label: `${copy.result.snowball} — ${copy.result.interestSaved}`, value: '—' },
+      { id: 'dp-snowball-months', label: `${copy.result.snowball} — ${copy.result.monthsToFree}`, value: '—' },
+      { id: 'dp-snowball-interest', label: `${copy.result.snowball} — ${copy.result.totalInterest}`, value: '—' },
+      { id: 'dp-minimum-months', label: `${copy.result.minimumOnly} — ${copy.result.monthsToFree}`, value: '—' },
+      { id: 'dp-minimum-interest', label: `${copy.result.minimumOnly} — ${copy.result.totalInterest}`, value: '—' },
+    ]}
+    note={copy.result.note}
+  />
+  <p class="muted-block" style="margin-top: var(--space-4);">
+    {copy.resultNote}
+  </p>
+  {/*
+    Shown only when the minimum payments do not cover the interest. Without
+    it the panel would print a payoff date for a schedule that never ends.
+  */}
+  <p class="debt-warning" id="dp-warning" hidden>
+    {copy.result.minimumsNeverCoverNote}
+  </p>
+  <AdSlot placement="result" />
+</div>
+
+<template id="debt-row-template">
+  <div class="debt-row" data-debt-row>
+    <label class="field">
+      <span class="field__label" data-label="debtName"></span>
+      <span class="field__control">
+        <input class="input" data-field="name" type="text" value="" />
+      </span>
+    </label>
+    <label class="field">
+      <span class="field__label" data-label="balance"></span>
+      <span class="field__control">
+        <span class="field__prefix" aria-hidden="true">$</span>
+        <input class="input input--prefixed" data-field="balance" type="number"
+          inputmode="decimal" step="100" min="0" value="0" />
+      </span>
+    </label>
+    <label class="field">
+      <span class="field__label" data-label="rate"></span>
+      <span class="field__control">
+        <input class="input" data-field="rate" type="number" inputmode="decimal"
+          step="0.01" min="0" max="100" value="0" />
+        <span class="field__suffix" aria-hidden="true">%</span>
+      </span>
+    </label>
+    <label class="field">
+      <span class="field__label" data-label="minimum"></span>
+      <span class="field__control">
+        <span class="field__prefix" aria-hidden="true">$</span>
+        <input class="input input--prefixed" data-field="minimum" type="number"
+          inputmode="decimal" step="10" min="0" value="0" />
+      </span>
+    </label>
+    <button type="button" class="debt-row__remove" data-action="remove" data-label-aria="removeDebt">
+      &times;
+    </button>
+  </div>
+</template>
+
+{/*
+  The template carries no words of its own. Every label comes from the
+  dictionary of the language the page is in, and the client script fills
+  the placeholders when it clones a row.
+*/}
+<script type="application/json" id="debt-row-labels" set:html={JSON.stringify({
+  debtName: copy.fields.debtName,
+  balance: copy.fields.balance,
+  rate: copy.fields.rate,
+  minimum: copy.fields.minimum,
+  removeDebt: copy.fields.removeDebt,
+  minimumsNeverCover: copy.result.minimumsNeverCover,
+})} />
+
+<script>
+  import { comparePayoff, type Debt } from '../../lib/calc/debtPayoff.ts';
+  import { formatCurrency, formatNumber } from '../../lib/calc/money.ts';
+
+  const rowsContainer = document.getElementById('debt-rows');
+  const template = document.getElementById('debt-row-template') as HTMLTemplateElement | null;
+
+  /*
+   * The row template holds no words. The labels of the language the page is
+   * in travel with the page as JSON and are written into each new row, so
+   * a Russian reader adding a second debt does not get an English form.
+   */
+  const labelsElement = document.getElementById('debt-row-labels');
+  let labels: Record<string, string> = {};
+  try {
+    labels = labelsElement?.textContent
+      ? (JSON.parse(labelsElement.textContent) as Record<string, string>)
+      : {};
+  } catch {
+    labels = {};
+  }
+
+  function labelRow(row: Element): void {
+    row.querySelectorAll<HTMLElement>('[data-label]').forEach((element) => {
+      const key = element.dataset.label;
+      if (key && labels[key]) element.textContent = labels[key];
+    });
+    row.querySelectorAll<HTMLElement>('[data-label-aria]').forEach((element) => {
+      const key = element.dataset.labelAria;
+      if (key && labels[key]) element.setAttribute('aria-label', labels[key]);
+    });
+  }
+
+  function readRows(): Debt[] {
+    if (!rowsContainer) return [];
+    const debts: Debt[] = [];
+    const rows = rowsContainer.querySelectorAll('[data-debt-row]');
+    rows.forEach((row, index) => {
+      const read = (field: string): number => {
+        const input = row.querySelector(`[data-field="${field}"]`) as HTMLInputElement | null;
+        if (!input) return 0;
+        const parsed = Number.parseFloat(input.value.replace(/[^0-9.-]/g, ''));
+        return Number.isFinite(parsed) ? parsed : 0;
+      };
+      const nameInput = row.querySelector('[data-field="name"]') as HTMLInputElement | null;
+      debts.push({
+        id: `d${index}`,
+        name: nameInput?.value.trim() || `${labels.debtName ?? 'Debt'} ${index + 1}`,
+        balance: Math.max(0, read('balance')),
+        aprPercent: Math.max(0, read('rate')),
+        minimumPayment: Math.max(0, read('minimum')),
+      });
+    });
+    return debts.filter((debt) => debt.balance > 0);
+  }
+
+  function recalculate(): void {
+    const debts = readRows();
+    const extraInput = document.getElementById('debt-extra') as HTMLInputElement | null;
+    const extra = extraInput ? Math.max(0, Number.parseFloat(extraInput.value) || 0) : 0;
+
+    if (debts.length === 0) {
+      const ids = [
+        'dp-saved',
+        'dp-avalanche-saved',
+        'dp-avalanche-months',
+        'dp-avalanche-interest',
+        'dp-snowball-saved',
+        'dp-snowball-months',
+        'dp-snowball-interest',
+        'dp-minimum-months',
+        'dp-minimum-interest',
+      ];
+      for (const id of ids) {
+        const element = document.getElementById(id);
+        if (element) element.textContent = '—';
+      }
+      setWarning(false);
+      return;
+    }
+
+    const comparison = comparePayoff(debts, extra);
+
+    /*
+     * The interest saved against the minimums only exists when the
+     * minimums actually clear the debts. When they do not, the balance
+     * grows and there is no finished schedule to save interest against, so
+     * the figure is left empty and the note below the panel says why.
+     */
+    setSaved('dp-saved', comparison.interestSavedAvalanche);
+    setSaved('dp-avalanche-saved', comparison.interestSavedAvalanche);
+    setSaved('dp-snowball-saved', comparison.interestSavedSnowball);
+    setText('dp-avalanche-months', formatNumber(comparison.avalanche.months));
+    setText('dp-avalanche-interest', formatCurrency(comparison.avalanche.totalInterest));
+    setText('dp-snowball-months', formatNumber(comparison.snowball.months));
+    setText('dp-snowball-interest', formatCurrency(comparison.snowball.totalInterest));
+
+    if (comparison.minimumOnly.paidOff) {
+      setText('dp-minimum-months', formatNumber(comparison.minimumOnly.months));
+      setText('dp-minimum-interest', formatCurrency(comparison.minimumOnly.totalInterest));
+      setWarning(false);
+    } else {
+      setText('dp-minimum-months', labels.minimumsNeverCover ?? '—');
+      setText('dp-minimum-interest', '—');
+      setWarning(true);
+    }
+  }
+
+  function setSaved(id: string, value: number | null): void {
+    setText(id, value === null ? '—' : formatCurrency(value));
+  }
+
+  function setText(id: string, value: string): void {
+    const element = document.getElementById(id);
+    if (element) element.textContent = value;
+  }
+
+  function setWarning(visible: boolean): void {
+    const element = document.getElementById('dp-warning');
+    if (element) element.hidden = !visible;
+  }
+
+  document.getElementById('debt-add')?.addEventListener('click', () => {
+    if (!rowsContainer || !template) return;
+    const fragment = template.content.cloneNode(true) as DocumentFragment;
+    const row = fragment.querySelector('[data-debt-row]');
+    if (row) labelRow(row);
+    rowsContainer.appendChild(fragment);
+    recalculate();
+  });
+
+  rowsContainer?.addEventListener('click', (event) => {
+    const target = event.target as HTMLElement | null;
+    const button = target?.closest('[data-action="remove"]') as HTMLElement | null;
+    if (!button) return;
+    const row = button.closest('[data-debt-row]');
+    const rows = rowsContainer.querySelectorAll('[data-debt-row]');
+    // The last row stays: a calculator with nothing to calculate is not
+    // a useful state to leave the reader in.
+    if (rows.length <= 1) {
+      const inputs = row?.querySelectorAll('input');
+      inputs?.forEach((input) => {
+        (input as HTMLInputElement).value = '0';
+      });
+    } else {
+      row?.remove();
+    }
+    recalculate();
+  });
+
+  rowsContainer?.addEventListener('input', recalculate);
+  rowsContainer?.addEventListener('change', recalculate);
+  document.getElementById('debt-extra')?.addEventListener('input', recalculate);
+  document.getElementById('debt-extra')?.addEventListener('change', recalculate);
+
+  recalculate();
+</script>
+
+<style>
+  /*
+   * One debt per row: the four numbers side by side, and the button that
+   * takes the row away on the right. The row is a grid rather than a
+   * stack because the numbers belong next to each other: the balance, the
+   * rate and the minimum are read together.
+   */
+  .debt-rows {
+    display: grid;
+    gap: var(--space-4);
+  }
+
+  .debt-row {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--space-3);
+    align-items: end;
+    padding-bottom: var(--space-4);
+    border-bottom: 1px solid var(--border);
+  }
+
+  .debt-row__remove {
+    justify-self: start;
+    width: 2rem;
+    height: 2rem;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md, 8px);
+    background: transparent;
+    color: var(--text-secondary);
+    font-size: var(--text-lg);
+    line-height: 1;
+    cursor: pointer;
+  }
+
+  .debt-row__remove:hover {
+    border-color: var(--border-strong);
+    color: var(--text);
+  }
+
+  .debt-warning {
+    margin-top: var(--space-3);
+    padding: var(--space-3) var(--space-4);
+    border-left: 2px solid var(--border-strong);
+    background: var(--surface-2, var(--surface, transparent));
+    color: var(--text-secondary);
+    font-size: var(--text-sm);
+    line-height: 1.6;
+  }
+
+  @media (min-width: 720px) {
+    .debt-row {
+      grid-template-columns: 1.1fr 0.9fr 0.7fr 0.9fr auto;
+    }
+
+    .debt-row__remove {
+      justify-self: end;
+      margin-bottom: 0.25rem;
+    }
+  }
+</style>

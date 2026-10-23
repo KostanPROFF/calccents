@@ -50,9 +50,9 @@ are needed (`esbuild` for the Astro toolchain, `workerd` for wrangler).
 ```
 src/
 ├─ config/site.ts          site identity — the single source of truth
-├─ config/tools.ts         registry of the three calculators
+├─ config/tools.ts         registry of the six calculators
 ├─ content.config.ts       Zod schema for the guides collection
-├─ content/guides/         15 guides × 3 languages
+├─ content/guides/         18 guides × 3 languages
 │  ├─ *.mdx                English, at the root
 │  ├─ ru/*.mdx             Russian
 │  └─ es/*.mdx             Spanish
@@ -64,7 +64,7 @@ src/
 ├─ lib/client/dom.ts       browser helpers used by the page scripts
 ├─ components/             AdSlot, ToolShell, ResultPanel, Faq, SourceList, …
 ├─ components/pages/       the page bodies, one component per page
-├─ components/tools/       the three calculator forms
+├─ components/tools/       the six calculator forms
 ├─ layouts/Base.astro      document shell
 ├─ pages/                  routes
 │  ├─ *.astro              English, at the root
@@ -76,6 +76,7 @@ scripts/
 ├─ lint-advisory.ts        YMYL guardrail, plus its own test suite
 ├─ check-links.ts          internal link resolution
 ├─ check-ads.ts            AdSense gating, both directions
+├─ check-consent.ts        consent gating: no tracker before the answer
 └─ check-dom-ids.ts        duplicate id detection in the built HTML
 ```
 
@@ -370,6 +371,29 @@ the site earns nothing from that visit. That is the honest reading of
 "decline", and the alternative — loading the ad script for a reader who said
 no — is the thing the banner exists to prevent.
 
+## The tax year
+
+The take-home pay and income tax calculators work from the 2026 tax year.
+The figures are constants with a date attached, not a live feed:
+
+| Figure | 2026 value | Where it comes from |
+|---|---|---|
+| Brackets, single filer | 10 / 12 / 22 / 24 / 32 / 35 / 37 % | Rev. Proc. 2025-32, IRB 2025-45, 3 November 2025 |
+| Standard deduction | $16,100 / $32,200 / $24,150 | the same |
+| Social Security | 6.2 % up to $184,500 | SSA wage base for 2026 |
+| Medicare | 1.45 % of all wages | SSA Publication 15 |
+| Additional Medicare Tax | 0.9 % above $200,000 / $250,000 | SSA Publication 15 |
+
+Nothing in `src/lib/calc/tax.ts` reaches the network. The figures are read
+from the source, dated, and replaced by hand when the next set is published,
+which is usually in October. A unit test pins each bracket against the
+revenue procedure, so a mistyped digit fails the build rather than the
+reader.
+
+The state income tax is deliberately not modelled: most states tax in bands,
+and a per-state table that is out of date is worse than a rate the reader
+types in. The calculators take the rate as an input and say so on the page.
+
 ## The ladder after AdSense
 
 Each network has a threshold that has to be reached before the account can be
@@ -437,9 +461,21 @@ closed-form formula at every compounding frequency.
 - The reviewer's bio is deliberately short. It says what she does on the site, not
   what she is professionally qualified to do; a real credential and a profile
   that shows the financial background would strengthen the E-E-A-T signal.
-- Net pay, debt payoff and tax calculators are planned but not built. They
-  need reference data with dates, which is a different kind of work from the
-  pure-arithmetic tools here.
+- The tax figures are for the 2026 tax year and they have to be replaced by
+  hand when the next set is published, usually in October. The brackets and the
+  standard deduction live in `src/lib/calc/tax.ts` with the revenue procedure
+  they came from; the payroll tax limits live next to them with the Social
+  Security Administration's figures. Nothing in that file reads from a network
+  service, so a year going by is a maintenance task and not a break.
+- The state income tax is a rate the reader types in, applied to the whole of
+  the taxable income. Most states tax in bands, so the real figure is usually
+  lower, and a per-state table would be a better answer than one number.
+- The debt payoff calculator refuses to print a figure that does not exist.
+  When the minimum payments are smaller than the monthly interest, the
+  balance grows and the debts are never cleared, so there is no finished
+  schedule to measure the other two runs against. The interest-saved cells
+  stay empty and the page says why, rather than printing a number made of a
+  hundred years of interest that never ends.
 - The AdSense account is the last thing standing between the site and its
   first advertisement. Apply with the site at its final address.
 - The newsletter form is hidden until a Buttondown form URL is configured, so

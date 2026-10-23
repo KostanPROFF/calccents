@@ -1,0 +1,150 @@
+---
+import { getUi } from '../../i18n/ui/index.ts';
+import ResultPanel from '../ResultPanel.astro';
+import AdSlot from '../AdSlot.astro';
+import type { Locale } from '../../i18n/locales.ts';
+
+interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+const ui = getUi(locale);
+const copy = ui.tool['income-tax'];
+---
+
+<div>
+  <form class="card" id="income-tax-form" novalidate>
+    <label class="field" for="it-gross">
+      <span class="field__label">{copy.fields.grossIncome}</span>
+      <span class="field__control">
+        <span class="field__prefix" aria-hidden="true">$</span>
+        <input class="input input--prefixed" id="it-gross" type="number"
+          inputmode="decimal" step="1000" min="0" value="85000" />
+      </span>
+    </label>
+
+    <div class="input-group">
+      <label class="field" for="it-status">
+        <span class="field__label">{copy.fields.filingStatus}</span>
+        <span class="field__control">
+          <select class="input" id="it-status">
+            <option value="single" selected>{copy.terms.filingStatuses.single}</option>
+            <option value="married">{copy.terms.filingStatuses.married}</option>
+            <option value="head-of-household">{copy.terms.filingStatuses.head}</option>
+          </select>
+        </span>
+      </label>
+      <label class="field" for="it-itemised">
+        <span class="field__label">{copy.fields.itemisedDeduction}</span>
+        <span class="field__control">
+          <span class="field__prefix" aria-hidden="true">$</span>
+          <input class="input input--prefixed" id="it-itemised" type="number"
+            inputmode="decimal" step="100" min="0" value="0" />
+        </span>
+      </label>
+    </div>
+
+    <div class="input-group">
+      <label class="field" for="it-state-rate">
+        <span class="field__label">
+          {copy.fields.stateRate}
+          <span class="field__hint">{copy.fields.stateRateHint}</span>
+        </span>
+        <span class="field__control">
+          <input class="input" id="it-state-rate" type="number" inputmode="decimal"
+            step="0.1" min="0" max="20" value="0" />
+          <span class="field__suffix" aria-hidden="true">%</span>
+        </span>
+      </label>
+      <label class="field" for="it-pretax">
+        <span class="field__label">
+          {copy.fields.preTax}
+          <span class="field__hint">{copy.fields.preTaxHint}</span>
+        </span>
+        <span class="field__control">
+          <span class="field__prefix" aria-hidden="true">$</span>
+          <input class="input input--prefixed" id="it-pretax" type="number"
+            inputmode="decimal" step="100" min="0" value="0" />
+        </span>
+      </label>
+    </div>
+
+    <button type="button" class="btn" id="it-use-standard" style="margin-top: var(--space-5);">
+      {copy.fields.useStandard}
+    </button>
+  </form>
+</div>
+
+<div class="tool-panel">
+  <ResultPanel
+    headlineId="it-tax"
+    headlineLabel={copy.result.headlineLabel}
+    headline="—"
+    stats={[
+      { id: 'it-taxable', label: copy.result.taxableIncome, value: '—' },
+      { id: 'it-deduction', label: copy.result.deductionApplied, value: '—' },
+      { id: 'it-standard', label: copy.result.standardDeduction, value: '—' },
+      { id: 'it-itemised-out', label: copy.result.itemisedDeduction, value: '—' },
+      { id: 'it-state', label: copy.result.stateTax, value: '—' },
+      { id: 'it-total', label: copy.result.totalTax, value: '—' },
+      { id: 'it-effective', label: copy.result.effectiveRate, value: '—' },
+      { id: 'it-marginal', label: copy.result.marginalRate, value: '—' },
+      { id: 'it-after', label: copy.result.afterTax, value: '—' },
+    ]}
+    note={copy.result.note}
+  />
+  <p class="muted-block" style="margin-top: var(--space-4);">
+    {copy.resultNote}
+  </p>
+  <AdSlot placement="result" />
+</div>
+
+<script>
+  import { computeIncomeTax, standardDeduction } from '../../lib/calc/tax.ts';
+  import type { FilingStatus } from '../../lib/calc/tax.ts';
+  import { formatCurrency, formatPercent } from '../../lib/calc/money.ts';
+  import { numberValue, selectValue, setText } from '../../lib/client/dom.ts';
+
+  const ids = ['it-gross', 'it-status', 'it-itemised', 'it-state-rate', 'it-pretax'];
+
+  function recalculate(): void {
+    const grossIncome = Math.max(0, numberValue('it-gross'));
+    const filingStatus = selectValue('it-status', 'single') as FilingStatus;
+    const itemisedDeduction = Math.max(0, numberValue('it-itemised'));
+    const stateRatePercent = Math.max(0, numberValue('it-state-rate'));
+    const preTaxDeductions = Math.max(0, numberValue('it-pretax'));
+
+    const result = computeIncomeTax({
+      grossIncome,
+      filingStatus,
+      preTaxDeductions,
+      itemisedDeduction,
+      stateRatePercent,
+    });
+
+    setText('it-tax', formatCurrency(result.federalTax));
+    setText('it-taxable', formatCurrency(result.taxableIncome));
+    setText('it-deduction', formatCurrency(result.deduction));
+    setText('it-standard', formatCurrency(standardDeduction(filingStatus)));
+    setText('it-itemised-out', formatCurrency(itemisedDeduction));
+    setText('it-state', formatCurrency(result.stateTax));
+    setText('it-total', formatCurrency(result.totalTax));
+    setText('it-effective', formatPercent(result.effectiveRate));
+    setText('it-marginal', formatPercent(result.marginalRate * 100));
+    setText('it-after', formatCurrency(result.afterTaxIncome));
+  }
+
+  for (const id of ids) {
+    document.getElementById(id)?.addEventListener('input', recalculate);
+    document.getElementById(id)?.addEventListener('change', recalculate);
+  }
+
+  document.getElementById('it-use-standard')?.addEventListener('click', () => {
+    const input = document.getElementById('it-itemised') as HTMLInputElement | null;
+    if (input) input.value = '0';
+    recalculate();
+  });
+
+  recalculate();
+</script>

@@ -41,6 +41,9 @@ export const es = {
       'mortgage-payment': 'Pago de hipoteca',
       'rent-vs-buy': 'Alquiler o compra',
       'compound-interest': 'Interés compuesto',
+      'net-pay': 'Salario neto',
+      'income-tax': 'Impuesto federal sobre la renta',
+      'debt-payoff': 'Amortización de deudas',
     },
     links: {
       guides: 'Guías',
@@ -96,13 +99,13 @@ export const es = {
   home: {
     title: 'Calccents — Calculadoras financieras que muestran sus cuentas',
     description:
-      'Calculadoras financieras gratuitas para el pago de hipotecas, para comparar alquiler y compra y para el interés compuesto. Se muestra cada fórmula, cada supuesto te corresponde a ti, y ninguna página te dice qué hacer con el resultado.',
+      'Calculadoras financieras gratuitas para el pago de hipotecas, comparar alquiler y compra, el interés compuesto, el salario neto, el impuesto federal y la amortización de deudas. Se muestra cada fórmula.',
     eyebrow: 'Calculadoras financieras',
     heading: 'Conoce la cifra antes de decidir',
-    lede: 'Herramientas gratuitas para la aritmética de una hipoteca, un alquiler y un montón de ahorros. Cada fórmula está escrita, cada supuesto te corresponde a ti, y ninguna página te dice qué hacer con el resultado.',
+    lede: 'Herramientas gratuitas para la aritmética de una hipoteca, un alquiler, un salario neto y un montón de ahorros. Cada fórmula está escrita, cada supuesto te corresponde a ti, y ninguna página te dice qué hacer con el resultado.',
     cta: 'Ver las calculadoras',
     calculatorsEyebrow: 'Las calculadoras',
-    calculatorsHeading: 'Tres preguntas, tres conjuntos de cifras',
+    calculatorsHeading: 'Seis preguntas, seis conjuntos de cifras',
     workHeading: 'Cada cifra muestra sus cuentas',
     workPoints: [
       'La fórmula está junto a la respuesta, en lenguaje claro y en símbolos.',
@@ -270,6 +273,10 @@ export const es = {
       {
         label: 'Internal Revenue Service (IRS) — brackets fiscales, ajustes por inflación, reglas de jubilación',
         url: 'https://www.irs.gov/',
+      },
+      {
+        label: 'Social Security Administration (SSA) — tipos de las cargas sociales, base imponible, límite anual',
+        url: 'https://www.ssa.gov/',
       },
       {
         label: 'Freddie Mac — Encuesta sobre el mercado hipotecario primario',
@@ -823,6 +830,331 @@ export const es = {
         yearsOne: '1 año',
         yearsOther: '{n} años',
       },
+    },
+
+    'net-pay': {
+      name: 'Calculadora de salario neto',
+      title: 'Calculadora de salario neto para el ejercicio fiscal 2026',
+      description:
+        'Calcula lo que queda de un salario después del impuesto federal sobre la renta, el Social Security, el Medicare y el impuesto estatal, para cualquier periodo de pago, con cada deducción a la vista.',
+      short: 'Lo que queda de un salario tras el impuesto federal, las cargas sociales y el impuesto estatal.',
+      category: 'Nómina',
+      methodNote:
+        'Las cifras son las del ejercicio fiscal 2026: Rev. Proc. 2025-32 para los tramos federales y la deducción estándar, y la Social Security Administration para los límites de las cargas sociales. Nada de esta página es una cotización de un proveedor de nóminas.',
+      fields: {
+        grossPay: 'Salario bruto',
+        payPeriod: 'Periodo de pago',
+        filingStatus: 'Situación fiscal',
+        stateRate: 'Tipo de impuesto estatal sobre la renta',
+        stateRateHint: 'el tipo de tu tramo',
+        preTax: 'Deducciones antes de impuestos',
+        preTaxHint: '401(k), HSA, FSA al año',
+        perYear: 'al año',
+        debtName: 'Deuda',
+        balance: 'Saldo',
+        rate: 'Tipo',
+        minimum: 'Pago mínimo',
+      },
+      terms: {
+        payPeriods: {
+          year: 'Anualmente',
+          month: 'Mensual',
+          week: 'Semanal',
+          day: 'Por día',
+          hour: 'Por hora',
+        },
+        filingStatuses: {
+          single: 'Soltero',
+          married: 'Casado, declaración conjunta',
+          head: 'Cabeza de familia',
+        },
+      },
+      result: {
+        headlineLabel: 'Salario neto',
+        annualGross: 'Salario bruto del año',
+        federalTax: 'Impuesto federal sobre la renta',
+        socialSecurity: 'Social Security',
+        medicare: 'Medicare',
+        additionalMedicare: 'Impuesto adicional de Medicare',
+        stateTax: 'Impuesto estatal sobre la renta',
+        totalTax: 'Impuesto total',
+        netPerMonth: 'Neto al mes',
+        effectiveRate: 'Tipo efectivo de impuesto',
+        note:
+          'El importe neto es el salario bruto menos las deducciones anteriores, dividido por el número de periodos de pago del año.',
+      },
+      resultNote:
+        'Un sistema de nóminas aplica las elecciones de retención del W-4 y los importes ya retenidos durante el año, así que la cifra de una nómina real se mueve un poco de un mes a otro.',
+      formula:
+        'salario neto = salario bruto − deducciones antes de impuestos − impuesto federal sobre la renta − Social Security − Medicare − impuesto estatal sobre la renta',
+      method: [
+        'El cálculo parte del salario bruto y retrocede por las deducciones, en el mismo orden en que las aplica un sistema de nóminas. Las deducciones antes de impuestos salen primero, porque una aportación a un 401(k) o a una cuenta de salud se resta del salario antes de que este se grave. Lo que queda es el salario gravable.',
+        'El impuesto federal sobre la renta se calcula sobre ese salario gravable. Se resta la deducción estándar de la situación fiscal y el resultado pasa por la tabla de tramos de 2026. Cada tramo es un importe fijo de impuesto más un porcentaje de los ingresos por encima del suelo de ese tramo, que es como el IRS publica la tabla.',
+        'Después vienen las cargas sociales. El Social Security es el 6.2% del salario hasta el máximo imponible de $184,500 para 2026. El Medicare es el 1.45% de todo el salario sin techo, y el impuesto adicional de Medicare es el 0.9% de la parte por encima de $200,000 para un declarante soltero, o por encima de $250,000 para una declaración conjunta de casados.',
+        'El impuesto estatal sobre la renta es el tipo que introduces, aplicado a los ingresos gravables. Es una estimación: la mayoría de los estados grava por tramos, así que un único tipo aplicado a todos los ingresos sobreestima lo que paga la mayoría de la gente. La cifra final es lo que queda, dividido por el número de periodos de pago del año.',
+      ],
+      limits: [
+        'No modela los créditos fiscales. El crédito fiscal por hijos, el crédito fiscal por ingresos del trabajo y los créditos educativos cambian la cifra final y no están en el cálculo.',
+        'No modela las plusvalías, los ingresos por trabajo autónomo ni el tratamiento de los ingresos por encima de la base imponible del Social Security, donde el Medicare se sigue aplicando y el Social Security no.',
+        'No modela los impuestos locales. Los impuestos sobre la renta de ciudad y de condado son distintos del tipo estatal.',
+        'Los recuentos de periodos de pago son convencionales: 12 meses, 52 semanas, 260 días laborables o 2,080 horas para una semana de 40 horas a lo largo de 52 semanas. Quien cobra con otro calendario puede introducir la cifra anual.',
+        'Una aportación a un 401(k) por encima del límite anual no queda exenta de las cargas sociales en su totalidad, y este cálculo trata todo el importe antes de impuestos como exento.',
+      ],
+      faq: [
+        {
+          q: '¿Por qué mi salario neto es menor que el bruto menos el impuesto sobre la renta?',
+          a: 'Porque el salario se reduce por el Social Security y el Medicare antes de calcular el impuesto sobre la renta. Esas son cargas sociales sobre el empleo, distintas del impuesto sobre la renta de la nómina.',
+        },
+        {
+          q: '¿Esto usa mi tramo de impuestos real?',
+          a: 'Usa la tabla de tramos de 2026 y la deducción estándar de la situación fiscal, así que la cifra se acerca a lo que calcula un sistema de nóminas para quien cobra un salario y no tiene otros ingresos. No sabe nada de créditos, otras deducciones ni otros ingresos.',
+        },
+        {
+          q: '¿Cuál es la diferencia entre el tipo efectivo y el marginal?',
+          a: 'El tipo marginal es el tipo al que se grava el siguiente dólar de ingresos gravables, y es el tramo más alto al que llega el ingreso. El tipo efectivo es el impuesto total dividido por todos los ingresos, y es menor, porque los tramos más altos solo se aplican a la parte de los ingresos que los supera.',
+        },
+        {
+          q: '¿Qué tipo estatal corresponde?',
+          a: 'El que se aplica a tu propio tramo en tu estado. La mayoría de los estados grava por tramos, así que el tipo efectivo es menor que el tipo máximo. Ese único número es exacto en un estado con tipo plano y en un estado sin impuesto sobre la renta.',
+        },
+        {
+          q: '¿Por qué el Social Security tiene tope y el Medicare no?',
+          a: 'El Social Security tiene un máximo imponible que se fija cada año, $184,500 para 2026, y las ganancias por encima de él no tributan por Social Security. El Medicare no tiene techo, así que se aplica a cada dólar del salario.',
+        },
+        {
+          q: '¿Sirve esto para calcular mi factura de impuestos?',
+          a: 'No. Calcula el impuesto retenido de un salario. Una declaración de impuestos es otro cálculo: incluye otros ingresos, deducciones, créditos y los pagos ya realizados, y se presenta una vez al año en lugar de en cada periodo de pago.',
+        },
+      ],
+      sources: [
+        {
+          label: 'IRS — Rev. Proc. 2025-32, ajustes por inflación para el ejercicio fiscal 2026',
+          url: 'https://www.irs.gov/irb/2025-45_IRB',
+        },
+        {
+          label: 'Social Security Administration — base imponible y COLA de 2026',
+          url: 'https://www.ssa.gov/cola/',
+        },
+        {
+          label: 'Social Security Administration — Publicación 15, Guía de impuestos del empleador',
+          url: 'https://www.ssa.gov/pubs/EN-05-10035.pdf',
+        },
+        {
+          label: 'IRS — Tax Topic 511, Retenciones',
+          url: 'https://www.irs.gov/taxtopics/tc511',
+        },
+      ],
+      relatedGuides: [
+        { slug: 'net-pay-calculator-explained', title: 'Cómo se calcula el salario neto' },
+      ],
+    },
+
+    'income-tax': {
+      name: 'Calculadora del impuesto federal sobre la renta',
+      title: 'Calculadora del impuesto federal sobre la renta para el ejercicio fiscal 2026',
+      description:
+        'Calcula el impuesto federal sobre la renta de 2026 sobre un año de ingresos, con la situación fiscal, la deducción y los tipos efectivo y marginal uno al lado del otro.',
+      short: 'Impuesto federal sobre la renta de un año de ingresos, con los dos tipos a la vista.',
+      category: 'Impuestos',
+      methodNote:
+        'Los tramos y la deducción estándar son las cifras de 2026 de Rev. Proc. 2025-32, publicadas el 3 de noviembre de 2025. Las cargas sociales que se restan de un salario no forman parte de este cálculo; están en la calculadora de salario neto.',
+      fields: {
+        grossIncome: 'Ingresos brutos del año',
+        filingStatus: 'Situación fiscal',
+        itemisedDeduction: 'Deducciones detalladas',
+        standardDeduction: 'Deducción estándar',
+        useStandard: 'Usar la deducción estándar',
+        stateRate: 'Tipo de impuesto estatal sobre la renta',
+        stateRateHint: 'el tipo de tu tramo',
+        preTax: 'Deducciones antes de impuestos',
+        preTaxHint: '401(k), HSA, FSA al año',
+        perYear: 'al año',
+      },
+      terms: {
+        filingStatuses: {
+          single: 'Soltero',
+          married: 'Casado, declaración conjunta',
+          head: 'Cabeza de familia',
+        },
+      },
+      result: {
+        headlineLabel: 'Impuesto federal sobre la renta',
+        taxableIncome: 'Ingresos gravables',
+        deductionApplied: 'Deducción aplicada',
+        standardDeduction: 'Deducción estándar',
+        itemisedDeduction: 'Deducción detallada',
+        federalTax: 'Impuesto federal sobre la renta',
+        stateTax: 'Impuesto estatal sobre la renta',
+        totalTax: 'Impuesto total',
+        effectiveRate: 'Tipo efectivo',
+        marginalRate: 'Tipo marginal',
+        afterTax: 'Ingresos después de impuestos',
+        note:
+          'La deducción que se aplica es la mayor de las dos: la deducción estándar o la deducción detallada que se introduce a la izquierda.',
+      },
+      resultNote:
+        'La cifra es una obligación tributaria, no el importe retenido de una nómina. No incluye créditos ni los pagos ya realizados durante el año.',
+      formula:
+        'ingresos gravables = ingresos brutos − deducciones antes de impuestos − deducción; impuesto = tabla de tramos aplicada a los ingresos gravables',
+      method: [
+        'El cálculo parte de los ingresos brutos del año y resta las deducciones antes de impuestos, porque una aportación a un 401(k) o a una cuenta de salud no tributa como ingreso.',
+        'Después viene la deducción. Se usa la deducción estándar de la situación fiscal salvo que se introduzcan deducciones detalladas, y se aplica la mayor de las dos. La deducción estándar de 2026 es $16,100 para un declarante soltero, $32,200 para una declaración conjunta de casados y $24,150 para cabeza de familia.',
+        'Lo que queda son los ingresos gravables, y el impuesto es la tabla de tramos de 2026 aplicada a esa cifra. Cada tramo es un importe fijo de impuesto más un porcentaje de los ingresos por encima del suelo de ese tramo, tal como lo publica el IRS.',
+        'Los dos tipos responden a preguntas distintas. El tipo marginal es el tipo al que se grava el siguiente dólar de ingresos gravables, que es el tramo más alto al que llega el ingreso. El tipo efectivo es el impuesto total dividido por todos los ingresos, y es menor porque los tramos más altos solo alcanzan a la parte de los ingresos que los supera.',
+      ],
+      limits: [
+        'No modela los créditos fiscales. El crédito fiscal por hijos, el crédito fiscal por ingresos del trabajo y los créditos educativos reducen el impuesto y no están en el cálculo.',
+        'No modela la diferencia entre las plusvalías y los ingresos ordinarios, así que un año con ingresos de inversión se calcula con los tipos ordinarios.',
+        'No modela la deducción por edad ni ninguna deducción fuera de los importes estándar y detallado que se introducen a la izquierda.',
+        'No modela el impuesto por trabajo autónomo, que se cobra sobre los ingresos netos de quien trabaja por cuenta propia y tiene su propia base y su propio tipo.',
+        'La cifra estatal es un tipo que introduces, aplicado a la totalidad de los ingresos gravables. La mayoría de los estados grava por tramos, así que el impuesto estatal real suele ser menor.',
+      ],
+      faq: [
+        {
+          q: '¿Qué deducción se aplica?',
+          a: 'La estándar, salvo que las deducciones detalladas sumen más. La calculadora muestra la deducción estándar de la situación fiscal y la cifra detallada una al lado de la otra, así que la comparación es de un vistazo.',
+        },
+        {
+          q: '¿Cuál es la diferencia entre el tipo efectivo y el marginal?',
+          a: 'El tipo marginal es el tipo al que se grava el siguiente dólar de ingresos gravables. El tipo efectivo es el impuesto total dividido por todos los ingresos, y es menor, porque los tramos por encima del primero solo se aplican a la parte de los ingresos que los supera.',
+        },
+        {
+          q: '¿Por qué el impuesto da un salto en ciertos ingresos?',
+          a: 'Ese es el límite de un tramo. Por encima de él, otro dólar se grava al tipo siguiente, así que el impuesto sube más deprisa que los ingresos. El tipo marginal indica en qué tramo está el ingreso.',
+        },
+        {
+          q: '¿Esto incluye el Social Security y el Medicare?',
+          a: 'No. Esas son cargas sociales que se cobran sobre un salario, con sus propios topes, y se calculan en la calculadora de salario neto.',
+        },
+        {
+          q: '¿Qué es la cifra del impuesto estatal?',
+          a: 'El tipo que se introduce a la izquierda, aplicado a los ingresos gravables. La mayoría de los estados grava por tramos, así que la cifra real para un ingreso concreto suele ser menor que esta estimación.',
+        },
+        {
+          q: '¿Es esta la cantidad final?',
+          a: 'Es el impuesto antes de los créditos y antes de los pagos ya realizados durante el año. Una declaración suma los créditos, suma todo lo demás que no se gravó por nómina y resta lo ya pagado.',
+        },
+      ],
+      sources: [
+        {
+          label: 'IRS — Rev. Proc. 2025-32, ajustes por inflación para el ejercicio fiscal 2026',
+          url: 'https://www.irs.gov/irb/2025-45_IRB',
+        },
+        {
+          label: 'IRS — Tax Topic 505, Retenciones y pagos estimados de impuestos',
+          url: 'https://www.irs.gov/taxtopics/tc505',
+        },
+        {
+          label: 'IRS — Tax Topic 611, Impuesto sobre la renta',
+          url: 'https://www.irs.gov/taxtopics/tc611',
+        },
+      ],
+      relatedGuides: [
+        { slug: 'income-tax-calculator-explained', title: 'Cómo se calcula el impuesto federal sobre la renta' },
+      ],
+    },
+
+    'debt-payoff': {
+      name: 'Calculadora de amortización de deudas',
+      title: 'Calculadora de amortización de deudas: Avalancha y bola de nieve',
+      description:
+        'Compara la amortización de varias deudas a la vez: solo los pagos mínimos, el orden Avalancha y el orden bola de nieve, con los meses hasta quedar libre de deudas y el interés ahorrado.',
+      short: 'Amortiza varias deudas a la vez y compara el orden.',
+      category: 'Deuda',
+      methodNote:
+        'El modelo es una simulación mes a mes: los intereses se acumulan sobre el saldo al inicio del mes, los pagos van primero a los intereses y el dinero extra va a la deuda que has elegido.',
+      fields: {
+        debtName: 'Deuda',
+        balance: 'Saldo',
+        rate: 'Tipo de interés',
+        minimum: 'Pago mínimo',
+        addDebt: 'Añadir una deuda',
+        removeDebt: 'Quitar esta deuda',
+        extraPayment: 'Pago mensual extra',
+        extraPaymentHint: 'además de cada pago mínimo',
+      },
+      terms: {
+        strategies: {
+          minimum: 'Solo mínimos',
+          avalanche: 'Avalancha',
+          snowball: 'Bola de nieve',
+        },
+        orderHints: {
+          avalanche: 'el tipo de interés más alto primero',
+          snowball: 'el saldo más pequeño primero',
+        },
+      },
+      result: {
+        headlineLabel: 'Interés ahorrado',
+        interestSaved: 'Interés ahorrado frente a los pagos mínimos',
+        monthsToFree: 'Meses hasta quedar libre de deudas',
+        totalInterest: 'Interés total',
+        totalPaid: 'Total pagado',
+        minimumOnly: 'Solo mínimos',
+        avalanche: 'Avalancha',
+        snowball: 'Bola de nieve',
+        minimumsNeverCover: 'Nunca se salda',
+        minimumsNeverCoverNote:
+          'Los pagos mínimos de estas deudas no cubren los intereses, así que el saldo crece en lugar de bajar. Solo con los pagos mínimos las deudas nunca se saldan, y no hay intereses que ahorrar frente a esa situación. El pago extra es lo que las hace bajar.',
+        note:
+          'Avalancha paga primero la deuda con el tipo más alto y cuesta menos intereses. Bola de nieve salda antes el saldo más pequeño y termina esa deuda antes. La diferencia entre las dos es el precio del orden.',
+      },
+      resultNote:
+        'Las tres simulaciones usan las mismas deudas y el mismo pago extra. Lo único que cambia es el orden en el que va el dinero extra.',
+      formula:
+        'interés del mes = saldo al inicio del mes × tipo anual ÷ 12; el pago va primero a los intereses y después al capital',
+      method: [
+        'El cálculo es una simulación mes a mes. Al inicio de cada mes los intereses se cobran sobre el saldo y se suman a este. El dinero disponible ese mes es la suma de todos los pagos mínimos más el pago extra que introduces a la izquierda, y se aplica primero a los intereses y después al capital.',
+        'Una deuda saldada deja de recibir su pago mínimo, y ese mínimo se suma al dinero que va a la siguiente deuda. Ese es el mecanismo detrás de la diferencia entre los órdenes: la misma cantidad mensual, gastada en una deuda u otra, termina antes saldos diferentes.',
+        'El orden avalanche envía el dinero extra primero a la deuda con el tipo de interés más alto. Es el orden que menos cuesta en dólares, porque los intereses que deja de generar son los más caros de los que se pagan.',
+        'El orden bola de nieve envía el dinero extra primero al saldo más pequeño. Cuesta más intereses en total y salda antes una cuenta, que es otro tipo de resultado. La calculadora muestra los dos y el interés ahorrado en cada caso, de modo que se pueden comparar con las mismas cifras.',
+      ],
+      limits: [
+        'No modela los tipos variables. Una tarjeta de crédito con tipo variable cambia los intereses según se mueva el índice, y el calendario de aquí supone que el tipo se mantiene donde se escribió.',
+        'No modela las comisiones: los recargos por pago tardío, las comisiones por traspaso de saldo y las cuotas anuales de las tarjetas no están en el total.',
+        'Carga los intereses una vez al mes. Una tarjeta de crédito que capitaliza a diario cobra algo más a lo largo del año, así que la cifra real de un saldo de tarjeta suele ser algo mayor que esta.',
+        'No modela el tratamiento fiscal de los intereses, que en algunas deudas se pueden deducir y en otras no.',
+        'No modela un cambio en los pagos mínimos, que los prestamistas a veces bajan por dificultad y a veces suben conforme baja el saldo.',
+      ],
+      faq: [
+        {
+          q: '¿Cuál es la diferencia entre avalanche y bola de nieve?',
+          a: 'Solo el orden. Avalancha envía el dinero extra primero a la deuda con el tipo de interés más alto, y bola de nieve primero al saldo más pequeño. Las deudas, los pagos mínimos y el pago extra son los mismos en las dos simulaciones.',
+        },
+        {
+          q: '¿Cuál de las dos ahorra más dinero?',
+          a: 'Avalancha, en intereses. El dinero extra frena primero la deuda más cara, así que se acumulan menos intereses a lo largo de la vida de las deudas. La calculadora imprime la diferencia del interés ahorrado para cada orden.',
+        },
+        {
+          q: '¿Por qué existe la bola de nieve si cuesta más?',
+          a: 'Salda primero el saldo más pequeño, así que una deuda llega a cero antes. Ese es un resultado distinto del que miden los intereses, y la calculadora muestra los dos para compararlos con las mismas cifras.',
+        },
+        {
+          q: '¿Cómo se calculan los intereses?',
+          a: 'Sobre el saldo al inicio de cada mes, al tipo anual dividido entre doce, y se suman al saldo. Los pagos van después primero a esos intereses y después al capital.',
+        },
+        {
+          q: '¿Qué pasa con el pago mínimo de una deuda saldada?',
+          a: 'Se suma al dinero que va a la siguiente deuda, así que la cantidad mensual que va a las deudas nunca baja. Eso es lo que hace que las fechas de cancelación sean más cortas que la suma de los calendarios por separado.',
+        },
+        {
+          q: '¿Esto tiene en cuenta una tarjeta de crédito que capitaliza a diario?',
+          a: 'No. El modelo carga los intereses una vez al mes. Una tarjeta que capitaliza cada día cobra algo más a lo largo de un año, así que la cifra real de un saldo de tarjeta suele ser algo mayor que la de aquí.',
+        },
+      ],
+      sources: [
+        {
+          label: 'CFPB — Ask CFPB, preguntas y respuestas de consumo',
+          url: 'https://www.consumerfinance.gov/ask-cfpb/',
+        },
+        {
+          label: 'CFPB — Herramientas para tarjetas de crédito y orientación al consumidor',
+          url: 'https://www.consumerfinance.gov/consumer-tools/credit-cards/',
+        },
+      ],
+      relatedGuides: [
+        { slug: 'debt-payoff-calculator-explained', title: 'Cómo funciona amortizar varias deudas' },
+      ],
     },
 
   },

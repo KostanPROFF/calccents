@@ -1,0 +1,128 @@
+---
+title: "Calculadora de impuesto sobre la renta 2026"
+description: "Cómo se construye el ingreso gravable desde el sueldo bruto, cómo funcionan las escalas federales de 2026 y qué significan la deducción estándar y los dos tipos de tasa."
+locale: "es"
+date: 2026-10-23
+lastReviewed: 2026-10-23
+author: "Kostan Proff"
+reviewedBy: "Tetiana Goncharko"
+group: "home"
+readingMinutes: 9
+sources:
+  - label: "IRS — Rev. Proc. 2025-32, 2026 inflation adjustments"
+    url: "https://www.irs.gov/irb/2025-45_IRB"
+  - label: "IRS — Tax Topic 505, Tax Withholding and Estimated Tax Payments"
+    url: "https://www.irs.gov/taxtopics/tc505"
+  - label: "IRS — Tax Topic 611, Income Tax"
+    url: "https://www.irs.gov/taxtopics/tc611"
+relatedTools:
+  - "income-tax"
+faq:
+  - q: "¿Qué ejercicio fiscal usa la calculadora?"
+    a: "El de 2026. Las escalas y la deducción estándar provienen de la Rev. Proc. 2025-32, publicada en el Internal Revenue Bulletin 2025-45 el 3 de noviembre de 2025, y las cifras del cálculo se leen de ese documento y no de la tabla del año anterior."
+  - q: "¿En qué se diferencia el ingreso gravable del ingreso bruto?"
+    a: "El ingreso gravable es lo que queda tras las deducciones antes de impuestos —una aportación al 401(k), una HSA o una FSA— y tras la deducción estándar o por partidas. Las escalas se aplican al ingreso gravable, no a la cifra bruta de la nómina."
+  - q: "¿Qué diferencia hay entre la tasa marginal y la tasa efectiva?"
+    a: "La tasa marginal es la que encuentra el próximo dólar de ingreso gravable: el 22% con $83,900 de ingreso gravable para un soltero. La tasa efectiva es todo el impuesto dividido entre todos los ingresos, que para esa misma persona es alrededor del 13% de lo ganado."
+  - q: "¿Cómo trata la calculadora la deducción por partidas?"
+    a: "Usa la cifra por partidas cuando esa cifra es mayor que la deducción estándar del estado civil. Cuando es menor, se aplica la deducción estándar y el ingreso gravable queda más alto."
+  - q: "¿Incluye la calculadora los créditos fiscales?"
+    a: "No. No modela los créditos fiscales, el crédito por dependientes, las escalas de plusvalías ni la deducción para declarantes mayores. La cifra federal es el impuesto ordinario sobre la renta del ingreso gravable."
+  - q: "¿Es exacta la cifra del impuesto estatal?"
+    a: "Es una estimación. El tipo es el que se introduce en la calculadora y se aplica a todo el ingreso gravable. En un estado de tipo plano es exacta, y en uno progresivo sobrestima el impuesto."
+  - q: "¿Incluye el Seguro Social y Medicare?"
+    a: "No. Son impuestos sobre la nómina, retenidos del salario con sus propios tipos y sus propios topes, y van aparte del impuesto sobre la renta de las ganancias."
+---
+
+El impuesto federal sobre la renta de un año de ingresos es una tabla publicada
+aplicada a una cifra que se arma en varios pasos. La
+<a href="/es/tools/income-tax/">calculadora de impuesto sobre la renta</a> de
+este sitio ejecuta esos pasos en orden y muestra el desarrollo del cálculo. Las
+cifras de 2026 provienen de la Rev. Proc. 2025-32, publicada en el Internal
+Revenue Bulletin 2025-45 el 3 de noviembre de 2025.
+
+En la página no hay proyecciones ni datos que cambien en vivo. Las escalas y la
+deducción estándar son las publicadas para el ejercicio fiscal de 2026, y cada
+resultado se deriva de ellas y de los valores que se introducen.
+
+## Del sueldo bruto al ingreso gravable
+
+El ingreso gravable no es la cifra de la nómina. La calculadora parte del
+ingreso bruto del año, resta las deducciones antes de impuestos que se
+introducen —una aportación al 401(k), una HSA o una FSA— y después resta la
+deducción.
+
+La deducción es la deducción estándar del estado civil, salvo que se introduzca
+una cifra por partidas mayor. Para 2026 la deducción estándar es de $16,100
+para un declarante soltero y para casados que presentan por separado, de
+$32,200 para casados que presentan juntos y de $24,150 para cabeza de familia.
+
+Lo que queda es el ingreso gravable. Las escalas se aplican a esa cifra, y a esa
+misma cifra se aplica la estimación del impuesto estatal.
+
+## Cómo funcionan las escalas
+
+El IRS publica cada escala no como un porcentaje fijo sobre cada tramo, sino
+como un importe fijo de impuesto más un porcentaje del exceso sobre el límite
+inferior de ese tramo. Para un soltero en 2026 los tipos son 10% sobre los
+primeros $12,400, 12% hasta $50,400, 22% hasta $105,700, 24% hasta $201,775,
+32% hasta $256,225, 35% hasta $640,600 y 37% por encima de esa cifra.
+
+En esa forma la tabla se lee como una serie de puntos de control: el impuesto
+es de $1,240 a los $12,400, de $5,800 a los $50,400, de $17,966 a los $105,700,
+de $41,024 a los $201,775, de $58,448 a los $256,225 y de $192,979.25 a los
+$640,600. Un ingreso gravable de $83,900 para un soltero da $5,800 más el 22% de
+los $33,500 que superan los $50,400, es decir $5,800 más $7,370 — un impuesto
+federal de $13,170.
+
+De ahí salen dos tasas, y contestan a preguntas distintas. La tasa marginal es
+la que encuentra el próximo dólar: con $83,900 de ingreso gravable, el próximo
+dólar se grava al 22%. La tasa efectiva es todo el impuesto dividido entre
+todos los ingresos: la misma persona, con $100,000 de ingreso bruto y la
+deducción estándar de $16,100, paga $13,170 de impuesto federal, alrededor del
+13% de lo ganado.
+
+## La deducción estándar y la deducción por partidas
+
+Un dólar de deducción es un dólar de ingreso gravable, y el ingreso gravable se
+grava a la tasa marginal, así que un dólar de deducción ahorra la tasa marginal
+en impuestos. Por eso el importe de la deducción importa más a quien está en
+una escala alta que a quien está en una escala baja: los primeros dólares de
+ingreso se gravan al 10%, de modo que la deducción estándar vale $16,100 de
+impuesto a un soltero en la parte baja de la tabla y bastante más arriba.
+
+La calculadora pide la deducción por partidas y la usa cuando es mayor que la
+deducción estándar del estado civil. Cuando la cifra por partidas es menor, se
+aplica la deducción estándar y el ingreso gravable queda más alto. En el
+resultado se ve cuál de las dos se usó.
+
+## Qué no cubre la cifra
+
+La cifra federal es el impuesto ordinario sobre la renta del ingreso gravable, y
+ahí termina el cálculo. No modela:
+
+- **Los créditos fiscales.** Reducen el impuesto una vez calculado, y aquí no
+  se aplica ninguno.
+- **El crédito por dependientes.** Lo mismo se aplica a él, y suele ser una de
+  las mayores diferencias entre el impuesto calculado y el impuesto pagado.
+- **Las escalas de plusvalías.** Se aplican los tipos ordinarios a todo el
+  ingreso gravable, sin un tratamiento aparte para las ganancias de capital.
+- **La deducción para declarantes mayores.** El importe adicional disponible
+  para los declarantes de mayor edad no forma parte del cálculo.
+
+El impuesto estatal se maneja aparte y de forma deliberadamente sencilla. El
+tipo es el que introduce quien usa la página y se aplica a todo el ingreso
+gravable. La mayoría de los estados usa escalas progresivas, así que un único
+porcentaje sobre toda la base sobrestima el impuesto en un estado progresivo y
+es exacto en uno de tipo plano. La cifra estatal es una estimación que cambia
+con el tipo introducido.
+
+Los impuestos sobre la nómina tampoco entran en este cálculo. El Seguro Social
+y Medicare se retienen del salario con sus propios tipos y sus propios topes, y
+pertenecen al cálculo de la nómina neta y no al impuesto sobre la renta de las
+ganancias.
+
+Cada cifra del resultado se deriva de la tabla publicada de 2026 y de los
+valores de la página. Cambie el ingreso, el estado civil, la deducción o el tipo
+estatal, y el impuesto, la tasa efectiva y la renta restante se mueven con
+ellos.

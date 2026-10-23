@@ -1,0 +1,144 @@
+---
+import { getUi } from '../../i18n/ui/index.ts';
+import ResultPanel from '../ResultPanel.astro';
+import AdSlot from '../AdSlot.astro';
+import type { Locale } from '../../i18n/locales.ts';
+
+interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+const ui = getUi(locale);
+const copy = ui.tool['net-pay'];
+---
+
+<div>
+  <form class="card" id="net-pay-form" novalidate>
+    <div class="input-group">
+      <label class="field" for="np-gross">
+        <span class="field__label">{copy.fields.grossPay}</span>
+        <span class="field__control">
+          <span class="field__prefix" aria-hidden="true">$</span>
+          <input class="input input--prefixed" id="np-gross" type="number"
+            inputmode="decimal" step="100" min="0" value="5000" />
+        </span>
+      </label>
+      <label class="field" for="np-period">
+        <span class="field__label">{copy.fields.payPeriod}</span>
+        <span class="field__control">
+          <select class="input" id="np-period">
+            <option value="year">{copy.terms.payPeriods.year}</option>
+            <option value="month" selected>{copy.terms.payPeriods.month}</option>
+            <option value="week">{copy.terms.payPeriods.week}</option>
+            <option value="day">{copy.terms.payPeriods.day}</option>
+            <option value="hour">{copy.terms.payPeriods.hour}</option>
+          </select>
+        </span>
+      </label>
+    </div>
+
+    <div class="input-group">
+      <label class="field" for="np-status">
+        <span class="field__label">{copy.fields.filingStatus}</span>
+        <span class="field__control">
+          <select class="input" id="np-status">
+            <option value="single" selected>{copy.terms.filingStatuses.single}</option>
+            <option value="married">{copy.terms.filingStatuses.married}</option>
+            <option value="head-of-household">{copy.terms.filingStatuses.head}</option>
+          </select>
+        </span>
+      </label>
+      <label class="field" for="np-state-rate">
+        <span class="field__label">
+          {copy.fields.stateRate}
+          <span class="field__hint">{copy.fields.stateRateHint}</span>
+        </span>
+        <span class="field__control">
+          <input class="input" id="np-state-rate" type="number" inputmode="decimal"
+            step="0.1" min="0" max="20" value="0" />
+          <span class="field__suffix" aria-hidden="true">%</span>
+        </span>
+      </label>
+    </div>
+
+    <label class="field" for="np-pretax">
+      <span class="field__label">
+        {copy.fields.preTax}
+        <span class="field__hint">{copy.fields.preTaxHint}</span>
+      </span>
+      <span class="field__control">
+        <span class="field__prefix" aria-hidden="true">$</span>
+        <input class="input input--prefixed" id="np-pretax" type="number"
+          inputmode="decimal" step="100" min="0" value="0" />
+      </span>
+    </label>
+  </form>
+</div>
+
+<div class="tool-panel">
+  <ResultPanel
+    headlineId="np-net"
+    headlineLabel={copy.result.headlineLabel}
+    headline="—"
+    stats={[
+      { id: 'np-gross-out', label: copy.result.annualGross, value: '—' },
+      { id: 'np-federal', label: copy.result.federalTax, value: '—' },
+      { id: 'np-ss', label: copy.result.socialSecurity, value: '—' },
+      { id: 'np-medicare', label: copy.result.medicare, value: '—' },
+      { id: 'np-additional', label: copy.result.additionalMedicare, value: '—' },
+      { id: 'np-state', label: copy.result.stateTax, value: '—' },
+      { id: 'np-total', label: copy.result.totalTax, value: '—' },
+      { id: 'np-month', label: copy.result.netPerMonth, value: '—' },
+      { id: 'np-rate', label: copy.result.effectiveRate, value: '—' },
+    ]}
+    note={copy.result.note}
+  />
+  <p class="muted-block" style="margin-top: var(--space-4);">
+    {copy.resultNote}
+  </p>
+  <AdSlot placement="result" />
+</div>
+
+<script>
+  import { computeNetPay, type PayPeriod } from '../../lib/calc/netPay.ts';
+  import type { FilingStatus } from '../../lib/calc/tax.ts';
+  import { formatCurrency, formatPercent } from '../../lib/calc/money.ts';
+  import { numberValue, selectValue, setText } from '../../lib/client/dom.ts';
+
+  const ids = ['np-gross', 'np-period', 'np-status', 'np-state-rate', 'np-pretax'];
+
+  function recalculate(): void {
+    const grossPay = Math.max(0, numberValue('np-gross'));
+    const period = selectValue('np-period', 'month') as PayPeriod;
+    const filingStatus = selectValue('np-status', 'single') as FilingStatus;
+    const stateRatePercent = Math.max(0, numberValue('np-state-rate'));
+    const preTaxDeductionsAnnual = Math.max(0, numberValue('np-pretax'));
+
+    const result = computeNetPay({
+      grossPay,
+      period,
+      filingStatus,
+      stateRatePercent,
+      preTaxDeductionsAnnual,
+    });
+
+    setText('np-net', formatCurrency(result.netPerPeriod));
+    setText('np-gross-out', formatCurrency(result.annualGross));
+    setText('np-federal', formatCurrency(result.federalTax));
+    setText('np-ss', formatCurrency(result.socialSecurity));
+    setText('np-medicare', formatCurrency(result.medicare));
+    setText('np-additional', formatCurrency(result.additionalMedicare));
+    setText('np-state', formatCurrency(result.stateTax));
+    setText('np-total', formatCurrency(result.totalTax));
+    setText('np-month', formatCurrency(result.netPerMonth));
+    setText('np-rate', formatPercent(result.effectiveTaxRate));
+  }
+
+  for (const id of ids) {
+    document.getElementById(id)?.addEventListener('input', recalculate);
+    document.getElementById(id)?.addEventListener('change', recalculate);
+  }
+
+  recalculate();
+</script>

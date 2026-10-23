@@ -1,0 +1,137 @@
+---
+title: "Calculadora de pago de deudas: avalancha y bola de nieve"
+description: "Cómo modela la calculadora de pago de deudas varias deudas a la vez, en qué se diferencian los órdenes avalancha y bola de nieve, y qué mide la comparación entre ambos."
+locale: "es"
+date: 2026-10-23
+lastReviewed: 2026-10-23
+author: "Kostan Proff"
+reviewedBy: "Tetiana Goncharko"
+group: "home"
+readingMinutes: 8
+sources:
+  - label: "CFPB — Ask CFPB, preguntas y respuestas para consumidores"
+    url: "https://www.consumerfinance.gov/ask-cfpb/"
+  - label: "CFPB — Herramientas y orientación sobre tarjetas de crédito"
+    url: "https://www.consumerfinance.gov/consumer-tools/credit-cards/"
+relatedTools:
+  - "debt-payoff"
+faq:
+  - q: "¿Qué compara la calculadora de pago de deudas?"
+    a: "Tres ejecuciones sobre las mismas deudas: cuotas mínimas solamente, el orden avalancha con el pago adicional y el orden bola de nieve con ese mismo pago adicional. De cada una informa de los meses hasta quedar libre de deudas, del total de intereses pagados y de los intereses ahorrados frente a la ejecución con solo mínimas."
+  - q: "¿Qué orden cuesta menos intereses?"
+    a: "El orden avalancha, que dirige el dinero adicional primero a la deuda con la tasa más alta. La calculadora muestra la distancia entre los dos órdenes en dólares y no como un veredicto, porque la magnitud de esa distancia depende de los saldos y las tasas introducidos."
+  - q: "¿Qué orden cancela antes la primera deuda?"
+    a: "El orden bola de nieve, que empieza por el saldo más pequeño. El mes en que se cancela cada deuda se informa por separado para cada orden, así que la primera cuenta que llega a cero se ve en los resultados."
+  - q: "¿Los intereses se calculan a diario o a mes?"
+    a: "A mes, sobre el saldo del principio del mes. En muchas tarjetas los intereses se acumulan y se capitalizan a diario, y la calculadora no reproduce esa diferencia."
+  - q: "¿Qué pasa cuando una deuda queda cancelada?"
+    a: "Deja de absorber su cuota mínima, y esa cantidad se suma al dinero disponible para las deudas que siguen abiertas. Eso es lo que hace que un orden de cancelación acelere a medida que desaparecen los saldos pequeños."
+  - q: "¿Qué hace el campo de pago adicional?"
+    a: "Añade un importe mensual a la suma de las cuotas mínimas, y la calculadora lo aplica a la deuda a la que apunta el orden elegido. En las tres ejecuciones el pago adicional es el mismo; lo que cambia es el orden."
+  - q: "¿Se incluyen penalizaciones y efectos fiscales?"
+    a: "No. Las penalizaciones por pago tardío, las comisiones por traspaso de saldo y el tratamiento fiscal de los intereses deducibles quedan fuera del modelo."
+---
+
+Varios debts que se pagan al mismo tiempo no se suman como se suma un solo
+saldo. Una tarjeta al 18% y un préstamo personal al 7% cobran una cuota cada
+mes, y el orden en que se aplican esos pagos cambia lo que cuesta el mismo
+dinero en intereses. La <a href="/es/tools/debt-payoff/">calculadora de pago
+de deudas</a> hace esa comparación directamente.
+
+## El modelo mes a mes
+
+La calculadora simula las deudas mes a mes, y los pasos de la simulación son
+los mismos cada mes.
+
+Los intereses del mes se calculan sobre el saldo que hay al principio del mes
+y se suman a ese saldo. Un saldo de $10,000 al 18% genera $150 de intereses en
+el mes, y contra el que se trabaja es $10,150.
+
+El dinero disponible ese mes es la suma de todas las cuotas mínimas más la
+cantidad adicional que se haya escrito. Cada deuda cubre primero sus propios
+intereses y después su propio capital. Lo que queda después de eso pasa a la
+deuda siguiente.
+
+Cuando una deuda llega a cero deja de absorber su cuota mínima, y esa mínima
+se suma al dinero disponible para las deudas que siguen abiertas. Una mínima
+de $200 que se convierte en $200 de capital adicional es lo que hace que un
+orden de cancelación acelere en lugar de limitarse a reordenar los pagos.
+
+Una sola deuda muestra la misma aritmética en su forma más simple. Un saldo
+de $10,000 al 18% con una cuota mínima de $200 se cancela en 94 meses, y por
+el camino se pagan unos $8,622 de intereses. El saldo baja $50 en el primer
+mes, porque se añaden $150 de intereses y salen $200, y baja un poco más cada
+mes siguiente, porque los intereses se calculan sobre un saldo que ya es
+menor.
+
+## Avalancha y bola de nieve
+
+La pregunta que hace la calculadora es a qué deuda va primero el dinero
+adicional.
+
+El orden avalancha empieza por la tasa de interés más alta. La deuda que más
+cuesta mantener se amortiza primero, y de ahí sale un total de intereses
+menor.
+
+El orden bola de nieve empieza por el saldo más pequeño. La deuda más
+pequeña se cancela primero y su cuota mínima se libera antes en el presupuesto
+mensual, así que la primera cuenta llega a cero antes, aunque en total se
+paguen más intereses.
+
+Los dos órdenes hacen visibles cosas distintas. Uno muestra la menor cantidad
+de dinero al final, el otro muestra el primer saldo eliminado.
+
+## Qué muestra la comparación
+
+La calculadora hace tres simulaciones y las coloca una al lado de la otra.
+
+La primera es la de cuotas mínimas solamente: todas las mínimas y nada de
+dinero adicional. Es la base contra la que se miden las otras dos.
+
+La segunda es el orden avalancha con el pago adicional. La tercera es el
+orden bola de nieve con ese mismo pago adicional. Para cada una la calculadora
+informa de los meses que tardan en cancelarse todas las deudas, del total de
+intereses pagados y de los intereses ahorrados frente a la ejecución con solo
+mínimas.
+
+Esas dos cifras de ahorro son la comparación que da sentido a la herramienta, y
+responden a preguntas distintas. La cifra de avalancha es la más pequeña de
+las dos, y la de bola de nieve es la mayor. Lo que hay entre ellas es el
+precio de cancelar antes la cuenta más pequeña, expresado en dólares de
+intereses.
+
+La distancia entre ellas depende de las cifras introducidas. Con una sola
+deuda los dos órdenes coinciden. Con deudas de tasas y saldos parecidos los
+dos órdenes quedan muy cerca. La separación crece cuando un saldo grande tiene
+una tasa alta y uno pequeño una tasa baja.
+
+Hay un caso en el que la línea de base no existe. Cuando los pagos mínimos son
+menores que los intereses que las deudas generan en un mes, el saldo no baja:
+se suman los intereses, el pago cubre una parte de ellos, y lo que queda vuelve
+a hacer crecer el saldo. Solo con los pagos mínimos las deudas nunca se
+saldan, así que no existe un plan terminado con el que comparar. La calculadora
+deja en blanco las cifras de ahorro y lo dice en la propia página, en lugar de
+imprimir un número hecho de cien años de intereses que nunca terminan. Las
+corridas de avalancha y de bola de nieve sí llegan al final, y son sus meses y
+sus intereses totales los que describen las deudas.
+
+## Lo que el modelo no incluye
+
+El modelo es mensual y sencillo, y hay varias cosas que quedan fuera.
+
+Los tipos de interés variables se mantienen en el nivel que se introdujo
+durante todos los meses del cálculo.
+
+Las penalizaciones por pago tardío y las comisiones por traspaso de saldo no
+forman parte de la aritmética.
+
+En muchas tarjetas de crédito los intereses se acumulan y se capitalizan a
+diario, mientras que la calculadora aplica la acumulación mensual, así que el
+coste de un saldo de tarjeta sale más bajo que en la factura.
+
+Los intereses de algunas deudas son deducibles, y ese efecto fiscal no está
+en el cálculo.
+
+Un pago que no llega detiene la simulación en lugar de arrastrarse como
+morosidad, de modo que las cifras describen el plan tal y como estaba
+programado y no como acabó resultando.

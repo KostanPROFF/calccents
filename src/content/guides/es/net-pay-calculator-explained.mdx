@@ -1,0 +1,160 @@
+---
+title: "Cómo se calcula el salario neto"
+description: "El orden en que el dinero sale del sueldo: deducciones previas, tramos federales de 2026, Social Security, Medicare, impuesto estatal y tasa efectiva frente a marginal."
+locale: "es"
+date: 2026-10-23
+lastReviewed: 2026-10-23
+author: "Kostan Proff"
+reviewedBy: "Tetiana Goncharko"
+group: "home"
+readingMinutes: 8
+sources:
+  - label: "IRS — Rev. Proc. 2025-32, 2026 inflation adjustments"
+    url: "https://www.irs.gov/irb/2025-45_IRB"
+  - label: "Social Security Administration — 2026 wage base and COLA"
+    url: "https://www.ssa.gov/cola/"
+  - label: "Social Security Administration — Publication 15, Employer's Tax Guide"
+    url: "https://www.ssa.gov/pubs/EN-05-10035.pdf"
+  - label: "IRS — Tax Topic 511, Withholding"
+    url: "https://www.irs.gov/taxtopics/tc511"
+relatedTools:
+  - "net-pay"
+faq:
+  - q: "¿Por qué el salario neto es menor que el bruto menos un porcentaje?"
+    a: "Porque hay más de un porcentaje en juego, y cada uno se aplica sobre una base distinta. El impuesto federal sobre la renta es progresivo, así que el tipo sube con la base imponible. Social Security y Medicare son tipos planos sobre el sueldo, cada uno con su propio techo. El resultado no lo describe un solo porcentaje, y la calculadora muestra las partidas por separado."
+  - q: "¿Por qué la tasa efectiva es menor que la marginal?"
+    a: "La tasa marginal es el tipo con que se grava el siguiente dólar de base imponible, es decir, el del tramo en el que ya ha entrado la renta. La tasa efectiva divide el impuesto total entre el sueldo bruto completo, y por eso promedia todos los tramos por los que pasó la renta y la parte del bruto que no se gravó en absoluto, porque las deducciones salieron antes."
+  - q: "¿Una aportación a un 401(k) reduce los impuestos del resto del sueldo?"
+    a: "En el cálculo, sí. Una aportación a un 401(k), a una HSA o a una FSA se resta antes de que el sueldo se grave, y reduce a la vez la base del impuesto federal, la de Social Security y la de Medicare. El salario neto también queda más bajo, porque la aportación salió del sueldo antes de calcular los impuestos."
+  - q: "¿Desde qué cantidad se aplica el impuesto adicional de Medicare?"
+    a: "Desde un sueldo superior a $200,000 para quien presenta en individual, para matrimonio que presenta por separado y para jefe de hogar, y superior a $250,000 para matrimonio conjunto. El tipo es del 0.9% sobre el exceso, y esos umbrales no se indexan con la inflación, de modo que no cambian desde 2013."
+  - q: "¿Cómo pasa un precio por hora a un año de sueldo?"
+    a: "La calculadora multiplica el precio por 2,080 horas, que son 40 horas a la semana durante 52 semanas. Lo mismo hace con los demás periodos: 12 meses, 52 semanas y 260 días laborables. Son convenciones, no derechos, y quien cobre con otra base puede trabajar con su propia cifra."
+  - q: "¿Por qué el impuesto estatal no coincide con lo que cobra el estado?"
+    a: "La calculadora aplica un único tipo a toda la base imponible. La mayoría de los estados gravan por tramos, así que un solo porcentaje da un resultado por encima de lo que cobraría un estado progresivo y coincide exactamente con un estado de tipo plano. El porcentaje que se introduce en la página es la única variable del cálculo que depende del estado."
+  - q: "¿Esto muestra lo que se retiene en cada nómina?"
+    a: "No. Aquí se calcula el impuesto del año con las cifras anuales. La retención es lo que el empleador remite al IRS durante el año, y se fija con el método indicado en el W-4, así que la cifra de una nómina concreta puede diferir de un doceavo del total anual."
+---
+
+La nómina trae una cifra. La del contrato es otra, y la diferencia entre ambas se
+puede escribir como una lista corta de reglas.
+
+La <a href="/es/tools/net-pay/">calculadora de salario neto</a> recorre esas
+reglas en el orden en que el dinero sale del sueldo, con las cifras del año
+fiscal 2026.
+
+## El orden en que sale el dinero
+
+El sueldo llega como un único importe bruto. A partir de ahí, el dinero sale en
+un orden fijo.
+
+1. Primero se descuentan las deducciones previas: las aportaciones a un 401(k),
+   a una HSA y a una FSA. Sobre lo que queda se calculan tanto el impuesto
+   sobre la renta como los impuestos de nómina.
+2. Después se aplica la deducción estándar. Para 2026 es de $16,100 para
+   quien presenta en individual, de $32,200 para matrimonio conjunto y de
+   $24,150 para jefe de hogar. Lo que queda es la base imponible, y a esa base
+   se le aplican los tramos federales.
+3. El impuesto federal sobre la renta se calcula sobre la base imponible.
+4. Social Security se retiene al 6.2% del sueldo, hasta el máximo imponible de
+   $184,500 para 2026.
+5. Medicare se retiene al 1.45% de todo el sueldo, sin techo.
+6. El impuesto adicional de Medicare es el 0.9% de la parte que supera el
+   umbral correspondiente al estado civil.
+7. El impuesto estatal se aplica con el porcentaje que se introduce en la
+   página.
+
+Lo que sobrevive a esos pasos es el salario neto, y la calculadora lo divide
+entre el número de periodos del año para obtener la cifra de cada periodo.
+
+Los impuestos de nómina se calculan sobre el sueldo que queda tras las
+deducciones previas y antes de la deducción estándar. La diferencia importa:
+la deducción estándar reduce el impuesto federal y el estatal, mientras que
+Social Security y Medicare se cobran sobre una base mayor.
+
+## Los tramos federales
+
+El impuesto federal sobre la renta no se calcula con un único tipo. Para 2026,
+la base imponible de quien presenta en individual se reparte así:
+
+- 10% sobre los primeros $12,400
+- 12% desde $12,400 hasta $50,400
+- 22% desde $50,400 hasta $105,700
+- 24% desde $105,700 hasta $201,775
+- 32% desde $201,775 hasta $256,225
+- 35% desde $256,225 hasta $640,600
+- 37% por encima de $640,600
+
+El IRS publica cada tramo como un importe fijo de impuesto más un porcentaje
+del exceso sobre el límite inferior del tramo, y la calculadora opera del
+mismo modo. Quien tenga una base imponible de $50,400 paga $1,240 —el importe
+del impuesto en el límite inferior del tramo del 12%— y nada más. Con $60,000,
+esos $1,240 se suman al 12% de los $9,600 que superan los $50,400, lo que da
+$2,392.
+
+Los tramos y la deducción estándar proceden de la Rev. Proc. 2025-32, publicada
+en el Internal Revenue Bulletin 2025-45 el 3 de noviembre de 2025.
+
+## Social Security, Medicare y el impuesto estatal
+
+Social Security es un 6.2% del sueldo hasta un máximo imponible que para 2026
+es de $184,500. Lo que supera ese techo no se vuelve a gravar, así que el tipo
+marginal de Social Security es del 6.2% hasta el máximo y del 0% por encima.
+
+Medicare es un 1.45% de todo el sueldo, sin techo alguno. Encima se aplica el
+impuesto adicional de Medicare: el 0.9% de un sueldo superior a $200,000 para
+quien presenta en individual, para matrimonio por separado y para jefe de
+hogar, y superior a $250,000 para matrimonio conjunto. Esos umbrales no se
+indexan con la inflación, así que llevan sin cambiar desde 2013. Los tipos y
+los umbrales aparecen en la Publication 15 de la Social Security
+Administration.
+
+El impuesto estatal de la calculadora es el porcentaje que se introduce en la
+página, aplicado a la base imponible. Esa es una simplificación, y una
+simplificación deliberada: la mayoría de los estados gravan por tramos, de
+modo que un solo porcentaje sobre toda la base imponible queda por encima de
+lo que cobraría un estado progresivo y coincide con un estado de tipo plano.
+El porcentaje de la página es la única variable del cálculo que depende del
+estado.
+
+## Por qué la tasa efectiva queda por debajo de la marginal
+
+Los dos tipos que aparecen en los resultados responden a preguntas distintas.
+La tasa marginal es el tipo con que se grava el siguiente dólar de base
+imponible, de modo que pertenece al tramo en el que ya ha entrado la renta. La
+tasa efectiva divide el impuesto total entre el sueldo bruto completo, así que
+mezcla todos los tramos por los que pasó la renta, la parte del bruto que
+nunca se gravó y las deducciones que salieron antes de calcular el impuesto.
+
+Tomemos a quien presenta en individual con un bruto de $60,000 al año, sin
+deducciones previas y en un estado al 5%. El impuesto total es de $11,805:
+$5,020 federal, $3,720 de Social Security, $870 de Medicare y $2,195
+estatal. La tasa efectiva es del 19.68%. La tasa marginal es del 12%, porque
+la base imponible de $43,900 cae en el tramo del 12%. La mayor parte de esos
+$60,000 se gravó al 10% o al 12%, y $16,100 no se gravaron en absoluto, así
+que el promedio queda por debajo del tipo que encuentra el siguiente dólar.
+
+Añadir una aportación de $5,000 a un 401(k) al mismo caso muestra el mismo
+efecto desde el otro lado. El sueldo imponible baja a $55,000, el impuesto
+federal a $4,420, Social Security a $3,410 y Medicare a $797.50, y la tasa
+efectiva cae al 17.62%. El salario neto también baja, porque esos $5,000
+salieron del sueldo antes de calcular los impuestos.
+
+## Lo que el cálculo no incluye
+
+La cifra de la página es el impuesto del año, calculado sobre las cifras
+anuales. Varias cosas quedan fuera.
+
+- **Los créditos fiscales.** No se aplica ningún crédito, así que el impuesto que
+  se muestra es la obligación antes de créditos.
+- **Las deducciones detalladas.** Se usa la deducción estándar, y el cálculo no
+  modela una deducción que dependa de lo que realmente se gastó cada año.
+- **Los impuestos locales.** Los impuestos sobre la renta de ciudad, condado
+  o distrito escolar no forman parte de la cifra.
+- **La retención de cada nómina.** La retención se fija en el W-4 y es lo que
+  el empleador remite durante el año, así que una nómina concreta puede
+  diferir de un doceavo del total anual. El Tax Topic 511 del IRS explica cómo
+  se calcula la retención.
+- **Los beneficios que no están en el sueldo.** Una aportación de la empresa al
+  seguro médico o a un plan de pensiones no aparece en el bruto que se
+  introduce, y por eso tampoco aparece en el resultado.

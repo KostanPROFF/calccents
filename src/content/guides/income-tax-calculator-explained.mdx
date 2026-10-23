@@ -1,0 +1,126 @@
+---
+title: "2026 Income Tax Calculator Explained"
+description: "How taxable income is built up from gross pay, how the 2026 federal brackets work, and what the standard deduction and the two tax rates mean."
+locale: "en"
+date: 2026-10-23
+lastReviewed: 2026-10-23
+author: "Kostan Proff"
+reviewedBy: "Tetiana Goncharko"
+group: "home"
+readingMinutes: 9
+sources:
+  - label: "IRS — Rev. Proc. 2025-32, 2026 inflation adjustments"
+    url: "https://www.irs.gov/irb/2025-45_IRB"
+  - label: "IRS — Tax Topic 505, Tax Withholding and Estimated Tax Payments"
+    url: "https://www.irs.gov/taxtopics/tc505"
+  - label: "IRS — Tax Topic 611, Income Tax"
+    url: "https://www.irs.gov/taxtopics/tc611"
+relatedTools:
+  - "income-tax"
+faq:
+  - q: "Which tax year does the calculator use?"
+    a: "The 2026 tax year. The brackets and the standard deduction come from Rev. Proc. 2025-32, published in Internal Revenue Bulletin 2025-45 on 3 November 2025, and the figures in the calculation are read from that document rather than from the previous year's table."
+  - q: "How is taxable income different from gross income?"
+    a: "Taxable income is what is left after pre-tax deductions such as a 401(k), an HSA or an FSA, and after the standard or itemised deduction. The brackets apply to taxable income, not to the gross figure on the payslip."
+  - q: "What is the difference between the marginal rate and the effective rate?"
+    a: "The marginal rate is the rate the next dollar of taxable income meets: 22 percent at $83,900 of taxable income for a single filer. The effective rate is the total tax divided by the whole income, which for the same reader is about 13 percent of what they earned."
+  - q: "How does the calculator treat the itemised deduction?"
+    a: "It uses the itemised figure when that figure is larger than the standard deduction for the filing status. Where the itemised amount is smaller, the standard deduction stands and taxable income is higher."
+  - q: "Does the calculator include tax credits?"
+    a: "No. It does not model tax credits, the child tax credit, capital gains rates or the senior deduction. The federal figure it produces is ordinary income tax on taxable income."
+  - q: "Is the state tax figure exact?"
+    a: "It is an estimate. The rate is the one typed into the calculator, and it is applied to the whole of taxable income. That is exact in a flat-rate state and overstates the tax in a progressive one."
+  - q: "Does this include Social Security and Medicare?"
+    a: "No. Those are payroll taxes withheld from wages, with their own rates and their own ceilings, and they are separate from income tax on earnings."
+---
+
+The federal income tax on a year of earnings is a published table applied to a
+number that is assembled in a few steps. The
+<a href="/tools/income-tax/">income tax calculator</a> on this site performs
+those steps in order and shows the working. The 2026 figures it uses come from
+Rev. Proc. 2025-32, published in Internal Revenue Bulletin 2025-45 on
+3 November 2025.
+
+Nothing on the page is a forecast and nothing is a live figure. The brackets
+and the standard deduction are the published ones for the 2026 tax year, and
+every number in the result follows from them and from the values entered.
+
+## From gross pay to taxable income
+
+Taxable income is not the number on the payslip. The calculator starts from
+gross income for the year, subtracts the pre-tax deductions entered there —
+a 401(k) contribution, an HSA or an FSA — and then subtracts the deduction.
+
+The deduction is the standard deduction for the filing status, unless an
+itemised figure larger than it is entered. For 2026 the standard deduction is
+$16,100 for a single filer and for married filing separately, $32,200 for
+married filing jointly, and $24,150 for head of household.
+
+What remains is taxable income. The brackets apply to that number, and the
+state estimate applies to the same number.
+
+## How the brackets work
+
+The IRS publishes each bracket as a fixed amount of tax plus a percentage of
+the excess over the bottom of that bracket, rather than as a flat rate on
+each slice. For a single filer in 2026, the rates run 10 percent on the first
+$12,400, 12 percent from there to $50,400, 22 percent to $105,700, 24 percent
+to $201,775, 32 percent to $256,225, 35 percent to $640,600, and 37 percent
+on anything above that.
+
+In that form the table reads as a list of checkpoints: the tax is $1,240 at
+$12,400, $5,800 at $50,400, $17,966 at $105,700, $41,024 at $201,775, $58,448
+at $256,225, and $192,979.25 at $640,600. A taxable income of $83,900 for a
+single filer therefore gives $5,800 plus 22 percent of the $33,500 above
+$50,400, which is $5,800 plus $7,370 — a federal tax of $13,170.
+
+Two rates come out of that, and they answer different questions. The marginal
+rate is the rate the next dollar meets, so at $83,900 of taxable income the
+next dollar is taxed at 22 percent. The effective rate is the whole tax
+divided by the whole income: the same reader, with gross income of $100,000
+and the standard deduction of $16,100, pays $13,170 in federal tax, which is
+about 13 percent of what they earned.
+
+## The standard deduction and itemising
+
+A dollar of deduction is a dollar of taxable income, and taxable income is
+taxed at the marginal rate, so a dollar of deduction saves the marginal rate
+in tax. The size of the deduction therefore matters more to a reader in a
+higher bracket than to a reader in a lower one: the first dollars of income
+are taxed at 10 percent, so the standard deduction is worth $16,100 of tax to
+a single filer at the bottom of the table and considerably more further up.
+
+The calculator asks for the itemised deduction and uses it when it is larger
+than the standard deduction. Where the itemised figure is smaller, the
+standard deduction stands and taxable income is higher. The two numbers in
+the result show which one was used.
+
+## What the figure does not cover
+
+The federal figure is ordinary income tax on taxable income, and the
+calculation stops there. It does not model:
+
+- **Tax credits.** Credits reduce the tax after it is computed, and no credit
+  is applied here.
+- **The child tax credit.** The same applies to it, and it is one of the
+  largest differences between a tax liability and a tax bill.
+- **Capital gains rates.** The ordinary income rates are applied to the whole
+  of taxable income, with no separate treatment for gains.
+- **The senior deduction.** The additional amount available to older filers is
+  not part of the calculation.
+
+State income tax is handled separately and is deliberately simple. The rate
+is the one typed into the calculator, and it is applied to the whole of
+taxable income. Most states use progressive rates, so a single percentage on
+the whole base overstates the tax in a progressive state and is exact in a
+flat-rate one. The state figure is an estimate that moves with the rate
+entered.
+
+Payroll taxes are outside this calculation as well. Social Security and
+Medicare are withheld from wages under their own rates and ceilings, which
+belong to the net pay calculation rather than to income tax on earnings.
+
+Every figure in the result follows from the published 2026 table and from the
+values on the page. Change the income, the filing status, the deduction or
+the state rate, and the tax, the effective rate and the income left over all
+move with them.

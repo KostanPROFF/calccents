@@ -30,7 +30,7 @@ export const en = {
   /** Short description of the site, used in structured data and meta tags. */
   tagline: 'Financial calculators that show their work',
   description:
-    'Free financial calculators for mortgage payments, renting versus buying, and compound interest. Every formula is shown, every assumption belongs to you, and no page tells you what to do with the result.',
+    'Free financial calculators for mortgage payments, rent versus buy, compound interest, take-home pay, federal tax and debt payoff. Every formula is shown.',
 
   author: {
     role: 'Author',
@@ -67,6 +67,9 @@ export const en = {
       'mortgage-payment': 'Mortgage payment',
       'rent-vs-buy': 'Rent vs buy',
       'compound-interest': 'Compound interest',
+      'net-pay': 'Take-home pay',
+      'income-tax': 'Federal income tax',
+      'debt-payoff': 'Debt payoff',
     },
     links: {
       guides: 'Guides',
@@ -122,13 +125,13 @@ export const en = {
   home: {
     title: 'Calccents — Financial calculators that show their work',
     description:
-      'Free financial calculators for mortgage payments, renting versus buying, and compound interest. Every formula is shown, every assumption belongs to you, and no page tells you what to do with the result.',
+      'Free financial calculators for mortgage payments, rent versus buy, compound interest, take-home pay, federal tax and debt payoff. Every formula is shown.',
     eyebrow: 'Financial calculators',
     heading: 'Know the number before you decide',
-    lede: 'Free tools for the arithmetic behind a mortgage, a lease and a pile of savings. Every formula is written out, every assumption belongs to you, and no page tells you what to do with the result.',
+    lede: 'Free tools for the arithmetic behind a mortgage, a lease, a payslip and a stack of debt. Every formula is written out, every assumption belongs to you, and no page tells you what to do with the result.',
     cta: 'Browse the calculators',
     calculatorsEyebrow: 'The calculators',
-    calculatorsHeading: 'Three questions, three sets of numbers',
+    calculatorsHeading: 'Six questions, six sets of numbers',
     workHeading: 'Every figure shows its work',
     workPoints: [
       'The formula sits next to the answer, in plain language and in symbols.',
@@ -296,6 +299,10 @@ export const en = {
       {
         label: 'Internal Revenue Service (IRS) — tax brackets, inflation adjustments, retirement rules',
         url: 'https://www.irs.gov/',
+      },
+      {
+        label: 'Social Security Administration (SSA) — payroll tax rates, wage base, annual limit',
+        url: 'https://www.ssa.gov/',
       },
       {
         label: 'Freddie Mac — Primary Mortgage Market Survey',
@@ -851,6 +858,340 @@ export const en = {
         yearsOther: '{n} years',
       },
     },
+    'net-pay': {
+      name: 'Take-Home Pay Calculator',
+      title: 'Take-Home Pay Calculator for the 2026 Tax Year',
+      description:
+        'Work out what is left of a wage after federal income tax, Social Security, Medicare and state tax, for any pay period, with every deduction shown.',
+      short: 'What a wage becomes after federal tax, payroll tax and state tax.',
+      category: 'Pay',
+      methodNote:
+        'The figures are the 2026 tax year: Rev. Proc. 2025-32 for the federal brackets and the standard deduction, and the Social Security Administration for the payroll tax limits. Nothing on this page is a quote from a payroll provider.',
+      fields: {
+        grossPay: 'Gross pay',
+        payPeriod: 'Pay period',
+        filingStatus: 'Filing status',
+        stateRate: 'State income tax rate',
+        stateRateHint: 'the rate for your bracket',
+        preTax: 'Pre-tax deductions',
+        preTaxHint: '401(k), HSA, FSA per year',
+        perYear: 'per year',
+        debtName: 'Debt',
+        balance: 'Balance',
+        rate: 'Rate',
+        minimum: 'Minimum payment',
+      },
+      terms: {
+        payPeriods: {
+          year: 'Annually',
+          month: 'Monthly',
+          week: 'Weekly',
+          day: 'Per day',
+          hour: 'Hourly',
+        },
+        filingStatuses: {
+          single: 'Single',
+          married: 'Married filing jointly',
+          head: 'Head of household',
+        },
+      },
+      result: {
+        headlineLabel: 'Take-home pay',
+        annualGross: 'Gross pay for the year',
+        federalTax: 'Federal income tax',
+        socialSecurity: 'Social Security',
+        medicare: 'Medicare',
+        additionalMedicare: 'Additional Medicare tax',
+        stateTax: 'State income tax',
+        totalTax: 'Total tax',
+        netPerMonth: 'Take-home per month',
+        effectiveRate: 'Effective tax rate',
+        note:
+          'The take-home amount is the gross pay less the deductions above, divided by the number of pay periods in the year.',
+      },
+      resultNote:
+        'A payroll system uses the withholding elections on the W-4 and the amounts already withheld during the year, so the figure on a real paycheque moves a little from month to month.',
+      formula:
+        'take-home = gross pay − pre-tax deductions − federal income tax − Social Security − Medicare − state income tax',
+      method: [
+        'The calculation starts from the gross pay and works backwards through the deductions, in the order a payroll system applies them. Pre-tax deductions come out first, because a contribution to a 401(k) or a health account is taken out of the wage before it is taxed. What is left is the taxable wage.',
+        'Federal income tax is calculated on that taxable wage. The standard deduction for the filing status is subtracted, and the result is run through the 2026 bracket table. Each bracket is a fixed amount of tax plus a percentage of the income above the bottom of that bracket, which is how the IRS publishes the table.',
+        'The payroll taxes come next. Social Security is 6.2% of the wage up to the taxable maximum of $184,500 for 2026. Medicare is 1.45% of the whole wage with no ceiling, and the Additional Medicare Tax is 0.9% of the part above $200,000 for a single filer, or above $250,000 for married filing jointly.',
+        'The state income tax is the rate the reader types in, applied to the taxable income. It is an estimate: most states tax in bands, so one number applied to the whole income overstates what most people pay. The final figure is what is left, divided by the number of pay periods in the year.',
+      ],
+      limits: [
+        'It does not model tax credits. The child tax credit, the earned income credit and the education credits change the final figure and are not in the calculation.',
+        'It does not model capital gains, self-employment income, or the treatment of income above the Social Security wage base, where Medicare still applies and Social Security does not.',
+        'It does not model local taxes. City and county income taxes are separate from the state rate.',
+        'The pay period counts are conventional: 12 months, 52 weeks, 260 working days, or 2,080 hours for a 40-hour week over 52 weeks. A reader paid on a different schedule can enter the yearly figure instead.',
+        'A 401(k) contribution above the annual limit is not fully exempt from the payroll taxes, and this calculation treats the whole pre-tax amount as exempt.',
+      ],
+      faq: [
+        {
+          q: 'Why is my take-home pay lower than the gross minus the income tax?',
+          a: 'Because the wage is reduced by Social Security and Medicare before the income tax is calculated. Those are payroll taxes on the job itself, separate from the income tax on the paycheque.',
+        },
+        {
+          q: 'Does this use my actual tax bracket?',
+          a: 'It uses the 2026 bracket table and the standard deduction for the filing status, so the figure is close to what a payroll system calculates for a wage earner with no other income. It knows nothing about credits, other deductions or other income.',
+        },
+        {
+          q: 'What is the difference between the effective and the marginal rate?',
+          a: 'The marginal rate is the rate the next dollar of taxable income is taxed at, and it is the highest bracket the income reaches. The effective rate is the total tax divided by the whole income, and it is lower, because the higher brackets only apply to the part of the income above them.',
+        },
+        {
+          q: 'Which state rate should I use?',
+          a: 'The rate that applies to your own bracket in your state. Most states tax in bands, so the effective rate is lower than the top rate. The one number is exactly right in a flat-rate state and in a state with no income tax.',
+        },
+        {
+          q: 'Why is the Social Security tax capped and the Medicare tax is not?',
+          a: 'Social Security has a taxable maximum set every year, $184,500 for 2026, and earnings above it are not taxed for Social Security. Medicare has no ceiling, so it applies to every dollar of the wage.',
+        },
+        {
+          q: 'Can I use this to work out my tax bill?',
+          a: 'No. It calculates the tax withheld from a wage. A tax return is a different calculation: it includes other income, deductions, credits and the payments already made, and it is filed once a year rather than every pay period.',
+        },
+      ],
+      sources: [
+        {
+          label: 'IRS — Rev. Proc. 2025-32, inflation adjustments for the 2026 tax year',
+          url: 'https://www.irs.gov/irb/2025-45_IRB',
+        },
+        {
+          label: 'Social Security Administration — 2026 wage base and cola',
+          url: 'https://www.ssa.gov/cola/',
+        },
+        {
+          label: 'Social Security Administration — Publication 15, Employer Tax Guide',
+          url: 'https://www.ssa.gov/pubs/EN-05-10035.pdf',
+        },
+        {
+          label: 'IRS — Tax Topic 511, Withholding',
+          url: 'https://www.irs.gov/taxtopics/tc511',
+        },
+      ],
+      relatedGuides: [
+        {
+          slug: 'net-pay-calculator-explained',
+          title: 'How take-home pay is calculated',
+        },
+      ],
+    },
+
+    'income-tax': {
+      name: 'Federal Income Tax Calculator',
+      title: 'Federal Income Tax Calculator for the 2026 Tax Year',
+      description:
+        'Calculate the 2026 federal income tax on a year of earnings, with the filing status, the deduction, and the effective and marginal rates side by side.',
+      short: 'Federal income tax on a year of earnings, with both rates shown.',
+      category: 'Pay',
+      methodNote:
+        'The brackets and the standard deduction are the 2026 figures from Rev. Proc. 2025-32, published 3 November 2025. The payroll taxes that come out of a wage are not part of this calculation; they are in the take-home pay calculator.',
+      fields: {
+        grossIncome: 'Gross income for the year',
+        filingStatus: 'Filing status',
+        itemisedDeduction: 'Itemised deduction',
+        standardDeduction: 'Standard deduction',
+        useStandard: 'Use the standard deduction',
+        stateRate: 'State income tax rate',
+        stateRateHint: 'the rate for your bracket',
+        preTax: 'Pre-tax deductions',
+        preTaxHint: '401(k), HSA, FSA per year',
+        perYear: 'per year',
+      },
+      terms: {
+        filingStatuses: {
+          single: 'Single',
+          married: 'Married filing jointly',
+          head: 'Head of household',
+        },
+      },
+      result: {
+        headlineLabel: 'Federal income tax',
+        taxableIncome: 'Taxable income',
+        deductionApplied: 'Deduction applied',
+        standardDeduction: 'Standard deduction',
+        itemisedDeduction: 'Itemised deduction',
+        federalTax: 'Federal income tax',
+        stateTax: 'State income tax',
+        totalTax: 'Total tax',
+        effectiveRate: 'Effective rate',
+        marginalRate: 'Marginal rate',
+        afterTax: 'Income after tax',
+        note:
+          'The deduction applied is the larger of the two: the standard deduction for the filing status, or the itemised deduction entered on the left.',
+      },
+      resultNote:
+        'The figure is a tax liability, not the amount withheld from a paycheque. It does not include credits or the payments already made during the year.',
+      formula:
+        'taxable income = gross income − pre-tax deductions − deduction; tax = bracket table applied to taxable income',
+      method: [
+        'The calculation starts with the gross income for the year and takes the pre-tax deductions off, because a 401(k) contribution or a health account contribution is not taxed as income.',
+        'The deduction comes next. The standard deduction for the filing status is used unless the reader enters an itemised deduction, and the larger of the two is the one that applies. The standard deduction for 2026 is $16,100 for a single filer, $32,200 for married filing jointly and $24,150 for head of household.',
+        'What is left is the taxable income, and the tax is the 2026 bracket table applied to it. Each bracket is a fixed amount of tax plus a percentage of the income above the bottom of that bracket, the way the IRS publishes it.',
+        'The two rates answer different questions. The marginal rate is the rate the next dollar of taxable income is taxed at, which is the highest bracket the income reaches. The effective rate is the total tax divided by the whole income, and it is lower because the higher brackets only touch the part of the income above them.',
+      ],
+      limits: [
+        'It does not model tax credits. The child tax credit, the earned income credit and the education credits reduce the tax and are not in the calculation.',
+        'It does not model the capital gains and ordinary income distinction, so a year with investment income is calculated at the ordinary rates.',
+        'It does not model the senior deduction, or any deduction outside the standard and itemised amounts entered on the left.',
+        'It does not model self-employment tax, which is charged on the net earnings of a self-employed person and has its own base and rate.',
+        'The state figure is a rate the reader types in, applied to the whole of the taxable income. Most states tax in bands, so the real state tax is usually lower.',
+      ],
+      faq: [
+        {
+          q: 'Which deduction should I use?',
+          a: 'The standard deduction unless the itemised deductions add up to more. The calculator shows the standard deduction for the filing status and the itemised figure side by side, so the comparison is one glance.',
+        },
+        {
+          q: 'What is the difference between the effective and the marginal rate?',
+          a: 'The marginal rate is the rate the next dollar of taxable income is taxed at. The effective rate is the total tax divided by the whole income, and it is lower, because the brackets above the first one only apply to the part of the income above them.',
+        },
+        {
+          q: 'Why does the tax jump at a certain income?',
+          a: 'That is the bracket boundary. Above it, another dollar is taxed at the next rate, so the tax rises faster than the income. The marginal rate tells you which band the income is in.',
+        },
+        {
+          q: 'Does this include Social Security and Medicare?',
+          a: 'No. Those are payroll taxes charged on a wage, with their own ceilings, and they are calculated in the take-home pay calculator instead.',
+        },
+        {
+          q: 'What is the state tax figure?',
+          a: 'The rate entered on the left, applied to the taxable income. Most states tax in bands, so the true figure for a particular income is usually lower than this estimate.',
+        },
+        {
+          q: 'Is this the amount I will owe?',
+          a: 'It is the tax before credits and before the payments already made during the year. A return adds the credits, adds anything else that was not taxed through payroll, and subtracts what has already been paid.',
+        },
+      ],
+      sources: [
+        {
+          label: 'IRS — Rev. Proc. 2025-32, inflation adjustments for the 2026 tax year',
+          url: 'https://www.irs.gov/irb/2025-45_IRB',
+        },
+        {
+          label: 'IRS — Tax Topic 505, Tax Withholding and Estimated Tax Payments',
+          url: 'https://www.irs.gov/taxtopics/tc505',
+        },
+        {
+          label: 'IRS — Tax Topic 611, Income Tax',
+          url: 'https://www.irs.gov/taxtopics/tc611',
+        },
+      ],
+      relatedGuides: [
+        {
+          slug: 'income-tax-calculator-explained',
+          title: 'How federal income tax is calculated',
+        },
+      ],
+    },
+
+    'debt-payoff': {
+      name: 'Debt Payoff Calculator',
+      title: 'Debt Payoff Calculator: Avalanche and Snowball',
+      description:
+        'Compare paying off several debts at once: the minimums only, the avalanche order and the snowball order, with the months to debt-free and the interest saved.',
+      short: 'Pay off several debts at once and compare the order.',
+      category: 'Debt',
+      methodNote:
+        'The model is a month-by-month simulation: interest accrues on the balance at the start of the month, payments go to interest first, and the extra money goes to the debt the reader picked.',
+      fields: {
+        debtName: 'Debt',
+        balance: 'Balance',
+        rate: 'Interest rate',
+        minimum: 'Minimum payment',
+        addDebt: 'Add a debt',
+        removeDebt: 'Remove this debt',
+        extraPayment: 'Extra monthly payment',
+        extraPaymentHint: 'on top of every minimum payment',
+      },
+      terms: {
+        strategies: {
+          minimum: 'Minimums only',
+          avalanche: 'Avalanche',
+          snowball: 'Snowball',
+        },
+        orderHints: {
+          avalanche: 'highest interest rate first',
+          snowball: 'smallest balance first',
+        },
+      },
+      result: {
+        headlineLabel: 'Interest saved',
+        interestSaved: 'Interest saved against the minimums',
+        monthsToFree: 'Months to debt-free',
+        totalInterest: 'Total interest',
+        totalPaid: 'Total paid',
+        minimumOnly: 'Minimums only',
+        avalanche: 'Avalanche',
+        snowball: 'Snowball',
+        minimumsNeverCover: 'Never paid off',
+        minimumsNeverCoverNote:
+          'The minimum payments on these debts do not cover the interest, so the balance grows instead of falling. On the minimums alone the debts are never cleared, and there is no interest to save against that run. The extra payment is what brings them down.',
+        note:
+          'Avalanche pays the highest rate first and costs the least in interest. Snowball clears the smallest balance first and finishes that debt sooner. The difference between the two is the price of the order.',
+      },
+      resultNote:
+        'The three runs use the same debts and the same extra payment. The only thing that changes is the order the extra money goes in.',
+      formula:
+        'interest for the month = balance at the start of the month × annual rate ÷ 12; payment goes to interest first, then to principal',
+      method: [
+        'The calculation is a month-by-month simulation. At the start of each month the interest is charged on the balance and added to it. The money available that month is the sum of every minimum payment plus the extra payment entered on the left, and it is applied to the interest first and to the principal after that.',
+        'A debt that has been cleared stops taking a minimum payment, and that minimum joins the money going to the next debt. That is the mechanism behind the difference between the orders: the same monthly amount, spent on a different debt, stops different balances sooner.',
+        'The avalanche order sends the extra money to the highest interest rate first. It costs the least in interest, because the interest it stops is the most expensive money the reader is paying.',
+        'The snowball order sends the extra money to the smallest balance first. It costs more in interest overall and it clears one account sooner, which is a different kind of result. The calculator shows both, and the interest saved in each case, so the two can be compared on the same numbers.',
+      ],
+      limits: [
+        'It does not model variable rates. A credit card on a variable rate changes the interest as the index moves, and the schedule here assumes the rate stays where it was typed.',
+        'It does not model fees: late fees, balance transfer fees and annual card fees are not in the total.',
+        'It charges interest monthly. A credit card that compounds daily charges a little more over the year, and the real figure on a card balance is usually slightly higher than this one.',
+        'It does not model the tax treatment of the interest, which on some debts can be deducted and on others cannot.',
+        'It does not model a change in the minimum payments, which lenders sometimes lower for hardship and sometimes raise as the balance falls.',
+      ],
+      faq: [
+        {
+          q: 'What is the difference between the avalanche and the snowball?',
+          a: 'Only the order. Avalanche sends the extra money to the highest interest rate first, snowball to the smallest balance first. The debts, the minimums and the extra payment are the same in both runs.',
+        },
+        {
+          q: 'Which one saves more money?',
+          a: 'Avalanche, in the interest. The extra money stops the most expensive debt first, so less interest accrues over the life of the debts. The calculator prints the difference in the interest saved for each order.',
+        },
+        {
+          q: 'Why does the snowball exist if it costs more?',
+          a: 'It clears the smallest balance first, so a balance goes to zero sooner. That is a different result from the one the interest measures, and the calculator shows both so the two can be compared on the same numbers.',
+        },
+        {
+          q: 'How is the interest calculated?',
+          a: 'On the balance at the start of each month, at the annual rate divided by twelve, and it is added to the balance. Payments then go to that interest first and to the principal afterwards.',
+        },
+        {
+          q: 'What happens to the minimum payment of a debt that is cleared?',
+          a: 'It is added to the money going to the next debt, so the monthly amount going to the debts never falls. That is what makes the payoff dates shorter than the sum of the separate schedules.',
+        },
+        {
+          q: 'Does this account for a credit card compounding daily?',
+          a: 'No. The model charges interest once a month. A card that compounds every day charges a little more over a year, so the real figure on a card balance is usually a little higher than the one here.',
+        },
+      ],
+      sources: [
+        {
+          label: 'CFPB — Ask CFPB, consumer questions and answers',
+          url: 'https://www.consumerfinance.gov/ask-cfpb/',
+        },
+        {
+          label: 'CFPB — Credit card tools and consumer guidance',
+          url: 'https://www.consumerfinance.gov/consumer-tools/credit-cards/',
+        },
+      ],
+      relatedGuides: [
+        {
+          slug: 'debt-payoff-calculator-explained',
+          title: 'How paying off several debts works',
+        },
+      ],
+    },
+
   },
 };
 

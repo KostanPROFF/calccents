@@ -18,6 +18,9 @@ import AdAdvice from './AdAdvice.astro';
 import SourceList from './SourceList.astro';
 import Faq from './Faq.astro';
 import MortgageCalculator from './tools/MortgageCalculator.astro';
+import NetPayCalculator from './tools/NetPayCalculator.astro';
+import IncomeTaxCalculator from './tools/IncomeTaxCalculator.astro';
+import DebtPayoffCalculator from './tools/DebtPayoffCalculator.astro';
 import RentVsBuyCalculator from './tools/RentVsBuyCalculator.astro';
 import CompoundInterestCalculator from './tools/CompoundInterestCalculator.astro';
 import { getSite } from '../config/site.ts';
@@ -43,7 +46,23 @@ const CALCULATORS = {
   'mortgage-payment': MortgageCalculator,
   'rent-vs-buy': RentVsBuyCalculator,
   'compound-interest': CompoundInterestCalculator,
+  'net-pay': NetPayCalculator,
+  'income-tax': IncomeTaxCalculator,
+  'debt-payoff': DebtPayoffCalculator,
 } as const;
+
+/**
+ * Where the formula sits in the method paragraphs.
+ *
+ * The formula is one line of algebra and it reads best next to the
+ * paragraph it comes from, which is not the same place in every tool.
+ * The default is after the first paragraph.
+ */
+const FORMULA_AFTER: Partial<Record<ToolSlug, number>> = {
+  'rent-vs-buy': 1,
+  'compound-interest': 1,
+  'debt-payoff': 1,
+};
 
 const Calculator = CALCULATORS[slug];
 
@@ -128,42 +147,16 @@ const faqPage = {
       {copy.methodNote && <p class="text-muted">{copy.methodNote}</p>}
       <div class="prose" style="margin-top: var(--space-4);">
         {
-          slug === 'mortgage-payment' && (
-            <>
-              <p>{copy.method[0]}</p>
-              <p>
-                <strong>{copy.formula}</strong>
-              </p>
-              <p>{copy.method[1]}</p>
-              <p>{copy.method[2]}</p>
-              <p>{copy.method[3]}</p>
-            </>
-          )
-        }
-        {
-          slug === 'rent-vs-buy' && (
-            <>
-              <p>{copy.method[0]}</p>
-              <p>{copy.method[1]}</p>
-              <p>
-                <strong>{copy.formula}</strong>
-              </p>
-              <p>{copy.method[2]}</p>
-            </>
-          )
-        }
-        {
-          slug === 'compound-interest' && (
-            <>
-              <p>{copy.method[0]}</p>
-              <p>{copy.method[1]}</p>
-              <p>
-                <strong>{copy.formula}</strong>
-              </p>
-              <p>{copy.method[2]}</p>
-              <p>{copy.method[3]}</p>
-            </>
-          )
+          copy.method.map((paragraph, index) => (
+            <Fragment>
+              <p>{paragraph}</p>
+              {FORMULA_AFTER[slug] === index && (
+                <p>
+                  <strong>{copy.formula}</strong>
+                </p>
+              )}
+            </Fragment>
+          ))
         }
       </div>
     </section>
