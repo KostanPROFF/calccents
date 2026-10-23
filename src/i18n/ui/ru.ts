@@ -81,7 +81,7 @@ export const ru = {
     calculatorsBehindThisGuide: 'Калькуляторы к этому руководству',
     published: 'Опубликовано',
     lastReviewed: 'Последняя вычитка',
-    reviewedBy: 'Проверил',
+    reviewedBy: 'Проверила',
     language: 'Язык',
     switchTheme: 'Сменить тему',
     switchToLight: 'Переключить на светлую тему',
