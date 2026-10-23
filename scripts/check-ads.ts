@@ -139,6 +139,8 @@ const expectSlots = process.argv.includes('--expect-slots')
 
 const pagesWithSlots: string[] = [];
 let scriptClient: string | undefined;
+/** The publisher account this site belongs to, from the ownership tag. */
+let accountId: string | undefined;
 
 // The problems are counted rather than listed one page at a time. A gate
 // that prints eighty lines says the same thing eighty times and makes the
@@ -157,6 +159,11 @@ for (const file of htmlFiles) {
   } else {
     scriptClient ??= clientFromScript(source);
   }
+
+  // The ownership tag carries the publisher account of the site itself,
+  // and it is the one number ads.txt has to agree with.
+  const account = source.match(/name="google-adsense-account" content="([^"]+)"/);
+  if (account) accountId ??= account[1];
 
   const slots = countOccurrences(source, 'class="adsbygoogle"');
   if (slots > MAX_SLOTS_PER_PAGE) {
@@ -195,6 +202,43 @@ if (expectSlots) {
       }
     }
   }
+}
+
+/**
+ * ads.txt.
+ *
+ * The file declares which ad sellers are allowed to sell this site's
+ * inventory. AdSense reads it to confirm that Google is an authorised
+ * seller for this publisher, and the AdSense dashboard reports on it
+ * separately from the review. A missing file is not a rejection, but it
+ * is a declaration the site has not made yet.
+ *
+ * The publisher ID here comes from the ownership tag in the built page,
+ * not from the environment: the environment overrides the client for CI
+ * builds that use dummy IDs, and ads.txt must always name the real
+ * account.
+ */
+const adsTxtPath = join(DIST, 'ads.txt');
+let adsTxt: string | undefined;
+try {
+  adsTxt = readFileSync(adsTxtPath, 'utf8');
+} catch {
+  adsTxt = undefined;
+}
+
+if (adsTxt === undefined) {
+  problems.push('ads.txt is missing from the build');
+} else if (accountId) {
+  // The ownership tag says "ca-pub-5321511632415174"; ads.txt names the
+  // same account as "pub-5321511632415174".
+  const publisherId = accountId.replace(/^ca-/, '');
+  if (!adsTxt.includes(publisherId)) {
+    problems.push(
+      `ads.txt does not name ${publisherId}, the publisher account this site belongs to`,
+    );
+  }
+} else {
+  problems.push('no page carries the AdSense ownership tag');
 }
 
 if (pagesWithoutScript > 0) {

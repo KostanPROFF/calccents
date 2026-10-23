@@ -229,6 +229,26 @@ contact form but is not the same as having a mailbox on this domain. Adding
 `calccents.com` to the existing Purelymail account would give the site a
 mailbox that both sends and receives under its own name.
 
+## ads.txt
+
+The site declares who is allowed to sell its advertising inventory:
+
+```
+google.com, pub-5321511632415174, DIRECT, f08c47fec0942fa0
+```
+
+It lives at `public/ads.txt` and is served as `/ads.txt`. AdSense reads it
+to confirm that Google is an authorised seller for this publisher, and the
+AdSense dashboard reports on the file separately from the review: a site
+without it shows "ads.txt not found", which is a missing declaration rather
+than a defect.
+
+The line has to name the publisher account the site belongs to, and it has
+to match the ownership tag in the head. The ad gate checks that it does, so
+the file cannot silently drift away from the account: it reads the publisher
+ID out of the built page rather than from the environment, because the
+environment overrides the client for CI builds with dummy IDs.
+
 ## Turning on advertising
 
 The AdSense account exists and the publisher ID is
