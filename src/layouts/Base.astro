@@ -77,6 +77,25 @@ const person = {
 };
 
 /**
+ * The reviewer, as a second person.
+ *
+ * The site has two people behind it and the structured data says so. The
+ * reviewer is described with her own profile rather than folded into the
+ * author, because she is a different person and her links point at her own
+ * profile.
+ */
+const reviewer = {
+  '@context': 'https://schema.org',
+  '@type': 'Person',
+  name: site.reviewer.name,
+  jobTitle: site.reviewer.role,
+  description: site.reviewer.bio,
+  url: new URL(localePath(locale, '/editorial-team/'), site.origin).toString(),
+  worksFor: { '@type': 'Organization', name: site.name },
+  sameAs: site.reviewer.links.map((link) => link.href),
+};
+
+/**
  * The AdSense publisher ID.
  *
  * The account exists, so the ID is a fact about the site and lives in the
@@ -191,7 +210,7 @@ const gaId = import.meta.env.PUBLIC_GA_ID;
     </script>
 
     {
-      [...jsonLd, organization, person].map((schema) => (
+      [...jsonLd, organization, person, reviewer].map((schema) => (
         <script type="application/ld+json" set:html={JSON.stringify(schema)} />
       ))
     }

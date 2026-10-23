@@ -8,8 +8,13 @@ export const es = {
     'Calculadoras financieras gratuitas para el pago de hipotecas, para comparar alquiler y compra y para el interés compuesto. Se muestra cada fórmula, cada supuesto te corresponde a ti, y ninguna página te dice qué hacer con el resultado.',
 
   author: {
-    role: 'Autor y revisor',
-    bio: 'Trabaja en infraestructura de TI —nubes, CI/CD, infraestructura como código—, donde un cambio que no se puede verificar no llega a producción. Mantener las nubes en orden y los pipelines de entrega rápidos es el trabajo del día a día; el mismo criterio recorre todo este sitio. La aritmética vive en un solo sitio, las fórmulas están cubiertas por pruebas unitarias que las contrastan con cifras de préstamos publicadas, y toda cifra externa lleva su fuente y la fecha en que se consultó. Escribe las guías, mantiene el motor de cálculo y revisa cada cifra publicada. Aquí no se le dice al lector qué hacer.',
+    role: 'Autor',
+    bio: 'Trabaja en infraestructura de TI —nubes, CI/CD, infraestructura como código—, donde un cambio que no se puede verificar no llega a producción. Mantener las nubes en orden y los pipelines de entrega rápidos es el trabajo del día a día; el mismo criterio recorre todo este sitio. La aritmética vive en un solo sitio, las fórmulas están cubiertas por pruebas unitarias que las contrastan con cifras de préstamos publicadas, y toda cifra externa lleva su fuente y la fecha en que se consultó. Escribe las guías y mantiene el motor de cálculo. Otra persona lee la parte financiera de cada guía antes de publicarla. Aquí no se le dice al lector qué hacer.',
+  },
+
+  reviewer: {
+    role: 'Revisora financiera',
+    bio: 'Lee la parte financiera de una guía antes de publicarla: las cifras, las suposiciones que hay detrás y las fuentes de donde salen. El autor construye el motor de cálculo; la revisora mira el resultado desde el otro lado, el lado de alguien que trata con dinero y no con código. Su nombre aparece solo en las guías que revisó.',
   },
 
   nav: {
@@ -178,7 +183,7 @@ export const es = {
     ],
     whoHeading: 'Quién lo lleva',
     whoBody:
-      '{name}. {bio} La página editorial expone lo que comprueba la revisión antes de publicar una página, y el código es público: las fórmulas, las pruebas unitarias y las comprobaciones que bloquean una publicación con una página rota.',
+      '{name}. {bio} {reviewerName} lee la parte financiera de las guías antes de publicarlas. La página editorial expone lo que comprueba la revisión antes de publicar una página, y el código es público: las fórmulas, las pruebas unitarias y las comprobaciones que bloquean una publicación con una página rota.',
     whoEditorialLink: 'página editorial',
     whoCodeLink: 'el código es público',
     howHeading: 'Cómo funcionan las calculadoras',
@@ -296,18 +301,19 @@ export const es = {
     description:
       'Quién escribe las guías, quién las revisa y qué comprueba realmente la revisión antes de publicar una página.',
     heading: 'Equipo editorial',
-    lede: 'Este sitio tiene un autor, y ese autor también revisa lo que escribe. Esta página dice quién es, qué comprueba la revisión y qué puedes comprobar tú.',
-    authorEyebrow: 'Autor y revisor',
+    lede: 'Una persona escribe las guías. Otra lee la parte financiera de cada guía antes de publicarla. Esta página dice quiénes son, qué comprueba la revisión y qué puedes comprobar tú.',
+    authorEyebrow: 'Autor',
+    reviewerEyebrow: 'Revisora financiera',
     checkEyebrow: 'Lo que puedes comprobar',
     checkHeading: 'La aritmética es pública',
     checkBody:
       'El código que hay detrás de cada calculadora está en un repositorio público, con las fórmulas que implementa, las pruebas unitarias que las contrastan con cifras publicadas conocidas y las comprobaciones que bloquean una publicación con una página rota. No hace falta que te fíes de los números, ni que tengas que pedir nada.',
     openRepository: 'Abrir el repositorio',
-    oneNameHeading: 'Por qué en esta página solo hay un nombre',
-    oneNameBody: [
-      'Muchos sitios enumeran un equipo de redacción y otro de revisión separados. Este no lo hace, porque no los hay. La persona cuyo nombre aparece arriba escribe las guías, comprueba la aritmética y publica el resultado. Cuando una página dice quién la escribió, esa es la persona que la escribió.',
-      'Inventar un segundo nombre sería fácil, y no hay forma honesta de hacerlo. Si un sitio dice que alguien revisó algo, la versión honesta de esa afirmación es una persona que sí lo revisó. Así que el sitio dice lo que es cierto y lo respalda con algo que el lector puede inspeccionar: la fuente de cada cifra, la fórmula que hay detrás y el código que la aplica, todo en público.',
-      'Si más adelante se añade un revisor externo, su nombre aparece en las páginas que revisó de verdad y en ninguna otra.',
+    twoNamesHeading: 'Dos nombres, dos funciones',
+    twoNamesBody: [
+      'Un nombre escribe las guías y mantiene el motor de cálculo. Otro lee la parte financiera de una guía antes de publicarla: las cifras, las suposiciones que hay detrás y las fuentes de donde salen. Las dos funciones están separadas a propósito: quien escribe una guía no es quien le hace la última lectura.',
+      'Cuando una guía nombra a quien la revisó, esa es la persona que la revisó, y el nombre aparece en esa guía y en ninguna otra. Una revisión es una afirmación sobre una página concreta, así que se aplica a la página y no al sitio entero.',
+      'Todo lo demás en esta página describe qué comprueba la revisión y qué puede verificar un lector sin preguntar a nadie.',
     ],
     reviewHeading: 'Qué comprueba la revisión',
     reviewIntro:

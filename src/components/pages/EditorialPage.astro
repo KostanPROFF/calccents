@@ -36,13 +36,13 @@ const correctionsBody = fill(copy.correctionsBody, {
       <p class="page-head__lede">{copy.lede}</p>
     </div>
 
-    <div class="grid grid--2" style="margin-bottom: var(--space-12);">
-      <div class="card">
+    <div class="grid grid--3 people-grid" style="margin-bottom: var(--space-12);">
+      <div class="card people-card">
         <p class="eyebrow" style="color: var(--text-muted);">{copy.authorEyebrow}</p>
         <h2 class="card__title" style="margin-top: var(--space-2);">
           {site.author.name}
         </h2>
-        <p class="card__body">{site.author.bio}</p>
+        <p class="card__body people-card__bio">{site.author.bio}</p>
         <p class="card__body" style="margin-top: var(--space-3);">
           {
             site.author.links.map((link, index) => (
@@ -56,12 +56,31 @@ const correctionsBody = fill(copy.correctionsBody, {
           }
         </p>
       </div>
-      <div class="card">
+      <div class="card people-card">
+        <p class="eyebrow" style="color: var(--text-muted);">{copy.reviewerEyebrow}</p>
+        <h2 class="card__title" style="margin-top: var(--space-2);">
+          {site.reviewer.name}
+        </h2>
+        <p class="card__body people-card__bio">{site.reviewer.bio}</p>
+        <p class="card__body" style="margin-top: var(--space-3);">
+          {
+            site.reviewer.links.map((link, index) => (
+              <>
+                {index > 0 && <span aria-hidden="true"> · </span>}
+                <a href={link.href} rel="me noopener">
+                  {link.label}
+                </a>
+              </>
+            ))
+          }
+        </p>
+      </div>
+      <div class="card people-card">
         <p class="eyebrow" style="color: var(--text-muted);">{copy.checkEyebrow}</p>
         <h2 class="card__title" style="margin-top: var(--space-2);">
           {copy.checkHeading}
         </h2>
-        <p class="card__body">{copy.checkBody}</p>
+        <p class="card__body people-card__bio">{copy.checkBody}</p>
         <p class="card__body" style="margin-top: var(--space-3);">
           <a href={site.repository} rel="noopener">{copy.openRepository}</a>
         </p>
@@ -69,8 +88,8 @@ const correctionsBody = fill(copy.correctionsBody, {
     </div>
 
     <div class="prose">
-      <h2>{copy.oneNameHeading}</h2>
-      {copy.oneNameBody.map((paragraph) => <p>{paragraph}</p>)}
+      <h2>{copy.twoNamesHeading}</h2>
+      {copy.twoNamesBody.map((paragraph) => <p>{paragraph}</p>)}
 
       <h2>{copy.reviewHeading}</h2>
       <p>{copy.reviewIntro}</p>
@@ -97,3 +116,20 @@ const correctionsBody = fill(copy.correctionsBody, {
     <AdSlot placement="footer" />
   </div>
 </Base>
+
+<style>
+  /*
+   * The three cards carry the same amount of content, so they are laid out
+   * as flex columns: the biography takes the free space and the links sit
+   * on the same line at the bottom of every card, whatever the length of
+   * the text above them.
+   */
+  .people-card {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .people-card__bio {
+    flex-grow: 1;
+  }
+</style>

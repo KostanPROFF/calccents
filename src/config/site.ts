@@ -9,6 +9,7 @@
 
 import { getUi } from '../i18n/ui/index.ts';
 import { LOCALE_META, type Locale } from '../i18n/locales.ts';
+import { AUTHOR, REVIEWER } from './people.ts';
 
 export const SITE = {
   name: 'Calccents',
@@ -24,21 +25,21 @@ export const SITE = {
    */
   reviewedOn: new Date('2026-10-20T00:00:00Z'),
   /**
-   * One person runs this site.
+   * One person writes the guides and maintains the calculation engine.
    *
-   * There is deliberately no separate "reviewer" entry. A site with one
-   * author who also does the review should say so: a second name on the
-   * page that does not exist is a fabricated credential, and this one is
-   * open source, so anybody can look. When an outside reviewer is added,
-   * their name goes on the pages they actually reviewed, in the guide
-   * frontmatter, and the byline prints it there.
+   * The name and the profiles come from the people registry, so the same
+   * person is called the same thing on every page and in every language.
+   * The reviewer is a separate person, and their name appears only on the
+   * pages they actually reviewed.
    */
   author: {
-    name: 'Kostan Proff',
-    links: [
-      { label: 'GitHub', href: 'https://github.com/KostanPROFF' },
-      { label: 'LinkedIn', href: 'https://www.linkedin.com/in/tetiana-goncharko/' },
-    ],
+    name: AUTHOR.name,
+    links: AUTHOR.links,
+  },
+  /** The person who reviews the financial content of the guides. */
+  reviewer: {
+    name: REVIEWER.name,
+    links: REVIEWER.links,
   },
   /** The public repository, mentioned on the about and editorial pages. */
   repository: 'https://github.com/KostanPROFF/calccents',
@@ -86,6 +87,13 @@ export interface SiteForLocale {
     bio: string;
     links: readonly { label: string; href: string }[];
   };
+  /** The person who reviews the financial content of the guides. */
+  reviewer: {
+    name: string;
+    role: string;
+    bio: string;
+    links: readonly { label: string; href: string }[];
+  };
   repository: string;
   adsensePublisherId: string;
   nav: NavItem[];
@@ -111,6 +119,12 @@ export function getSite(locale: Locale): SiteForLocale {
       role: ui.author.role,
       bio: ui.author.bio,
       links: SITE.author.links,
+    },
+    reviewer: {
+      name: SITE.reviewer.name,
+      role: ui.reviewer.role,
+      bio: ui.reviewer.bio,
+      links: SITE.reviewer.links,
     },
     repository: SITE.repository,
     adsensePublisherId: SITE.adsensePublisherId,

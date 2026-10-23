@@ -2,6 +2,7 @@ import { defineCollection } from 'astro:content';
 import { glob } from 'astro/loaders';
 import { z } from 'zod';
 import { LOCALES } from './i18n/locales.ts';
+import { PEOPLE_NAMES } from './config/people.ts';
 
 /**
  * The guides collection.
@@ -58,6 +59,20 @@ const guides = defineCollection({
         .max(8),
     })
     .superRefine((data, ctx) => {
+      // A guide can only credit somebody the site knows about. The names
+      // come from the people registry, so a typo in the frontmatter or a
+      // credit to a person who is not listed fails the build instead of
+      // quietly publishing a name the site cannot support.
+      for (const field of ['author', 'reviewedBy'] as const) {
+        if (!PEOPLE_NAMES.includes(data[field] as (typeof PEOPLE_NAMES)[number])) {
+          ctx.addIssue({
+            code: 'custom',
+            path: [field],
+            message: `${field} must be one of: ${PEOPLE_NAMES.join(', ')}`,
+          });
+        }
+      }
+
       if (data.locale !== 'en') return;
       if (data.description.length < 140 || data.description.length > 160) {
         ctx.addIssue({

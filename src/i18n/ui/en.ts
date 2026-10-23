@@ -33,8 +33,13 @@ export const en = {
     'Free financial calculators for mortgage payments, renting versus buying, and compound interest. Every formula is shown, every assumption belongs to you, and no page tells you what to do with the result.',
 
   author: {
-    role: 'Author and reviewer',
-    bio: 'Works in IT infrastructure — cloud, CI/CD, infrastructure as code — where a change that cannot be verified does not ship. Keeping cloud environments lean and delivery pipelines fast is the day job; the same standard runs through this site. The arithmetic lives in one place, the formulas are covered by unit tests that check them against published loan figures, and every figure that comes from outside carries its source and the date it was read. Writes the guides, maintains the calculation engine, and reviews every published figure. Nothing here tells the reader what to do.',
+    role: 'Author',
+    bio: 'Works in IT infrastructure — cloud, CI/CD, infrastructure as code — where a change that cannot be verified does not ship. Keeping cloud environments lean and delivery pipelines fast is the day job; the same standard runs through this site. The arithmetic lives in one place, the formulas are covered by unit tests that check them against published loan figures, and every figure that comes from outside carries its source and the date it was read. Writes the guides and maintains the calculation engine. A second person reads the financial content of each guide before it goes live. Nothing here tells the reader what to do.',
+  },
+
+  reviewer: {
+    role: 'Financial reviewer',
+    bio: 'Reads the financial content of a guide before it is published: the figures, the assumptions behind them, and the sources they come from. The author builds the calculation engine; the reviewer reads the result from the other side, the side of someone who deals with money rather than with code. Her name appears only on the guides she reviewed.',
   },
 
   nav: {
@@ -204,7 +209,7 @@ export const en = {
     ],
     whoHeading: 'Who runs this',
     whoBody:
-      '{name}. {bio} The editorial page sets out what the review checks before a page goes live, and the code is public — the formulas, the unit tests and the checks that block a release with a broken page.',
+      '{name}. {bio} {reviewerName} reads the financial content of the guides before they are published. The editorial page sets out what the review checks before a page goes live, and the code is public — the formulas, the unit tests and the checks that block a release with a broken page.',
     whoEditorialLink: 'editorial page',
     whoCodeLink: 'code is public',
     howHeading: 'How the calculators work',
@@ -322,18 +327,19 @@ export const en = {
     description:
       'Who writes the guides, who reviews them, and what the review actually checks before a page is published.',
     heading: 'Editorial team',
-    lede: 'This site has one author, and that author also reviews what they write. This page says who that is, what the review checks, and what you can check for yourself.',
-    authorEyebrow: 'Author and reviewer',
+    lede: 'One person writes the guides. Another reads the financial content of each guide before it goes live. This page says who they are, what the review checks, and what you can check for yourself.',
+    authorEyebrow: 'Author',
+    reviewerEyebrow: 'Financial reviewer',
     checkEyebrow: 'What you can check',
     checkHeading: 'The arithmetic is public',
     checkBody:
       'The code behind every calculator is in a public repository, with the formulas it implements, the unit tests that check them against known published figures, and the checks that block a release with a broken page. You do not have to take the numbers on trust, and you do not have to ask.',
     openRepository: 'Open the repository',
-    oneNameHeading: 'Why there is only one name on this page',
-    oneNameBody: [
-      'Plenty of sites list a writing team and a separate review team. This one does not, because there is not one. The person whose name is above writes the guides, checks the arithmetic, and publishes the result. Where a page says who wrote it, that is who wrote it.',
-      'A second name would be easy to invent and there is no honest way to do it. If a site says a reviewer checked something, the honest version of that claim is a person who did check it. So the site says what is actually true and backs it with something a reader can inspect: the source of every figure, the formula behind it, and the code that applies it, in public.',
-      'If an outside reviewer is added later, their name appears on the pages they actually reviewed and nowhere else.',
+    twoNamesHeading: 'Two names, two jobs',
+    twoNamesBody: [
+      'One name writes the guides and maintains the calculation engine. Another reads the financial content of a guide before it is published, checking the figures, the assumptions behind them and the sources they come from. The two jobs are separate on purpose: the person who writes a guide is not the person who gives it the final read.',
+      'Where a guide names a reviewer, that is the person who reviewed it, and the name appears on that guide and nowhere else. A review is a statement about a specific page, so it is attached to the page rather than to the site as a whole.',
+      'Everything else on this page describes what the review checks, and what a reader can verify without asking anyone.',
     ],
     reviewHeading: 'What the review checks',
     reviewIntro:

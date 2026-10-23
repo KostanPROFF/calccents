@@ -24,6 +24,7 @@ const copy = ui.about;
 const whoBody = fill(copy.whoBody, {
   name: site.author.name,
   bio: site.author.bio,
+  reviewerName: site.reviewer.name,
   whoEditorialLink: `<a href="${localePath(locale, '/editorial-team/')}">${copy.whoEditorialLink}</a>`,
   whoCodeLink: `<a href="${site.repository}" rel="noopener">${copy.whoCodeLink}</a>`,
 });

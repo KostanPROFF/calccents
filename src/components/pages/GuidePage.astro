@@ -5,6 +5,7 @@ import AdSlot from '../AdSlot.astro';
 import Faq from '../Faq.astro';
 import SourceList from '../SourceList.astro';
 import { getSite } from '../../config/site.ts';
+import { personLinks } from '../../config/people.ts';
 import { getUi } from '../../i18n/ui/index.ts';
 import { formatDate, localePath, type Locale } from '../../i18n/locales.ts';
 import { guideSlug, type GuideEntry } from '../../i18n/guides.ts';
@@ -40,7 +41,7 @@ const article = {
   author: {
     '@type': 'Person',
     name: data.author,
-    sameAs: site.author.links.map((link) => link.href),
+    sameAs: personLinks(data.author).map((link) => link.href),
   },
   publisher: {
     '@type': 'Organization',
@@ -51,7 +52,13 @@ const article = {
   // author. A reviewer the same person as the author is not a fact worth
   // putting in structured data.
   ...(data.reviewedBy !== data.author
-    ? { reviewedBy: { '@type': 'Person', name: data.reviewedBy } }
+    ? {
+        reviewedBy: {
+          '@type': 'Person',
+          name: data.reviewedBy,
+          sameAs: personLinks(data.reviewedBy).map((link) => link.href),
+        },
+      }
     : {}),
   mainEntityOfPage: {
     '@type': 'WebPage',
