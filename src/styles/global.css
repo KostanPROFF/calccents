@@ -1185,12 +1185,22 @@ a:hover {
 /* The real ad unit. The reserved height keeps the layout from shifting
    when the block fills in. */
 ins.adsbygoogle {
-  display: block;
+  display: none;
   width: 100%;
   min-height: 90px;
   margin-block: var(--space-8);
   text-align: center;
   overflow: hidden;
+}
+
+/*
+ * The ad units stay out of sight until the reader has agreed to cookies.
+ * Hidden rather than empty: an empty box the size of an advertisement is
+ * worse than no box at all, and the script that decides this runs after
+ * the markup is parsed.
+ */
+html.consent-granted ins.adsbygoogle {
+  display: block;
 }
 
 .ad-slot--reserved {

@@ -1,0 +1,275 @@
+---
+/**
+ * Cookie consent.
+ *
+ * The site loads two things from Google: the AdSense script, which serves
+ * the advertising, and the Google Analytics script, which counts the page
+ * views. Both of them set cookies. So neither of them is loaded until the
+ * reader has answered the question, and the answer is remembered in the
+ * browser.
+ *
+ * The script tags are not in the document. They are injected by the
+ * bootstrap below once the answer is known, which is why the source of a
+ * page contains the URLs but no request goes out before the answer.
+ *
+ * The three states:
+ *
+ *   no answer   the banner is shown, the ad units stay hidden and no
+ *               request leaves the browser
+ *   accepted   both scripts are loaded, the ad units are pushed to Google
+ *   declined   nothing is loaded, the ad units are removed from the page
+ *
+ * The banner can be opened again from the footer, so a reader who changes
+ * their mind is not stuck with the first answer.
+ */
+import { SITE } from '../config/site.ts';
+import { getUi } from '../i18n/ui/index.ts';
+import { localePath, type Locale } from '../i18n/locales.ts';
+
+interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+const ui = getUi(locale);
+const copy = ui.consent;
+
+const gaId = import.meta.env.PUBLIC_GA_ID || SITE.gaMeasurementId;
+const adsenseClient = import.meta.env.PUBLIC_ADSENSE_CLIENT || SITE.adsensePublisherId;
+
+const gaUrl = `https://www.googletagmanager.com/gtag/js?id=${gaId}`;
+const adsenseUrl = `https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${adsenseClient}`;
+
+const privacyLink = `<a href="${localePath(locale, '/privacy/')}">${copy.privacyLink}</a>`;
+const body = copy.body.replace('{privacyLink}', privacyLink);
+
+/**
+ * The bootstrap.
+ *
+ * It is written as plain ES5 in a string, because it has to run before any
+ * module on the page and it has to survive being inlined into the HTML.
+ * The two URLs are interpolated rather than read from the DOM, so the
+ * publisher IDs are in the markup for the ad check to read.
+ */
+const bootstrap = `(function () {
+  var KEY = 'cc-consent';
+  var GA_ID = '${gaId}';
+  var GA_URL = '${gaUrl}';
+  var ADSENSE_URL = '${adsenseUrl}';
+
+  function read() {
+    try { return window.localStorage.getItem(KEY); } catch (error) { return null; }
+  }
+
+  function write(value) {
+    try { window.localStorage.setItem(KEY, value); } catch (error) { /* private mode */ }
+  }
+
+  function loadAnalytics() {
+    window.dataLayer = window.dataLayer || [];
+    function gtag() { window.dataLayer.push(arguments); }
+    window.gtag = gtag;
+    gtag('js', new Date());
+    gtag('config', GA_ID);
+    var el = document.createElement('script');
+    el.async = true;
+    el.src = GA_URL;
+    document.head.appendChild(el);
+  }
+
+  function loadAds() {
+    var el = document.createElement('script');
+    el.async = true;
+    el.src = ADSENSE_URL;
+    // The hand-placed units are only known to Google once the loader has
+    // arrived, so the push happens after it loads.
+    el.onload = function () {
+      window.adsbygoogle = window.adsbygoogle || [];
+      var units = document.querySelectorAll('ins.adsbygoogle');
+      for (var i = 0; i < units.length; i += 1) {
+        window.adsbygoogle.push({});
+      }
+    };
+    document.head.appendChild(el);
+  }
+
+  function removeAdUnits() {
+    var units = document.querySelectorAll('ins.adsbygoogle');
+    for (var i = 0; i < units.length; i += 1) {
+      units[i].parentNode.removeChild(units[i]);
+    }
+  }
+
+  function grant() {
+    document.documentElement.classList.add('consent-granted');
+    loadAnalytics();
+    loadAds();
+  }
+
+  function deny() {
+    document.documentElement.classList.remove('consent-granted');
+    removeAdUnits();
+  }
+
+  var banner = document.getElementById('consent-banner');
+  var decision = read();
+
+  if (decision === 'granted') {
+    grant();
+  } else if (decision === 'denied') {
+    deny();
+  } else {
+    // No answer yet: the ad units stay hidden by the stylesheet and the
+    // banner asks.
+    if (banner) {
+      banner.hidden = false;
+      banner.focus();
+    }
+  }
+
+  function answer(value) {
+    var previous = read();
+    write(value);
+    if (banner) banner.hidden = true;
+    if (previous && previous !== value) {
+      // A changed answer can only take effect on a fresh page: a script
+      // that has already run cannot be unloaded.
+      window.location.reload();
+      return;
+    }
+    if (value === 'granted') { grant(); } else { deny(); }
+  }
+
+  document.addEventListener('click', function (event) {
+    var target = event.target;
+    if (!target || !target.closest) return;
+
+    var choice = target.closest('[data-consent]');
+    if (choice) {
+      answer(choice.getAttribute('data-consent'));
+      return;
+    }
+
+    var reopen = target.closest('[data-consent-open]');
+    if (reopen && banner) {
+      event.preventDefault();
+      banner.hidden = false;
+      banner.focus();
+    }
+  });
+})();`;
+---
+
+<div
+  class="consent"
+  id="consent-banner"
+  role="dialog"
+  aria-labelledby="consent-heading"
+  tabindex="-1"
+  hidden
+>
+  <div class="consent__inner">
+    <div class="consent__text">
+      <h2 class="consent__heading" id="consent-heading">{copy.heading}</h2>
+      <p class="consent__body" set:html={body} />
+    </div>
+    <div class="consent__actions">
+      <button type="button" class="btn consent__button" data-consent="denied">
+        {copy.reject}
+      </button>
+      <button type="button" class="btn btn--primary" data-consent="granted">
+        {copy.accept}
+      </button>
+    </div>
+  </div>
+</div>
+
+<script is:inline set:html={bootstrap} />
+
+<style>
+  /*
+   * The banner is a bar across the bottom of the viewport, in the same
+   * shape as the Superdesign draft: the text on the left, the two
+   * buttons on the right, and the bar stacks on a narrow screen.
+   */
+  .consent {
+    position: fixed;
+    inset: auto 0 0 0;
+    z-index: 100;
+    padding: var(--space-5);
+    pointer-events: none;
+  }
+
+  .consent:focus {
+    outline: none;
+  }
+
+  .consent__inner {
+    pointer-events: auto;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-5);
+    align-items: flex-start;
+    max-width: var(--container-max);
+    margin-inline: auto;
+    padding: var(--space-6);
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.45);
+  }
+
+  .consent__text {
+    flex: 1 1 auto;
+  }
+
+  .consent__heading {
+    font-size: var(--text-base);
+    font-weight: 500;
+    letter-spacing: -0.01em;
+    margin-bottom: var(--space-2);
+  }
+
+  .consent__body {
+    color: var(--text-secondary);
+    font-size: var(--text-sm);
+    line-height: 1.6;
+  }
+
+  .consent__body :global(a) {
+    color: var(--accent-link);
+    text-decoration: underline;
+    text-underline-offset: 4px;
+  }
+
+  .consent__actions {
+    display: flex;
+    gap: var(--space-3);
+    width: 100%;
+  }
+
+  .consent__button {
+    background: transparent;
+    border-color: var(--border);
+    color: var(--text);
+  }
+
+  .consent__button:hover {
+    background: var(--surface-raised);
+    border-color: var(--border-strong);
+  }
+
+  @media (min-width: 720px) {
+    .consent__inner {
+      flex-direction: row;
+      align-items: center;
+      justify-content: space-between;
+      padding: var(--space-6) var(--space-8);
+    }
+
+    .consent__actions {
+      width: auto;
+      flex-shrink: 0;
+    }
+  }
+</style>

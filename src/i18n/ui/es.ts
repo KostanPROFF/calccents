@@ -17,6 +17,15 @@ export const es = {
     bio: 'Lee la parte financiera de una guía antes de publicarla: las cifras, las suposiciones que hay detrás y las fuentes de donde salen. El autor construye el motor de cálculo; la revisora mira el resultado desde el otro lado, el lado de alguien que trata con dinero y no con código. Su nombre aparece solo en las guías que revisó.',
   },
 
+  consent: {
+    heading: 'Cookies',
+    body: 'Este sitio usa cookies para servir publicidad y para contar qué páginas se leen. Puedes aceptarlas o rechazarlas, y puedes cambiar tu decisión más tarde desde el pie de página. Qué se recoge y quién lo proporciona está en la {privacyLink}.',
+    privacyLink: 'página de privacidad',
+    accept: 'Aceptar',
+    reject: 'Rechazar',
+    settings: 'Configuración de cookies',
+  },
+
   nav: {
     tools: 'Herramientas',
     guides: 'Guías',
@@ -42,6 +51,7 @@ export const es = {
       privacy: 'Privacidad',
       terms: 'Términos',
     },
+    cookieSettings: 'Configuración de cookies',
     note:
       '{name} publica cálculos y explicaciones, no asesoramiento financiero. Las herramientas muestran la aritmética que hay detrás de una cifra y los supuestos que hay detrás de la aritmética. No evalúan tu situación ni recomiendan una vía de acción. Toda cifra que produce una herramienta depende de los datos que introduces: lee los supuestos antes de basarte en algún resultado. © {founded}–{year} {name}.',
   },
@@ -384,6 +394,9 @@ export const es = {
     changesHeading: 'Cambios',
     changesBody:
       'Si los proveedores de arriba cambian, esta página cambia con ellos. La fecha al pie de la página es la fecha en que se revisó este texto por última vez.',
+    consentHeading: 'Tu elección',
+    consentBody:
+      'No se carga nada de Google hasta que respondes. Si aceptas, se cargan los scripts de publicidad y de analítica y la respuesta queda guardada en tu navegador; si rechazas, el sitio funciona exactamente igual y no se carga nada. El enlace {settingsLink} del pie de página vuelve a abrir la pregunta.',
     lastReviewed: 'Última revisión: {date}.',
   },
 

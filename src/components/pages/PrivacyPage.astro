@@ -28,6 +28,15 @@ const advertisingBody = fill(copy.advertisingBody, {
 const analyticsBody = fill(copy.analyticsBody, {
   analyticsPoliciesLink: `<a href="https://policies.google.com/privacy" rel="noopener">${copy.analyticsPoliciesLink}</a>`,
 });
+
+/**
+ * The consent section ends with the same button the footer carries. It
+ * opens the banner rather than going anywhere, so it is a button and not a
+ * link.
+ */
+const consentBody = fill(copy.consentBody, {
+  settingsLink: `<button type="button" class="link-button" data-consent-open>${ui.consent.settings}</button>`,
+});
 ---
 
 <Base
@@ -69,6 +78,9 @@ const analyticsBody = fill(copy.analyticsBody, {
       <h2>{copy.changesHeading}</h2>
       <p>{copy.changesBody}</p>
 
+      <h2>{copy.consentHeading}</h2>
+      <p set:html={consentBody} />
+
       <p class="text-muted">
         {fill(copy.lastReviewed, { date: formatDate(site.reviewedOn, locale) })}
       </p>
@@ -77,3 +89,22 @@ const analyticsBody = fill(copy.analyticsBody, {
     <AdSlot placement="footer" />
   </div>
 </Base>
+
+<style>
+  /* A button that reads as a link: it opens the banner instead of
+     navigating anywhere, but the sentence around it is a paragraph. */
+  .link-button {
+    padding: 0;
+    background: none;
+    border: none;
+    color: var(--accent-link);
+    font: inherit;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+    cursor: pointer;
+  }
+
+  .link-button:hover {
+    color: var(--accent-link-hover);
+  }
+</style>

@@ -42,6 +42,15 @@ export const en = {
     bio: 'Reads the financial content of a guide before it is published: the figures, the assumptions behind them, and the sources they come from. The author builds the calculation engine; the reviewer reads the result from the other side, the side of someone who deals with money rather than with code. Her name appears only on the guides she reviewed.',
   },
 
+  consent: {
+    heading: 'Cookies',
+    body: 'This site uses cookies to serve advertising and to count which pages are read. You can accept them or decline them, and you can change your answer later from the footer. What is collected and who provides it is on the {privacyLink}.',
+    privacyLink: 'privacy page',
+    accept: 'Accept',
+    reject: 'Decline',
+    settings: 'Cookie settings',
+  },
+
   nav: {
     tools: 'Tools',
     guides: 'Guides',
@@ -68,6 +77,7 @@ export const en = {
       privacy: 'Privacy',
       terms: 'Terms',
     },
+    cookieSettings: 'Cookie settings',
     note:
       '{name} publishes calculations and explanations, not financial advice. The tools show the arithmetic behind a number and the assumptions behind the arithmetic. They do not evaluate your situation and they do not recommend a course of action. Every figure a tool produces depends on the inputs you supply — read the assumptions before you rely on any result. © {founded}–{year} {name}.',
   },
@@ -410,6 +420,9 @@ export const en = {
     changesHeading: 'Changes',
     changesBody:
       'If the providers above change, this page changes with them. The date at the bottom of the page is the date this text was last reviewed.',
+    consentHeading: 'Your choice',
+    consentBody:
+      'Nothing is loaded from Google until you answer. If you accept, the advertising and analytics scripts are loaded and the answer is remembered in your browser; if you decline, the site works exactly the same and nothing is loaded. The {settingsLink} link in the footer opens the question again.',
     lastReviewed: 'Last reviewed: {date}.',
   },
 

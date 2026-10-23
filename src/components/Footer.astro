@@ -65,5 +65,32 @@ const siteLinks = site.footer.filter((item) => !item.href.startsWith('/tools/'))
           .replace('{year}', String(new Date().getFullYear()))
       }
     </p>
+    {/*
+      The cookie question has to be answerable more than once. A reader
+      who declined the cookies and changed their mind needs a way back to
+      the banner, and that link belongs where the other footer links are.
+    */}
+    <button type="button" class="footer-consent" data-consent-open>
+      {ui.footer.cookieSettings}
+    </button>
   </div>
 </footer>
+
+<style>
+  .footer-consent {
+    margin-top: var(--space-3);
+    padding: 0;
+    background: none;
+    border: none;
+    color: var(--text-muted);
+    font-size: var(--text-sm);
+    font-family: inherit;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+    cursor: pointer;
+  }
+
+  .footer-consent:hover {
+    color: var(--text-secondary);
+  }
+</style>

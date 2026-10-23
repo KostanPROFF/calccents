@@ -55,6 +55,11 @@ jobs:
       - name: Ad gating check with the ad units enabled
         run: node scripts/check-ads.ts --expect-slots
 
+      # The ad units are on the page in this build, so this is the build
+      # that proves they stay hidden until the reader has answered.
+      - name: Consent gating check with the ad units enabled
+        run: pnpm lint:consent
+
       # This is the build that ships: the loader script, and no ad units,
       # because no slot IDs are configured.
       - name: Build
@@ -62,6 +67,12 @@ jobs:
 
       - name: Ad gating check
         run: pnpm lint:ads
+
+      # The trackers are loaded by the consent component and by nothing
+      # else, so the build has to prove that neither script tag is in the
+      # document and that the banner is on every page.
+      - name: Consent gating check
+        run: pnpm lint:consent
 
       - name: DOM id check
         run: pnpm lint:ids
@@ -123,6 +134,9 @@ jobs:
           PUBLIC_ADSENSE_SLOT_RESULT: ${{ vars.PUBLIC_ADSENSE_SLOT_RESULT }}
           PUBLIC_ADSENSE_SLOT_IN_ARTICLE: ${{ vars.PUBLIC_ADSENSE_SLOT_IN_ARTICLE }}
           PUBLIC_ADSENSE_SLOT_FOOTER: ${{ vars.PUBLIC_ADSENSE_SLOT_FOOTER }}
+
+      - name: Consent gating check for the build that ships
+        run: pnpm lint:consent
 
       # The deploy is skipped until the two Cloudflare secrets exist. The
       # check lives in the shell rather than in an `if:` expression, because

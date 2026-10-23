@@ -17,8 +17,9 @@
     "lint:links": "node scripts/check-links.ts",
     "lint:ads": "node scripts/check-ads.ts",
     "lint:ids": "node scripts/check-dom-ids.ts",
+    "lint:consent": "node scripts/check-consent.ts",
     "lint": "pnpm lint:advisory && pnpm lint:links",
-    "verify": "pnpm check && pnpm test && pnpm lint && pnpm build && pnpm lint:ads && pnpm lint:ids"
+    "verify": "pnpm check && pnpm test && pnpm lint && pnpm build && pnpm lint:ads && pnpm lint:consent && pnpm lint:ids"
   },
   "dependencies": {
     "@astrojs/mdx": "8.1.0",

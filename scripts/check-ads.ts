@@ -2,11 +2,15 @@
 /**
  * Ad gating check.
  *
- * The site carries the AdSense loader script on every page, because that
- * is what turns on auto ads: Google places the units itself, wherever it
+ * The site references the AdSense loader on every page, because that is
+ * what turns on auto ads: Google places the units itself, wherever it
  * decides they fit. The hand-placed units in the tool pages are a second,
  * separate mechanism, and they stay off until their slot IDs are
  * configured.
+ *
+ * The loader tag itself is not in the document. The consent component
+ * injects it after the reader has agreed to cookies, so the URL is in the
+ * page and the request is not. The consent check proves the second half.
  *
  * So the site has two states, and the check knows both:
  *
@@ -35,7 +39,7 @@ import { fileURLToPath } from 'node:url';
 const ROOT = fileURLToPath(new URL('..', import.meta.url)).replace(/\/$/, '');
 const DIST = join(ROOT, 'dist');
 
-/** The loader script. It is on every page, in the head, always. */
+/** The loader script. Its URL is on every page; the tag is injected on consent. */
 const SCRIPT_MARKER = 'pagead2.googlesyndication.com';
 
 /** Marks that only appear when a hand-placed ad unit is rendered. */
@@ -232,7 +236,7 @@ if (expectSlots) {
   );
 } else {
   console.log(
-    `Ad gating check passed: ${htmlFiles.length} pages carry the AdSense loader and ` +
+    `Ad gating check passed: ${htmlFiles.length} pages reference the AdSense loader and ` +
       `no ad units, and ${scriptFiles.length} scripts are clean.`,
   );
 }

@@ -4,6 +4,7 @@ import { getUi } from '../i18n/ui/index.ts';
 import { alternates, DEFAULT_LOCALE, LOCALE_META, localePath, type Locale } from '../i18n/locales.ts';
 import Nav from '../components/Nav.astro';
 import Footer from '../components/Footer.astro';
+import CookieConsent from '../components/CookieConsent.astro';
 import '../styles/global.css';
 
 interface Props {
@@ -95,24 +96,6 @@ const reviewer = {
   sameAs: site.reviewer.links.map((link) => link.href),
 };
 
-/**
- * The AdSense publisher ID.
- *
- * The account exists, so the ID is a fact about the site and lives in the
- * config with the name and the domain. The environment variable overrides
- * it, which is what the CI build with dummy IDs uses to prove the ad path
- * still works.
- */
-const adsenseClient = import.meta.env.PUBLIC_ADSENSE_CLIENT || site.adsensePublisherId;
-
-/**
- * The Google Analytics measurement ID.
- *
- * The property belongs to this site, so the ID lives in the config with the
- * name and the domain. The environment variable overrides it, which is how a
- * build can prove the analytics path still works with a dummy ID.
- */
-const gaId = import.meta.env.PUBLIC_GA_ID || site.gaMeasurementId;
 ---
 
 <!doctype html>
@@ -166,31 +149,12 @@ const gaId = import.meta.env.PUBLIC_GA_ID || site.gaMeasurementId;
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
 
     <!--
-      The AdSense loader.
-
-      AdSense asks for this script on every page and asks for it in the
-      head, so it starts downloading in parallel with the rest of the
-      document instead of after it. The script on its own is what turns on
-      auto ads: Google decides where the units go.
-
-      The hand-placed units in the tool pages are a separate mechanism. They
-      stay off until their slot IDs are configured, so a page never carries
-      both auto ads and manual units unless both are switched on on purpose.
-    -->
-    <script
-      is:inline
-      async
-      src={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${adsenseClient}`}
-      crossorigin="anonymous"
-    ></script>
-
-    <!--
       The AdSense ownership tag.
 
       This tells Google which publisher account this site belongs to, which
       is how the application is reviewed. It carries no ad code and makes no
-      request to anyone: the loader script and the ad units are gated on
-      environment variables and stay off until the account is approved.
+      request to anyone: the loader script is loaded by the consent
+      component, and only after the reader has agreed to cookies.
     -->
     <meta name="google-adsense-account" content={site.adsensePublisherId} />
     <link rel="sitemap" href="/sitemap-index.xml" />
@@ -222,24 +186,6 @@ const gaId = import.meta.env.PUBLIC_GA_ID || site.gaMeasurementId;
         <script type="application/ld+json" set:html={JSON.stringify(schema)} />
       ))
     }
-
-    {
-      gaId && (
-        <script
-          is:inline
-          async
-          src={`https://www.googletagmanager.com/gtag/js?id=${gaId}`}
-        />
-      )
-    }
-    {
-      gaId && (
-        <script
-          is:inline
-          set:html={`window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','${gaId}');`}
-        />
-      )
-    }
   </head>
   <body>
     <a class="skip-link" href="#main">{ui.ui.skipToContent}</a>
@@ -248,5 +194,13 @@ const gaId = import.meta.env.PUBLIC_GA_ID || site.gaMeasurementId;
       <slot />
     </main>
     <Footer locale={locale} />
+
+    {/*
+      The consent banner and the scripts it gates.
+
+      Both Google scripts set cookies, so neither one is in the document
+      until the reader has answered. The component injects them.
+    */}
+    <CookieConsent locale={locale} />
   </body>
 </html>

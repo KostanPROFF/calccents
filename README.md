@@ -279,6 +279,11 @@ configured. To use them:
 with the name and the domain, and the variable is only an override for the
 CI build that uses dummy IDs.
 
+The loader itself is not a script tag in the page. The consent component
+injects it once the reader has agreed to cookies, so the ad units stay
+hidden until then and a reader who declines never sends a request to
+Google.
+
 The automatic gate is the part that matters. It reads the three slot
 variables and works out what the build should contain: all three set means
 the hand-placed units are rendered, none set means they are not, and some
@@ -304,18 +309,46 @@ content down and slowing the page.
 
 ## Analytics
 
-Google Analytics 4 is loaded on every page. The measurement ID lives in
-`src/config/site.ts` next to the name and the domain, because the property
-belongs to the site, and a GA4 measurement ID is public by design — it is
-visible in the source of every page that loads the tag. `PUBLIC_GA_ID`
-overrides it, which is how a build can prove the tag path works with a dummy
-ID.
+Google Analytics 4 is loaded on every page a reader has agreed to cookies
+on. The measurement ID lives in `src/config/site.ts` next to the name and the
+domain, because the property belongs to the site, and a GA4 measurement ID is
+public by design — it is visible in the source of every page that loads the
+tag. `PUBLIC_GA_ID` overrides it, which is how a build can prove the tag
+path works with a dummy ID.
 
 The privacy page names the provider and says what is collected. It used to
 promise a cookieless provider served from the site's own domain, which was
 true only while no analytics were running at all; GA4 is served by Google
 from `googletagmanager.com` and stores a first-party identifier, so the text
 now describes what actually happens.
+
+## Consent
+
+The AdSense loader and the Google Analytics loader both set cookies, so
+neither one is in the document until the reader has answered the cookie
+question. `src/components/CookieConsent.astro` owns the whole thing:
+
+- the banner is on every page and is the only thing in the body that is
+  rendered by the component
+- the answer is kept in `localStorage` under `cc-consent`, as `granted` or
+  `denied`
+- accepting injects both scripts and pushes the hand-placed ad units to
+  Google; declining removes the ad units from the page and loads nothing
+- changing the answer later reloads the page, because a script that has
+  already run cannot be unloaded
+- the footer carries a button that opens the banner again, so the answer is
+  not a one-time decision
+
+The URLs of both scripts are in the source of every page, because that is
+what the ad gate reads, and the check for a script *tag* is what proves that
+nothing goes out before the answer. `scripts/check-consent.ts` runs that
+check over the built output, in the verify job and again in the deploy job
+for the build that is about to ship.
+
+The trade-off is deliberate: a reader who declines sees no advertising, and
+the site earns nothing from that visit. That is the honest reading of
+"decline", and the alternative — loading the ad script for a reader who said
+no — is the thing the banner exists to prevent.
 
 ## The ladder after AdSense
 
@@ -345,7 +378,7 @@ those markets earns a fraction of the same page view.
 
 ## Verification gates
 
-`pnpm verify` runs six gates, and all six block a deployment:
+`pnpm verify` runs seven gates, and all seven block a deployment:
 
 1. `astro check` — no type or template errors.
 2. Unit tests — 90 % line coverage, 90 % function coverage and 85 % branch
@@ -356,9 +389,12 @@ those markets earns a fraction of the same page view.
 4. `astro build` — the site builds.
 5. Ad gating — the built HTML and JS contain no AdSense code while no
    publisher ID is configured, and no page carries more than three slots.
-6. DOM ids — every id in the built HTML appears exactly once.
+6. Consent gating — the banner is on every page, both trackers are present
+   in the source, and neither one is loaded as a script tag before the
+   reader has answered.
+7. DOM ids — every id in the built HTML appears exactly once.
 
-The last two gates exist because the build proves the code compiles, not that
+The last three gates exist because the build proves the code compiles, not that
 it behaves. A result cell and an input field that shared an id once left the
 monthly rent figure stuck on a placeholder while every test still passed; the
 duplicate-id gate now catches that class of defect before it ships.
