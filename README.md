@@ -150,7 +150,7 @@ the shipped HTML; no secret belongs in this file.
 |---|---|
 | `PUBLIC_ADSENSE_CLIENT` | No ad markup is shipped at all — the slots render nothing |
 | `PUBLIC_ADSENSE_SLOT_RESULT` / `_IN_ARTICLE` / `_FOOTER` | The corresponding slot stays empty |
-| `PUBLIC_GA_ID` | Google Analytics is not loaded; Cloudflare Web Analytics still works |
+| `PUBLIC_GA_ID` | Overrides the Google Analytics measurement ID from the config; the tag loads either way |
 | `PUBLIC_BUTTONDOWN_FORM` | The newsletter form is not rendered |
 
 The ad slots are env-gated on purpose. An `<ins>` element on a page that has
@@ -301,6 +301,21 @@ Keep the number of ad units per page at three or fewer. On a comparable
 site, cutting the ad units on the main page from 18 to 9 raised page RPM by
 40 % and monthly revenue by nearly 50 %, because the ads were pushing the
 content down and slowing the page.
+
+## Analytics
+
+Google Analytics 4 is loaded on every page. The measurement ID lives in
+`src/config/site.ts` next to the name and the domain, because the property
+belongs to the site, and a GA4 measurement ID is public by design — it is
+visible in the source of every page that loads the tag. `PUBLIC_GA_ID`
+overrides it, which is how a build can prove the tag path works with a dummy
+ID.
+
+The privacy page names the provider and says what is collected. It used to
+promise a cookieless provider served from the site's own domain, which was
+true only while no analytics were running at all; GA4 is served by Google
+from `googletagmanager.com` and stores a first-party identifier, so the text
+now describes what actually happens.
 
 ## The ladder after AdSense
 

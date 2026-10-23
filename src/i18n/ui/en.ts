@@ -385,21 +385,22 @@ export const en = {
     description:
       'What this site collects, what it does not collect, and which advertising and analytics providers appear on the pages.',
     heading: 'Privacy',
-    lede: 'The short version: the numbers you type into a calculator stay in your browser, and the site sets no cookies of its own.',
+    lede: 'The short version: the numbers you type into a calculator stay in your browser, and the site itself keeps no tracking cookie.',
     calculatorsHeading: 'What the calculators do with your input',
     calculatorsBody:
       'Nothing. The arithmetic runs in your browser using JavaScript that is downloaded with the page. The values you enter are not transmitted anywhere, are not stored, and are not visible to the site or to anyone else. Closing the tab discards them.',
     cookiesHeading: 'Cookies',
     cookiesBody:
-      '{name} sets no cookies. The site\'s own analytics use a cookieless provider that records an aggregate page view with no identifier that could be used to follow you between sites.',
+      '{name} sets no cookies of its own. The site\'s analytics run on Google Analytics 4, which Google serves from its own domains and which stores a first-party identifier in your browser so that one visit can be told from the next. That identifier is not used for advertising and is not shared with other sites.',
     advertisingHeading: 'Advertising',
     advertisingBody:
-      'The site is funded by display advertising served by Google AdSense. Google and its partners may set cookies or use similar technologies to serve and measure advertising, and may use them to serve ads based on your prior visits to this or other websites. You can review and change your choices at Google Ads Settings, and Google\'s own explanation of how it uses data from sites and apps that use its services is at policies.google.com.',
+      'The site is funded by display advertising served by Google AdSense. Google and its partners may set cookies or use similar technologies to serve and measure advertising, and may use them to serve ads based on your prior visits to this or other websites. You can review and change your choices at {adsSettingsLink}, and Google\'s own explanation of how it uses data from sites and apps that use its services is at {policiesLink}.',
     adsSettingsLink: 'Google Ads Settings',
     policiesLink: 'policies.google.com',
+    analyticsPoliciesLink: 'policies.google.com',
     analyticsHeading: 'Analytics',
     analyticsBody:
-      'Aggregate page views are recorded with a cookieless analytics provider that is served from the same domain as the site. The data used is limited to the page, the referring source and a coarse country or city level location. It is used to count visits and to find out which pages are read.',
+      'Page views are recorded with Google Analytics 4, served by Google from googletagmanager.com. The data used is limited to the page, the referring source and a coarse country or city level location; the IP address is truncated rather than stored in full. It is used to count visits and to find out which pages are read. Google\'s own explanation of how it uses data from sites and apps that use its services is at {analyticsPoliciesLink}.',
     newsletterHeading: 'Newsletter',
     newsletterBody:
       'If you subscribe to the newsletter, the address you enter is stored by the email provider so that the newsletter can be sent. That address is used for the newsletter and for nothing else, and every issue carries an unsubscribe link.',

@@ -20,6 +20,14 @@ const advertisingBody = fill(copy.advertisingBody, {
   adsSettingsLink: `<a href="https://adssettings.google.com/" rel="noopener">${copy.adsSettingsLink}</a>`,
   policiesLink: `<a href="https://policies.google.com/technologies/ads" rel="noopener">${copy.policiesLink}</a>`,
 });
+
+/**
+ * The analytics section links to Google's general privacy policy, which is
+ * a different page from the one the advertising section points at.
+ */
+const analyticsBody = fill(copy.analyticsBody, {
+  analyticsPoliciesLink: `<a href="https://policies.google.com/privacy" rel="noopener">${copy.analyticsPoliciesLink}</a>`,
+});
 ---
 
 <Base
@@ -50,7 +58,7 @@ const advertisingBody = fill(copy.advertisingBody, {
       <p set:html={advertisingBody} />
 
       <h2>{copy.analyticsHeading}</h2>
-      <p>{copy.analyticsBody}</p>
+      <p set:html={analyticsBody} />
 
       <h2>{copy.newsletterHeading}</h2>
       <p>{copy.newsletterBody}</p>

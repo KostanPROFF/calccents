@@ -104,7 +104,15 @@ const reviewer = {
  * still works.
  */
 const adsenseClient = import.meta.env.PUBLIC_ADSENSE_CLIENT || site.adsensePublisherId;
-const gaId = import.meta.env.PUBLIC_GA_ID;
+
+/**
+ * The Google Analytics measurement ID.
+ *
+ * The property belongs to this site, so the ID lives in the config with the
+ * name and the domain. The environment variable overrides it, which is how a
+ * build can prove the analytics path still works with a dummy ID.
+ */
+const gaId = import.meta.env.PUBLIC_GA_ID || site.gaMeasurementId;
 ---
 
 <!doctype html>

@@ -23,7 +23,7 @@ export const SITE = {
    * A date rather than a string, because the pages print it and a page in
    * Russian should not print a date written the English way.
    */
-  reviewedOn: new Date('2026-10-20T00:00:00Z'),
+  reviewedOn: new Date('2026-10-23T00:00:00Z'),
   /**
    * One person writes the guides and maintains the calculation engine.
    *
@@ -56,6 +56,18 @@ export const SITE = {
    * still shipping without a single ad request.
    */
   adsensePublisherId: 'ca-pub-5321511632415174',
+  /**
+   * The Google Analytics 4 measurement ID.
+   *
+   * The property belongs to this site, so the ID is a fact about the site
+   * and lives here with the name and the domain. The environment variable
+   * overrides it, which is how a build can prove the analytics path works
+   * with a dummy ID.
+   *
+   * A GA4 measurement ID is public by design: it is visible in the source
+   * of every page that loads the tag.
+   */
+  gaMeasurementId: 'G-J8H5VGPMS5',
 } as const;
 
 export type NavItem = { href: string; label: string };
@@ -96,6 +108,8 @@ export interface SiteForLocale {
   };
   repository: string;
   adsensePublisherId: string;
+  /** The Google Analytics 4 measurement ID. */
+  gaMeasurementId: string;
   nav: NavItem[];
   footer: NavItem[];
 }
@@ -128,6 +142,7 @@ export function getSite(locale: Locale): SiteForLocale {
     },
     repository: SITE.repository,
     adsensePublisherId: SITE.adsensePublisherId,
+    gaMeasurementId: SITE.gaMeasurementId,
     nav: [
       { href: '/tools/', label: ui.nav.tools },
       { href: '/guides/', label: ui.nav.guides },

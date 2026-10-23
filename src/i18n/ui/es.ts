@@ -359,21 +359,22 @@ export const es = {
     description:
       'Qué recoge este sitio, qué no recoge y qué proveedores de publicidad y analítica aparecen en las páginas.',
     heading: 'Privacidad',
-    lede: 'La versión corta: los números que escribes en una calculadora se quedan en tu navegador, y el sitio no instala cookies propias.',
+    lede: 'La versión corta: los números que escribes en una calculadora se quedan en tu navegador, y el sitio no guarda por su cuenta ninguna cookie de seguimiento.',
     calculatorsHeading: 'Qué hacen las calculadoras con los datos que introduces',
     calculatorsBody:
       'Nada. La aritmética se ejecuta en tu navegador con JavaScript que se descarga junto con la página. Los valores que introduces no se transmiten a ninguna parte, no se almacenan y no son visibles ni para el sitio ni para nadie más. Al cerrar la pestaña se descartan.',
     cookiesHeading: 'Cookies',
     cookiesBody:
-      '{name} no instala cookies. La analítica propia del sitio usa un proveedor sin cookies que registra una vista agregada de la página, sin ningún identificador que sirva para seguirte entre sitios.',
+      '{name} no instala cookies propias. La analítica del sitio funciona con Google Analytics 4, que Google sirve desde sus propios dominios y que guarda en tu navegador un identificador de primera parte para distinguir una visita de otra. Ese identificador no se usa para publicidad ni se comparte con otros sitios.',
     advertisingHeading: 'Publicidad',
     advertisingBody:
-      'El sitio se financia con publicidad gráfica servida por Google AdSense. Google y sus socios pueden instalar cookies o usar tecnologías similares para servir y medir la publicidad, y pueden usarlas para mostrar anuncios según tus visitas anteriores a este u otros sitios web. Puedes revisar y cambiar tus preferencias en Google Ads Settings, y la explicación de Google sobre cómo usa los datos de los sitios y las aplicaciones que usan sus servicios está en policies.google.com.',
+      'El sitio se financia con publicidad gráfica servida por Google AdSense. Google y sus socios pueden instalar cookies o usar tecnologías similares para servir y medir la publicidad, y pueden usarlas para mostrar anuncios según tus visitas anteriores a este u otros sitios web. Puedes revisar y cambiar tus preferencias en {adsSettingsLink}, y la explicación de Google sobre cómo usa los datos de los sitios y las aplicaciones que usan sus servicios está en {policiesLink}.',
     adsSettingsLink: 'Google Ads Settings',
     policiesLink: 'policies.google.com',
+    analyticsPoliciesLink: 'policies.google.com',
     analyticsHeading: 'Analítica',
     analyticsBody:
-      'Las vistas agregadas de página se registran con un proveedor de analítica sin cookies que se sirve desde el mismo dominio que el sitio. Los datos usados se limitan a la página, la fuente de referencia y una ubicación aproximada a nivel de país o ciudad. Sirven para contar visitas y para saber qué páginas se leen.',
+      'Las vistas de página se registran con Google Analytics 4, que Google sirve desde googletagmanager.com. Los datos usados se limitan a la página, la fuente de referencia y una ubicación aproximada a nivel de país o ciudad; la dirección IP se trunca en lugar de guardarse entera. Sirven para contar visitas y para saber qué páginas se leen. La explicación de Google sobre cómo usa los datos de los sitios y las aplicaciones que usan sus servicios está en {analyticsPoliciesLink}.',
     newsletterHeading: 'Boletín',
     newsletterBody:
       'Si te suscribes al boletín, la dirección que introduces la almacena el proveedor de correo para poder enviar el boletín. Esa dirección se usa para el boletín y para nada más, y cada número incluye un enlace para cancelar la suscripción.',
