@@ -610,7 +610,7 @@ closed-form formula at every compounding frequency.
 The site is live at **https://calccents.com**, deployed from `main` by GitHub
 Actions, with `www.calccents.com` pointing at the same place.
 
-The repository builds clean and every gate passes: 100 pages, 209 tests, 99.48 %
+The repository builds clean and every gate passes: 100 pages, 211 tests, 99.49 %
 line coverage over the calculation engine, zero advisory findings in three
 languages, zero broken links, zero duplicate ids, and no AdSense code in the
 output.
