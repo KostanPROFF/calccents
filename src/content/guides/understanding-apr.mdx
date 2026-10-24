@@ -33,6 +33,8 @@ faq:
     a: "One percent of the loan amount paid at closing in exchange for a lower interest rate. Whether that is a good trade depends on the size of the rate reduction and how long the loan lasts."
 ---
 
+import GuideIllustration from '../../components/visuals/GuideIllustration.astro';
+
 Two numbers appear on a mortgage quote, and they are easy to confuse. The
 **interest rate** is the price of borrowing the money. The **annual
 percentage rate** is the price of borrowing the money plus the cost of
@@ -56,6 +58,10 @@ The formula is set out in federal regulation, which matters for one
 important reason: it means two lenders quoting an APR are quoting it the
 same way, so the numbers can be compared directly.
 
+
+<div class="guide-inline-figure">
+  <GuideIllustration slug="mortgage-rate-and-term-tradeoffs" locale={frontmatter.locale} />
+</div>
 ## How it is calculated
 
 The APR is the discount rate that would produce the same total of payments
@@ -81,6 +87,10 @@ $4,000 of extra fees can easily carry a higher APR than a rate 0.5 percent
 higher with no extra fees. Neither offer is wrong; they are two different
 structures, and the APR is the number that puts them on the same scale.
 
+
+<div class="guide-inline-figure">
+  <GuideIllustration slug="extra-mortgage-payments-math" locale={frontmatter.locale} />
+</div>
 ## What the APR does not tell you
 
 The APR is a cost measure, and it has limits that matter when comparing

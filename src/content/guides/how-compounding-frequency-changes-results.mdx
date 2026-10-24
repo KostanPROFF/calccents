@@ -33,6 +33,8 @@ faq:
     a: "No. The nominal rate is the stated number and the frequency changes what it turns into. Two accounts with the same nominal rate and different frequencies are not the same product, and the effective annual rate is how you compare them."
 ---
 
+import GuideIllustration from '../../components/visuals/GuideIllustration.astro';
+
 Two accounts that both advertise "7 percent" are not necessarily the same
 account. The nominal rate is the number, and the compounding frequency
 decides what the number turns into.
@@ -51,6 +53,10 @@ one date at the end. With monthly compounding, a twelfth of the annual
 interest lands at the end of every month and starts earning interest
 immediately. The extra interest is small, but it is earned for a long time.
 
+
+<div class="guide-inline-figure">
+  <GuideIllustration slug="compound-vs-simple-interest" locale={frontmatter.locale} />
+</div>
 ## The effective annual rate
 
 The way to compare two frequencies is the effective annual rate: the rate
@@ -99,6 +105,10 @@ earning interest at the higher effective rate as well.
 The pattern is consistent: the gap between two frequencies is small in the
 early years and widens steadily, because it is itself being compounded.
 
+
+<div class="guide-inline-figure">
+  <GuideIllustration slug="compound-interest-calculator-explained" locale={frontmatter.locale} />
+</div>
 ## Why this tool offers six frequencies
 
 The tool offers annually, twice a year, every four months, quarterly, every

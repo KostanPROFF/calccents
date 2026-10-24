@@ -34,6 +34,8 @@ faq:
     a: "No. El total de intereses es el coste del préstamo. El impuesto predial, el seguro, el HOA y el mantenimiento son adicionales, y la calculadora informa del coste total de la vivienda para que las dos cosas se vean por separado."
 ---
 
+import GuideIllustration from '../../../components/visuals/GuideIllustration.astro';
+
 Una oferta de hipoteca se presenta casi siempre como una cifra mensual, y la
 cifra mensual es una forma mala de comparar dos ofertas. Es una buena forma
 de comprobar que algo queda a tu alcance, y una forma mala de averiguar cuál
@@ -59,6 +61,10 @@ En abstracto, ninguno de los dos sale ganando. Son mejores en circunstancias dis
 las circunstancias no son aritmética. Pero los dos hechos de arriba sí son
 aritmética, y son los hechos que una comparación puede establecer.
 
+
+<div class="guide-inline-figure">
+  <GuideIllustration slug="mortgage-payment-calculator-explained" locale={frontmatter.locale} />
+</div>
 ## Las cuatro cifras de la comparación
 
 Una comparación de hipotecas se entiende mejor con cuatro cifras que con
@@ -90,6 +96,10 @@ década más. La primera década de una hipoteca es donde se cobra casi todo
 el interés, y un plazo que alarga esa década es caro de una forma que la
 cuota por sí sola no enseña.
 
+
+<div class="guide-inline-figure">
+  <GuideIllustration slug="mortgage-rate-and-term-tradeoffs" locale={frontmatter.locale} />
+</div>
 ## Lo que hace el tipo en esa misma comparación
 
 El tipo tiene una forma de efecto parecida. Sobre los mismos $360,000 a 30

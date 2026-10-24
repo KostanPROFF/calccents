@@ -35,6 +35,8 @@ faq:
     a: "No. Those are payroll taxes withheld from wages, with their own rates and their own ceilings, and they are separate from income tax on earnings."
 ---
 
+import GuideIllustration from '../../components/visuals/GuideIllustration.astro';
+
 The federal income tax on a year of earnings is a published table applied to a
 number that is assembled in a few steps. The
 <a href="/tools/income-tax/">income tax calculator</a> on this site performs
@@ -60,6 +62,10 @@ married filing jointly, and $24,150 for head of household.
 What remains is taxable income. The brackets apply to that number, and the
 state estimate applies to the same number.
 
+
+<div class="guide-inline-figure">
+  <GuideIllustration slug="net-pay-calculator-explained" locale={frontmatter.locale} />
+</div>
 ## How the brackets work
 
 The IRS publishes each bracket as a fixed amount of tax plus a percentage of
@@ -96,6 +102,10 @@ than the standard deduction. Where the itemised figure is smaller, the
 standard deduction stands and taxable income is higher. The two numbers in
 the result show which one was used.
 
+
+<div class="guide-inline-figure">
+  <GuideIllustration slug="debt-payoff-calculator-explained" locale={frontmatter.locale} />
+</div>
 ## What the figure does not cover
 
 The federal figure is ordinary income tax on taxable income, and the

@@ -34,6 +34,8 @@ faq:
     a: "Forman parte del PITI, así que normalmente se cobran mensualmente en el escrow. La cantidad anual es lo que muestra la calculadora; la cifra mensual es la cantidad anual dividida entre doce."
 ---
 
+import GuideIllustration from '../../../components/visuals/GuideIllustration.astro';
+
 Dos de las cuatro partes de una cuota de hipoteca no las fija el préstamo en
 absoluto. El impuesto predial viene de un gobierno local y el seguro de
 hogar viene de una aseguradora, y los dos son estimaciones hasta que llega
@@ -69,6 +71,10 @@ aplica el tipo sin que la casa haya cambiado en absoluto.
 Los recursos de vivienda de HUD y de CFPB describen esta estructura, y son
 el sitio donde se puede ver cómo funciona una jurisdicción concreta.
 
+
+<div class="guide-inline-figure">
+  <GuideIllustration slug="down-payment-and-closing-costs-explained" locale={frontmatter.locale} />
+</div>
 ## El seguro de hogar
 
 La prima se construye a partir de varios insumos, y el mayor es uno que la
@@ -108,6 +114,10 @@ El orden que mejor funciona es breve:
    propias cifras. No es una promesa para el año siguiente, y se moverá
    cuando lleguen la factura del impuesto y la renovación del seguro.
 
+
+<div class="guide-inline-figure">
+  <GuideIllustration slug="rent-vs-buy-calculator-explained" locale={frontmatter.locale} />
+</div>
 ## Por qué la calculadora los pide por separado
 
 El impuesto y el seguro son cantidades anuales, y la cuota mensual los

@@ -31,6 +31,8 @@ faq:
     a: "Sí. La calculadora genera el cuadro para cualquier préstamo, y una guía explica cómo leer cada una de sus columnas."
 ---
 
+import GuideIllustration from '../../../components/visuals/GuideIllustration.astro';
+
 La amortización es el proceso por el que se devuelve una hipoteca, y produce
 uno de los resultados más contraintuitivos de las finanzas personales: un
 préstamo a treinta años no son treinta años devolviéndolo. Son unos diez años
@@ -58,6 +60,10 @@ cuota —que se fijó para cubrir esos intereses más una porción pequeña de
 capital— es casi todo intereses. A medida que el saldo baja, el cargo de
 intereses baja con él, y la misma cuota empieza a cubrir más capital.
 
+
+<div class="guide-inline-figure">
+  <GuideIllustration slug="mortgage-payment-calculator-explained" locale={frontmatter.locale} />
+</div>
 ## La aritmética de un solo mes
 
 El cargo de intereses de un mes es:
@@ -95,6 +101,10 @@ ido la mayor parte del saldo. Por eso importa el año exacto: «cuánto he
 devuelto» y «cuánto he pagado en intereses» son preguntas muy distintas, y el
 cuadro de amortización responde a las dos.
 
+
+<div class="guide-inline-figure">
+  <GuideIllustration slug="extra-mortgage-payments-math" locale={frontmatter.locale} />
+</div>
 ## Por qué la última cuota es distinta
 
 Una cuota mensual tiene que ser un número fijo de céntimos, y un préstamo

@@ -33,6 +33,8 @@ faq:
     a: "An adjustable rate has a starting rate and a schedule, and the payment moves as the index moves. The calculators on this site model fixed rates, because a fixed-rate projection is a projection and an adjustable-rate projection is a set of scenarios."
 ---
 
+import GuideIllustration from '../../components/visuals/GuideIllustration.astro';
+
 A mortgage has two dials that move the payment, and they pull in opposite
 directions once you look at the total cost. The rate and the term have to be
 read together, because the effect of one depends on where the other is
@@ -56,6 +58,10 @@ Both of those lower the payment, and both of them raise the total cost.
 That is the shape of the trade: the monthly number and the lifetime number
 move in opposite directions.
 
+
+<div class="guide-inline-figure">
+  <GuideIllustration slug="monthly-payment-vs-total-cost-mortgage" locale={frontmatter.locale} />
+</div>
 ## The numbers for a typical loan
 
 Take $360,000 at 6.5 percent.
@@ -90,6 +96,10 @@ comparatively more important. The rule of thumb — a percentage point of
 rate is worth more than five years of term — holds for the long loans that
 most people take.
 
+
+<div class="guide-inline-figure">
+  <GuideIllustration slug="understanding-apr" locale={frontmatter.locale} />
+</div>
 ## Why the first decade decides the total
 
 A 30-year loan spends its first decade with a balance that barely moves, and

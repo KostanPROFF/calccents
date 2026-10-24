@@ -33,6 +33,8 @@ faq:
     a: "Un tipo variable tiene un tipo inicial y un calendario, y la cuota se mueve cuando se mueve el índice. Las calculadoras de este sitio modelan tipos fijos, porque una proyección a tipo fijo es una proyección y una proyección a tipo variable es un conjunto de escenarios."
 ---
 
+import GuideIllustration from '../../../components/visuals/GuideIllustration.astro';
+
 Una hipoteca tiene dos mandos que mueven la cuota, y tiran en direcciones
 opuestas en cuanto se mira el coste total. El tipo y el plazo tienen que
 leerse juntos, porque el efecto de uno depende de dónde está puesto el otro.
@@ -54,6 +56,10 @@ Las dos cosas bajan la cuota, y las dos suben el coste total. Esa es la
 forma del intercambio: la cifra mensual y la cifra de toda la vida se
 mueven en direcciones opuestas.
 
+
+<div class="guide-inline-figure">
+  <GuideIllustration slug="monthly-payment-vs-total-cost-mortgage" locale={frontmatter.locale} />
+</div>
 ## Las cifras de un préstamo típico
 
 Tomemos $360,000 al 6.5 por ciento.
@@ -88,6 +94,10 @@ quince años, el plazo pesa relativamente más. La regla empírica —un punto
 porcentual de tipo vale más que cinco años de plazo— se cumple en los
 préstamos largos que casi todo el mundo contrata.
 
+
+<div class="guide-inline-figure">
+  <GuideIllustration slug="understanding-apr" locale={frontmatter.locale} />
+</div>
 ## Por qué la primera década decide el total
 
 Un préstamo a 30 años pasa su primera década con un saldo que apenas se

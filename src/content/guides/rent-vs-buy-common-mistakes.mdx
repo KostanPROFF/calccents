@@ -33,6 +33,8 @@ faq:
     a: "It is realistic for many people, who move for work or family reasons long before thirty years. A short horizon is the strongest argument in the comparison for renting, and it is worth running the calculation at both five and thirty years."
 ---
 
+import GuideIllustration from '../../components/visuals/GuideIllustration.astro';
+
 Most rent versus buy comparisons are not wrong because of the arithmetic.
 They are wrong because of the assumptions, and the assumptions are usually
 made silently.
@@ -59,6 +61,10 @@ zero, then with it positive, then with it negative. If the answer changes
 completely, the answer was never really about rent versus buying. It was
 about a house price forecast.
 
+
+<div class="guide-inline-figure">
+  <GuideIllustration slug="rent-vs-buy-calculator-explained" locale={frontmatter.locale} />
+</div>
 ## Forgetting that owning has running costs
 
 Rent is one number. Owning is a mortgage payment, plus property tax, plus
@@ -90,6 +96,10 @@ down payment either. It reports the cash outlay and the equity built, which
 is the part of the comparison the arithmetic can establish. The rest is a
 judgement about returns.
 
+
+<div class="guide-inline-figure">
+  <GuideIllustration slug="monthly-payment-vs-total-cost-mortgage" locale={frontmatter.locale} />
+</div>
 ## Using a headline rent and a headline price
 
 Rents and prices are quoted in a way that flatters one side of the

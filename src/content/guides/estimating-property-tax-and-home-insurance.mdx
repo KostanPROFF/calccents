@@ -34,6 +34,8 @@ faq:
     a: "They are part of PITI, so they are usually collected monthly into escrow. The annual amount is what the calculator reports; the monthly figure is the annual amount divided by twelve."
 ---
 
+import GuideIllustration from '../../components/visuals/GuideIllustration.astro';
+
 Two of the four parts of a mortgage payment are not set by the loan at all.
 Property tax comes from a local government and homeowners insurance comes
 from an insurer, and both are estimates until the first bill arrives.
@@ -68,6 +70,10 @@ house changing at all.
 The HUD and CFPB housing resources both describe this structure, and they
 are the right place to look for how a specific jurisdiction works.
 
+
+<div class="guide-inline-figure">
+  <GuideIllustration slug="down-payment-and-closing-costs-explained" locale={frontmatter.locale} />
+</div>
 ## Homeowners insurance
 
 The premium is built from several inputs, and the largest is one people
@@ -104,6 +110,10 @@ The order that works best is short:
    for the following year, and it will move when the tax bill and the
    insurance renewal arrive.
 
+
+<div class="guide-inline-figure">
+  <GuideIllustration slug="rent-vs-buy-calculator-explained" locale={frontmatter.locale} />
+</div>
 ## Why the calculator asks for these separately
 
 Tax and insurance are annual amounts, and the monthly payment shows them

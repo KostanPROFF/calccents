@@ -31,6 +31,8 @@ faq:
     a: "The same mechanism applies, with a larger step. The calculator's extra payment field is a monthly amount, and the payoff date it produces is the month the balance reaches zero."
 ---
 
+import GuideIllustration from '../../components/visuals/GuideIllustration.astro';
+
 Extra mortgage payments get described in two ways. One says they save
 thousands of dollars. The other says they are a waste. Both are describing
 the same arithmetic, and the arithmetic is worth looking at directly.
@@ -60,6 +62,10 @@ it is permanent, and it repeats. Over a long enough horizon, extra payments
 remove more interest than the extra cash would have paid directly, even
 though the extra cash is what caused the difference.
 
+
+<div class="guide-inline-figure">
+  <GuideIllustration slug="mortgage-payment-calculator-explained" locale={frontmatter.locale} />
+</div>
 ## Why the payment does not change
 
 This surprises people. The scheduled payment stays exactly as it was, because
@@ -91,6 +97,10 @@ The calculator lets you change the extra payment and watch the payoff date
 and the total interest move. Running it at $0, $100, $200 and $500 is a
 faster way to understand the shape of the effect than any rule of thumb.
 
+
+<div class="guide-inline-figure">
+  <GuideIllustration slug="how-mortgage-amortization-works" locale={frontmatter.locale} />
+</div>
 ## What it does not tell you
 
 The extra payment calculation is about the loan and nothing else. It does

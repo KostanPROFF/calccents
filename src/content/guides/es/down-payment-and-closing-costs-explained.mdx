@@ -34,6 +34,8 @@ faq:
     a: "Afectan si se financian, porque aumenta el importe prestado. La calculadora toma directamente el importe del préstamo, así que el efecto de un importe financiado mayor se ve en la cuota y en el total de intereses."
 ---
 
+import GuideIllustration from '../../../components/visuals/GuideIllustration.astro';
+
 Dos sumas de dinero salen de tu cuenta antes que la hipoteca. El pago
 inicial compra la casa; los gastos de cierre compran el préstamo. Ambos
 cambian la aritmética desde el primer día, y los dos se estiman a menudo
@@ -60,6 +62,10 @@ de la cuota.
 Los recursos de vivienda de HUD y las herramientas hipotecarias de CFPB
 exponen los requisitos actuales de cada programa.
 
+
+<div class="guide-inline-figure">
+  <GuideIllustration slug="mortgage-payment-calculator-explained" locale={frontmatter.locale} />
+</div>
 ## Qué cubren los gastos de cierre
 
 Los gastos de cierre se agrupan en cuatro bloques:
@@ -97,6 +103,10 @@ según la complejidad del título.
 CFPB publica una herramienta que calcula los gastos de cierre en un
 condado concreto, y es la forma más precisa de obtener una cifra local.
 
+
+<div class="guide-inline-figure">
+  <GuideIllustration slug="estimating-property-tax-and-home-insurance" locale={frontmatter.locale} />
+</div>
 ## El Loan Estimate
 
 Tres días hábiles después de solicitar un préstamo, el prestamista tiene que

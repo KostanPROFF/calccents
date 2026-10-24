@@ -36,6 +36,8 @@ faq:
     a: "El horizonte es un insumo. Un horizonte más corto favorece el alquiler, porque el coste inicial de la compra se recupera a lo largo de más años, y un horizonte más largo favorece la propiedad. La herramienta permite fijar 5, 10, 15 o 30 años para que el efecto de esa elección se vea."
 ---
 
+import GuideIllustration from '../../../components/visuals/GuideIllustration.astro';
+
 El alquiler y la compra son dos regímenes distintos para lo mismo de
 fondo: un techo sobre la cabeza y un sitio donde trabajar. La
 <a href="/es/tools/rent-vs-buy/">calculadora de alquiler frente a
@@ -72,6 +74,10 @@ favorece en sentido contrario. Expresarlas como un porcentaje del precio de
 compra cada año las deja junto a los demás costes recurrentes, donde se
 pueden discutir en condiciones.
 
+
+<div class="guide-inline-figure">
+  <GuideIllustration slug="rent-vs-buy-common-mistakes" locale={frontmatter.locale} />
+</div>
 ## El patrimonio es la parte que se pasa por alto
 
 Llevar los libros de efectivo por sí solos produce una imagen incompleta,
@@ -118,6 +124,10 @@ alquiler es pequeño respecto al precio de compra, y esa es la razón
 aritmética por la que una compra al contado en un mercado caro puede ser la
 opción más cara a cinco años.
 
+
+<div class="guide-inline-figure">
+  <GuideIllustration slug="down-payment-and-closing-costs-explained" locale={frontmatter.locale} />
+</div>
 ## Lo que queda fuera a propósito
 
 La comparación cubre el efectivo y el patrimonio. No cubre:

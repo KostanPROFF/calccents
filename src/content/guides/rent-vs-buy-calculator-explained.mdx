@@ -36,6 +36,8 @@ faq:
     a: "The horizon is an input. A shorter horizon favours renting, because the upfront cost of buying is recovered over more years, and a longer horizon favours owning. The tool lets you set 5, 10, 15 or 30 years so the effect of that choice is visible."
 ---
 
+import GuideIllustration from '../../components/visuals/GuideIllustration.astro';
+
 Renting and buying are two different arrangements for the same underlying
 thing: a roof over your head and a place to work. The
 <a href="/tools/rent-vs-buy/">rent versus buy calculator</a> compares them on
@@ -71,6 +73,10 @@ enormous flatters it the other way. Expressing them as a percentage of the
 purchase price each year keeps them next to the other running costs, where
 they can be argued about properly.
 
+
+<div class="guide-inline-figure">
+  <GuideIllustration slug="rent-vs-buy-common-mistakes" locale={frontmatter.locale} />
+</div>
 ## Equity is the part that is easy to miss
 
 Running the cash ledgers on their own produces an incomplete picture, because
@@ -115,6 +121,10 @@ rent is small relative to the purchase price, which is the arithmetic reason
 a cash purchase in an expensive market can be the more expensive option
 over five years.
 
+
+<div class="guide-inline-figure">
+  <GuideIllustration slug="down-payment-and-closing-costs-explained" locale={frontmatter.locale} />
+</div>
 ## What is deliberately outside
 
 The comparison covers cash and equity. It does not cover:

@@ -37,6 +37,8 @@ faq:
     a: "No. This is the tax for the year, computed from the annual figures. Withholding is what the employer sends to the IRS during the year, and it is set by the withholding method on the W-4, so the amount on a single paycheque can differ from a twelfth of the annual figure."
 ---
 
+import GuideIllustration from '../../components/visuals/GuideIllustration.astro';
+
 A paycheque carries one number. The number on the offer letter is a different
 one, and the gap between them is built from a short list of rules that can be
 written down exactly.
@@ -72,6 +74,10 @@ pre-tax deductions, before the standard deduction. That distinction matters:
 the standard deduction reduces federal income tax and state tax, while Social
 Security and Medicare are charged on the larger base.
 
+
+<div class="guide-inline-figure">
+  <GuideIllustration slug="income-tax-calculator-explained" locale={frontmatter.locale} />
+</div>
 ## The federal brackets
 
 Federal income tax is not a single rate. For 2026, a single filer's taxable
@@ -117,6 +123,10 @@ whole of taxable income sits above what a progressive state would collect and
 matches a flat-rate state exactly. The rate on the page is the only
 state-specific input in the calculation.
 
+
+<div class="guide-inline-figure">
+  <GuideIllustration slug="debt-payoff-calculator-explained" locale={frontmatter.locale} />
+</div>
 ## Why the effective rate sits below the marginal rate
 
 The two rates in the results answer different questions. The marginal rate is

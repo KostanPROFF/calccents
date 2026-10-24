@@ -259,6 +259,18 @@ a:hover {
   max-width: var(--prose-max);
 }
 
+/*
+ * A picture inside the body of a guide.
+ *
+ * It is narrower than the column of text and centred under it, so the
+ * reading line is not broken by a picture that runs the full width.
+ */
+.guide-inline-figure {
+  max-width: 560px;
+  margin: var(--space-8) auto;
+  --fig-aspect: 16 / 9;
+}
+
 .stack > * + * {
   margin-top: var(--space-4);
 }

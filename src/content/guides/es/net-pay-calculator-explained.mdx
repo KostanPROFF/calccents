@@ -37,6 +37,8 @@ faq:
     a: "No. Aquí se calcula el impuesto del año con las cifras anuales. La retención es lo que el empleador remite al IRS durante el año, y se fija con el método indicado en el W-4, así que la cifra de una nómina concreta puede diferir de un doceavo del total anual."
 ---
 
+import GuideIllustration from '../../../components/visuals/GuideIllustration.astro';
+
 La nómina trae una cifra. La del contrato es otra, y la diferencia entre ambas se
 puede escribir como una lista corta de reglas.
 
@@ -73,6 +75,10 @@ deducciones previas y antes de la deducción estándar. La diferencia importa:
 la deducción estándar reduce el impuesto federal y el estatal, mientras que
 Social Security y Medicare se cobran sobre una base mayor.
 
+
+<div class="guide-inline-figure">
+  <GuideIllustration slug="income-tax-calculator-explained" locale={frontmatter.locale} />
+</div>
 ## Los tramos federales
 
 El impuesto federal sobre la renta no se calcula con un único tipo. Para 2026,
@@ -118,6 +124,10 @@ lo que cobraría un estado progresivo y coincide con un estado de tipo plano.
 El porcentaje de la página es la única variable del cálculo que depende del
 estado.
 
+
+<div class="guide-inline-figure">
+  <GuideIllustration slug="debt-payoff-calculator-explained" locale={frontmatter.locale} />
+</div>
 ## Por qué la tasa efectiva queda por debajo de la marginal
 
 Los dos tipos que aparecen en los resultados responden a preguntas distintas.

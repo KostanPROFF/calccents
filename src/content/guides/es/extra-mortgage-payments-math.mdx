@@ -31,6 +31,8 @@ faq:
     a: "Se aplica el mismo mecanismo, con un paso más grande. El campo de pago adicional de la calculadora es un importe mensual, y la fecha de cancelación que produce es el mes en que el saldo llega a cero."
 ---
 
+import GuideIllustration from '../../../components/visuals/GuideIllustration.astro';
+
 Los pagos adicionales de hipoteca se describen de dos maneras. Una dice que
 ahorran miles de dólares. La otra dice que son un desperdicio. Las dos
 describen la misma aritmética, y la aritmética merece mirarse de frente.
@@ -61,6 +63,10 @@ los pagos adicionales retiran más intereses de los que el efectivo extra
 habría pagado directamente, aunque el efectivo extra es lo que provocó la
 diferencia.
 
+
+<div class="guide-inline-figure">
+  <GuideIllustration slug="mortgage-payment-calculator-explained" locale={frontmatter.locale} />
+</div>
 ## Por qué la cuota no cambia
 
 Esto sorprende. La cuota programada se queda exactamente como estaba,
@@ -93,6 +99,10 @@ fecha de cancelación y el total de intereses. Ejecutarla con $0, $100,
 $200 y $500 es una forma más rápida de entender la forma del efecto que
 cualquier regla empírica.
 
+
+<div class="guide-inline-figure">
+  <GuideIllustration slug="how-mortgage-amortization-works" locale={frontmatter.locale} />
+</div>
 ## Lo que no te dice
 
 El cálculo del pago adicional tiene que ver con el préstamo y con nada

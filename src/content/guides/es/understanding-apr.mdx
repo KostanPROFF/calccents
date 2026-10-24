@@ -33,6 +33,8 @@ faq:
     a: "Un 1 por ciento del importe del préstamo pagado en el cierre a cambio de un tipo de interés más bajo. Si el intercambio sale adelante depende de cuánto baja el tipo y de cuánto dura el préstamo."
 ---
 
+import GuideIllustration from '../../../components/visuals/GuideIllustration.astro';
+
 En una oferta de hipoteca aparecen dos números, y son fáciles de confundir.
 El **tipo de interés** es el precio de pedir prestado el dinero. La **tasa
 anual efectiva** es el precio de pedir prestado el dinero más el coste de
@@ -56,6 +58,10 @@ La fórmula está recogida en la normativa federal, y eso importa por una razón
 importante: significa que dos prestamistas que cotizan un APR lo cotizan de
 la misma manera, así que las cifras se comparan directamente.
 
+
+<div class="guide-inline-figure">
+  <GuideIllustration slug="mortgage-rate-and-term-tradeoffs" locale={frontmatter.locale} />
+</div>
 ## Cómo se calcula
 
 El APR es el tipo de descuento que produciría el mismo total de pagos a lo
@@ -83,6 +89,10 @@ un tipo un 0.5 por ciento más alto sin honorarios extra. Ninguna de las dos
 ofertas está mal; son dos estructuras distintas, y el APR es el número que
 las pone en la misma escala.
 
+
+<div class="guide-inline-figure">
+  <GuideIllustration slug="extra-mortgage-payments-math" locale={frontmatter.locale} />
+</div>
 ## Lo que el APR no te dice
 
 El APR es una medida de coste, y tiene límites que importan al comparar

@@ -33,6 +33,8 @@ faq:
     a: "No. Una rentabilidad real es un cálculo sobre números supuestos, y la cifra de inflación utilizada es en sí misma histórica. El cálculo muestra lo que produce la aritmética con los insumos dados."
 ---
 
+import GuideIllustration from '../../../components/visuals/GuideIllustration.astro';
+
 Una rentabilidad del 7 por ciento suena a un buen año hasta que se pregunta
 qué se podía adquirir con ella. Si los precios subieron un 2.5 por ciento
 en el mismo periodo, el dinero creció un 7 por ciento y cada uno de esos
@@ -66,6 +68,10 @@ es 4.39 por ciento, no el 4.5 por ciento que da la resta simple. La
 diferencia es pequeña a estos tipos y crece a tipos más altos, y por eso la fórmula exacta
 no es un detalle.
 
+
+<div class="guide-inline-figure">
+  <GuideIllustration slug="compound-vs-simple-interest" locale={frontmatter.locale} />
+</div>
 ## Un ejemplo calculado
 
 La columna de valor real de la calculadora hace la misma conversión sobre el
@@ -91,6 +97,10 @@ describe tu propio poder de compra. El IPC general sigue una cesta de
 bienes y servicios que compran los hogares típicos, y es el valor por
 defecto en la mayoría de los cálculos, incluido el de este sitio.
 
+
+<div class="guide-inline-figure">
+  <GuideIllustration slug="compound-interest-calculator-explained" locale={frontmatter.locale} />
+</div>
 ## Inflación y deudas a tipo fijo
 
 La relación va en sentido contrario con una hipoteca a tipo fijo. Una cuota

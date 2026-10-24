@@ -33,6 +33,8 @@ faq:
     a: "The rule of 70 is a useful approximation: divide 70 by the annual rate to get the years to double. At 7 percent that is about ten years. The calculator shows the actual figure rather than the approximation."
 ---
 
+import GuideIllustration from '../../components/visuals/GuideIllustration.astro';
+
 Simple interest and compound interest are the same idea computed two
 different ways, and the difference between them is one of the largest gaps
 in ordinary arithmetic.
@@ -60,6 +62,10 @@ second case. To see the first, set the rate to zero and note that the
 balance then grows by the deposits alone — the simple-interest case is the
 same projection with the interest switched off.
 
+
+<div class="guide-inline-figure">
+  <GuideIllustration slug="compound-interest-calculator-explained" locale={frontmatter.locale} />
+</div>
 ## Why the gap widens rather than stays constant
 
 The growth is not linear. In a simple-interest account, each year adds the
@@ -99,6 +105,10 @@ The calculator is the way to check it. Run thirty years at 7 percent with no
 contributions, and compare the final balance with twice the starting
 balance. The approximation is close; the exact figure is on the screen.
 
+
+<div class="guide-inline-figure">
+  <GuideIllustration slug="inflation-and-real-returns-explained" locale={frontmatter.locale} />
+</div>
 ## Where the same mechanism runs the other way
 
 Compound interest is not a favour granted by finance. It is a property of

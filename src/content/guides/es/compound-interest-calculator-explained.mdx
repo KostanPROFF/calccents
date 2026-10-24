@@ -35,6 +35,8 @@ faq:
     a: "Porque la proyección avanza un periodo cada vez en lugar de saltar a un resultado en forma cerrada. El saldo final es la última fila de la tabla, y eso es también lo que hace que la tabla sea fiable."
 ---
 
+import GuideIllustration from '../../../components/visuals/GuideIllustration.astro';
+
 El interés compuesto es una de las pocas ideas de las finanzas que se
 enuncian con facilidad y cuesta de verdad sentir. La
 <a href="/es/tools/compound-interest/">calculadora de interés compuesto</a>
@@ -60,6 +62,10 @@ intereses durante todo ese periodo, así que termina valiendo más que la
 misma aportación hecha al final. La diferencia por pago es pequeña. La
 diferencia a lo largo de treinta años no.
 
+
+<div class="guide-inline-figure">
+  <GuideIllustration slug="compound-vs-simple-interest" locale={frontmatter.locale} />
+</div>
 ## La forma cerrada
 
 El mismo resultado se puede escribir como una sola expresión:
@@ -110,6 +116,10 @@ aproximadamente 4.44 por ciento, y el saldo de la columna de valor real de
 la calculadora es el saldo nominal dividido por la inflación capitalizada en
 el mismo periodo.
 
+
+<div class="guide-inline-figure">
+  <GuideIllustration slug="how-compounding-frequency-changes-results" locale={frontmatter.locale} />
+</div>
 ## La cuestión de la frecuencia
 
 Capitalizar más a menudo, con el mismo tipo nominal, produce un saldo

@@ -31,6 +31,8 @@ faq:
     a: "Yes. The calculator produces the schedule for any loan, and a guide explains how to read each column of it."
 ---
 
+import GuideIllustration from '../../components/visuals/GuideIllustration.astro';
+
 Amortization is the process by which a mortgage is repaid, and it produces
 one of the most counter-intuitive results in personal finance: a thirty-year
 loan is not thirty years of paying it off. It is about a decade of paying it
@@ -58,6 +60,10 @@ which was set to cover that interest plus a small slice of principal — is
 almost entirely interest. As the balance falls, the interest charge falls
 with it, and the same payment starts covering more principal.
 
+
+<div class="guide-inline-figure">
+  <GuideIllustration slug="mortgage-payment-calculator-explained" locale={frontmatter.locale} />
+</div>
 ## The arithmetic of a single month
 
 The interest charge for a month is:
@@ -94,6 +100,10 @@ why the exact year matters: "how much have I paid off" and "how much have I
 paid in interest" are very different questions, and the amortization table
 answers both.
 
+
+<div class="guide-inline-figure">
+  <GuideIllustration slug="extra-mortgage-payments-math" locale={frontmatter.locale} />
+</div>
 ## Why the last payment is different
 
 A monthly payment has to be a fixed number of cents, and a loan with an

@@ -33,6 +33,8 @@ faq:
     a: "No. Las penalizaciones por pago tardío, las comisiones por traspaso de saldo y el tratamiento fiscal de los intereses deducibles quedan fuera del modelo."
 ---
 
+import GuideIllustration from '../../../components/visuals/GuideIllustration.astro';
+
 Varios debts que se pagan al mismo tiempo no se suman como se suma un solo
 saldo. Una tarjeta al 18% y un préstamo personal al 7% cobran una cuota cada
 mes, y el orden en que se aplican esos pagos cambia lo que cuesta el mismo
@@ -65,6 +67,10 @@ mes, porque se añaden $150 de intereses y salen $200, y baja un poco más cada
 mes siguiente, porque los intereses se calculan sobre un saldo que ya es
 menor.
 
+
+<div class="guide-inline-figure">
+  <GuideIllustration slug="net-pay-calculator-explained" locale={frontmatter.locale} />
+</div>
 ## Avalancha y bola de nieve
 
 La pregunta que hace la calculadora es a qué deuda va primero el dinero
@@ -116,6 +122,10 @@ imprimir un número hecho de cien años de intereses que nunca terminan. Las
 corridas de avalancha y de bola de nieve sí llegan al final, y son sus meses y
 sus intereses totales los que describen las deudas.
 
+
+<div class="guide-inline-figure">
+  <GuideIllustration slug="income-tax-calculator-explained" locale={frontmatter.locale} />
+</div>
 ## Lo que el modelo no incluye
 
 El modelo es mensual y sencillo, y hay varias cosas que quedan fuera.

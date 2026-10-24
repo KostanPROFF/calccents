@@ -35,6 +35,8 @@ faq:
     a: "No. Son impuestos sobre la nómina, retenidos del salario con sus propios tipos y sus propios topes, y van aparte del impuesto sobre la renta de las ganancias."
 ---
 
+import GuideIllustration from '../../../components/visuals/GuideIllustration.astro';
+
 El impuesto federal sobre la renta de un año de ingresos es una tabla publicada
 aplicada a una cifra que se arma en varios pasos. La
 <a href="/es/tools/income-tax/">calculadora de impuesto sobre la renta</a> de
@@ -61,6 +63,10 @@ $32,200 para casados que presentan juntos y de $24,150 para cabeza de familia.
 Lo que queda es el ingreso gravable. Las escalas se aplican a esa cifra, y a esa
 misma cifra se aplica la estimación del impuesto estatal.
 
+
+<div class="guide-inline-figure">
+  <GuideIllustration slug="net-pay-calculator-explained" locale={frontmatter.locale} />
+</div>
 ## Cómo funcionan las escalas
 
 El IRS publica cada escala no como un porcentaje fijo sobre cada tramo, sino
@@ -97,6 +103,10 @@ deducción estándar del estado civil. Cuando la cifra por partidas es menor, se
 aplica la deducción estándar y el ingreso gravable queda más alto. En el
 resultado se ve cuál de las dos se usó.
 
+
+<div class="guide-inline-figure">
+  <GuideIllustration slug="debt-payoff-calculator-explained" locale={frontmatter.locale} />
+</div>
 ## Qué no cubre la cifra
 
 La cifra federal es el impuesto ordinario sobre la renta del ingreso gravable, y

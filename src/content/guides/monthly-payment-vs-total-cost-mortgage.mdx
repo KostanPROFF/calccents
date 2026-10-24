@@ -34,6 +34,8 @@ faq:
     a: "No. Total interest is the cost of the loan. Property tax, insurance, HOA and maintenance are additional, and the calculator reports total housing cost so the two can be seen separately."
 ---
 
+import GuideIllustration from '../../components/visuals/GuideIllustration.astro';
+
 A mortgage offer is usually presented as a monthly number, and the monthly
 number is a poor way to compare two offers. It is a good way to check that
 you can afford something, and a bad way to work out which one costs less.
@@ -58,6 +60,10 @@ Neither is better in the abstract. They are better for different
 circumstances, and the circumstances are not arithmetic. But the two facts
 above are arithmetic, and they are the facts a comparison needs.
 
+
+<div class="guide-inline-figure">
+  <GuideIllustration slug="mortgage-payment-calculator-explained" locale={frontmatter.locale} />
+</div>
 ## The four numbers worth comparing
 
 A mortgage comparison is clearer with four numbers rather than one:
@@ -85,6 +91,10 @@ for a decade longer. The first decade of a mortgage is where nearly all of
 the interest is charged, and a term that extends that decade is expensive in
 a way that the payment alone does not show.
 
+
+<div class="guide-inline-figure">
+  <GuideIllustration slug="mortgage-rate-and-term-tradeoffs" locale={frontmatter.locale} />
+</div>
 ## What the rate does to the same comparison
 
 The rate has a similar shape of effect. On the same $360,000 over 30 years,

@@ -35,6 +35,8 @@ faq:
     a: "You can run one loan, note the figures, and run the second. The two runs happen separately, so nothing is stored between them and nothing is transmitted to the site."
 ---
 
+import GuideIllustration from '../../components/visuals/GuideIllustration.astro';
+
 A mortgage payment is one number with four parts, and the reason two
 people can quote different payments for the same house is usually that they
 are counting different parts.
@@ -70,6 +72,10 @@ The Consumer Financial Protection Bureau sets out the same formula in its
 mortgage guidance, and the widely used amortization tables in the industry
 are built from it.
 
+
+<div class="guide-inline-figure">
+  <GuideIllustration slug="how-mortgage-amortization-works" locale={frontmatter.locale} />
+</div>
 ## Why the payment stays level while the split changes
 
 The formula produces a level payment. What is not level is what the payment
@@ -108,6 +114,10 @@ HOA fees sit outside PITI but inside the monthly outflow for a condo or a
 house in a planned development. They are entered separately for the same
 reason: the number depends entirely on the property.
 
+
+<div class="guide-inline-figure">
+  <GuideIllustration slug="how-to-read-an-amortization-schedule" locale={frontmatter.locale} />
+</div>
 ## Extra payments
 
 An extra payment applied to principal lowers the balance that the next

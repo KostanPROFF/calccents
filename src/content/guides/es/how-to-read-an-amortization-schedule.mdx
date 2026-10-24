@@ -31,6 +31,8 @@ faq:
     a: "Sí. El cuadro se recalcula mes a mes, así que un pago adicional acorta todo el cuadro y la última fila se acerca. Es la forma más clara de ver el efecto de un cambio."
 ---
 
+import GuideIllustration from '../../../components/visuals/GuideIllustration.astro';
+
 Un cuadro de amortización es el préstamo escrito mes a mes. Parece un muro
 de números, y es la respuesta más directa que existe a la pregunta «cuánto
 me está costando realmente este préstamo», porque muestra cada dólar, en
@@ -62,6 +64,10 @@ que se construye en la calculadora cuando se usa el campo de pago adicional.
 **Saldo.** Lo que queda pendiente después de ese pago. Esta es la columna
 que cuenta la historia.
 
+
+<div class="guide-inline-figure">
+  <GuideIllustration slug="how-mortgage-amortization-works" locale={frontmatter.locale} />
+</div>
 ## Las tres formas que muestra la tabla
 
 **La columna de intereses baja.** No porque cambie el tipo, sino porque se
@@ -87,6 +93,10 @@ total de intereses se cobra en los primeros cinco años, y la mayor parte se
 cobra en la primera década. Verlo en una sola columna es una experiencia
 distinta a sumar a mano las cifras mensuales de intereses.
 
+
+<div class="guide-inline-figure">
+  <GuideIllustration slug="monthly-payment-vs-total-cost-mortgage" locale={frontmatter.locale} />
+</div>
 ## Por qué la última fila es distinta
 
 La cuota es un número fijo de céntimos, y un préstamo no se divide de forma

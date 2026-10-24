@@ -33,6 +33,8 @@ faq:
     a: "No. Late fees, balance-transfer fees and the tax treatment of deductible interest all sit outside the model."
 ---
 
+import GuideIllustration from '../../components/visuals/GuideIllustration.astro';
+
 Several debts at once do not add up the way a single balance does. A card at
 18% and a personal loan at 7% both take a payment every month, and the order
 in which those payments are applied changes what the same money costs in
@@ -65,6 +67,10 @@ first month, because $150 of interest is added and $200 goes out, and by a
 little more in each month after that, because the interest is charged on a
 balance that is going down.
 
+
+<div class="guide-inline-figure">
+  <GuideIllustration slug="net-pay-calculator-explained" locale={frontmatter.locale} />
+</div>
 ## Avalanche and snowball
 
 The question the calculator asks is which debt the extra money goes to first.
@@ -112,6 +118,10 @@ rather than printing a number made of a hundred years of interest that never
 ends. The avalanche and snowball runs still finish, and their months and
 total interest are the figures that describe the debts.
 
+
+<div class="guide-inline-figure">
+  <GuideIllustration slug="income-tax-calculator-explained" locale={frontmatter.locale} />
+</div>
 ## What the model leaves out
 
 The model is monthly and plain, and several things sit outside it.

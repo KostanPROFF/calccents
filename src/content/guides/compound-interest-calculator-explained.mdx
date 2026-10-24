@@ -35,6 +35,8 @@ faq:
     a: "Because the projection advances one period at a time rather than jumping to a closed-form result. The final balance is the last row of the table, which is also what makes the table trustworthy."
 ---
 
+import GuideIllustration from '../../components/visuals/GuideIllustration.astro';
+
 Compound interest is one of the few ideas in finance that is genuinely
 simple to state and genuinely hard to feel. The
 <a href="/tools/compound-interest/">compound interest calculator</a> on this
@@ -60,6 +62,10 @@ interest for that whole period, so it ends with more than the same
 contribution made at the end. The difference per payment is small. The
 difference over thirty years is not.
 
+
+<div class="guide-inline-figure">
+  <GuideIllustration slug="compound-vs-simple-interest" locale={frontmatter.locale} />
+</div>
 ## The closed form
 
 The same result can be written as a single expression:
@@ -108,6 +114,10 @@ At 7 percent nominal and 2.5 percent inflation, the real rate is about 4.44
 percent, and the balance in the calculator's real-value column is the
 nominal balance divided by inflation compounded over the same period.
 
+
+<div class="guide-inline-figure">
+  <GuideIllustration slug="how-compounding-frequency-changes-results" locale={frontmatter.locale} />
+</div>
 ## The frequency question
 
 Compounding more often, at the same nominal rate, produces a larger balance.

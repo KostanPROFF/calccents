@@ -44,7 +44,7 @@ const { slug, locale, class: className } = Astro.props;
       <svg
         class="fig"
         viewBox="0 0 240 160"
-        preserveAspectRatio="none"
+        preserveAspectRatio="xMidYMid meet"
         aria-hidden="true"
         focusable="false"
       >
@@ -489,11 +489,24 @@ const { slug, locale, class: className } = Astro.props;
     border: 1px solid var(--border);
     border-radius: var(--radius-md);
     overflow: hidden;
+    /*
+     * The frame keeps the proportion of the drawing, so the picture is
+     * not stretched when the column it sits in is wider than the drawing.
+     * A picture inside the body of a guide sets `--fig-aspect` to a
+     * wider shape.
+     */
+    aspect-ratio: var(--fig-aspect, 3 / 2);
   }
 
   .fig {
     display: block;
     width: 100%;
-    height: 160px;
+    /*
+     * The drawing fills the frame, and the frame keeps the proportion of
+     * the drawing. With a fixed height here the picture would be fitted
+     * into that height and sit in the middle of a wide frame instead of
+     * filling it.
+     */
+    height: 100%;
   }
 </style>

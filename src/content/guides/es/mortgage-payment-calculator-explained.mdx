@@ -35,6 +35,8 @@ faq:
     a: "Se ejecuta un préstamo, se anotan las cifras y se ejecuta el segundo. Las dos ejecuciones ocurren por separado, así que no se guarda nada entre ellas ni se transmite nada al sitio."
 ---
 
+import GuideIllustration from '../../../components/visuals/GuideIllustration.astro';
+
 Una cuota de hipoteca es un número con cuatro partes, y la razón por la que
 dos personas pueden citar cuotas distintas para la misma casa suele ser que
 están contando partes distintas.
@@ -72,6 +74,10 @@ La Consumer Financial Protection Bureau expone la misma fórmula en su guía
 hipotecaria, y las tablas de amortización ampliamente usadas en el sector
 están construidas a partir de ella.
 
+
+<div class="guide-inline-figure">
+  <GuideIllustration slug="how-mortgage-amortization-works" locale={frontmatter.locale} />
+</div>
 ## Por qué la cuota se mantiene constante mientras el reparto cambia
 
 La fórmula produce una cuota constante. Lo que no es constante es de qué está
@@ -114,6 +120,10 @@ un piso en régimen de comunidad o de una casa en una urbanización planificada.
 Se introducen aparte por el mismo motivo: la cifra depende por completo del
 inmueble.
 
+
+<div class="guide-inline-figure">
+  <GuideIllustration slug="how-to-read-an-amortization-schedule" locale={frontmatter.locale} />
+</div>
 ## Pagos adicionales
 
 Un pago adicional aplicado a capital reduce el saldo sobre el que se cobran

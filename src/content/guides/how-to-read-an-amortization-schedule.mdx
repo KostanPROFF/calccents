@@ -31,6 +31,8 @@ faq:
     a: "Yes. The schedule recalculates month by month, so an extra payment shortens the whole schedule and the final row moves closer. That is the clearest way to see the effect of a change."
 ---
 
+import GuideIllustration from '../../components/visuals/GuideIllustration.astro';
+
 An amortization schedule is the loan written out month by month. It looks
 like a wall of numbers, and it is the most direct answer to the question
 "what is this loan actually costing me" that exists — because it shows
@@ -64,6 +66,10 @@ the calculator when you use the extra payment field.
 **Balance.** What is still owed after that payment. This is the column that
 tells the story.
 
+
+<div class="guide-inline-figure">
+  <GuideIllustration slug="how-mortgage-amortization-works" locale={frontmatter.locale} />
+</div>
 ## The three shapes to look for
 
 **The interest column falls.** Not because the rate changes, but because
@@ -89,6 +95,10 @@ charged in the first five years, and the majority of it is charged in the
 first decade. Seeing that in a single column is a different experience from
 adding up monthly interest figures by hand.
 
+
+<div class="guide-inline-figure">
+  <GuideIllustration slug="monthly-payment-vs-total-cost-mortgage" locale={frontmatter.locale} />
+</div>
 ## Why the last row is different
 
 The payment is a fixed number of cents, and a loan does not divide evenly

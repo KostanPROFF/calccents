@@ -346,6 +346,13 @@ bars for the debt payoff. They live in `src/components/visuals/` and are
 drawn from the theme variables, so they follow the light and the dark theme
 and cost no request.
 
+A guide carries three of them: one under the title, and two more inside the
+text, placed before the second and the fourth section, each on the subject
+the guide is talking about at that point. The picture under the title is
+named by the guide itself in the frontmatter, so the drawing and the text it
+belongs to cannot drift apart: renaming a guide file means renaming the
+picture as well, and the build fails if they disagree.
+
 **The result charts.** Each calculator draws a chart under its figures, from
 the numbers the calculation has already produced. Nothing is recomputed for
 the picture, so the picture cannot disagree with the numbers above it. The

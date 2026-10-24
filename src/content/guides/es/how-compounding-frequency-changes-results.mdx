@@ -33,6 +33,8 @@ faq:
     a: "No. El tipo nominal es el número declarado y la frecuencia cambia en qué se convierte. Dos cuentas con el mismo tipo nominal y frecuencias distintas no son el mismo producto, y el tipo anual efectivo es la forma de compararlas."
 ---
 
+import GuideIllustration from '../../../components/visuals/GuideIllustration.astro';
+
 Dos cuentas que anuncian ambas «7 por ciento» no son necesariamente la misma
 cuenta. El tipo nominal es el número, y la frecuencia de capitalización
 decide en qué se convierte ese número.
@@ -52,6 +54,10 @@ una fecha, al final. Con capitalización mensual, un doceavo de los intereses
 anuales cae al final de cada mes y empieza a generar intereses de inmediato.
 El interés extra es pequeño, pero se gana durante mucho tiempo.
 
+
+<div class="guide-inline-figure">
+  <GuideIllustration slug="compound-vs-simple-interest" locale={frontmatter.locale} />
+</div>
 ## El tipo anual efectivo
 
 La forma de comparar dos frecuencias es el tipo anual efectivo: el tipo
@@ -101,6 +107,10 @@ El patrón es constante: la brecha entre dos frecuencias es pequeña en los
 primeros años y se ensancha de forma sostenida, porque la propia brecha se
 capitaliza.
 
+
+<div class="guide-inline-figure">
+  <GuideIllustration slug="compound-interest-calculator-explained" locale={frontmatter.locale} />
+</div>
 ## Por qué esta herramienta ofrece seis frecuencias
 
 La herramienta ofrece la anual, la de dos veces al año, la de cada cuatro
