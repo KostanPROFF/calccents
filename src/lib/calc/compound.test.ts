@@ -126,3 +126,19 @@ test('averageYearlyBalance divides the yearly balances', () => {
   assert.ok(value > 0);
   assert.ok(value < result.futureValue);
 });
+
+test('compoundFutureValue rejects a horizon that would loop for billions of periods', () => {
+  assert.throws(
+    () =>
+      compoundFutureValue({
+        principal: 1000,
+        monthlyContribution: 0,
+        annualRatePercent: 5,
+        years: 1e9,
+        compoundsPerYear: 12,
+        contributionTiming: 'end',
+        inflationPercent: 0,
+      }),
+    /100 or fewer/,
+  );
+});

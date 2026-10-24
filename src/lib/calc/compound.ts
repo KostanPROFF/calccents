@@ -61,6 +61,9 @@ function assertNonNegative(value: number, label: string): void {
   }
 }
 
+/** A ceiling on the horizon, so a typo cannot make the projection loop for billions of periods. */
+const MAX_YEARS = 100;
+
 /**
  * Closed-form future value.
  *
@@ -75,6 +78,9 @@ export function compoundFutureValue(input: CompoundInput): number {
   assertNonNegative(input.monthlyContribution, 'Monthly contribution');
   assertNonNegative(input.annualRatePercent, 'Interest rate');
   assertNonNegative(input.years, 'Number of years');
+  if (input.years > MAX_YEARS) {
+    throw new Error(`Number of years must be ${MAX_YEARS} or fewer`);
+  }
   assertNonNegative(input.inflationPercent, 'Inflation rate');
   if (!ALLOWED_FREQUENCIES.includes(input.compoundsPerYear)) {
     throw new Error(

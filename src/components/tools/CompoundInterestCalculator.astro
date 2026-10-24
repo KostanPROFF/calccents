@@ -189,7 +189,7 @@ const copy = ui.tool['compound-interest'];
   ];
 
   function recalculate(): void {
-    const years = Math.max(0, numberValue('ci-years', 10));
+    const years = Math.min(60, Math.max(0, numberValue('ci-years', 10)));
     const timingSelect = document.getElementById('ci-timing') as HTMLSelectElement | null;
     const timing = timingSelect?.value === 'begin' ? 'begin' : 'end';
 
