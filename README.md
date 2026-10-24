@@ -68,6 +68,9 @@ src/
 ├─ components/pages/       the page bodies, one component per page
 ├─ components/tools/       the six calculator forms
 ├─ components/visuals/     the illustrations and the hero picture
+functions/api/contact.ts   the endpoint the contact form posts to
+worker/src/                the mailer worker, and the rules it checks
+wrangler.toml              the Pages project: build output and the binding
 ├─ layouts/Base.astro      document shell
 ├─ pages/                  routes
 │  ├─ *.astro              English, at the root
@@ -172,15 +175,18 @@ its own project settings stay empty — every variable lives in GitHub.
 2. Add two GitHub repository **secrets**: `CLOUDFLARE_API_TOKEN` and
    `CLOUDFLARE_ACCOUNT_ID`.
 3. Push to `main`. The workflow verifies the build, creates the Cloudflare
-   Pages project `calccents` if it does not exist yet, and deploys `dist/`.
+   Pages project `calccents` if it does not exist yet, deploys the mailer
+   worker and then deploys the site.
 
 Until those two secrets exist, the deploy step is skipped and the pipeline
 reports why; the rest of CI still runs. The first push after the secrets are
 added deploys on its own, with no further action.
 
-The build is fully static, so there is no server to run, patch or pay for.
-Rollback is a matter of promoting an earlier deployment from the Cloudflare
-Pages dashboard.
+The site itself is static, so there is no server to run, patch or pay for.
+Two small pieces move: the Pages Function that receives the contact form and
+the worker that sends the mail. Both are Cloudflare's own runtime and both
+are deployed by the same workflow. Rollback is a matter of promoting an
+earlier deployment from the Cloudflare Pages dashboard.
 
 ### The domain
 
@@ -229,10 +235,50 @@ The chain, in the order a message takes it:
 address when one is needed.
 
 Email Routing only receives. A reply to a reader therefore goes out from the
-addressing domain rather than from `calccents.com`, which is fine for a
-contact form but is not the same as having a mailbox on this domain. Adding
-`calccents.com` to the existing Purelymail account would give the site a
-mailbox that both sends and receives under its own name.
+addressing domain rather than from `calccents.com`. Adding `calccents.com` to
+the existing Purelymail account would give the site a mailbox that both sends
+and receives under its own name.
+
+## The contact form
+
+The contact page carries a form that sends the message by email. The path a
+message takes, and the reason it is built this way:
+
+| Step | What it is |
+|---|---|
+| The page | `src/components/ContactForm.astro` posts to `/api/contact` |
+| The endpoint | `functions/api/contact.ts` checks the request and forwards it |
+| The mailer | `worker/src/index.ts` sends the mail |
+| The binding | `send_email`, authorised by the account |
+
+The important part is what is **not** in that chain. There is no API token in
+the repository, none in the Pages project and none to rotate: the
+`send_email` binding is authorised by the account itself, and the Pages
+project reaches the worker over a service binding rather than over the
+internet.
+
+The worker is private. Its `workers.dev` route is switched off in
+`worker/wrangler.toml`, so the only way to reach it is the binding from the
+Pages project, and the binding is pinned to one destination address
+(`info@constantinecs.com`) and one sender address (`hello@calccents.com`).
+The worker cannot be used to send mail anywhere else, even if somebody finds
+a way to make it run.
+
+What the message goes through, in order:
+
+- the fields have to be present and within their length limits
+- the email address has to look like an email address
+- a hidden field a person cannot fill has to stay empty, and a filled one is
+  answered as though it worked, so a robot learns nothing
+- a line break cannot be smuggled into a subject or a name, because those
+  end up in a mail header
+- one address may send two messages a minute, which stops a script from
+  filling the mailbox and does not stop a person writing twice
+
+The form works without JavaScript as well: it is a real form, and the
+endpoint answers with a page saying the message was sent. With JavaScript the
+answer arrives on the page, in the language of the page. The privacy page
+says what the form does with what is typed into it, in all three languages.
 
 ## ads.txt
 
@@ -499,7 +545,9 @@ those markets earns a fraction of the same page view.
 2. Unit tests — 90 % line coverage, 90 % function coverage and 85 % branch
    coverage over `src/lib/calc/`, enforced by the Node test runner. The test
    suite also covers the advisory linter itself, pinning the sentences it must
-   reject and the sentences it must accept.
+   reject and the sentences it must accept, and the rules the contact form
+   checks, which are the last thing between the public internet and a real
+   mailbox.
 3. Linters — zero advisory-language findings, zero broken internal links.
 4. `astro build` — the site builds.
 5. Ad gating — the built HTML and JS contain no AdSense code while no
