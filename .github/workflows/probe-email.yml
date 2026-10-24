@@ -1,0 +1,36 @@
+name: Probe email sending
+
+# One-off probe: can this account send mail, and from which address?
+# It tries the Email Sending REST API and reports the exact error code,
+# because the answer decides how the contact form is built.
+
+on:
+  workflow_dispatch:
+
+jobs:
+  probe:
+    name: Probe email sending
+    runs-on: ubuntu-latest
+    steps:
+      - name: Try the Email Sending REST API
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+        run: |
+          set -uo pipefail
+          echo "--- account email sending domains ---"
+          curl -sS "https://api.cloudflare.com/client/v4/accounts/${CLOUDFLARE_ACCOUNT_ID}/email/sending/domains" \
+            -H "Authorization: Bearer ${CLOUDFLARE_API_TOKEN}" \
+            | node -e 'let r="";process.stdin.on("data",c=>r+=c).on("end",()=>{const b=JSON.parse(r);if(!b.success){console.log("unavailable:",(b.errors??[]).map(e=>`${e.code}: ${e.message}`).join("; "));return;}console.log((b.result??[]).map(d=>`${d.domain} — status: ${d.status}`).join("\n")||"none");});'
+
+          echo "--- attempt to send ---"
+          curl -sS -X POST "https://api.cloudflare.com/client/v4/accounts/${CLOUDFLARE_ACCOUNT_ID}/email/sending/send" \
+            -H "Authorization: Bearer ${CLOUDFLARE_API_TOKEN}" \
+            -H 'Content-Type: application/json' \
+            -d '{"to":"info@constantinecs.com","from":"hello@calccents.com","subject":"Calccents probe","text":"Probe."}' \
+            | node -e 'let r="";process.stdin.on("data",c=>r+=c).on("end",()=>{const b=JSON.parse(r);console.log("success:",b.success);if(!b.success){console.log((b.errors??[]).map(e=>`${e.code}: ${e.message}`).join("; "));}else{console.log(JSON.stringify(b.result));}});'
+
+          echo "--- token verify ---"
+          curl -sS "https://api.cloudflare.com/client/v4/user/tokens/verify" \
+            -H "Authorization: Bearer ${CLOUDFLARE_API_TOKEN}" \
+            | node -e 'let r="";process.stdin.on("data",c=>r+=c).on("end",()=>{const b=JSON.parse(r);console.log(b.success?`token status: ${b.result?.status}`:`verify failed: ${(b.errors??[]).map(e=>e.message).join("; ")}`);});'
