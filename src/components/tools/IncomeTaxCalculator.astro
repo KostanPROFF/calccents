@@ -1,6 +1,7 @@
 ---
 import { getUi } from '../../i18n/ui/index.ts';
 import ResultPanel from '../ResultPanel.astro';
+import ResultChart from '../ResultChart.astro';
 import AdSlot from '../AdSlot.astro';
 import type { Locale } from '../../i18n/locales.ts';
 
@@ -94,6 +95,18 @@ const copy = ui.tool['income-tax'];
     ]}
     note={copy.result.note}
   />
+  <ResultChart
+    chartId="income-tax-chart"
+    title={copy.chart?.title}
+    note={copy.chart?.note}
+    emptyText={ui.chart?.empty}
+    xAxis={copy.chart?.xAxis}
+    yearsLabel={ui.chart?.years}
+    monthsLabel={ui.chart?.months}
+    startLabel={ui.chart?.start}
+    endLabel={ui.chart?.end}
+    series={copy.chart?.series}
+  />
   <p class="muted-block" style="margin-top: var(--space-4);">
     {copy.resultNote}
   </p>
@@ -105,6 +118,7 @@ const copy = ui.tool['income-tax'];
   import type { FilingStatus } from '../../lib/calc/tax.ts';
   import { formatCurrency, formatPercent } from '../../lib/calc/money.ts';
   import { numberValue, selectValue, setText } from '../../lib/client/dom.ts';
+  import { renderChart } from '../../lib/client/chartView.ts';
 
   const ids = ['it-gross', 'it-status', 'it-itemised', 'it-state-rate', 'it-pretax'];
 
@@ -133,6 +147,18 @@ const copy = ui.tool['income-tax'];
     setText('it-effective', formatPercent(result.effectiveRate));
     setText('it-marginal', formatPercent(result.marginalRate * 100));
     setText('it-after', formatCurrency(result.afterTaxIncome));
+
+    /*
+     * One bar for the year: the income that stays and the tax that goes.
+     */
+    renderChart('income-tax-chart', {
+      kind: 'bar',
+      series: [
+        { key: 'afterTax', values: [result.afterTaxIncome] },
+        { key: 'federal', values: [result.federalTax] },
+        { key: 'state', values: [result.stateTax] },
+      ],
+    });
   }
 
   for (const id of ids) {

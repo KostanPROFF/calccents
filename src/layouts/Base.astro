@@ -132,6 +132,13 @@ const reviewer = {
     <meta property="og:description" content={description} />
     <meta property="og:url" content={canonical} />
     <meta property="og:locale" content={site.ogLocale} />
+    <meta
+      property="og:image"
+      content={new URL('/og-image.png', site.origin).toString()}
+    />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content={site.name} />
     {
       alternateLinks
         .filter((alternate) => alternate.locale !== locale)
@@ -145,6 +152,10 @@ const reviewer = {
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content={title} />
     <meta name="twitter:description" content={description} />
+    <meta
+      name="twitter:image"
+      content={new URL('/og-image.png', site.origin).toString()}
+    />
 
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
 

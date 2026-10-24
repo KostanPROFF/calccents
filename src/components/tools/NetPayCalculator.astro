@@ -1,6 +1,7 @@
 ---
 import { getUi } from '../../i18n/ui/index.ts';
 import ResultPanel from '../ResultPanel.astro';
+import ResultChart from '../ResultChart.astro';
 import AdSlot from '../AdSlot.astro';
 import type { Locale } from '../../i18n/locales.ts';
 
@@ -94,6 +95,18 @@ const copy = ui.tool['net-pay'];
     ]}
     note={copy.result.note}
   />
+  <ResultChart
+    chartId="net-pay-chart"
+    title={copy.chart?.title}
+    note={copy.chart?.note}
+    emptyText={ui.chart?.empty}
+    xAxis={copy.chart?.xAxis}
+    yearsLabel={ui.chart?.years}
+    monthsLabel={ui.chart?.months}
+    startLabel={ui.chart?.start}
+    endLabel={ui.chart?.end}
+    series={copy.chart?.series}
+  />
   <p class="muted-block" style="margin-top: var(--space-4);">
     {copy.resultNote}
   </p>
@@ -105,6 +118,7 @@ const copy = ui.tool['net-pay'];
   import type { FilingStatus } from '../../lib/calc/tax.ts';
   import { formatCurrency, formatPercent } from '../../lib/calc/money.ts';
   import { numberValue, selectValue, setText } from '../../lib/client/dom.ts';
+  import { renderChart } from '../../lib/client/chartView.ts';
 
   const ids = ['np-gross', 'np-period', 'np-status', 'np-state-rate', 'np-pretax'];
 
@@ -133,6 +147,22 @@ const copy = ui.tool['net-pay'];
     setText('np-total', formatCurrency(result.totalTax));
     setText('np-month', formatCurrency(result.netPerMonth));
     setText('np-rate', formatPercent(result.effectiveTaxRate));
+
+    /*
+     * One bar for the year: the take-home pay and the parts taken out of
+     * it. The two Medicare taxes are one figure here, because the panel
+     * beside it breaks them apart and the bar cannot.
+     */
+    renderChart('net-pay-chart', {
+      kind: 'bar',
+      series: [
+        { key: 'net', values: [result.annualNet] },
+        { key: 'federal', values: [result.federalTax] },
+        { key: 'socialSecurity', values: [result.socialSecurity] },
+        { key: 'medicare', values: [result.medicare + result.additionalMedicare] },
+        { key: 'state', values: [result.stateTax] },
+      ],
+    });
   }
 
   for (const id of ids) {

@@ -7,6 +7,7 @@
  * from the dictionary for the language the page is in.
  */
 import ResultPanel from '../ResultPanel.astro';
+import ResultChart from '../ResultChart.astro';
 import AdSlot from '../AdSlot.astro';
 import { getUi } from '../../i18n/ui/index.ts';
 import { LOCALE_META, type Locale } from '../../i18n/locales.ts';
@@ -165,6 +166,18 @@ const copy = ui.tool['mortgage-payment'];
     ]}
     note={copy.result.note}
   />
+  <ResultChart
+    chartId="mortgage-chart"
+    title={copy.chart?.title}
+    note={copy.chart?.note}
+    emptyText={ui.chart?.empty}
+    xAxis={copy.chart?.xAxis}
+    yearsLabel={ui.chart?.years}
+    monthsLabel={ui.chart?.months}
+    startLabel={ui.chart?.start}
+    endLabel={ui.chart?.end}
+    series={copy.chart?.series}
+  />
   <p class="muted-block" style="margin-top: var(--space-4);">
     {copy.resultNote}
   </p>
@@ -175,6 +188,7 @@ const copy = ui.tool['mortgage-payment'];
   import { buildAmortization } from '../../lib/calc/mortgage.ts';
   import { formatCurrency, formatMonthYear, formatNumber } from '../../lib/calc/money.ts';
   import { currentMonthValue, monthValue, numberValue, setText } from '../../lib/client/dom.ts';
+  import { renderChart } from '../../lib/client/chartView.ts';
 
   const locale =
     document.getElementById('mortgage-form')?.dataset.locale ?? 'en-US';
@@ -209,6 +223,7 @@ const copy = ui.tool['mortgage-payment'];
       for (const id of ['m-pi', 'm-tax', 'm-insurance', 'm-hoa', 'm-interest', 'm-payoff']) {
         setText(id, '—');
       }
+      renderChart('mortgage-chart', { kind: 'line', series: [] });
       return;
     }
 
@@ -234,6 +249,20 @@ const copy = ui.tool['mortgage-payment'];
     setText('m-hoa', formatCurrency(hoaMonthly));
     setText('m-interest', formatCurrency(result.totalInterest));
     setText('m-payoff', formatMonthYear(result.payoffDate, locale));
+
+    /*
+     * The chart is drawn from the year-by-year figures of the same
+     * calculation: the balance at the end of each year, and the interest
+     * paid in that year. Nothing is worked out a second time.
+     */
+    renderChart('mortgage-chart', {
+      kind: 'line',
+      xValues: result.yearly.map((row) => row.year),
+      series: [
+        { key: 'balance', values: result.yearly.map((row) => row.yearEndBalance) },
+        { key: 'interest', values: result.yearly.map((row) => row.interestPaid) },
+      ],
+    });
 
     const body = document.getElementById('amortization-body');
     if (body) {

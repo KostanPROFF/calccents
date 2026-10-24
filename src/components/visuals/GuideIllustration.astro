@@ -1,0 +1,499 @@
+---
+/**
+ * The small picture that sits on top of a guide.
+ *
+ * It is the same drawing language as the calculator pictures: inline SVG on
+ * the theme tokens, hairline strokes, nothing but shapes. The picture shows
+ * the shape of the arithmetic the guide explains, never the numbers, because
+ * a number in a picture is a number nobody can check.
+ *
+ * Six of the guides describe a calculator that already has a picture, so
+ * those guides reuse `ToolIllustration` rather than draw the same shape
+ * twice. The rest are drawn here.
+ */
+
+import ToolIllustration from './ToolIllustration.astro';
+import {
+  isReusedGuideSlug,
+  TOOL_ILLUSTRATION_BY_GUIDE,
+  type GuideIllustrationSlug,
+} from './guideIllustrations.ts';
+import type { Locale } from '../../i18n/locales.ts';
+
+interface Props {
+  /** Which guide the picture belongs to. */
+  slug: GuideIllustrationSlug;
+  /** The language the page is in; the pictures carry no text of their own. */
+  locale: Locale;
+  /** Extra class for the frame, if the page needs one. */
+  class?: string;
+}
+
+const { slug, locale, class: className } = Astro.props;
+---
+
+{
+  isReusedGuideSlug(slug) ? (
+    <ToolIllustration
+      slug={TOOL_ILLUSTRATION_BY_GUIDE[slug]}
+      locale={locale}
+      class={className}
+    />
+  ) : (
+    <div class:list={['fig__frame', className]}>
+      <svg
+        class="fig"
+        viewBox="0 0 240 160"
+        preserveAspectRatio="none"
+        aria-hidden="true"
+        focusable="false"
+      >
+        {
+          slug === 'how-mortgage-amortization-works' && (
+            <g>
+              {/* The balance left on the loan, falling away fast at first. */}
+              <path
+                d="M18 26 C 70 90 140 120 222 134 L222 140 L18 140 Z"
+                fill="var(--accent-subtle)"
+              />
+              <path
+                d="M18 26 C 70 90 140 120 222 134"
+                fill="none"
+                stroke="var(--accent)"
+                stroke-width="1.5"
+                stroke-linecap="round"
+                vector-effect="non-scaling-stroke"
+              />
+              {/* The share of each payment that goes on interest, also falling. */}
+              <path
+                d="M18 44 C 84 66 152 92 222 112"
+                fill="none"
+                stroke="var(--text-muted)"
+                stroke-width="1.25"
+                stroke-linecap="round"
+                vector-effect="non-scaling-stroke"
+              />
+              <line
+                x1="18"
+                y1="140"
+                x2="222"
+                y2="140"
+                stroke="var(--border-strong)"
+                stroke-width="1"
+                vector-effect="non-scaling-stroke"
+              />
+            </g>
+          )
+        }
+
+        {
+          slug === 'how-to-read-an-amortization-schedule' && (
+            <g>
+              {/* The rows of the schedule, one bar each; one row picked out. */}
+              <rect
+                x="26"
+                y="100"
+                width="14"
+                height="40"
+                fill="none"
+                stroke="var(--text-muted)"
+                stroke-width="1.25"
+                vector-effect="non-scaling-stroke"
+              />
+              <rect
+                x="52"
+                y="80"
+                width="14"
+                height="60"
+                fill="none"
+                stroke="var(--text-muted)"
+                stroke-width="1.25"
+                vector-effect="non-scaling-stroke"
+              />
+              <rect
+                x="78"
+                y="88"
+                width="14"
+                height="52"
+                fill="none"
+                stroke="var(--text-muted)"
+                stroke-width="1.25"
+                vector-effect="non-scaling-stroke"
+              />
+              <rect
+                x="104"
+                y="54"
+                width="14"
+                height="86"
+                fill="var(--accent-subtle)"
+                stroke="var(--accent)"
+                stroke-width="1.5"
+                vector-effect="non-scaling-stroke"
+              />
+              <rect
+                x="130"
+                y="70"
+                width="14"
+                height="70"
+                fill="none"
+                stroke="var(--text-muted)"
+                stroke-width="1.25"
+                vector-effect="non-scaling-stroke"
+              />
+              <rect
+                x="156"
+                y="82"
+                width="14"
+                height="58"
+                fill="none"
+                stroke="var(--text-muted)"
+                stroke-width="1.25"
+                vector-effect="non-scaling-stroke"
+              />
+              <rect
+                x="182"
+                y="94"
+                width="14"
+                height="46"
+                fill="none"
+                stroke="var(--text-muted)"
+                stroke-width="1.25"
+                vector-effect="non-scaling-stroke"
+              />
+              <rect
+                x="208"
+                y="108"
+                width="14"
+                height="32"
+                fill="none"
+                stroke="var(--text-muted)"
+                stroke-width="1.25"
+                vector-effect="non-scaling-stroke"
+              />
+              <line
+                x1="18"
+                y1="140"
+                x2="222"
+                y2="140"
+                stroke="var(--border-strong)"
+                stroke-width="1"
+                vector-effect="non-scaling-stroke"
+              />
+            </g>
+          )
+        }
+
+        {
+          slug === 'down-payment-and-closing-costs-explained' && (
+            <g>
+              {/* One bar of cash, cut into what the buyer brings and what is borrowed. */}
+              <rect
+                x="18"
+                y="58"
+                width="56"
+                height="46"
+                fill="var(--accent-subtle)"
+                stroke="var(--accent)"
+                stroke-width="1.5"
+                vector-effect="non-scaling-stroke"
+              />
+              <rect
+                x="74"
+                y="58"
+                width="42"
+                height="46"
+                fill="var(--surface-raised)"
+                stroke="var(--border-strong)"
+                stroke-width="1"
+                vector-effect="non-scaling-stroke"
+              />
+              <rect
+                x="116"
+                y="58"
+                width="106"
+                height="46"
+                fill="var(--surface-raised)"
+                stroke="var(--border-strong)"
+                stroke-width="1"
+                vector-effect="non-scaling-stroke"
+              />
+            </g>
+          )
+        }
+
+        {
+          slug === 'extra-mortgage-payments-math' && (
+            <g>
+              {/* The balance with the extra payment, reaching the end sooner. */}
+              <path
+                d="M18 30 C 66 96 130 122 222 136"
+                fill="none"
+                stroke="var(--accent)"
+                stroke-width="1.5"
+                stroke-linecap="round"
+                vector-effect="non-scaling-stroke"
+              />
+              {/* The balance without it, flattening out as the loan ages. */}
+              <path
+                d="M18 30 C 90 74 160 98 222 110"
+                fill="none"
+                stroke="var(--text-muted)"
+                stroke-width="1.25"
+                stroke-linecap="round"
+                vector-effect="non-scaling-stroke"
+              />
+              <line
+                x1="18"
+                y1="140"
+                x2="222"
+                y2="140"
+                stroke="var(--border-strong)"
+                stroke-width="1"
+                vector-effect="non-scaling-stroke"
+              />
+            </g>
+          )
+        }
+
+        {
+          slug === 'monthly-payment-vs-total-cost-mortgage' && (
+            <g>
+              {/* Everything the loan costs in the end, and it keeps adding up. */}
+              <path
+                d="M18 132 C 100 130 170 96 222 36 L222 140 L18 140 Z"
+                fill="var(--accent-subtle)"
+              />
+              <path
+                d="M18 132 C 100 130 170 96 222 36"
+                fill="none"
+                stroke="var(--accent)"
+                stroke-width="1.5"
+                stroke-linecap="round"
+                vector-effect="non-scaling-stroke"
+              />
+              {/* The monthly payment, which barely moves. */}
+              <path
+                d="M18 44 C 80 43 160 42 222 41"
+                fill="none"
+                stroke="var(--text-muted)"
+                stroke-width="1.25"
+                stroke-linecap="round"
+                vector-effect="non-scaling-stroke"
+              />
+            </g>
+          )
+        }
+
+        {
+          slug === 'mortgage-rate-and-term-tradeoffs' && (
+            <g>
+              {/* A longer term pulls one way, a higher rate pulls the other. */}
+              <path
+                d="M18 132 L222 34"
+                fill="none"
+                stroke="var(--accent)"
+                stroke-width="1.5"
+                stroke-linecap="round"
+                vector-effect="non-scaling-stroke"
+              />
+              <path
+                d="M18 34 L222 112"
+                fill="none"
+                stroke="var(--text-muted)"
+                stroke-width="1.25"
+                stroke-linecap="round"
+                vector-effect="non-scaling-stroke"
+              />
+            </g>
+          )
+        }
+
+        {
+          slug === 'understanding-apr' && (
+            <g>
+              {/* The stated rate and the cost of borrowing, running close together. */}
+              <path
+                d="M18 118 C 80 104 160 78 222 46"
+                fill="none"
+                stroke="var(--accent)"
+                stroke-width="1.5"
+                stroke-linecap="round"
+                vector-effect="non-scaling-stroke"
+              />
+              <path
+                d="M18 118 C 80 106 160 84 222 56"
+                fill="none"
+                stroke="var(--text-muted)"
+                stroke-width="1.25"
+                stroke-linecap="round"
+                vector-effect="non-scaling-stroke"
+              />
+            </g>
+          )
+        }
+
+        {
+          slug === 'estimating-property-tax-and-home-insurance' && (
+            <g>
+              {/* Two standing costs, and they are not the same size. */}
+              <rect
+                x="78"
+                y="44"
+                width="30"
+                height="96"
+                fill="var(--accent-subtle)"
+                stroke="var(--accent)"
+                stroke-width="1.5"
+                vector-effect="non-scaling-stroke"
+              />
+              <rect
+                x="132"
+                y="88"
+                width="30"
+                height="52"
+                fill="none"
+                stroke="var(--text-muted)"
+                stroke-width="1.25"
+                vector-effect="non-scaling-stroke"
+              />
+              <line
+                x1="18"
+                y1="140"
+                x2="222"
+                y2="140"
+                stroke="var(--border-strong)"
+                stroke-width="1"
+                vector-effect="non-scaling-stroke"
+              />
+            </g>
+          )
+        }
+
+        {
+          slug === 'rent-vs-buy-common-mistakes' && (
+            <g>
+              {/* The line dips and then shoots up: the mistake in the middle. */}
+              <path
+                d="M18 38 C 52 92 92 118 122 116 C 162 112 196 62 222 26 L222 140 L18 140 Z"
+                fill="var(--accent-subtle)"
+              />
+              <path
+                d="M18 38 C 52 92 92 118 122 116 C 162 112 196 62 222 26"
+                fill="none"
+                stroke="var(--accent)"
+                stroke-width="1.5"
+                stroke-linecap="round"
+                vector-effect="non-scaling-stroke"
+              />
+            </g>
+          )
+        }
+
+        {
+          slug === 'compound-vs-simple-interest' && (
+            <g>
+              {/* Compounding, which bends away from the straight line. */}
+              <path
+                d="M18 134 C 92 130 158 104 222 28 L222 140 L18 140 Z"
+                fill="var(--accent-subtle)"
+              />
+              <path
+                d="M18 134 C 92 130 158 104 222 28"
+                fill="none"
+                stroke="var(--accent)"
+                stroke-width="1.5"
+                stroke-linecap="round"
+                vector-effect="non-scaling-stroke"
+              />
+              {/* Simple interest, a straight line all the way. */}
+              <path
+                d="M18 134 L222 46"
+                fill="none"
+                stroke="var(--text-muted)"
+                stroke-width="1.25"
+                stroke-linecap="round"
+                vector-effect="non-scaling-stroke"
+              />
+            </g>
+          )
+        }
+
+        {
+          slug === 'how-compounding-frequency-changes-results' && (
+            <g>
+              {/* Three ways of compounding, each ending a little higher than the last. */}
+              <path
+                d="M18 136 C 96 132 162 100 222 30"
+                fill="none"
+                stroke="var(--accent)"
+                stroke-width="1.5"
+                stroke-linecap="round"
+                vector-effect="non-scaling-stroke"
+              />
+              <path
+                d="M18 136 C 96 134 162 110 222 52"
+                fill="none"
+                stroke="var(--text-muted)"
+                stroke-width="1.25"
+                stroke-linecap="round"
+                vector-effect="non-scaling-stroke"
+              />
+              <path
+                d="M18 136 C 96 136 162 122 222 76"
+                fill="none"
+                stroke="var(--text-muted)"
+                stroke-width="1.25"
+                stroke-linecap="round"
+                vector-effect="non-scaling-stroke"
+              />
+            </g>
+          )
+        }
+
+        {
+          slug === 'inflation-and-real-returns-explained' && (
+            <g>
+              {/* The nominal balance, climbing with the years. */}
+              <path
+                d="M18 136 C 90 130 156 100 222 32 L222 140 L18 140 Z"
+                fill="var(--accent-subtle)"
+              />
+              <path
+                d="M18 136 C 90 130 156 100 222 32"
+                fill="none"
+                stroke="var(--accent)"
+                stroke-width="1.5"
+                stroke-linecap="round"
+                vector-effect="non-scaling-stroke"
+              />
+              {/* What the same balance is really worth after inflation. */}
+              <path
+                d="M18 106 C 90 104 156 100 222 92"
+                fill="none"
+                stroke="var(--text-muted)"
+                stroke-width="1.25"
+                stroke-linecap="round"
+                vector-effect="non-scaling-stroke"
+              />
+            </g>
+          )
+        }
+      </svg>
+    </div>
+  )
+}
+
+<style>
+  .fig__frame {
+    background: var(--surface-inset);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    overflow: hidden;
+  }
+
+  .fig {
+    display: block;
+    width: 100%;
+    height: 160px;
+  }
+</style>

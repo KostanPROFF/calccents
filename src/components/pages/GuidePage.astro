@@ -10,6 +10,8 @@ import { getUi } from '../../i18n/ui/index.ts';
 import { formatDate, localePath, type Locale } from '../../i18n/locales.ts';
 import { guideSlug, type GuideEntry } from '../../i18n/guides.ts';
 import { getTool, isToolSlug } from '../../config/tools.ts';
+import GuideIllustration from '../visuals/GuideIllustration.astro';
+import ToolIllustration from '../visuals/ToolIllustration.astro';
 
 interface Props {
   guide: GuideEntry;
@@ -124,6 +126,10 @@ const faqPage = {
       </div>
     </div>
 
+    <figure class="guide-figure">
+      <GuideIllustration slug={data.illustration} locale={locale} />
+    </figure>
+
     <div class="prose">
       <Content />
     </div>
@@ -144,6 +150,9 @@ const faqPage = {
           <div class="grid grid--2" style="margin-top: var(--space-5);">
             {relatedTools.map((tool) => (
               <a class="tile" href={localePath(locale, `/tools/${tool.slug}/`)}>
+                <span class="tile__figure">
+                  <ToolIllustration slug={tool.slug} locale={locale} />
+                </span>
                 <span class="tile__title">{tool.name}</span>
                 <span class="tile__text">{tool.short}</span>
                 <span class="tile__meta">{ui.ui.calculate}</span>
@@ -164,3 +173,22 @@ const faqPage = {
     <AdSlot placement="footer" />
   </div>
 </Base>
+
+<style>
+  /*
+   * The picture under the title of the guide.
+   *
+   * It is capped at the width of the text column, so the guide reads as one
+   * column of prose with a picture in it rather than as a page that has
+   * suddenly become wider.
+   */
+  .guide-figure {
+    max-width: 720px;
+    margin: 0 auto var(--space-8);
+  }
+
+  .tile__figure {
+    display: block;
+    margin-bottom: var(--space-4);
+  }
+</style>

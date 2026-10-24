@@ -1,0 +1,376 @@
+---
+/**
+ * The small picture that sits on top of a calculator card.
+ *
+ * Every calculator gets one, drawn as inline SVG from the design tokens, so
+ * the page carries no image file and no second request. The drawing is
+ * abstract on purpose: it shows the shape of the arithmetic the tool does,
+ * not numbers, because a number here would be a number nobody can check.
+ *
+ * The strokes use the theme variables and nothing else, which is what keeps
+ * the picture readable when the reader switches to the light theme.
+ */
+
+import { getUi } from '../../i18n/ui/index.ts';
+import type { UiDictionary } from '../../i18n/ui/index.ts';
+import type { Locale } from '../../i18n/locales.ts';
+import type { ToolSlug } from '../../config/tools.ts';
+
+interface Props {
+  /** Which calculator the picture belongs to. */
+  slug: ToolSlug;
+  /** The language the page is in; the alt text comes from the dictionary. */
+  locale: Locale;
+  /** Extra class for the frame, if the page needs one. */
+  class?: string;
+}
+
+const { slug, locale, class: className } = Astro.props;
+
+/** The key each picture's alt text sits under in the dictionary. */
+const ALT_KEYS = {
+  'mortgage-payment': 'mortgagePayment',
+  'rent-vs-buy': 'rentVsBuy',
+  'compound-interest': 'compoundInterest',
+  'net-pay': 'netPay',
+  'income-tax': 'incomeTax',
+  'debt-payoff': 'debtPayoff',
+} as const satisfies Record<ToolSlug, keyof UiDictionary['illustration']>;
+
+const alt = getUi(locale).illustration?.[ALT_KEYS[slug]] ?? '';
+---
+
+<div class:list={['fig__frame', className]}>
+  <svg
+    class="fig"
+    viewBox="0 0 240 160"
+    preserveAspectRatio="none"
+    role={alt ? 'img' : undefined}
+    aria-label={alt || undefined}
+    aria-hidden={alt ? undefined : 'true'}
+    focusable="false"
+  >
+    {
+      slug === 'mortgage-payment' && (
+        <g>
+          {/* The balance left on the loan, falling away fast at first. */}
+          <path
+            d="M18 30 C 44 74 96 110 222 130 L222 140 L18 140 Z"
+            fill="var(--accent-subtle)"
+          />
+          <path
+            d="M18 30 C 44 74 96 110 222 130"
+            fill="none"
+            stroke="var(--accent)"
+            stroke-width="1.5"
+            stroke-linecap="round"
+            vector-effect="non-scaling-stroke"
+          />
+          {/* The share of the payment that goes on interest, also falling. */}
+          <path
+            d="M18 48 C 78 66 142 88 222 104"
+            fill="none"
+            stroke="var(--text-muted)"
+            stroke-width="1.25"
+            stroke-linecap="round"
+            vector-effect="non-scaling-stroke"
+          />
+          <line
+            x1="18"
+            y1="140"
+            x2="222"
+            y2="140"
+            stroke="var(--border-strong)"
+            stroke-width="1"
+            vector-effect="non-scaling-stroke"
+          />
+        </g>
+      )
+    }
+
+    {
+      slug === 'rent-vs-buy' && (
+        <g>
+          {/* Rent paid, year on year. */}
+          <path
+            d="M18 136 L222 30"
+            fill="none"
+            stroke="var(--accent)"
+            stroke-width="1.5"
+            stroke-linecap="round"
+            vector-effect="non-scaling-stroke"
+          />
+          {/* The cost of owning, which starts higher and crosses rent. */}
+          <path
+            d="M18 30 L222 120"
+            fill="none"
+            stroke="var(--text-muted)"
+            stroke-width="1.25"
+            stroke-linecap="round"
+            vector-effect="non-scaling-stroke"
+          />
+        </g>
+      )
+    }
+
+    {
+      slug === 'compound-interest' && (
+        <g>
+          {/* A balance that grows faster and faster. */}
+          <path
+            d="M18 136 C 92 134 152 110 222 28 L222 140 L18 140 Z"
+            fill="var(--accent-subtle)"
+          />
+          <path
+            d="M18 136 C 92 134 152 110 222 28"
+            fill="none"
+            stroke="var(--accent)"
+            stroke-width="1.5"
+            stroke-linecap="round"
+            vector-effect="non-scaling-stroke"
+          />
+          <line
+            x1="18"
+            y1="140"
+            x2="222"
+            y2="140"
+            stroke="var(--border-strong)"
+            stroke-width="1"
+            vector-effect="non-scaling-stroke"
+          />
+        </g>
+      )
+    }
+
+    {
+      slug === 'net-pay' && (
+        <g>
+          {/* One column of gross pay, cut into the parts it is made of. */}
+          {/* The deductions, each one a band of its own. */}
+          <rect
+            x="98"
+            y="22"
+            width="44"
+            height="12"
+            fill="var(--surface-raised)"
+          />
+          <rect
+            x="98"
+            y="34"
+            width="44"
+            height="12"
+            fill="var(--surface-raised)"
+          />
+          <rect
+            x="98"
+            y="46"
+            width="44"
+            height="24"
+            fill="var(--surface-raised)"
+          />
+          {/* What the reader actually receives. */}
+          <rect
+            x="98"
+            y="70"
+            width="44"
+            height="70"
+            fill="var(--accent-subtle)"
+            stroke="var(--accent)"
+            stroke-width="1.5"
+            vector-effect="non-scaling-stroke"
+          />
+          <line
+            x1="98"
+            y1="34"
+            x2="142"
+            y2="34"
+            stroke="var(--text-muted)"
+            stroke-width="1.25"
+            vector-effect="non-scaling-stroke"
+          />
+          <line
+            x1="98"
+            y1="46"
+            x2="142"
+            y2="46"
+            stroke="var(--text-muted)"
+            stroke-width="1.25"
+            vector-effect="non-scaling-stroke"
+          />
+          {/* The hairline frame around the whole column. */}
+          <rect
+            x="98"
+            y="22"
+            width="44"
+            height="118"
+            fill="none"
+            stroke="var(--border-strong)"
+            stroke-width="1"
+            vector-effect="non-scaling-stroke"
+          />
+        </g>
+      )
+    }
+
+    {
+      slug === 'income-tax' && (
+        <g>
+          {/* The tax brackets, each one wider than the one above it. */}
+          <rect
+            x="20"
+            y="26"
+            width="46"
+            height="16"
+            fill="none"
+            stroke="var(--text-muted)"
+            stroke-width="1.25"
+            vector-effect="non-scaling-stroke"
+          />
+          <rect
+            x="20"
+            y="54"
+            width="88"
+            height="16"
+            fill="none"
+            stroke="var(--text-muted)"
+            stroke-width="1.25"
+            vector-effect="non-scaling-stroke"
+          />
+          <rect
+            x="20"
+            y="82"
+            width="136"
+            height="16"
+            fill="none"
+            stroke="var(--text-muted)"
+            stroke-width="1.25"
+            vector-effect="non-scaling-stroke"
+          />
+          <rect
+            x="20"
+            y="110"
+            width="198"
+            height="16"
+            fill="var(--accent-subtle)"
+            stroke="var(--accent)"
+            stroke-width="1.5"
+            vector-effect="non-scaling-stroke"
+          />
+        </g>
+      )
+    }
+
+    {
+      slug === 'debt-payoff' && (
+        <g>
+          {/* Avalanche: the largest debt goes first, so the tall bar is first. */}
+          <rect
+            x="26"
+            y="66"
+            width="14"
+            height="74"
+            fill="var(--accent-subtle)"
+            stroke="var(--accent)"
+            stroke-width="1.5"
+            vector-effect="non-scaling-stroke"
+          />
+          <rect
+            x="48"
+            y="92"
+            width="14"
+            height="48"
+            fill="none"
+            stroke="var(--text-muted)"
+            stroke-width="1.25"
+            vector-effect="non-scaling-stroke"
+          />
+          <rect
+            x="70"
+            y="100"
+            width="14"
+            height="40"
+            fill="none"
+            stroke="var(--text-muted)"
+            stroke-width="1.25"
+            vector-effect="non-scaling-stroke"
+          />
+          <rect
+            x="92"
+            y="110"
+            width="14"
+            height="30"
+            fill="none"
+            stroke="var(--text-muted)"
+            stroke-width="1.25"
+            vector-effect="non-scaling-stroke"
+          />
+          {/* Snowball: the smallest debt goes first, so the short bar is first. */}
+          <rect
+            x="134"
+            y="110"
+            width="14"
+            height="30"
+            fill="var(--accent-subtle)"
+            stroke="var(--accent)"
+            stroke-width="1.5"
+            vector-effect="non-scaling-stroke"
+          />
+          <rect
+            x="156"
+            y="100"
+            width="14"
+            height="40"
+            fill="none"
+            stroke="var(--text-muted)"
+            stroke-width="1.25"
+            vector-effect="non-scaling-stroke"
+          />
+          <rect
+            x="178"
+            y="92"
+            width="14"
+            height="48"
+            fill="none"
+            stroke="var(--text-muted)"
+            stroke-width="1.25"
+            vector-effect="non-scaling-stroke"
+          />
+          <rect
+            x="200"
+            y="66"
+            width="14"
+            height="74"
+            fill="none"
+            stroke="var(--text-muted)"
+            stroke-width="1.25"
+            vector-effect="non-scaling-stroke"
+          />
+          <line
+            x1="18"
+            y1="140"
+            x2="222"
+            y2="140"
+            stroke="var(--border-strong)"
+            stroke-width="1"
+            vector-effect="non-scaling-stroke"
+          />
+        </g>
+      )
+    }
+  </svg>
+</div>
+
+<style>
+  .fig__frame {
+    background: var(--surface-inset);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    overflow: hidden;
+  }
+
+  .fig {
+    display: block;
+    width: 100%;
+    height: 160px;
+  }
+</style>

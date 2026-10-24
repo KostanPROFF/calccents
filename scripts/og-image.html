@@ -1,0 +1,137 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>Calccents — social card</title>
+    <style>
+      /*
+        The source of public/og-image.png.
+
+        The card is rendered by headless Chrome and committed as a PNG,
+        because social platforms do not accept SVG in og:image. To rebuild
+        it after a change to the design tokens:
+
+          "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome" \
+            --headless --disable-gpu --no-sandbox --hide-scrollbars \
+            --screenshot=public/og-image.png --window-size=1200,630 \
+            "file://$PWD/scripts/og-image.html"
+
+        The values below are the dark theme tokens from src/styles/global.css.
+      */
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        width: 1200px;
+        height: 630px;
+        background: #08090a;
+        color: #f3f5f6;
+        font-family: 'Inter', -apple-system, 'Helvetica Neue', Arial, sans-serif;
+        -webkit-font-smoothing: antialiased;
+        display: grid;
+        grid-template-rows: auto 1fr;
+        padding: 72px 80px;
+        position: relative;
+        overflow: hidden;
+      }
+
+      .brand {
+        display: flex;
+        align-items: center;
+        gap: 14px;
+        font-size: 26px;
+        font-weight: 600;
+        letter-spacing: -0.02em;
+      }
+
+      .mark {
+        width: 44px;
+        height: 44px;
+        border-radius: 12px;
+        background: #6e8fff;
+        color: #05070f;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 24px;
+        font-weight: 700;
+      }
+
+      .body {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        max-width: 760px;
+      }
+
+      .eyebrow {
+        font-size: 17px;
+        font-weight: 500;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+        color: #6e8fff;
+      }
+
+      h1 {
+        margin-top: 22px;
+        font-size: 68px;
+        line-height: 1.06;
+        font-weight: 600;
+        letter-spacing: -0.035em;
+      }
+
+      p.lede {
+        margin-top: 26px;
+        font-size: 25px;
+        line-height: 1.5;
+        color: #9aa2a8;
+        max-width: 680px;
+      }
+
+      .chart {
+        position: absolute;
+        right: -40px;
+        bottom: -60px;
+        width: 620px;
+        opacity: 0.9;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="brand">
+      <span class="mark">C</span>
+      <span>Calccents</span>
+    </div>
+
+    <div class="body">
+      <span class="eyebrow">Financial calculators</span>
+      <h1>Every figure<br />shows its work</h1>
+      <p class="lede">
+        Mortgage, rent, compound interest, take-home pay, federal tax and debt payoff.
+        The formula sits next to the answer, and every number carries its source.
+      </p>
+    </div>
+
+    <svg class="chart" viewBox="0 0 620 420" fill="none" aria-hidden="true">
+      <defs>
+        <linearGradient id="fill" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stop-color="#6e8fff" stop-opacity="0.22" />
+          <stop offset="100%" stop-color="#6e8fff" stop-opacity="0" />
+        </linearGradient>
+      </defs>
+      <path
+        d="M0 392 C 90 384, 150 352, 200 306 C 258 252, 292 176, 330 96 C 352 48, 372 20, 400 0 L400 420 L0 420 Z"
+        fill="url(#fill)"
+      />
+      <path
+        d="M0 392 C 90 384, 150 352, 200 306 C 258 252, 292 176, 330 96 C 352 48, 372 20, 400 0"
+        stroke="#6e8fff"
+        stroke-width="3.5"
+        stroke-linecap="round"
+      />
+    </svg>
+  </body>
+</html>

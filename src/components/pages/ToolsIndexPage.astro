@@ -1,6 +1,7 @@
 ---
 import Base from '../../layouts/Base.astro';
 import AdSlot from '../AdSlot.astro';
+import ToolIllustration from '../visuals/ToolIllustration.astro';
 import { getTools } from '../../config/tools.ts';
 import { getUi } from '../../i18n/ui/index.ts';
 import { localePath, type Locale } from '../../i18n/locales.ts';
@@ -42,6 +43,9 @@ const countFor = (slug: string) =>
       {
         tools.map((tool) => (
           <a class="tile" href={localePath(locale, `/tools/${tool.slug}/`)}>
+            <div class="tile__figure">
+              <ToolIllustration slug={tool.slug} locale={locale} />
+            </div>
             <span class="badge">{tool.category}</span>
             <span class="tile__title">{tool.name}</span>
             <span class="tile__text">{tool.short}</span>
@@ -65,3 +69,9 @@ const countFor = (slug: string) =>
     <AdSlot placement="footer" />
   </div>
 </Base>
+
+<style>
+  .tile__figure {
+    margin-bottom: var(--space-2);
+  }
+</style>

@@ -7,6 +7,7 @@
  * from the dictionary for the language the page is in.
  */
 import ResultPanel from '../ResultPanel.astro';
+import ResultChart from '../ResultChart.astro';
 import AdSlot from '../AdSlot.astro';
 import { getUi } from '../../i18n/ui/index.ts';
 import type { Locale } from '../../i18n/locales.ts';
@@ -223,6 +224,18 @@ const copy = ui.tool['rent-vs-buy'];
     ]}
     note={copy.result.note}
   />
+  <ResultChart
+    chartId="rent-buy-chart"
+    title={copy.chart?.title}
+    note={copy.chart?.note}
+    emptyText={ui.chart?.empty}
+    xAxis={copy.chart?.xAxis}
+    yearsLabel={ui.chart?.years}
+    monthsLabel={ui.chart?.months}
+    startLabel={ui.chart?.start}
+    endLabel={ui.chart?.end}
+    series={copy.chart?.series}
+  />
   <p class="muted-block" style="margin-top: var(--space-4);">
     {copy.resultNote}
   </p>
@@ -233,6 +246,7 @@ const copy = ui.tool['rent-vs-buy'];
   import { compareRentAndBuy } from '../../lib/calc/rentVsBuy.ts';
   import { formatCurrency } from '../../lib/calc/money.ts';
   import { numberValue, setText } from '../../lib/client/dom.ts';
+  import { renderChart } from '../../lib/client/chartView.ts';
 
   const copy = document.getElementById('rent-buy-form')?.dataset;
   const ids = [
@@ -266,6 +280,7 @@ const copy = ui.tool['rent-vs-buy'];
       ]) {
         setText(id, '—');
       }
+      renderChart('rent-buy-chart', { kind: 'line', series: [] });
       return;
     }
 
@@ -299,6 +314,20 @@ const copy = ui.tool['rent-vs-buy'];
         ? (copy?.notWithinHorizon ?? 'Not within the horizon')
         : (copy?.monthLabel?.replace('{n}', String(result.breakEvenMonth)) ??
           `Month ${result.breakEvenMonth}`),    );
+
+    /*
+     * Both lines come from the same comparison: the rent paid out by the
+     * end of each year, and the money spent on the home once the equity
+     * it has built is taken off.
+     */
+    renderChart('rent-buy-chart', {
+      kind: 'line',
+      xValues: result.yearly.map((row) => row.year),
+      series: [
+        { key: 'rent', values: result.yearly.map((row) => row.cumulativeRent) },
+        { key: 'ownership', values: result.yearly.map((row) => row.netOwnershipCost) },
+      ],
+    });
   }
 
   for (const id of ids) {

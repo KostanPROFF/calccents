@@ -1,0 +1,243 @@
+---
+/**
+ * The chart under the result panel.
+ *
+ * The chart is drawn from the numbers the calculator has already worked
+ * out, so the picture cannot disagree with the figures above it. The
+ * words — the title, the note, the names of the series and the empty
+ * state — are written into the markup here and read back by the page
+ * script, so a page in any language carries its own labels.
+ *
+ * The chart itself is inline SVG: it scales with the column it sits in,
+ * it follows the light and the dark theme through the colour variables,
+ * and a screen reader is told what the picture is.
+ */
+import { CHART_HEIGHT } from '../lib/client/chart.ts';
+
+interface SeriesLabel {
+  key: string;
+  label: string;
+}
+
+interface Props {
+  /** The id of the chart. It has to be unique on the page. */
+  chartId: string;
+  title?: string;
+  note?: string;
+  /** The text shown when there is nothing to draw. */
+  emptyText?: string;
+  /** `years`, `months` or `none` for a chart without an axis. */
+  xAxis?: string;
+  /** The name of the unit on the axis, when the axis counts years. */
+  yearsLabel?: string;
+  /** The name of the unit on the axis, when the axis counts months. */
+  monthsLabel?: string;
+  /** The label at the start of the axis. */
+  startLabel?: string;
+  /** The label at the end of the axis. */
+  endLabel?: string;
+  /** The series the chart draws, in the order they are drawn. */
+  series?: SeriesLabel[];
+}
+
+const {
+  chartId,
+  title,
+  note,
+  emptyText,
+  xAxis,
+  yearsLabel,
+  monthsLabel,
+  startLabel,
+  endLabel,
+  series,
+} = Astro.props;
+
+const unitLabel = xAxis === 'months' ? (monthsLabel ?? '') : (yearsLabel ?? '');
+
+/*
+ * The settings the page script needs, carried with the chart itself.
+ */
+const config = JSON.stringify({
+  xAxis: xAxis ?? 'none',
+  unitLabel: unitLabel ?? '',
+  startLabel: startLabel ?? '',
+  endLabel: endLabel ?? '',
+  series: series ?? [],
+});
+---
+
+{
+  title && (
+    <figure class="chart" id={chartId} data-chart={config}>
+      <figcaption class="chart__title">{title}</figcaption>
+      <div class="chart__plot">
+        <svg
+          class="chart__svg"
+          width="100%"
+          viewBox={`0 0 320 ${CHART_HEIGHT}`}
+          role="img"
+          aria-label={title}
+          preserveAspectRatio="xMidYMid meet"
+        >
+          <title>{title}</title>
+        </svg>
+        <p class="chart__empty" data-chart-empty>
+          {emptyText}
+        </p>
+      </div>
+      {note && <p class="chart__note">{note}</p>}
+    </figure>
+  )
+}
+
+<style>
+  /*
+   * The chart sits in the same column as the numbers, under the
+   * statistics. It is inset rather than raised: a picture of a figure
+   * belongs to the figure, and it carries no shadow of its own.
+   */
+  .chart {
+    margin: var(--space-5) 0 0;
+    padding: var(--space-4);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-md);
+    background: var(--surface-inset);
+  }
+
+  .chart__title {
+    margin: 0 0 var(--space-3);
+    color: var(--text-secondary);
+    font-size: var(--text-sm);
+    font-weight: 600;
+    line-height: var(--leading-snug);
+  }
+
+  .chart__plot {
+    position: relative;
+  }
+
+  .chart__svg {
+    display: block;
+    width: 100%;
+    /*
+     * The height follows the view box, which the script sets to the size
+     * the drawing actually needs. A bar chart is shorter than a line
+     * chart, and a fixed height would leave a band of empty canvas under
+     * the bar.
+     */
+    height: auto;
+  }
+
+  .chart__empty {
+    position: absolute;
+    inset: 0;
+    display: grid;
+    place-items: center;
+    margin: 0;
+    padding: 0 var(--space-4);
+    color: var(--text-muted);
+    font-size: var(--text-sm);
+    text-align: center;
+  }
+
+  .chart__empty[hidden] {
+    display: none;
+  }
+
+  .chart__note {
+    margin: var(--space-3) 0 0;
+    color: var(--text-muted);
+    font-size: var(--text-xs);
+    line-height: var(--leading-normal);
+  }
+
+  /*
+   * The parts the page script draws. They are written by the script, so
+   * they carry no scope attribute of their own and are addressed
+   * globally.
+   */
+  .chart__svg :global(.chart-grid) {
+    stroke: var(--border-subtle);
+    stroke-width: 1;
+  }
+
+  .chart__svg :global(.chart-line) {
+    fill: none;
+    stroke-width: 1.75;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+
+  .chart__svg :global(.chart-line--accent) {
+    stroke: var(--accent);
+  }
+
+  .chart__svg :global(.chart-line--muted) {
+    stroke: var(--text-muted);
+  }
+
+  .chart__svg :global(.chart-line--dashed) {
+    stroke-dasharray: 5 4;
+  }
+
+  .chart__svg :global(.chart-band) {
+    stroke: none;
+  }
+
+  .chart__svg :global(.chart-band--muted) {
+    fill: var(--text-muted);
+    opacity: 0.2;
+  }
+
+  .chart__svg :global(.chart-segment) {
+    stroke: none;
+  }
+
+  .chart__svg :global(.chart-segment--accent),
+  .chart__svg :global(.chart-swatch--accent) {
+    fill: var(--accent);
+  }
+
+  .chart__svg :global(.chart-segment--muted),
+  .chart__svg :global(.chart-swatch--muted) {
+    fill: var(--text-muted);
+  }
+
+  .chart__svg :global(.chart-segment--soft-accent),
+  .chart__svg :global(.chart-swatch--soft-accent) {
+    fill: var(--accent);
+    opacity: 0.55;
+  }
+
+  .chart__svg :global(.chart-segment--soft-muted),
+  .chart__svg :global(.chart-swatch--soft-muted) {
+    fill: var(--text-muted);
+    opacity: 0.55;
+  }
+
+  .chart__svg :global(.chart-segment--faint-accent),
+  .chart__svg :global(.chart-swatch--faint-accent) {
+    fill: var(--accent);
+    opacity: 0.3;
+  }
+
+  .chart__svg :global(.chart-swatch) {
+    stroke: none;
+  }
+
+  .chart__svg :global(.chart-tick) {
+    fill: var(--text-muted);
+    font-size: 10px;
+  }
+
+  .chart__svg :global(.chart-caption) {
+    fill: var(--text-secondary);
+    font-size: 10px;
+  }
+
+  .chart__svg :global(.chart-legend) {
+    fill: var(--text-secondary);
+    font-size: 10.5px;
+  }
+</style>

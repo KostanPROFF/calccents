@@ -124,6 +124,34 @@ export const es = {
       'Una carta corta cuando sale una calculadora nueva o cuando se revisa una existente. Sin ofertas ni espacios patrocinados.',
   },
 
+  illustration: {
+    mortgagePayment:
+      'Un saldo de hipoteca que baja con el tiempo, con los intereses pagados al lado',
+    rentVsBuy:
+      'Dos líneas que se cruzan: el coste de alquilar frente al coste de ser propietario',
+    compoundInterest:
+      'Un saldo que sube cada vez más rápido a medida que se capitalizan los intereses',
+    netPay:
+      'Una barra de salario bruto partida entre el salario neto y las deducciones que se le restan',
+    incomeTax:
+      'Una pila de tramos fiscales, cada uno más ancho que el de arriba',
+    debtPayoff:
+      'Dos juegos de barras, uno por cada orden en el que se pueden saldar las deudas',
+  },
+
+  heroVisual: {
+    label: 'Pago mensual',
+    caption: 'Un ejemplo resuelto, dibujado tal como lo dibuja la calculadora.',
+  },
+
+  chart: {
+    months: 'Meses',
+    years: 'Años',
+    start: 'Ahora',
+    end: 'Fin',
+    empty: 'El gráfico se rellena en cuanto hay una cifra que dibujar.',
+  },
+
   toolsIndex: {
     title: 'Calculadoras financieras gratuitas',
     description:
@@ -518,6 +546,15 @@ export const es = {
       },
       resultNote:
         'Cambia cualquier campo y las cifras se actualizan mientras escribes. No se envía nada a ninguna parte: la aritmética se ejecuta en esta página.',
+      chart: {
+        title: 'El saldo y los intereses, año a año',
+        note: 'El saldo baja a medida que se amortiza el préstamo, y los intereses pagados cada año bajan con él.',
+        xAxis: 'years',
+        series: [
+          { key: 'balance', label: 'Saldo' },
+          { key: 'interest', label: 'Intereses pagados' },
+        ],
+      },
       formula: 'M = P · r(1 + r)ⁿ / ((1 + r)ⁿ − 1)',
       method: [
         'El pago mensual programado sale de la fórmula estándar de amortización:',
@@ -638,6 +675,15 @@ export const es = {
       },
       resultNote:
         'El mes de equilibrio es el primer mes en que el coste neto de ser propietario —el efectivo pagado menos el patrimonio acumulado— baja del coste en efectivo de alquilar. Es un dato sobre estos números, no una recomendación.',
+      chart: {
+        title: 'El coste de alquilar frente al coste de ser propietario',
+        note: 'Las dos líneas son efectivo acumulado: el alquiler pagado y el dinero gastado en la casa una vez descontado el patrimonio que genera.',
+        xAxis: 'years',
+        series: [
+          { key: 'rent', label: 'Alquiler pagado' },
+          { key: 'ownership', label: 'Coste neto de ser propietario' },
+        ],
+      },
       method: [
         'Cada mes la calculadora lleva dos libros en paralelo. El libro del alquiler suma tu alquiler y el seguro del inquilino. El libro de la propiedad suma el pago de la hipoteca de la fórmula estándar de amortización, el impuesto sobre la propiedad, el seguro, la HOA y la reserva de mantenimiento, más la entrada y los gastos de cierre en el primer mes.',
         'Junto al segundo libro, la calculadora sigue el valor de la vivienda, que crece o mengua cada mes al tipo anual que introdujiste, y el saldo pendiente del préstamo. La diferencia entre ambos es tu patrimonio:',
@@ -762,6 +808,15 @@ export const es = {
       },
       resultNote:
         'El tipo que introduces se usa tal cual durante todo el periodo. Esta página no busca un tipo de mercado.',
+      chart: {
+        title: 'De qué está hecho el saldo',
+        note: 'La línea es el saldo. La banda que hay debajo es la parte que vino de los intereses y no de las aportaciones.',
+        xAxis: 'years',
+        series: [
+          { key: 'balance', label: 'Saldo' },
+          { key: 'contributed', label: 'Aportado' },
+        ],
+      },
       method: [
         'La proyección avanza un periodo de capitalización cada vez. En cada periodo el saldo genera intereses al tipo del periodo, y luego se suma la aportación de ese periodo, al final del periodo o al principio, según el ajuste. Recorrer los periodos en secuencia en lugar de usar una sola expresión cerrada es lo que produce la tabla año a año, y el saldo final es el mismo en ambos casos.',
         'En forma cerrada, el mismo resultado es:',
@@ -885,6 +940,18 @@ export const es = {
       },
       resultNote:
         'Un sistema de nóminas aplica las elecciones de retención del W-4 y los importes ya retenidos durante el año, así que la cifra de una nómina real se mueve un poco de un mes a otro.',
+      chart: {
+        title: 'Adónde va el salario bruto',
+        note: 'Una barra para el año, partida entre la parte que llega al salario y las partes que se le retiran.',
+        xAxis: 'none',
+        series: [
+          { key: 'net', label: 'Salario neto' },
+          { key: 'federal', label: 'Impuesto federal sobre la renta' },
+          { key: 'socialSecurity', label: 'Social Security' },
+          { key: 'medicare', label: 'Medicare' },
+          { key: 'state', label: 'Impuesto estatal sobre la renta' },
+        ],
+      },
       formula:
         'salario neto = salario bruto − deducciones antes de impuestos − impuesto federal sobre la renta − Social Security − Medicare − impuesto estatal sobre la renta',
       method: [
@@ -994,6 +1061,16 @@ export const es = {
       },
       resultNote:
         'La cifra es una obligación tributaria, no el importe retenido de una nómina. No incluye créditos ni los pagos ya realizados durante el año.',
+      chart: {
+        title: 'Qué queda del ingreso',
+        note: 'Una barra para el año, partida entre la parte que se queda con quien lee y la parte que va a impuestos.',
+        xAxis: 'none',
+        series: [
+          { key: 'afterTax', label: 'Ingresos después de impuestos' },
+          { key: 'federal', label: 'Impuesto federal sobre la renta' },
+          { key: 'state', label: 'Impuesto estatal sobre la renta' },
+        ],
+      },
       formula:
         'ingresos gravables = ingresos brutos − deducciones antes de impuestos − deducción; impuesto = tabla de tramos aplicada a los ingresos gravables',
       method: [
@@ -1101,6 +1178,16 @@ export const es = {
       },
       resultNote:
         'Las tres simulaciones usan las mismas deudas y el mismo pago extra. Lo único que cambia es el orden en el que va el dinero extra.',
+      chart: {
+        title: 'El saldo con cada orden',
+        note: 'La línea de solo los pagos mínimos sigue subiendo allí donde los pagos no cubren los intereses, y la línea del pago extra llega a cero.',
+        xAxis: 'years',
+        series: [
+          { key: 'avalanche', label: 'Avalancha' },
+          { key: 'snowball', label: 'Bola de nieve' },
+          { key: 'minimumOnly', label: 'Solo mínimos' },
+        ],
+      },
       formula:
         'interés del mes = saldo al inicio del mes × tipo anual ÷ 12; el pago va primero a los intereses y después al capital',
       method: [

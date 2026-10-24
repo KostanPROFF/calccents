@@ -7,6 +7,7 @@
  * from the dictionary for the language the page is in.
  */
 import ResultPanel from '../ResultPanel.astro';
+import ResultChart from '../ResultChart.astro';
 import AdSlot from '../AdSlot.astro';
 import { getUi } from '../../i18n/ui/index.ts';
 import type { Locale } from '../../i18n/locales.ts';
@@ -149,6 +150,18 @@ const copy = ui.tool['compound-interest'];
     ]}
     note={copy.result.note}
   />
+  <ResultChart
+    chartId="compound-chart"
+    title={copy.chart?.title}
+    note={copy.chart?.note}
+    emptyText={ui.chart?.empty}
+    xAxis={copy.chart?.xAxis}
+    yearsLabel={ui.chart?.years}
+    monthsLabel={ui.chart?.months}
+    startLabel={ui.chart?.start}
+    endLabel={ui.chart?.end}
+    series={copy.chart?.series}
+  />
   <p class="muted-block" style="margin-top: var(--space-4);">
     {copy.resultNote}
   </p>
@@ -159,6 +172,7 @@ const copy = ui.tool['compound-interest'];
   import { projectCompoundInterest } from '../../lib/calc/compound.ts';
   import { formatCurrency, formatPercent } from '../../lib/calc/money.ts';
   import { numberValue, setText } from '../../lib/client/dom.ts';
+  import { renderChart } from '../../lib/client/chartView.ts';
 
   const form = document.getElementById('compound-form');
   const yearsOne = form?.dataset.yearsOne ?? '1 year';
@@ -199,6 +213,24 @@ const copy = ui.tool['compound-interest'];
       'ci-years-out',
       result.years === 1 ? yearsOne : yearsOther.replace('{n}', String(result.years)),
     );
+
+    /*
+     * The line is the balance at the end of each year. The band between
+     * the balance and the contributions is the part of it that came from
+     * interest rather than from what was paid in.
+     */
+    renderChart('compound-chart', {
+      kind: 'line',
+      xValues: result.yearly.map((row) => row.year),
+      series: [
+        { key: 'balance', values: result.yearly.map((row) => row.balance) },
+        {
+          key: 'contributed',
+          values: result.yearly.map((row) => row.contributed),
+          style: 'band',
+        },
+      ],
+    });
 
     const body = document.getElementById('compound-body');
     if (body) {

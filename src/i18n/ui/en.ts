@@ -150,6 +150,43 @@ export const en = {
       'One short letter when a new calculator goes live or an existing one is re-reviewed. No offers, no sponsored placements.',
   },
 
+  /*
+   * The key visual in the hero and the illustration on each calculator card.
+   *
+   * The illustrations are drawn as inline SVG from the design tokens, so
+   * they follow the light and the dark theme and carry no image request.
+   * The alt text is here because the illustration is a picture of a chart,
+   * and a screen reader needs to be told what the chart is about.
+   */
+  illustration: {
+    mortgagePayment: 'A mortgage balance falling over time, with the interest paid alongside it',
+    rentVsBuy: 'Two lines crossing: the cost of renting against the cost of owning',
+    compoundInterest: 'A balance rising faster and faster as interest compounds',
+    netPay: 'A bar of gross pay split into take-home pay and the deductions taken from it',
+    incomeTax: 'A stack of tax brackets, each one wider than the one above it',
+    debtPayoff: 'Two sets of bars, one for each order the debts can be cleared in',
+  },
+
+  heroVisual: {
+    label: 'Monthly payment',
+    caption: 'A worked example, drawn the way the calculator draws it.',
+  },
+
+  /*
+   * The labels around a result chart.
+   *
+   * The chart itself is drawn as inline SVG from the numbers the calculator
+   * has already worked out, so nothing is re-computed for the picture and
+   * the picture cannot disagree with the figures above it.
+   */
+  chart: {
+    months: 'Months',
+    years: 'Years',
+    start: 'Now',
+    end: 'End',
+    empty: 'The chart fills in once there is a figure to draw.',
+  },
+
   toolsIndex: {
     title: 'Free Financial Calculators',
     description:
@@ -545,6 +582,15 @@ export const en = {
       },
       resultNote:
         'Change any field and the figures update as you type. Nothing is sent anywhere: the arithmetic runs in this page.',
+      chart: {
+        title: 'The balance and the interest, year by year',
+        note: 'The balance falls as the loan is paid down, and the interest paid each year falls with it.',
+        xAxis: 'years',
+        series: [
+          { key: 'balance', label: 'Balance' },
+          { key: 'interest', label: 'Interest paid' },
+        ],
+      },
       formula: 'M = P · r(1 + r)ⁿ / ((1 + r)ⁿ − 1)',
       method: [
         'The scheduled monthly payment comes from the standard amortization formula:',
@@ -665,6 +711,15 @@ export const en = {
       },
       resultNote:
         'The crossover is the first month where the net cost of owning — cash paid minus equity built — falls below the cash cost of renting. It is a fact about these numbers, not a recommendation.',
+      chart: {
+        title: 'The cost of renting against the cost of owning',
+        note: 'Both lines are cumulative cash: the rent paid out, and the money spent on the home once the equity it builds is taken off.',
+        xAxis: 'years',
+        series: [
+          { key: 'rent', label: 'Rent paid' },
+          { key: 'ownership', label: 'Net cost of owning' },
+        ],
+      },
       method: [
         'Each month the calculator runs two ledgers side by side. The renting ledger adds your rent and renter\'s insurance. The owning ledger adds the mortgage payment from the standard amortization formula, property tax, insurance, HOA and the maintenance allowance, plus the down payment and closing costs on the first month.',
         "Alongside the second ledger it tracks the home's value, grown or shrunk each month at the annual rate you entered, and the balance still owed on the loan. The difference between the two is your equity:",
@@ -789,6 +844,15 @@ export const en = {
       },
       resultNote:
         'The rate you enter is used exactly as entered for the whole period. This page does not look up a market rate.',
+      chart: {
+        title: 'What the balance is made of',
+        note: 'The line is the balance. The band under it is the part of it that came from interest rather than from the contributions.',
+        xAxis: 'years',
+        series: [
+          { key: 'balance', label: 'Balance' },
+          { key: 'contributed', label: 'Contributed' },
+        ],
+      },
       method: [
         'The projection advances one compounding period at a time. In each period the balance earns interest at the period rate, and then the contribution for that period is added — at the end of the period or the start of it, depending on the setting. Running the periods in sequence rather than using one closed expression is what produces the year-by-year table, and the final balance is the same either way.',
         'In closed form the same result is:',
@@ -911,6 +975,18 @@ export const en = {
       },
       resultNote:
         'A payroll system uses the withholding elections on the W-4 and the amounts already withheld during the year, so the figure on a real paycheque moves a little from month to month.',
+      chart: {
+        title: 'Where the gross pay goes',
+        note: 'One bar for the year, split into the part that reaches the wage and the parts that are taken out of it.',
+        xAxis: 'none',
+        series: [
+          { key: 'net', label: 'Take-home pay' },
+          { key: 'federal', label: 'Federal income tax' },
+          { key: 'socialSecurity', label: 'Social Security' },
+          { key: 'medicare', label: 'Medicare' },
+          { key: 'state', label: 'State income tax' },
+        ],
+      },
       formula:
         'take-home = gross pay − pre-tax deductions − federal income tax − Social Security − Medicare − state income tax',
       method: [
@@ -1023,6 +1099,16 @@ export const en = {
       },
       resultNote:
         'The figure is a tax liability, not the amount withheld from a paycheque. It does not include credits or the payments already made during the year.',
+      chart: {
+        title: 'What the income is left with',
+        note: 'One bar for the year, split into the part that stays with the reader and the part that goes to tax.',
+        xAxis: 'none',
+        series: [
+          { key: 'afterTax', label: 'Income after tax' },
+          { key: 'federal', label: 'Federal income tax' },
+          { key: 'state', label: 'State income tax' },
+        ],
+      },
       formula:
         'taxable income = gross income − pre-tax deductions − deduction; tax = bracket table applied to taxable income',
       method: [
@@ -1133,6 +1219,16 @@ export const en = {
       },
       resultNote:
         'The three runs use the same debts and the same extra payment. The only thing that changes is the order the extra money goes in.',
+      chart: {
+        title: 'The balance under each order',
+        note: 'The line for the minimums only keeps going up where the payments do not cover the interest, and the line for the extra payment reaches zero.',
+        xAxis: 'years',
+        series: [
+          { key: 'avalanche', label: 'Avalanche' },
+          { key: 'snowball', label: 'Snowball' },
+          { key: 'minimumOnly', label: 'Minimums only' },
+        ],
+      },
       formula:
         'interest for the month = balance at the start of the month × annual rate ÷ 12; payment goes to interest first, then to principal',
       method: [

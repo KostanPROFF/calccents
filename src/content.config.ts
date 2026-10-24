@@ -38,6 +38,33 @@ const guides = defineCollection({
       author: z.string().min(1),
       reviewedBy: z.string().min(1),
       group: z.enum(['home', 'renting', 'investing']),
+      /**
+       * The picture that sits under the title of the guide.
+       *
+       * The slug is the name of the guide, so the drawing and the text it
+       * belongs to cannot drift apart: renaming a guide file means renaming
+       * the picture as well, and the build fails if they disagree.
+       */
+      illustration: z.enum([
+        'compound-interest-calculator-explained',
+        'compound-vs-simple-interest',
+        'debt-payoff-calculator-explained',
+        'down-payment-and-closing-costs-explained',
+        'estimating-property-tax-and-home-insurance',
+        'extra-mortgage-payments-math',
+        'how-compounding-frequency-changes-results',
+        'how-mortgage-amortization-works',
+        'how-to-read-an-amortization-schedule',
+        'income-tax-calculator-explained',
+        'inflation-and-real-returns-explained',
+        'monthly-payment-vs-total-cost-mortgage',
+        'mortgage-payment-calculator-explained',
+        'mortgage-rate-and-term-tradeoffs',
+        'net-pay-calculator-explained',
+        'rent-vs-buy-calculator-explained',
+        'rent-vs-buy-common-mistakes',
+        'understanding-apr',
+      ]),
       readingMinutes: z.number().int().min(3).max(25),
       sources: z
         .array(

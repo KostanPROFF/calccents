@@ -62,9 +62,12 @@ src/
 │  └─ ui/{en,ru,es}.ts     every user-visible string, one file per language
 ├─ lib/calc/               calculation engine + unit tests
 ├─ lib/client/dom.ts       browser helpers used by the page scripts
+├─ lib/client/chart.ts     chart geometry, no DOM
+├─ lib/client/chartView.ts the SVG a chart is drawn into
 ├─ components/             AdSlot, ToolShell, ResultPanel, Faq, SourceList, …
 ├─ components/pages/       the page bodies, one component per page
 ├─ components/tools/       the six calculator forms
+├─ components/visuals/     the illustrations and the hero picture
 ├─ layouts/Base.astro      document shell
 ├─ pages/                  routes
 │  ├─ *.astro              English, at the root
@@ -77,7 +80,8 @@ scripts/
 ├─ check-links.ts          internal link resolution
 ├─ check-ads.ts            AdSense gating, both directions
 ├─ check-consent.ts        consent gating: no tracker before the answer
-└─ check-dom-ids.ts        duplicate id detection in the built HTML
+├─ check-dom-ids.ts        duplicate id detection in the built HTML
+└─ og-image.html           the source of the social card
 ```
 
 ## Languages
@@ -327,6 +331,43 @@ Keep the number of ad units per page at three or fewer. On a comparable
 site, cutting the ad units on the main page from 18 to 9 raised page RPM by
 40 % and monthly revenue by nearly 50 %, because the ads were pushing the
 content down and slowing the page.
+
+## The pictures
+
+The site carries no raster images except the social card. Everything else is
+inline SVG, and there are three kinds of it.
+
+**The card illustrations.** Every calculator card and every guide has a
+picture: an abstract chart that shows the shape of the arithmetic the tool
+does — an amortisation curve for the mortgage, two crossing lines for rent
+against ownership, a rising curve for compound interest, a bar split into its
+deductions for take-home pay, a stack of brackets for the tax, two orders of
+bars for the debt payoff. They live in `src/components/visuals/` and are
+drawn from the theme variables, so they follow the light and the dark theme
+and cost no request.
+
+**The result charts.** Each calculator draws a chart under its figures, from
+the numbers the calculation has already produced. Nothing is recomputed for
+the picture, so the picture cannot disagree with the numbers above it. The
+geometry is in `src/lib/client/chart.ts` and the drawing in
+`src/lib/client/chartView.ts`; the text on the chart comes from the
+dictionary, so a Russian reader gets a Russian legend.
+
+**The hero picture** on the home page and the social card. The social card is
+the one raster file, because social platforms do not accept SVG in
+`og:image`. It is rendered from `scripts/og-image.html` by headless Chrome
+and committed as `public/og-image.png`:
+
+```
+"/Applications/Google Chrome.app/Contents/MacOS/Google Chrome" \
+  --headless --disable-gpu --no-sandbox --hide-scrollbars \
+  --screenshot=public/og-image.png --window-size=1200,630 \
+  "file://$PWD/scripts/og-image.html"
+```
+
+The picture is decorative and carries no figures of its own, so a guide
+picture repeats the arithmetic of the guide rather than inventing a number
+nobody can check.
 
 ## Analytics
 

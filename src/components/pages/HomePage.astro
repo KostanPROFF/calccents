@@ -2,8 +2,10 @@
 import Base from '../../layouts/Base.astro';
 import AdSlot from '../AdSlot.astro';
 import Newsletter from '../Newsletter.astro';
+import HeroVisual from '../visuals/HeroVisual.astro';
+import ToolIllustration from '../visuals/ToolIllustration.astro';
 import { getSite } from '../../config/site.ts';
-import { getTools, toolIcon } from '../../config/tools.ts';
+import { getTools } from '../../config/tools.ts';
 import { getUi } from '../../i18n/ui/index.ts';
 import { localePath, type Locale } from '../../i18n/locales.ts';
 import { getGuides, guideSlug } from '../../i18n/guides.ts';
@@ -46,18 +48,21 @@ const organization = {
   jsonLd={[webSite, organization]}
 >
   <section class="section-sm">
-    <div class="container" style="max-width: 720px; text-align: center;">
-      <p class="eyebrow">{ui.home.eyebrow}</p>
-      <h1 style="margin-top: var(--space-4); font-size: var(--text-4xl);">
-        {ui.home.heading}
-      </h1>
-      <p class="page-head__lede" style="margin-inline: auto;">
-        {ui.home.lede}
-      </p>
-      <div style="margin-top: var(--space-8);">
-        <a class="btn btn--primary" href={localePath(locale, '/tools/')}>
-          {ui.home.cta}
-        </a>
+    <div class="container">
+      <div class="hero">
+        <div>
+          <p class="eyebrow">{ui.home.eyebrow}</p>
+          <h1 style="margin-top: var(--space-4); font-size: var(--text-4xl);">
+            {ui.home.heading}
+          </h1>
+          <p class="page-head__lede">{ui.home.lede}</p>
+          <div style="margin-top: var(--space-8);">
+            <a class="btn btn--primary" href={localePath(locale, '/tools/')}>
+              {ui.home.cta}
+            </a>
+          </div>
+        </div>
+        <HeroVisual locale={locale} />
       </div>
     </div>
   </section>
@@ -72,13 +77,9 @@ const organization = {
         {
           tools.map((tool) => (
             <a class="tile" href={localePath(locale, `/tools/${tool.slug}/`)}>
-              <span
-                class="brand__mark"
-                aria-hidden="true"
-                style="width: 2.25rem; height: 2.25rem; font-size: var(--text-base);"
-              >
-                {toolIcon(tool.group)}
-              </span>
+              <div class="tile__figure">
+                <ToolIllustration slug={tool.slug} locale={locale} />
+              </div>
               <span class="tile__title">{tool.name}</span>
               <span class="tile__text">{tool.short}</span>
               <span class="tile__meta">{ui.ui.calculate}</span>
@@ -171,6 +172,24 @@ const organization = {
 </Base>
 
 <style>
+  .hero {
+    display: grid;
+    grid-template-columns: minmax(0, 1.05fr) minmax(0, 0.95fr);
+    gap: var(--space-10);
+    align-items: center;
+  }
+
+  @media (max-width: 940px) {
+    .hero {
+      grid-template-columns: 1fr;
+      gap: var(--space-8);
+    }
+  }
+
+  .tile__figure {
+    margin-bottom: var(--space-2);
+  }
+
   .guide-row {
     display: flex;
     align-items: baseline;
