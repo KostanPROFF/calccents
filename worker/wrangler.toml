@@ -1,0 +1,7 @@
+name = "calccents-contact-mailer"
+main = "src/index.ts"
+compatibility_date = "2026-10-21"
+
+[[send_email]]
+name = "EMAIL"
+allowed_destination_addresses = ["info@constantinecs.com"]
