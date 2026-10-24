@@ -1,0 +1,18 @@
+# The Pages project.
+#
+# This file is the source of truth for the Pages project configuration, so
+# what is written here is what the project runs with.
+#
+# The service binding is the reason this file exists. The contact form posts
+# to a Pages Function, which calls the mailer worker over the binding. The
+# binding is authorised by the account itself, so there is no API token in
+# the Pages project, none in the repository and nothing to rotate. The
+# worker refuses to serve anything over the public internet, so the only
+# way to reach it is from this project.
+name = "calccents"
+pages_build_output_dir = "./dist"
+compatibility_date = "2026-10-21"
+
+[[services]]
+binding = "MAILER"
+service = "calccents-contact-mailer"

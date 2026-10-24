@@ -138,6 +138,16 @@ jobs:
       - name: Consent gating check for the build that ships
         run: pnpm lint:consent
 
+      # The mailer worker is deployed first, because the Pages project binds
+      # to it and a binding to a worker that does not exist yet fails the
+      # deploy. The worker holds no credential: the send_email binding is
+      # authorised by the account, so there is no token to pass to it.
+      - name: Deploy the contact mailer
+        run: pnpm exec wrangler deploy --config worker/wrangler.toml
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+
       # The deploy is skipped until the two Cloudflare secrets exist. The
       # check lives in the shell rather than in an `if:` expression, because
       # the secrets context is not available in step conditions and GitHub
@@ -156,7 +166,10 @@ jobs:
           # means the pipeline works from nothing but the two secrets.
           pnpm exec wrangler pages project create calccents --production-branch main \
             || echo "::notice::Project calccents already exists, continuing."
-          pnpm exec wrangler pages deploy dist --project-name=calccents --branch=main
+          # The Wrangler file at the root of the repository holds the build
+          # output directory and the service binding, so no directory is
+          # passed here: the file is the source of truth for the project.
+          pnpm exec wrangler pages deploy --project-name=calccents --branch=main
         env:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}

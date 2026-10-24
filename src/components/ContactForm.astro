@@ -1,0 +1,282 @@
+---
+/**
+ * The contact form.
+ *
+ * The form posts to the site's own endpoint, which forwards the message to
+ * the mailer worker and sends it. It works without JavaScript as well: the
+ * form is a real form, and the endpoint answers with a page saying the
+ * message was sent. With JavaScript the answer arrives without a reload,
+ * which is the same thing the reader would get either way.
+ *
+ * The messages come from the dictionary, because the site is published in
+ * three languages and a reader in Spanish should not be told that a message
+ * was sent in a language they cannot read.
+ */
+import { getUi } from '../i18n/ui/index.ts';
+import type { Locale } from '../i18n/locales.ts';
+
+interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+const ui = getUi(locale);
+const copy = ui.contactForm;
+---
+
+<div class="contact-form" data-contact-form>
+  <form
+    class="contact-form__form"
+    method="post"
+    action="/api/contact"
+    data-contact-form-form
+  >
+    <div class="contact-form__row">
+      <label class="contact-form__label" for="contact-name">
+        {copy.nameLabel}
+      </label>
+      <input
+        class="input"
+        id="contact-name"
+        name="name"
+        type="text"
+        autocomplete="name"
+        required
+        maxlength="80"
+      />
+    </div>
+
+    <div class="contact-form__row">
+      <label class="contact-form__label" for="contact-email">
+        {copy.emailLabel}
+      </label>
+      <input
+        class="input"
+        id="contact-email"
+        name="email"
+        type="email"
+        autocomplete="email"
+        required
+        maxlength="120"
+      />
+    </div>
+
+    <div class="contact-form__row">
+      <label class="contact-form__label" for="contact-subject">
+        {copy.subjectLabel}
+      </label>
+      <input
+        class="input"
+        id="contact-subject"
+        name="subject"
+        type="text"
+        required
+        maxlength="120"
+      />
+    </div>
+
+    <div class="contact-form__row">
+      <label class="contact-form__label" for="contact-message">
+        {copy.messageLabel}
+      </label>
+      <textarea
+        class="input contact-form__message"
+        id="contact-message"
+        name="message"
+        rows="8"
+        required
+        maxlength="4000"></textarea>
+    </div>
+
+    {/*
+      A field a person does not see and cannot fill. A robot fills every
+      field it finds, so a filled one means the sender is not a person. The
+      form is arranged so the field sits below the visible ones and is
+      moved off screen rather than hidden, because a hidden field is
+      skipped and a skipped field is never filled.
+    */}
+    <div class="contact-form__trap" aria-hidden="true">
+      <label for="contact-company">Company</label>
+      <input id="contact-company" name="trap" type="text" tabindex="-1" autocomplete="off" />
+    </div>
+
+    <div class="contact-form__actions">
+      <button class="btn btn--primary" type="submit" data-contact-form-submit>
+        {copy.submit}
+      </button>
+      <p class="contact-form__note">{copy.note}</p>
+    </div>
+  </form>
+
+  {/*
+    The result of the submission. The messages live here in the markup, in
+    every language the site is published in, and the script picks the one
+    that matches the page. That way the text is in the page source and a
+    reader gets the answer in their own language without a round trip for
+    a translation.
+  */}
+  <div
+    class="contact-form__status"
+    role="status"
+    aria-live="polite"
+    data-contact-form-status
+    hidden
+  >
+    {
+      copy.statuses.map((status) => (
+        <p data-status={status.key} hidden>
+          {status.text}
+        </p>
+      ))
+    }
+  </div>
+</div>
+
+<script>
+  /*
+   * The form, in the browser.
+   *
+   * The script is a convenience, not a requirement: the form is a real form
+   * and works without it. What the script adds is that the reader stays on
+   * the page and sees the answer where they are looking, and that the
+   * answer arrives in their own language.
+   *
+   * The strings come from the markup rather than from this script, because
+   * a variable from the frontmatter of a component is not available inside
+   * a client script at runtime. The markup is the source of truth here,
+   * and the script reads it.
+   */
+  function setup(root: HTMLElement): void {
+    const form = root.querySelector<HTMLFormElement>('[data-contact-form-form]');
+    const statusEl = root.querySelector<HTMLElement>('[data-contact-form-status]');
+    const submit = root.querySelector<HTMLButtonElement>('[data-contact-form-submit]');
+    if (!form || !statusEl || submit === null) return;
+    const status: HTMLElement = statusEl;
+
+    const copies = new Map<string, string>();
+    for (const node of status.querySelectorAll<HTMLElement>('[data-status]')) {
+      const key = node.dataset.status;
+      if (key) copies.set(key, node.textContent?.trim() ?? '');
+    }
+
+    function show(key: string): void {
+      status.hidden = false;
+      for (const node of status.querySelectorAll<HTMLElement>('[data-status]')) {
+        node.hidden = node.dataset.status !== key;
+      }
+    }
+
+    form.addEventListener('submit', async (event) => {
+      event.preventDefault();
+      if (submit.disabled) return;
+
+      const data = new FormData(form);
+      const payload: Record<string, string> = {};
+      for (const [key, value] of data.entries()) {
+        if (typeof value === 'string') payload[key] = value;
+      }
+
+      submit.disabled = true;
+      status.hidden = true;
+
+      try {
+        const response = await fetch(form.action, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload),
+        });
+        const result = (await response.json().catch(() => ({}))) as {
+          ok?: boolean;
+          error?: string;
+        };
+
+        if (response.ok && result.ok) {
+          show('sent');
+          form.reset();
+        } else if (result.error === 'rate') {
+          show('rate');
+        } else if (result.error === 'email') {
+          show('email');
+        } else if (result.error === 'fields') {
+          show('fields');
+        } else {
+          show('failed');
+        }
+      } catch {
+        show('failed');
+      } finally {
+        submit.disabled = false;
+      }
+    });
+  }
+
+  for (const root of document.querySelectorAll<HTMLElement>('[data-contact-form]')) {
+    setup(root);
+  }
+</script>
+
+<style>
+  .contact-form {
+    margin-block: var(--space-8) var(--space-10);
+  }
+
+  .contact-form__form {
+    display: grid;
+    gap: var(--space-5);
+  }
+
+  .contact-form__row {
+    display: grid;
+    gap: var(--space-2);
+  }
+
+  .contact-form__label {
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: var(--text-muted);
+  }
+
+  .contact-form__message {
+    resize: vertical;
+    min-height: 160px;
+  }
+
+  .contact-form__actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--space-4);
+  }
+
+  .contact-form__note {
+    font-size: 0.8125rem;
+    color: var(--text-muted);
+    margin: 0;
+  }
+
+  /*
+   * The trap. It is moved off screen rather than hidden, because a field
+   * that is hidden with display:none is skipped by the browser and a
+   * skipped field is never filled.
+   */
+  .contact-form__trap {
+    position: absolute;
+    left: -9999px;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+  }
+
+  .contact-form__status {
+    margin-block-start: var(--space-5);
+    padding: var(--space-4);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    background: var(--surface-inset);
+    font-size: 0.9375rem;
+  }
+
+  .contact-form__status p {
+    margin: 0;
+  }
+</style>

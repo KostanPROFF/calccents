@@ -1,6 +1,7 @@
 ---
 import Base from '../../layouts/Base.astro';
 import AdSlot from '../AdSlot.astro';
+import ContactForm from '../ContactForm.astro';
 import { getSite } from '../../config/site.ts';
 import { getUi, fill } from '../../i18n/ui/index.ts';
 import { localePath, type Locale } from '../../i18n/locales.ts';
@@ -52,6 +53,29 @@ const emailLine = fill(copy.emailLine, { email: site.email });
       <p>{copy.nextBody}</p>
     </div>
 
+    <section class="contact-section">
+      <h2>{ui.contactForm.heading}</h2>
+      <p class="contact-section__lede">{ui.contactForm.lede}</p>
+      <ContactForm locale={locale} />
+    </section>
+
     <AdSlot placement="footer" />
   </div>
 </Base>
+
+<style>
+  .contact-section {
+    margin-block: var(--space-8);
+    padding-block-start: var(--space-8);
+    border-block-start: 1px solid var(--border-subtle);
+  }
+
+  .contact-section h2 {
+    margin-block-end: var(--space-3);
+  }
+
+  .contact-section__lede {
+    color: var(--text-muted);
+    margin-block-end: var(--space-2);
+  }
+</style>

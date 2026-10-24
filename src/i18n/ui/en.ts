@@ -302,6 +302,30 @@ export const en = {
       'A reported figure is checked against the source, and the page changes if the figure was wrong. The review date on the page moves when the content is checked, whether or not anything changed, so the date tells you when a person last read the page.',
   },
 
+  /**
+   * The contact form.
+   *
+   * The statuses are keyed rather than ordered, because the script picks
+   * one by key and the page carries all of them.
+   */
+  contactForm: {
+    heading: 'Write a message',
+    lede: 'The form sends a message to the person who reads this site, and the reply goes to the address you write here.',
+    nameLabel: 'Your name',
+    emailLabel: 'Your email address',
+    subjectLabel: 'What it is about',
+    messageLabel: 'Your message',
+    submit: 'Send the message',
+    note: 'The message is sent by email and read by a person.',
+    statuses: [
+      { key: 'sent', text: 'The message is sent. A reply comes to the address you wrote.' },
+      { key: 'email', text: 'That email address does not look complete. Check it and send the message again.' },
+      { key: 'fields', text: 'Every field needs something in it.' },
+      { key: 'rate', text: 'Several messages have gone out from this address in a short time. Wait a minute and send it again.' },
+      { key: 'failed', text: 'The message did not go through. Write to the address above instead.' },
+    ],
+  },
+
   sourcesPage: {
     title: 'Sources',
     description:
@@ -458,6 +482,9 @@ export const en = {
     newsletterHeading: 'Newsletter',
     newsletterBody:
       'If you subscribe to the newsletter, the address you enter is stored by the email provider so that the newsletter can be sent. That address is used for the newsletter and for nothing else, and every issue carries an unsubscribe link.',
+    contactHeading: 'The contact form',
+    contactBody:
+      'If you write a message through the contact form, the name, the email address, the subject and the message itself are sent by email to the person who runs the site, and are kept in that mailbox. The form is served from this site and the reply goes to the address you wrote, so that you can continue the conversation. The form sends nothing to Google and sets no cookie of its own; the advertising and analytics scripts described above belong to the page as a whole and load only if you accepted cookies. Nothing you type is stored on the site itself, and the message is not passed to anyone else.',
     thirdPartyHeading: 'Third-party links',
     thirdPartyBody:
       'Guides link to primary sources — government agencies, the SEC, the Federal Reserve. Those sites have their own privacy policies, which this site does not control and has not read on your behalf.',

@@ -1,7 +1,23 @@
+# The contact mailer.
+#
+# This worker is not a website. It sends the messages that the contact form
+# on calccents.com sends, and it does nothing else.
+#
+# `workers_dev = false` is the important line. Without it the worker would
+# answer on a public address, and anybody could post to it and use the
+# site's mailbox as a relay. With it, the only way to reach the worker is a
+# service binding from the Pages project, and the Pages Function is the
+# only thing that holds one.
+#
+# The `send_email` binding needs no credential: the account authorises it.
+# The destination and the sender are both pinned, so the worker cannot send
+# mail to anyone else or from another address.
 name = "calccents-contact-mailer"
 main = "src/index.ts"
 compatibility_date = "2026-10-21"
+workers_dev = false
 
 [[send_email]]
 name = "EMAIL"
 allowed_destination_addresses = ["info@constantinecs.com"]
+allowed_sender_addresses = ["hello@calccents.com"]

@@ -267,6 +267,30 @@ export const es = {
       'Una cifra comunicada se contrasta con la fuente, y la página cambia si la cifra estaba mal. La fecha de revisión de la página se mueve cuando se comprueba el contenido, haya cambiado algo o no, de modo que la fecha indica cuándo leyó la página una persona por última vez.',
   },
 
+  /**
+   * El formulario de contacto.
+   *
+   * Los estados se identifican por clave y no por orden: el script elige
+   * uno por clave, y la página lleva todos.
+   */
+  contactForm: {
+    heading: 'Escribir un mensaje',
+    lede: 'El formulario envía el mensaje a quien lee este sitio, y la respuesta va a la dirección que escribas.',
+    nameLabel: 'Tu nombre',
+    emailLabel: 'Tu correo electrónico',
+    subjectLabel: 'De qué trata',
+    messageLabel: 'Tu mensaje',
+    submit: 'Enviar el mensaje',
+    note: 'El mensaje se envía por correo y lo lee una persona.',
+    statuses: [
+      { key: 'sent', text: 'El mensaje está enviado. La respuesta llega a la dirección que escribiste.' },
+      { key: 'email', text: 'Esa dirección de correo no parece completa. Revísala y envía el mensaje otra vez.' },
+      { key: 'fields', text: 'Todos los campos necesitan algo escrito.' },
+      { key: 'rate', text: 'Desde esa dirección se han enviado varios mensajes en poco tiempo. Espera un minuto y envíalo de nuevo.' },
+      { key: 'failed', text: 'El mensaje no ha salido. Escribe a la dirección de arriba.' },
+    ],
+  },
+
   sourcesPage: {
     title: 'Fuentes',
     description:
@@ -423,6 +447,9 @@ export const es = {
     newsletterHeading: 'Boletín',
     newsletterBody:
       'Si te suscribes al boletín, la dirección que introduces la almacena el proveedor de correo para poder enviar el boletín. Esa dirección se usa para el boletín y para nada más, y cada número incluye un enlace para cancelar la suscripción.',
+    contactHeading: 'El formulario de contacto',
+    contactBody:
+      'Si escribes un mensaje a través del formulario de contacto, el nombre, la dirección de correo, el asunto y el mensaje se envían por correo a quien lleva el sitio, y quedan en ese buzón. El formulario se sirve desde este sitio y la respuesta va a la dirección que escribiste, para que puedas seguir la conversación. El formulario no envía nada a Google ni pone cookies propias; los scripts de publicidad y de analítica que se describen arriba pertenecen a la página entera y se cargan solo si aceptaste las cookies. Nada de lo que escribes queda guardado en el sitio, y el mensaje no se entrega a nadie más.',
     thirdPartyHeading: 'Enlaces de terceros',
     thirdPartyBody:
       'Las guías enlazan con fuentes primarias: organismos públicos, la SEC, la Reserva Federal. Esos sitios tienen sus propias políticas de privacidad, que este sitio no controla ni ha leído en tu nombre.',
