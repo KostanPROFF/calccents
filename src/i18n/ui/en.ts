@@ -466,7 +466,7 @@ export const en = {
       'If the providers above change, this page changes with them. The date at the bottom of the page is the date this text was last reviewed.',
     consentHeading: 'Your choice',
     consentBody:
-      'Nothing is loaded from Google until you answer. If you accept, the advertising and analytics scripts are loaded and the answer is remembered in your browser; if you decline, the site works exactly the same and nothing is loaded. The {settingsLink} link in the footer opens the question again.',
+      'Nothing is loaded from Google until you answer. If you accept, the advertising and analytics scripts are loaded and the answer is remembered in your browser; if you decline, the site works exactly the same and nothing is loaded. The {settingsLink} link in the footer opens the question again. One exception: Google\'s own crawler, which checks whether the site carries advertising, is served the advertising script directly, because it cannot answer the question. No choice is recorded for it and nothing is stored about it.',
     lastReviewed: 'Last reviewed: {date}.',
   },
 

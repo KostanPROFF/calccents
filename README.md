@@ -270,10 +270,10 @@ reviews the application, and the loader script it asks for.
 ></script>
 ```
 
-The loader script itself is on every page, in the head, and it is what turns
-on **auto ads**: Google decides where the units go and places them itself.
-The site therefore makes an ad request on every page from the moment it is
-deployed, and it shows no ad until the account is approved.
+The loader script is what turns on **auto ads**: Google decides where the
+units go and places them itself. The site therefore makes an ad request on
+every page, once the reader has answered the cookie question, and it shows
+no ad until the account is approved.
 
 The site also has three hand-placed positions: one in the result panel, one
 in the article, one at the foot of the page. They are a second mechanism,
@@ -308,6 +308,18 @@ The loader itself is not a script tag in the page. The consent component
 injects it once the reader has agreed to cookies, so the ad units stay
 hidden until then and a reader who declines never sends a request to
 Google.
+
+**The crawler exception.** Google's own crawler reviews the site for
+advertising. It renders the page but it cannot answer a cookie question, so
+on a site where the advertising only loads after a click it sees no
+advertising at all — which is one of the commonest reasons an application is
+turned down. The consent bootstrap therefore recognises a crawler user agent
+and gives it the ad script straight away, with no banner and without the
+analytics. It is not a reader: no choice is recorded for it and nothing is
+stored about it. `check-consent.ts` checks that this branch is still there,
+because a site that passes every other gate and shows the reviewer an empty
+page is exactly the failure this guards against. The privacy page says so in
+all three languages.
 
 The automatic gate is the part that matters. It reads the three slot
 variables and works out what the build should contain: all three set means

@@ -21,6 +21,15 @@
  *
  * The banner can be opened again from the footer, so a reader who changes
  * their mind is not stuck with the first answer.
+ *
+ * There is one exception, and it is not a reader. Google's crawler renders
+ * the page when it reviews the site for advertising, and it cannot answer a
+ * cookie question: no banner, no click, no consent. A site whose advertising
+ * only loads after a click is therefore a site that shows the reviewer no
+ * advertising at all, which is the commonest reason an application is turned
+ * down. So a recognised crawler is given the ad script directly, without the
+ * banner and without the analytics. It is not a person, no consent is
+ * recorded for it and nothing about it is stored.
  */
 import { SITE } from '../config/site.ts';
 import { getUi } from '../i18n/ui/index.ts';
@@ -114,7 +123,25 @@ const bootstrap = `(function () {
   var banner = document.getElementById('consent-banner');
   var decision = read();
 
-  if (decision === 'granted') {
+  /*
+   * Google's own crawler.
+   *
+   * The reviewer that checks the site for advertising renders the page with
+   * a crawler user agent. It does not answer the cookie question, so the
+   * advertising script would never load for it and the site would be
+   * reviewed as a site with no advertising on it. The crawler is therefore
+   * given the ad script straight away. The analytics are not loaded for it:
+   * a page view counted from a crawler is noise, not a reader.
+   */
+  function isCrawler() {
+    return /bot|crawler|spider|slurp|mediapartners/i.test(navigator.userAgent || '');
+  }
+
+  if (isCrawler()) {
+    document.documentElement.classList.add('consent-granted');
+    if (banner) { banner.hidden = true; }
+    loadAds();
+  } else if (decision === 'granted') {
     grant();
   } else if (decision === 'denied') {
     deny();

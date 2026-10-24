@@ -55,6 +55,18 @@ const STATIC_TAG = new RegExp(
 /** The rule that keeps the ad units out of sight until the answer. */
 const PENDING_MARKER = 'consent-granted';
 
+/**
+ * The crawler exception.
+ *
+ * Google's crawler cannot answer the cookie question, and a site whose
+ * advertising only loads after a click is reviewed as a site with no
+ * advertising on it. The bootstrap therefore serves the ad script to a
+ * recognised crawler without the banner. If that branch is removed, the
+ * review starts failing on a site that looks perfectly healthy, so the gate
+ * checks that the branch is still there.
+ */
+const CRAWLER_MARKER = 'isCrawler';
+
 function collectFiles(dir: string, extensions: string[]): string[] {
   const found: string[] = [];
   let entries: string[];
@@ -89,6 +101,7 @@ let pagesWithoutDecision = 0;
 let pagesWithoutAnalytics = 0;
 let pagesWithoutAds = 0;
 let pagesWithStaticTracker = 0;
+let pagesWithoutCrawlerException = 0;
 const staticExamples: string[] = [];
 
 for (const file of htmlFiles) {
@@ -100,6 +113,7 @@ for (const file of htmlFiles) {
   if (!html.includes(DECISION_MARKER)) pagesWithoutDecision += 1;
   if (!html.includes(ANALYTICS_MARKER)) pagesWithoutAnalytics += 1;
   if (!html.includes(ADS_MARKER)) pagesWithoutAds += 1;
+  if (!html.includes(CRAWLER_MARKER)) pagesWithoutCrawlerException += 1;
 
   const staticTag = html.match(STATIC_TAG);
   if (staticTag) {
@@ -144,6 +158,12 @@ if (pagesWithStaticTracker > 0) {
 if (!cssHasPendingRule) {
   problems.push('no stylesheet keeps the ad units hidden while the answer is pending');
 }
+if (pagesWithoutCrawlerException > 0) {
+  problems.push(
+    `${pagesWithoutCrawlerException} of ${htmlFiles.length} pages do not serve the ad script ` +
+      'to Google\'s crawler, so the advertising review sees a site with no advertising on it',
+  );
+}
 
 if (problems.length > 0) {
   console.error('Consent gating check failed:\n');
@@ -155,5 +175,6 @@ if (problems.length > 0) {
 
 console.log(
   `Consent gating check passed: ${htmlFiles.length} pages carry the banner, ` +
-    `both trackers are loaded only after the answer, and the ad units stay hidden until then.`,
+    `both trackers are loaded only after the answer, the ad units stay hidden until then, ` +
+    `and Google's crawler is served the ad script directly.`,
 );

@@ -431,7 +431,7 @@ export const es = {
       'Si los proveedores de arriba cambian, esta página cambia con ellos. La fecha al pie de la página es la fecha en que se revisó este texto por última vez.',
     consentHeading: 'Tu elección',
     consentBody:
-      'No se carga nada de Google hasta que respondes. Si aceptas, se cargan los scripts de publicidad y de analítica y la respuesta queda guardada en tu navegador; si rechazas, el sitio funciona exactamente igual y no se carga nada. El enlace {settingsLink} del pie de página vuelve a abrir la pregunta.',
+      'No se carga nada de Google hasta que respondes. Si aceptas, se cargan los scripts de publicidad y de analítica y la respuesta queda guardada en tu navegador; si rechazas, el sitio funciona exactamente igual y no se carga nada. El enlace {settingsLink} del pie de página vuelve a abrir la pregunta. Una excepción: el propio rastreador de Google, que comprueba si el sitio lleva publicidad, recibe el script de publicidad directamente, porque no puede responder la pregunta. No se registra ninguna elección para él y no se guarda nada sobre él.',
     lastReviewed: 'Última revisión: {date}.',
   },
 
