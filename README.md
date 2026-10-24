@@ -590,11 +590,12 @@ closed-form formula at every compounding frequency.
   the taxable income. Most states tax in bands, so the real figure is usually
   lower, and a per-state table would be a better answer than one number.
 - The debt payoff calculator refuses to print a figure that does not exist.
-  When the minimum payments are smaller than the monthly interest, the
-  balance grows and the debts are never cleared, so there is no finished
-  schedule to measure the other two runs against. The interest-saved cells
-  stay empty and the page says why, rather than printing a number made of a
-  hundred years of interest that never ends.
+  When the payments are smaller than the monthly interest, the balance grows
+  and the debts are never cleared, so there is no finished schedule to
+  measure the other runs against. The interest-saved cells stay empty and the
+  page says why, rather than printing a number made of a hundred years of
+  interest that never ends. A run that never finishes also reports no months
+  and no interest of its own.
 - The AdSense account is the last thing standing between the site and its
   first advertisement. Apply with the site at its final address.
 - The newsletter form is hidden until a Buttondown form URL is configured, so
@@ -609,7 +610,7 @@ closed-form formula at every compounding frequency.
 The site is live at **https://calccents.com**, deployed from `main` by GitHub
 Actions, with `www.calccents.com` pointing at the same place.
 
-The repository builds clean and every gate passes: 82 pages, 105 tests, 99.23 %
+The repository builds clean and every gate passes: 100 pages, 209 tests, 99.48 %
 line coverage over the calculation engine, zero advisory findings in three
 languages, zero broken links, zero duplicate ids, and no AdSense code in the
 output.

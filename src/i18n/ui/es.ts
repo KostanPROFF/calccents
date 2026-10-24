@@ -694,17 +694,20 @@ export const es = {
         headlineLabel: 'Diferencia mensual (propiedad menos alquiler)',
         monthlyRent: 'Alquiler mensual',
         monthlyOwnership: 'Coste mensual de la propiedad',
+        monthlyOwnershipAfterLoan: 'Coste mensual una vez pagado el préstamo',
         upfrontOutlay: 'Desembolso inicial',
         equityBuilt: 'Patrimonio acumulado',
         homeValueAtHorizon: 'Valor de la vivienda en el horizonte',
+        sellingCostsAtHorizon: 'Gastos de venta en el horizonte',
+        netCostAtHorizon: 'Coste neto de ser propietario en el horizonte',
         crossover: 'Mes de equilibrio',
-        note: 'La propiedad incluye hipoteca, impuesto sobre la propiedad, seguro, HOA y mantenimiento. El patrimonio es el valor de la vivienda menos el saldo pendiente del préstamo.',
+        note: 'La propiedad es el pago de la hipoteca mientras el préstamo sigue vivo, y el impuesto, el seguro, la HOA y el mantenimiento después. El patrimonio es el valor de la vivienda menos el saldo pendiente, menos los gastos de venta que costaría esa venta en ese momento.',
       },
       resultNote:
-        'El mes de equilibrio es el primer mes en que el coste neto de ser propietario —el efectivo pagado menos el patrimonio acumulado— baja del coste en efectivo de alquilar. Es un dato sobre estos números, no una recomendación.',
+        'El mes de equilibrio es el primer mes en que el coste neto de ser propietario —el efectivo pagado menos el patrimonio que dejaría una venta— baja del coste en efectivo de alquilar. Es un dato sobre estos números, no una recomendación.',
       chart: {
         title: 'El coste de alquilar frente al coste de ser propietario',
-        note: 'Las dos líneas son efectivo acumulado: el alquiler pagado y el dinero gastado en la casa una vez descontado el patrimonio que genera.',
+        note: 'Las dos líneas son efectivo acumulado: el alquiler pagado y el dinero gastado en la casa una vez descontado el patrimonio que genera, menos los gastos de venta de esa venta en ese momento.',
         xAxis: 'years',
         series: [
           { key: 'rent', label: 'Alquiler pagado' },
@@ -712,9 +715,9 @@ export const es = {
         ],
       },
       method: [
-        'Cada mes la calculadora lleva dos libros en paralelo. El libro del alquiler suma tu alquiler y el seguro del inquilino. El libro de la propiedad suma el pago de la hipoteca de la fórmula estándar de amortización, el impuesto sobre la propiedad, el seguro, la HOA y la reserva de mantenimiento, más la entrada y los gastos de cierre en el primer mes.',
+        'Cada mes la calculadora lleva dos libros en paralelo. El libro del alquiler suma tu alquiler y el seguro del inquilino. El libro de la propiedad suma el pago de la hipoteca de la fórmula estándar de amortización, el impuesto sobre la propiedad, el seguro, la HOA y la reserva de mantenimiento, más la entrada y los gastos de cierre en el primer mes. El pago de la hipoteca termina con el préstamo, y el resto de costes sigue mientras la vivienda sea tuya.',
         'Junto al segundo libro, la calculadora sigue el valor de la vivienda, que crece o mengua cada mes al tipo anual que introdujiste, y el saldo pendiente del préstamo. La diferencia entre ambos es tu patrimonio:',
-        'El coste neto de ser propietario es el efectivo que has pagado, menos el patrimonio que has acumulado. El mes de equilibrio es el primer mes en que esa cifra es menor que el alquiler que habrías pagado en el mismo periodo. Los gastos de venta se apartan y se informan al final del horizonte, porque no se pagan hasta que vendes.',
+        'El coste neto de ser propietario es el efectivo que has pagado, menos el patrimonio que has acumulado, más los gastos de venta que costaría esa venta en ese momento. El mes de equilibrio es el primer mes en que esa cifra es menor que el alquiler que habrías pagado en el mismo periodo. Los gastos de venta no forman parte del pago mensual, porque no se pagan hasta que vendes; van junto al patrimonio, que es donde ocurre la venta.',
       ],
       formula: 'patrimonio = valor de la vivienda − saldo pendiente del préstamo',
       limits: [
@@ -722,11 +725,12 @@ export const es = {
         'No modela el tratamiento fiscal de una venta, la deducción de los intereses de la hipoteca ni la depreciación de un inmueble con el tiempo.',
         'No cotiza un préstamo concreto. El tipo de interés que introduces es el tipo que se usa; la página no lleva cotizaciones en vivo ni información de entidades prestamistas.',
         'No pronostica los precios de la vivienda. La variación anual del valor que introduces se aplica mes a mes durante todo el horizonte, en ambos sentidos si introduces un número negativo.',
+        'No modela el coste de salir de una vivienda alquilada. La fianza, la comisión de la agencia y la mudanza quedan fuera de la comparación en el lado del alquiler.',
       ],
       faq: [
         {
           q: '¿Qué significa el mes de equilibrio?',
-          a: 'Es el primer mes en que el coste neto de ser propietario —el efectivo que has pagado, menos el patrimonio que has acumulado— es menor que el efectivo que habrías pagado en alquiler durante el mismo periodo. Antes de ese punto, alquilar ha costado menos en efectivo. Después, ser propietario ha costado menos una vez que se cuenta el patrimonio.',
+          a: 'Es el primer mes en que el coste neto de ser propietario —el efectivo que has pagado, menos el patrimonio que has acumulado, más los gastos de venta de ese momento— es menor que el efectivo que habrías pagado en alquiler durante el mismo periodo. Antes de ese punto, alquilar ha costado menos en efectivo. Después, ser propietario ha costado menos una vez que se cuenta el patrimonio.',
         },
         {
           q: '¿Por qué el cálculo incluye una reserva de mantenimiento?',
@@ -738,11 +742,15 @@ export const es = {
         },
         {
           q: '¿Se incluyen los gastos de venta?',
-          a: 'Los gastos de venta se muestran aparte al final del horizonte, como un porcentaje del valor final de la vivienda. No se descuentan mes a mes, porque no se pagan hasta que vendes.',
+          a: 'Sí. Los gastos de venta se cobran sobre el precio de la vivienda en el momento de la venta, así que no forman parte del pago mensual. Reducen el patrimonio que dejaría una venta, y por eso forman parte del coste neto de ser propietario y del mes de equilibrio. La cifra se informa por separado en el horizonte.',
+        },
+        {
+          q: '¿Qué ocurre con el pago de la hipoteca cuando el préstamo está pagado?',
+          a: 'Termina. El principal y los intereses se acaban con el préstamo, mientras que el impuesto, el seguro, la HOA y el mantenimiento siguen mientras la vivienda sea tuya. Cuando la comparación va más allá del plazo, los meses posteriores llevan solo los costes de mantenimiento.',
         },
         {
           q: '¿Cuál es la diferencia entre el alquiler total y el coste neto de la propiedad?',
-          a: 'El alquiler total es simplemente lo que pagas de alquiler cada mes multiplicado por el número de meses. El coste neto de la propiedad es lo que pagas en hipoteca, impuestos, seguro, HOA y mantenimiento, más el desembolso inicial, menos el patrimonio que has acumulado. La segunda cifra puede ser negativa, lo que significa que has acumulado más patrimonio del que has pagado.',
+          a: 'El alquiler total es simplemente lo que pagas de alquiler cada mes multiplicado por el número de meses. El coste neto de la propiedad es lo que pagas en hipoteca, impuestos, seguro, HOA y mantenimiento, más el desembolso inicial, menos el patrimonio que has acumulado, más los gastos de venta. La segunda cifra puede ser negativa, lo que significa que has acumulado más patrimonio del que has pagado.',
         },
         {
           q: '¿Esto incluye las consecuencias fiscales de vender una vivienda?',
@@ -1166,7 +1174,7 @@ export const es = {
       short: 'Amortiza varias deudas a la vez y compara el orden.',
       category: 'Deuda',
       methodNote:
-        'El modelo es una simulación mes a mes: los intereses se acumulan sobre el saldo al inicio del mes, los pagos van primero a los intereses y el dinero extra va a la deuda que has elegido.',
+        'El modelo es una simulación mes a mes: los intereses se acumulan sobre el saldo al inicio del mes, cada deuda que sigue abierta toma su propio pago mínimo, y el dinero que sobra va a la deuda que has elegido.',
       fields: {
         debtName: 'Deuda',
         balance: 'Saldo',
@@ -1199,7 +1207,7 @@ export const es = {
         snowball: 'Bola de nieve',
         minimumsNeverCover: 'Nunca se salda',
         minimumsNeverCoverNote:
-          'Los pagos mínimos de estas deudas no cubren los intereses, así que el saldo crece en lugar de bajar. Solo con los pagos mínimos las deudas nunca se saldan, y no hay intereses que ahorrar frente a esa situación. El pago extra es lo que las hace bajar.',
+          'A al menos una de estas deudas se le cobran más intereses en un mes de los que cubren los pagos, así que ese saldo crece en lugar de bajar. Una simulación que nunca salda las deudas no tiene un calendario terminado, así que no informa de meses ni de intereses: esas cifras describirían el final de la simulación, no las deudas.',
         note:
           'Avalancha paga primero la deuda con el tipo más alto y cuesta menos intereses. Bola de nieve salda antes el saldo más pequeño y termina esa deuda antes. La diferencia entre las dos es el precio del orden.',
       },
@@ -1207,7 +1215,7 @@ export const es = {
         'Las tres simulaciones usan las mismas deudas y el mismo pago extra. Lo único que cambia es el orden en el que va el dinero extra.',
       chart: {
         title: 'El saldo con cada orden',
-        note: 'La línea de solo los pagos mínimos sigue subiendo allí donde los pagos no cubren los intereses, y la línea del pago extra llega a cero.',
+        note: 'Una simulación que nunca salda las deudas no aparece en el gráfico: su saldo crece, y esa línea describiría el final de la simulación, no un calendario. La línea del pago extra llega a cero.',
         xAxis: 'years',
         series: [
           { key: 'avalanche', label: 'Avalancha' },
@@ -1216,9 +1224,9 @@ export const es = {
         ],
       },
       formula:
-        'interés del mes = saldo al inicio del mes × tipo anual ÷ 12; el pago va primero a los intereses y después al capital',
+        'interés del mes = saldo al inicio del mes × tipo anual ÷ 12; cada deuda abierta toma su propio pago mínimo, primero los intereses y después el capital; el dinero que sobra va a la deuda que marca el orden',
       method: [
-        'El cálculo es una simulación mes a mes. Al inicio de cada mes los intereses se cobran sobre el saldo y se suman a este. El dinero disponible ese mes es la suma de todos los pagos mínimos más el pago extra que introduces a la izquierda, y se aplica primero a los intereses y después al capital.',
+        'El cálculo es una simulación mes a mes. Al inicio de cada mes los intereses se cobran sobre el saldo y se suman a este. El dinero disponible ese mes es la suma de todos los pagos mínimos más el pago extra que introduces a la izquierda. Cada deuda que todavía tiene saldo toma su propio pago mínimo, y ese pago cubre primero sus intereses y después su capital.',
         'Una deuda saldada deja de recibir su pago mínimo, y ese mínimo se suma al dinero que va a la siguiente deuda. Ese es el mecanismo detrás de la diferencia entre los órdenes: la misma cantidad mensual, gastada en una deuda u otra, termina antes saldos diferentes.',
         'El orden avalanche envía el dinero extra primero a la deuda con el tipo de interés más alto. Es el orden que menos cuesta en dólares, porque los intereses que deja de generar son los más caros de los que se pagan.',
         'El orden bola de nieve envía el dinero extra primero al saldo más pequeño. Cuesta más intereses en total y salda antes una cuenta, que es otro tipo de resultado. La calculadora muestra los dos y el interés ahorrado en cada caso, de modo que se pueden comparar con las mismas cifras.',

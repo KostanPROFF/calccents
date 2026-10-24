@@ -4,6 +4,15 @@
  * The comparison is arithmetic only. It reports two cash-flow series, the
  * equity that builds up, and the month where the net cost of owning drops
  * below the cash cost of renting. It never states which option is better.
+ *
+ * Two things about the owning side are easy to get wrong and are handled
+ * here explicitly:
+ *
+ *   - the mortgage payment stops when the loan is paid off, while tax,
+ *     insurance, HOA and maintenance carry on for as long as the home is
+ *     owned
+ *   - selling costs are charged on the price of the home at the moment of
+ *     the sale, so they reduce the equity that the comparison counts
  */
 
 import { roundCents, roundTo } from './money.ts';
@@ -49,6 +58,10 @@ export interface RentVsBuyYearRow {
   homeValue: number;
   remainingBalance: number;
   equity: number;
+  /**
+   * Cash paid towards the home, minus the equity that would reach you if
+   * you sold at that point, after the selling costs of that sale.
+   */
   netOwnershipCost: number;
 }
 
@@ -58,18 +71,27 @@ export interface RentVsBuyResult {
   upfrontCost: number;
   loanAmount: number;
   monthlyPrincipalAndInterest: number;
+  /** Monthly ownership cost while the loan is running. */
   monthlyOwnership: number;
+  /**
+   * Monthly ownership cost once the loan is paid off: property tax,
+   * insurance, HOA and maintenance, which do not stop with the loan.
+   */
+  monthlyOwnershipAfterPayoff: number;
   monthlyRentTotal: number;
   monthlyDifference: number;
   totalRentOverHorizon: number;
   ownershipCashOutOverHorizon: number;
   homeValueAtHorizon: number;
   equityAtHorizon: number;
+  /** Equity at the horizon after the selling costs of that sale. */
+  netEquityAtHorizon: number;
   netOwnershipCostAtHorizon: number;
   sellingCostsAtHorizon: number;
   /**
-   * First month where the net cost of owning (cash paid minus equity) is
-   * lower than the cash cost of renting over the same period.
+   * First month where the net cost of owning (cash paid minus the equity a
+   * sale would leave you) is lower than the cash cost of renting over the
+   * same period.
    * `null` when the two paths never cross inside the horizon.
    */
   breakEvenMonth: number | null;
@@ -97,8 +119,8 @@ export function compareRentAndBuy(input: RentVsBuyInput): RentVsBuyResult {
   assertNonNegative(input.closingCostPercent, 'Closing cost rate');
   assertNonNegative(input.rentersInsuranceMonthly, 'Renters insurance');
   assertNonNegative(input.horizonYears, 'Comparison horizon');
-  if (!Number.isFinite(input.annualAppreciationPercent)) {
-    throw new Error('Appreciation must be a finite number');
+  if (!Number.isFinite(input.annualAppreciationPercent) || input.annualAppreciationPercent <= -100) {
+    throw new Error('Appreciation must be a finite number above -100');
   }
   if (!(input.startDate instanceof Date) || Number.isNaN(input.startDate.getTime())) {
     throw new Error('Start date must be a valid date');
@@ -131,17 +153,24 @@ export function compareRentAndBuy(input: RentVsBuyInput): RentVsBuyResult {
   const monthlyPropertyTax = input.homePrice * input.annualPropertyTaxPercent / 100 / 12;
   const monthlyInsurance = input.annualInsurance / 12;
   const monthlyMaintenance = input.homePrice * input.annualMaintenancePercent / 100 / 12;
-  const monthlyOwnership = roundCents(
-    mortgage.monthlyPrincipalAndInterest +
-      monthlyPropertyTax +
+  /*
+   * The costs of owning that do not depend on the loan. They run for as
+   * long as the home is owned, which is why they are kept apart from the
+   * principal and interest of a loan that ends.
+   */
+  const monthlyOwnershipWithoutLoan = roundCents(
+    monthlyPropertyTax +
       monthlyInsurance +
       input.monthlyHoa +
       monthlyMaintenance,
   );
+  const monthlyOwnership = roundCents(
+    mortgage.monthlyPrincipalAndInterest + monthlyOwnershipWithoutLoan,
+  );
   const monthlyRentTotal = roundCents(input.monthlyRent + input.rentersInsuranceMonthly);
 
   const horizonMonths = Math.round(input.horizonYears * 12);
-  const appreciationMonthly = input.annualAppreciationPercent / 100 / 12;
+  const appreciationAnnual = 1 + input.annualAppreciationPercent / 100;
 
   let cumulativeRent = 0;
   let cumulativeOwnership = 0;
@@ -157,18 +186,38 @@ export function compareRentAndBuy(input: RentVsBuyInput): RentVsBuyResult {
   }[] = [];
 
   for (let month = 1; month <= horizonMonths; month += 1) {
+    /*
+     * The loan is paid off at the end of its term, and a loan that has
+     * been paid off takes no more payments. The other costs of owning —
+     * tax, insurance, HOA and maintenance — carry on, because the home is
+     * still there after the last payment.
+     */
+    const loanPayment =
+      month <= mortgage.numberOfPayments
+        ? (mortgage.schedule[month - 1]?.scheduledPayment ?? 0)
+        : 0;
+    const ownershipThisMonth = roundCents(loanPayment + monthlyOwnershipWithoutLoan);
+
     cumulativeRent = roundCents(cumulativeRent + monthlyRentTotal);
-    cumulativeOwnership = roundCents(cumulativeOwnership + monthlyOwnership);
+    cumulativeOwnership = roundCents(cumulativeOwnership + ownershipThisMonth);
     if (month === 1) {
       cumulativeOwnership = roundCents(cumulativeOwnership + upfrontCost);
     }
 
     const homeValue = roundCents(
-      input.homePrice * (1 + appreciationMonthly) ** month,
+      input.homePrice * appreciationAnnual ** (month / 12),
     );
     const remainingBalance = balanceAfterMonths(mortgage, month);
     const equity = roundCents(homeValue - remainingBalance);
-    const netOwnershipCost = roundCents(cumulativeOwnership - equity);
+    /*
+     * Selling costs are charged on the price of the home at the moment of
+     * the sale, so they belong to the month the home is sold in. They are
+     * not spread across the months before it: they reduce the equity that
+     * a sale would actually leave you, which is what the comparison
+     * measures.
+     */
+    const sellingCosts = roundCents(homeValue * input.sellingCostPercent / 100);
+    const netOwnershipCost = roundCents(cumulativeOwnership - equity + sellingCosts);
 
     monthly.push({
       month,
@@ -192,6 +241,7 @@ export function compareRentAndBuy(input: RentVsBuyInput): RentVsBuyResult {
   const sellingCostsAtHorizon = roundCents(
     homeValueAtHorizon * input.sellingCostPercent / 100,
   );
+  const netEquityAtHorizon = roundCents(equityAtHorizon - sellingCostsAtHorizon);
 
   const yearly: RentVsBuyYearRow[] = [];
   for (const row of monthly) {
@@ -214,12 +264,14 @@ export function compareRentAndBuy(input: RentVsBuyInput): RentVsBuyResult {
     loanAmount,
     monthlyPrincipalAndInterest: mortgage.monthlyPrincipalAndInterest,
     monthlyOwnership,
+    monthlyOwnershipAfterPayoff: monthlyOwnershipWithoutLoan,
     monthlyRentTotal,
     monthlyDifference: roundCents(monthlyOwnership - monthlyRentTotal),
     totalRentOverHorizon: last ? last.cumulativeRent : 0,
     ownershipCashOutOverHorizon: last ? last.cumulativeOwnership : 0,
     homeValueAtHorizon,
     equityAtHorizon,
+    netEquityAtHorizon,
     netOwnershipCostAtHorizon,
     sellingCostsAtHorizon,
     breakEvenMonth,

@@ -29,7 +29,7 @@ faq:
   - q: "Why is maintenance a percentage of the price?"
     a: "Repairs do not appear on any statement, but they arrive. Expressing maintenance as a percentage of the purchase price each year keeps it visible next to the other running costs instead of letting it disappear into the comparison."
   - q: "Does selling cost appear in the monthly figures?"
-    a: "No. Selling costs are paid once, on the day you sell, so they are reported separately at the end of the horizon rather than spread across the months that precede it."
+    a: "No. Selling costs are paid once, on the day you sell, so they are not part of the monthly payment and are not spread across the months that precede it. They are charged on the price of the home at that moment, which is why they reduce the equity the comparison counts."
   - q: "What if the home price falls?"
     a: "Enter a negative annual change and the value falls every month. Equity shrinks, the crossover month moves further away or disappears entirely, and the net cost of owning rises. The tool handles a falling market without special treatment."
   - q: "Is a 30-year horizon realistic?"
@@ -66,6 +66,11 @@ The **owning ledger** adds:
 - A maintenance allowance, as a percentage of the purchase price per year
 - The down payment and closing costs, on the first month
 
+The mortgage payment belongs to the loan and ends with it. Tax, insurance, the
+HOA fee and the maintenance allowance belong to the home, and they run for as
+long as the home is owned. When the comparison reaches past the end of the
+loan, the months after it carry the running costs only.
+
 The maintenance allowance is the one people argue about. Repairs do not
 appear on a closing statement, but they arrive, and they arrive whether or not
 a mortgage is attached. Excluding them flatters owning; treating them as
@@ -91,9 +96,17 @@ Their difference is your equity:
 
 **equity = home value − remaining loan balance**
 
-The **net cost of owning** is then the cash you have paid, minus that equity:
+The **net cost of owning** is then the cash you have paid, minus that equity,
+plus the selling costs that a sale at that point would cost:
 
-**net cost = down payment + closing costs + all monthly ownership costs − equity**
+**net cost = down payment + closing costs + all monthly ownership costs − equity + selling costs**
+
+The selling costs are the last term because of when they are paid. They are
+charged on the price of the home on the day you sell, so they do not belong to
+the monthly figures; they belong to the equity, because what a sale leaves you
+is the value of the home minus the balance owed minus the cost of the sale.
+Set the selling costs to zero and the equity the comparison counts is the
+whole of it.
 
 This is the number that can be compared with the rent you would have paid
 over the same period. Early on, the net cost of owning is high, because you

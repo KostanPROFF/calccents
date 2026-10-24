@@ -310,22 +310,31 @@ const copy = ui.tool['debt-payoff'];
     setSaved('dp-saved', comparison.interestSavedAvalanche);
     setSaved('dp-avalanche-saved', comparison.interestSavedAvalanche);
     setSaved('dp-snowball-saved', comparison.interestSavedSnowball);
-    setText('dp-avalanche-months', formatNumber(comparison.avalanche.months));
-    setText('dp-avalanche-interest', formatCurrency(comparison.avalanche.totalInterest));
-    setText('dp-snowball-months', formatNumber(comparison.snowball.months));
-    setText('dp-snowball-interest', formatCurrency(comparison.snowball.totalInterest));
-
-    if (comparison.minimumOnly.paidOff) {
-      setText('dp-minimum-months', formatNumber(comparison.minimumOnly.months));
-      setText('dp-minimum-interest', formatCurrency(comparison.minimumOnly.totalInterest));
-      setWarning(false);
-    } else {
-      setText('dp-minimum-months', labels.minimumsNeverCover ?? '—');
-      setText('dp-minimum-interest', '—');
-      setWarning(true);
-    }
+    setRun('dp-avalanche-months', 'dp-avalanche-interest', comparison.avalanche);
+    setRun('dp-snowball-months', 'dp-snowball-interest', comparison.snowball);
+    setRun('dp-minimum-months', 'dp-minimum-interest', comparison.minimumOnly);
+    setWarning(
+      !comparison.avalanche.paidOff ||
+      !comparison.snowball.paidOff ||
+      !comparison.minimumOnly.paidOff,
+    );
 
     drawChart(comparison);
+  }
+
+  /*
+   * A run that never clears the debts has no months and no interest to
+   * report: the balance grows instead of falling, and the figures would
+   * describe the stop of the simulation rather than the debts.
+   */
+  function setRun(monthsId: string, interestId: string, result: PayoffResult): void {
+    if (!result.paidOff) {
+      setText(monthsId, labels.minimumsNeverCover ?? '—');
+      setText(interestId, '—');
+      return;
+    }
+    setText(monthsId, formatNumber(result.months));
+    setText(interestId, formatCurrency(result.totalInterest));
   }
 
   function setSaved(id: string, value: number | null): void {

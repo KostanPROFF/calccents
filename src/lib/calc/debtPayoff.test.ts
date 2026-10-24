@@ -259,3 +259,86 @@ test('debts with the same balance are ordered by their id', () => {
     `${result.payoffMonthById.a} should be before ${result.payoffMonthById.b}`,
   );
 });
+
+test('every open debt keeps its own minimum payment', () => {
+  // Two debts at no interest, each with a minimum of 100 dollars. Each
+  // debt takes its own minimum, so both clear in ten months. Pooling the
+  // money and sending it all to one debt would clear the first in five
+  // months and leave the second without a payment of its own.
+  const debts = [
+    debt({ id: 'a', balance: 1_000, aprPercent: 0, minimumPayment: 100 }),
+    debt({ id: 'b', balance: 1_000, aprPercent: 0, minimumPayment: 100 }),
+  ];
+
+  const result = simulatePayoff(debts, 0, 'avalanche');
+
+  assert.equal(result.payoffMonthById.a, 10);
+  assert.equal(result.payoffMonthById.b, 10);
+  assert.equal(result.months, 10);
+});
+
+test('the minimum of a cleared debt moves to the debts that are still open', () => {
+  // The first debt clears in ten months. Its minimum of 100 dollars is
+  // then free, so the second debt takes 200 dollars a month from month
+  // eleven and clears five months later.
+  const debts = [
+    debt({ id: 'a', balance: 1_000, aprPercent: 0, minimumPayment: 100 }),
+    debt({ id: 'b', balance: 2_000, aprPercent: 0, minimumPayment: 100 }),
+  ];
+
+  const result = simulatePayoff(debts, 0, 'avalanche');
+
+  assert.equal(result.payoffMonthById.a, 10);
+  assert.equal(result.payoffMonthById.b, 15);
+  assert.equal(result.months, 15);
+});
+
+test('the interest of a month is never paid out of money that is not there', () => {
+  // A balance of 1,000 dollars at 24 percent carries 20 dollars of
+  // interest a month, and the payment is 10. The interest cannot be paid
+  // in full, so the balance grows instead of standing still.
+  const result = simulatePayoff(
+    [debt({ id: 'a', balance: 1_000, aprPercent: 24, minimumPayment: 10 })],
+    0,
+    'avalanche',
+  );
+
+  assert.equal(result.paidOff, false);
+  // The run pays the minimum and nothing else: 10 dollars a month.
+  assert.equal(result.totalPaid, 12_000);
+  const firstYear = result.yearlyBalances[0].balances.a;
+  assert.ok(firstYear > 1_000, `the balance was ${firstYear} after a year`);
+});
+
+test('the total paid is the balances plus the interest', () => {
+  const debts = [
+    debt({ id: 'a', balance: 5_000, aprPercent: 10, minimumPayment: 200 }),
+    debt({ id: 'b', balance: 2_000, aprPercent: 5, minimumPayment: 100 }),
+  ];
+
+  const result = simulatePayoff(debts, 0, 'avalanche');
+
+  assert.ok(result.paidOff);
+  const opening = debts.reduce((sum, debt) => sum + debt.balance, 0);
+  assert.ok(
+    Math.abs(result.totalPaid - (opening + result.totalInterest)) < 0.05,
+    `paid ${result.totalPaid} against ${opening + result.totalInterest}`,
+  );
+});
+
+test('the interest saved is empty when a run never clears the debts', () => {
+  // The extra payment of 10 dollars does not cover the 20 dollars of
+  // interest a month, so none of the three runs finishes and there is no
+  // finished schedule to save interest against.
+  const debts = [
+    debt({ id: 'a', balance: 1_000, aprPercent: 24, minimumPayment: 10 }),
+  ];
+
+  const comparison = comparePayoff(debts, 10);
+
+  assert.equal(comparison.minimumOnly.paidOff, false);
+  assert.equal(comparison.avalanche.paidOff, false);
+  assert.equal(comparison.snowball.paidOff, false);
+  assert.equal(comparison.interestSavedAvalanche, null);
+  assert.equal(comparison.interestSavedSnowball, null);
+});

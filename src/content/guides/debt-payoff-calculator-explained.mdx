@@ -51,9 +51,11 @@ is added to that balance. A $10,000 balance at 18% carries $150 of interest in
 the month, and the balance to work against is $10,150.
 
 The money available that month is the sum of every minimum payment plus
-whatever extra payment was entered. Each debt covers its own interest first
-and its principal second. Only what is left after that moves on to the next
-debt.
+whatever extra payment was entered. Every debt that still has a balance takes
+its own minimum payment, and that payment covers its own interest first and
+its principal second. What is left of the month's money — the extra payment,
+and the minimums of debts that have already been cleared — goes to the debt
+the chosen order points at.
 
 When a debt reaches zero it stops taking a minimum payment, and that minimum
 joins the money available for the debts that are still open. A $200 minimum
@@ -115,8 +117,10 @@ grows the balance again. On the minimums alone the debts are never cleared,
 so there is no finished schedule to measure the other two runs against. The
 calculator leaves the interest-saved figures empty and says so on the page
 rather than printing a number made of a hundred years of interest that never
-ends. The avalanche and snowball runs still finish, and their months and
-total interest are the figures that describe the debts.
+ends. The avalanche and snowball runs still finish as long as the extra
+payment covers the interest, and their months and total interest are the
+figures that describe the debts. Where the extra payment does not cover it
+either, those runs report no months and no interest for the same reason.
 
 
 <div class="guide-inline-figure">

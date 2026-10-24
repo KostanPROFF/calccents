@@ -6,10 +6,11 @@
  * what the comparison is between:
  *
  *   - interest accrues on the balance at the start of each month
- *   - payments go to interest first, then to principal
- *   - every debt gets its minimum payment while it still has a balance
- *   - whatever is left over, including the minimums of debts that have
- *     been paid off, goes to the debt the reader picked
+ *   - every debt that still has a balance takes its own minimum payment,
+ *     and that payment goes to its interest first and its principal second
+ *   - whatever is left of the month's money, the extra payment plus the
+ *     minimums of debts that have already been cleared, goes to the debt
+ *     the reader picked
  *
  * Two orders are compared. Avalanche pays the highest interest rate
  * first, which is the cheapest order in dollars. Snowball pays the
@@ -62,10 +63,6 @@ function monthlyRate(debt: Debt): number {
   return Math.max(0, apr) / 100 / 12;
 }
 
-function activeDebts(debts: Debt[]): Debt[] {
-  return debts.filter((debt) => debt.balance > 0 && Number.isFinite(debt.balance));
-}
-
 /**
  * The order the extra money goes in.
  *
@@ -99,11 +96,31 @@ export function simulatePayoff(
   const balances = new Map<string, number>();
   const minimums = new Map<string, number>();
   for (const debt of debts) {
-    balances.set(debt.id, Math.max(0, debt.balance));
-    minimums.set(debt.id, Math.max(0, debt.minimumPayment));
+    balances.set(debt.id, Number.isFinite(debt.balance) ? Math.max(0, debt.balance) : 0);
+    minimums.set(debt.id, Number.isFinite(debt.minimumPayment)
+      ? Math.max(0, debt.minimumPayment)
+      : 0);
   }
 
   const extra = Number.isFinite(extraPayment) ? Math.max(0, extraPayment) : 0;
+
+  /*
+   * The money available every month: every minimum payment the reader has
+   * signed up for, plus the extra payment. A minimum belongs to its own
+   * debt while that debt is open, and to the debts that are still open
+   * once it has been cleared, so the total does not change from month to
+   * month. That is what carries a cleared debt's minimum into the next
+   * month instead of letting it disappear.
+   *
+   * A debt that starts with no balance is not part of the plan at all, so
+   * its minimum never enters the budget.
+   */
+  let monthlyBudget = 0;
+  for (const debt of debts) {
+    if ((balances.get(debt.id) ?? 0) <= 0) continue;
+    monthlyBudget = roundCents(monthlyBudget + (minimums.get(debt.id) ?? 0));
+  }
+  monthlyBudget = roundCents(monthlyBudget + extra);
 
   let totalInterest = 0;
   let totalPaid = 0;
@@ -113,7 +130,7 @@ export function simulatePayoff(
   const yearlyBalances: PayoffResult['yearlyBalances'] = [];
 
   while (month < MAX_MONTHS) {
-    const live = activeDebts(debts).filter((debt) => (balances.get(debt.id) ?? 0) > 0);
+    const live = debts.filter((debt) => (balances.get(debt.id) ?? 0) > 0);
     if (live.length === 0) {
       paidOff = true;
       break;
@@ -123,28 +140,40 @@ export function simulatePayoff(
     // Interest for the month, on the balance at the start of the month.
     // It is added to the balance first: that is what a lender does, and
     // skipping that step would make every balance look smaller than it is.
-    const interest: Record<string, number> = {};
     for (const debt of live) {
       const amount = roundCents((balances.get(debt.id) ?? 0) * monthlyRate(debt));
-      interest[debt.id] = amount;
       totalInterest = roundCents(totalInterest + amount);
       balances.set(debt.id, roundCents((balances.get(debt.id) ?? 0) + amount));
     }
+    // The interest has been added to the balance, so a payment taken from
+    // the balance always covers the interest of the month before it touches
+    // the principal.
 
-    // The money available this month: every minimum plus the extra.
-    let budget =
-      live.reduce((total, debt) => total + (minimums.get(debt.id) ?? 0), 0) + extra;
-
-    // Interest first.
+    /*
+     * Every debt that still has a balance takes its own minimum payment
+     * first, and that payment covers its interest before its principal.
+     *
+     * A minimum larger than the debt itself clears the debt and leaves the
+     * rest of the minimum in the pot. A minimum smaller than the interest
+     * leaves the interest unpaid, and the balance grows, which is exactly
+     * what happens on a balance whose payments do not cover the interest.
+     */
+    let budget = monthlyBudget;
     for (const debt of live) {
       const balance = balances.get(debt.id) ?? 0;
-      const payment = Math.min(balance, interest[debt.id]);
+      const payment = Math.min(balance, minimums.get(debt.id) ?? 0);
+      if (payment <= 0) continue;
       balances.set(debt.id, roundCents(balance - payment));
       budget = roundCents(budget - payment);
       totalPaid = roundCents(totalPaid + payment);
     }
 
-    // Then principal, in the order the reader picked.
+    /*
+     * What is left of the month's money goes to the debt the order points
+     * at, and to the next debt in that order once this one is cleared.
+     * The minimums of debts that have already been cleared are part of
+     * what is left, because they were never spent on them this month.
+     */
     for (const debt of orderDebts(live, order)) {
       if (budget <= 0) break;
       const balance = balances.get(debt.id) ?? 0;
@@ -190,7 +219,8 @@ export interface PayoffComparison {
    * Null when the minimums never clear the debts on their own: the balance
    * grows, the baseline never finishes, and there is no finished schedule
    * to save interest against. The figure would be an artefact of the hard
-   * stop rather than a number about the reader's debts.
+   * stop rather than a number about the reader's debts. It is null for the
+   * same reason when the run it measures never finishes either.
    */
   interestSavedAvalanche: number | null;
   /** Interest the snowball order saves against paying the minimums only. */
@@ -219,7 +249,7 @@ export function comparePayoff(debts: Debt[], extraPayment: number): PayoffCompar
   };
 
   const saved = (result: PayoffResult): number | null => {
-    if (!minimumOnly.paidOff) return null;
+    if (!minimumOnly.paidOff || !result.paidOff) return null;
     return roundCents(minimumOnly.totalInterest - result.totalInterest);
   };
 

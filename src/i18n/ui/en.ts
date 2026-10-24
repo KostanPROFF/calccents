@@ -730,17 +730,20 @@ export const en = {
         headlineLabel: 'Monthly difference (owning minus renting)',
         monthlyRent: 'Monthly rent',
         monthlyOwnership: 'Monthly ownership',
+        monthlyOwnershipAfterLoan: 'Monthly ownership once the loan is paid off',
         upfrontOutlay: 'Upfront outlay',
         equityBuilt: 'Equity built',
         homeValueAtHorizon: 'Home value at horizon',
+        sellingCostsAtHorizon: 'Selling costs at horizon',
+        netCostAtHorizon: 'Net cost of owning at horizon',
         crossover: 'Crossover',
-        note: 'Ownership includes mortgage, property tax, insurance, HOA and maintenance. Equity is the home value minus the balance still owed.',
+        note: 'Ownership covers the mortgage payment while the loan runs, and property tax, insurance, HOA and maintenance after it. Equity is the home value minus the balance still owed, less the selling costs a sale at that point would cost.',
       },
       resultNote:
-        'The crossover is the first month where the net cost of owning — cash paid minus equity built — falls below the cash cost of renting. It is a fact about these numbers, not a recommendation.',
+        'The crossover is the first month where the net cost of owning — cash paid minus the equity a sale would leave you — falls below the cash cost of renting. It is a fact about these numbers, not a recommendation.',
       chart: {
         title: 'The cost of renting against the cost of owning',
-        note: 'Both lines are cumulative cash: the rent paid out, and the money spent on the home once the equity it builds is taken off.',
+        note: 'Both lines are cumulative cash: the rent paid out, and the money spent on the home once the equity it builds is taken off, net of the selling costs of a sale at that point.',
         xAxis: 'years',
         series: [
           { key: 'rent', label: 'Rent paid' },
@@ -748,9 +751,9 @@ export const en = {
         ],
       },
       method: [
-        'Each month the calculator runs two ledgers side by side. The renting ledger adds your rent and renter\'s insurance. The owning ledger adds the mortgage payment from the standard amortization formula, property tax, insurance, HOA and the maintenance allowance, plus the down payment and closing costs on the first month.',
+        'Each month the calculator runs two ledgers side by side. The renting ledger adds your rent and renter\'s insurance. The owning ledger adds the mortgage payment from the standard amortization formula, property tax, insurance, HOA and the maintenance allowance, plus the down payment and closing costs on the first month. The mortgage payment stops when the loan is paid off; the other running costs carry on for as long as you own the home.',
         "Alongside the second ledger it tracks the home's value, grown or shrunk each month at the annual rate you entered, and the balance still owed on the loan. The difference between the two is your equity:",
-        'The net cost of owning is the cash you have paid, minus the equity you have built. The crossover month is the first month where that figure is lower than the rent you would have paid over the same period. Selling costs are held back and reported at the end of the horizon, because you do not pay them until you sell.',
+        'The net cost of owning is the cash you have paid, minus the equity you have built, plus the selling costs that a sale at that point would cost. The crossover month is the first month where that figure is lower than the rent you would have paid over the same period. Selling costs are not part of the monthly payment, because you do not pay them until you sell; they sit with the equity, where the sale happens.',
       ],
       formula: 'equity = home value − remaining loan balance',
       limits: [
@@ -758,11 +761,12 @@ export const en = {
         'It does not model the tax treatment of a sale, the mortgage interest deduction, or the depreciation of a property over time.',
         'It does not price a specific loan. The mortgage rate you enter is the rate used; the page carries no live quotes and no lender information.',
         'It does not forecast home prices. The annual change in value you enter is applied month by month for the whole horizon, in both directions if you enter a negative number.',
+        'It does not model the cost of moving out of a rented home. A deposit, an agent fee and moving costs sit outside the comparison on the renting side.',
       ],
       faq: [
         {
           q: 'What does the crossover month mean?',
-          a: 'It is the first month where the net cost of owning — the cash you have paid, minus the equity you have built — is lower than the cash you would have paid in rent over the same period. Before that point renting has cost less in cash terms. After it, owning has cost less once equity is counted.',
+          a: 'It is the first month where the net cost of owning — the cash you have paid, minus the equity you have built, plus the selling costs of a sale at that point — is lower than the cash you would have paid in rent over the same period. Before that point renting has cost less in cash terms. After it, owning has cost less once equity is counted.',
         },
         {
           q: 'Why does the calculation include a maintenance allowance?',
@@ -774,11 +778,15 @@ export const en = {
         },
         {
           q: 'Are selling costs included?',
-          a: 'Selling costs are shown separately at the end of the horizon, as a percentage of the final home value. They are not deducted month by month, because you do not pay them until you sell.',
+          a: 'Yes. Selling costs are charged on the price of the home at the moment of the sale, so they are not part of the monthly payment. They reduce the equity that a sale would leave you, and they are therefore part of the net cost of owning and of the crossover month. The figure is reported on its own at the horizon.',
+        },
+        {
+          q: 'What happens to the mortgage payment after the loan is paid off?',
+          a: 'It stops. The principal and interest of the loan end with the loan, while property tax, insurance, HOA and maintenance carry on for as long as the home is owned. When the comparison runs past the end of the term, the months after it carry the running costs only.',
         },
         {
           q: 'What is the difference between total rent and net cost of ownership?',
-          a: 'Total rent is simply what you pay in rent each month multiplied by the number of months. Net cost of ownership is what you pay in mortgage, tax, insurance, HOA and maintenance, plus the upfront outlay, minus the equity you have accumulated. The second figure can be negative, which means you have built more equity than you have paid out.',
+          a: 'Total rent is simply what you pay in rent each month multiplied by the number of months. Net cost of ownership is what you pay in mortgage, tax, insurance, HOA and maintenance, plus the upfront outlay, minus the equity you have accumulated, plus the selling costs of a sale. The second figure can be negative, which means you have built more equity than you have paid out.',
         },
         {
           q: 'Does this include the tax consequences of selling a home?',
@@ -1207,7 +1215,7 @@ export const en = {
       short: 'Pay off several debts at once and compare the order.',
       category: 'Debt',
       methodNote:
-        'The model is a month-by-month simulation: interest accrues on the balance at the start of the month, payments go to interest first, and the extra money goes to the debt the reader picked.',
+        'The model is a month-by-month simulation: interest accrues on the balance at the start of the month, every debt that is still open takes its own minimum payment, and the rest of the money goes to the debt the reader picked.',
       fields: {
         debtName: 'Debt',
         balance: 'Balance',
@@ -1240,7 +1248,7 @@ export const en = {
         snowball: 'Snowball',
         minimumsNeverCover: 'Never paid off',
         minimumsNeverCoverNote:
-          'The minimum payments on these debts do not cover the interest, so the balance grows instead of falling. On the minimums alone the debts are never cleared, and there is no interest to save against that run. The extra payment is what brings them down.',
+          'At least one of these debts is charged more interest in a month than the payments cover, so that balance grows instead of falling. A run that never clears the debts has no finished schedule, so it reports no months and no interest: those figures would describe the end of the simulation rather than the debts.',
         note:
           'Avalanche pays the highest rate first and costs the least in interest. Snowball clears the smallest balance first and finishes that debt sooner. The difference between the two is the price of the order.',
       },
@@ -1248,7 +1256,7 @@ export const en = {
         'The three runs use the same debts and the same extra payment. The only thing that changes is the order the extra money goes in.',
       chart: {
         title: 'The balance under each order',
-        note: 'The line for the minimums only keeps going up where the payments do not cover the interest, and the line for the extra payment reaches zero.',
+        note: 'A run that never clears the debts is left out: its balance grows instead of falling, and the shape of that line would describe the end of the simulation rather than a schedule. The line for the extra payment reaches zero.',
         xAxis: 'years',
         series: [
           { key: 'avalanche', label: 'Avalanche' },
@@ -1257,9 +1265,9 @@ export const en = {
         ],
       },
       formula:
-        'interest for the month = balance at the start of the month × annual rate ÷ 12; payment goes to interest first, then to principal',
+        'interest for the month = balance at the start of the month × annual rate ÷ 12; every open debt takes its own minimum payment, interest first and principal second; the rest of the money goes to the debt the order points at',
       method: [
-        'The calculation is a month-by-month simulation. At the start of each month the interest is charged on the balance and added to it. The money available that month is the sum of every minimum payment plus the extra payment entered on the left, and it is applied to the interest first and to the principal after that.',
+        'The calculation is a month-by-month simulation. At the start of each month the interest is charged on the balance and added to it. The money available that month is the sum of every minimum payment plus the extra payment entered on the left. Every debt that still has a balance takes its own minimum payment, and that payment covers its interest first and its principal second.',
         'A debt that has been cleared stops taking a minimum payment, and that minimum joins the money going to the next debt. That is the mechanism behind the difference between the orders: the same monthly amount, spent on a different debt, stops different balances sooner.',
         'The avalanche order sends the extra money to the highest interest rate first. It costs the least in interest, because the interest it stops is the most expensive money the reader is paying.',
         'The snowball order sends the extra money to the smallest balance first. It costs more in interest overall and it clears one account sooner, which is a different kind of result. The calculator shows both, and the interest saved in each case, so the two can be compared on the same numbers.',

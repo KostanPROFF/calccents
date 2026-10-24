@@ -217,9 +217,12 @@ const copy = ui.tool['rent-vs-buy'];
     stats={[
       { id: 'rb-out-rent', label: copy.result.monthlyRent, value: '—' },
       { id: 'rb-own', label: copy.result.monthlyOwnership, value: '—' },
+      { id: 'rb-own-after', label: copy.result.monthlyOwnershipAfterLoan, value: '—' },
       { id: 'rb-upfront', label: copy.result.upfrontOutlay, value: '—' },
       { id: 'rb-equity', label: copy.result.equityBuilt, value: '—' },
       { id: 'rb-home-value', label: copy.result.homeValueAtHorizon, value: '—' },
+      { id: 'rb-selling-costs', label: copy.result.sellingCostsAtHorizon, value: '—' },
+      { id: 'rb-net-cost', label: copy.result.netCostAtHorizon, value: '—' },
       { id: 'rb-breakeven', label: copy.result.crossover, value: '—' },
     ]}
     note={copy.result.note}
@@ -273,9 +276,12 @@ const copy = ui.tool['rent-vs-buy'];
         'rb-headline',
         'rb-out-rent',
         'rb-own',
+        'rb-own-after',
         'rb-upfront',
         'rb-equity',
         'rb-home-value',
+        'rb-selling-costs',
+        'rb-net-cost',
         'rb-breakeven',
       ]) {
         setText(id, '—');
@@ -305,9 +311,12 @@ const copy = ui.tool['rent-vs-buy'];
     setText('rb-headline', formatCurrency(result.monthlyDifference));
     setText('rb-out-rent', formatCurrency(result.monthlyRentTotal));
     setText('rb-own', formatCurrency(result.monthlyOwnership));
+    setText('rb-own-after', formatCurrency(result.monthlyOwnershipAfterPayoff));
     setText('rb-upfront', formatCurrency(result.upfrontCost));
     setText('rb-equity', formatCurrency(result.equityAtHorizon));
     setText('rb-home-value', formatCurrency(result.homeValueAtHorizon));
+    setText('rb-selling-costs', formatCurrency(result.sellingCostsAtHorizon));
+    setText('rb-net-cost', formatCurrency(result.netOwnershipCostAtHorizon));
     setText(
       'rb-breakeven',
       result.breakEvenMonth === null
@@ -318,7 +327,8 @@ const copy = ui.tool['rent-vs-buy'];
     /*
      * Both lines come from the same comparison: the rent paid out by the
      * end of each year, and the money spent on the home once the equity
-     * it has built is taken off.
+     * it has built is taken off, net of the selling costs of a sale at
+     * that point.
      */
     renderChart('rent-buy-chart', {
       kind: 'line',

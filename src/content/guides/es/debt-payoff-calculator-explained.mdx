@@ -51,9 +51,11 @@ y se suman a ese saldo. Un saldo de $10,000 al 18% genera $150 de intereses en
 el mes, y contra el que se trabaja es $10,150.
 
 El dinero disponible ese mes es la suma de todas las cuotas mínimas más la
-cantidad adicional que se haya escrito. Cada deuda cubre primero sus propios
-intereses y después su propio capital. Lo que queda después de eso pasa a la
-deuda siguiente.
+cantidad adicional que se haya escrito. Cada deuda que todavía tiene saldo
+toma su propia cuota mínima, y esa cuota cubre primero sus intereses y
+después su capital. Lo que queda del dinero del mes —la cantidad adicional y
+las cuotas mínimas de las deudas ya saldadas— va a la deuda que marca el orden
+elegido.
 
 Cuando una deuda llega a cero deja de absorber su cuota mínima, y esa mínima
 se suma al dinero disponible para las deudas que siguen abiertas. Una mínima
@@ -119,8 +121,10 @@ a hacer crecer el saldo. Solo con los pagos mínimos las deudas nunca se
 saldan, así que no existe un plan terminado con el que comparar. La calculadora
 deja en blanco las cifras de ahorro y lo dice en la propia página, en lugar de
 imprimir un número hecho de cien años de intereses que nunca terminan. Las
-corridas de avalancha y de bola de nieve sí llegan al final, y son sus meses y
-sus intereses totales los que describen las deudas.
+corridas de avalancha y de bola de nieve sí llegan al final mientras el pago
+extra cubra los intereses, y son sus meses y sus intereses totales los que
+describen las deudas. Cuando el pago extra tampoco los cubre, esas corridas
+no informan de meses ni de intereses, por la misma razón.
 
 
 <div class="guide-inline-figure">

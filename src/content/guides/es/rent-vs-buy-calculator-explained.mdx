@@ -29,7 +29,7 @@ faq:
   - q: "¿Por qué el mantenimiento es un porcentaje del precio?"
     a: "Las reparaciones no aparecen en ningún extracto, pero llegan. Expresar el mantenimiento como un porcentaje del precio de compra cada año lo mantiene visible junto a los demás costes recurrentes, en lugar de dejar que desaparezca dentro de la comparación."
   - q: "¿Aparecen los costes de venta en las cifras mensuales?"
-    a: "No. Los costes de venta se pagan una vez, el día de la venta, así que se informan aparte al final del horizonte y no repartidos entre los meses que lo preceden."
+    a: "No. Los costes de venta se pagan una vez, el día de la venta, así que no forman parte de la cuota mensual ni se reparten entre los meses que lo preceden. Se cobran sobre el precio de la vivienda en ese momento, por eso reducen el patrimonio que cuenta la comparación."
   - q: "¿Y si baja el precio de la vivienda?"
     a: "Se introduce una variación anual negativa y el valor baja cada mes. El patrimonio se encoge, el mes de equilibrio se aleja o desaparece por completo, y el coste neto de la propiedad sube. La herramienta gestiona un mercado a la baja sin tratamiento especial."
   - q: "¿Es realista un horizonte de 30 años?"
@@ -67,6 +67,12 @@ El **libro de la propiedad** suma:
   año
 - El pago inicial y los gastos de cierre, en el primer mes
 
+La cuota de hipoteca pertenece al préstamo y termina con él. El impuesto, el
+seguro, la cuota de HOA y la reserva de mantenimiento pertenecen a la vivienda
+y siguen mientras la vivienda sea tuya. Cuando la comparación llega más allá
+del final del préstamo, los meses siguientes llevan solo los costes
+recurrentes.
+
 La reserva de mantenimiento es la que se discute. Las reparaciones no
 aparecen en un acta de cierre, pero llegan, y llegan haya o no una hipoteca
 pegada. Excluirlas favorece a la propiedad; tratarlas como enormes la
@@ -94,9 +100,16 @@ Su diferencia es el patrimonio:
 **patrimonio = valor de la vivienda − saldo pendiente del préstamo**
 
 El **coste neto de la propiedad** es entonces el efectivo que has pagado,
-menos ese patrimonio:
+menos ese patrimonio, más los costes de venta que costaría esa venta en ese
+momento:
 
-**coste neto = pago inicial + gastos de cierre + todos los costes mensuales de la propiedad − patrimonio**
+**coste neto = pago inicial + gastos de cierre + todos los costes mensuales de la propiedad − patrimonio + costes de venta**
+
+Los costes de venta van al final por cuándo se pagan. Se cobran sobre el
+precio de la vivienda el día de la venta, así que no forman parte de las
+cifras mensuales; van con el patrimonio, porque lo que deja una venta es el
+valor de la vivienda menos el saldo pendiente menos el coste de la venta. Pon
+los costes de venta a cero y el patrimonio que cuenta la comparación es todo.
 
 Esta es la cifra que puede compararse con el alquiler que se habría pagado
 en el mismo periodo. Al principio, el coste neto de la propiedad es alto,
