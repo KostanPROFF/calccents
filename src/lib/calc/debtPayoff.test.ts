@@ -326,6 +326,35 @@ test('the total paid is the balances plus the interest', () => {
   );
 });
 
+test('a debt cleared in the last month of the run is reported as paid off', () => {
+  // 1,200 dollars at no interest with a payment of 1 dollar clears in
+  // 1,200 months, which is the last month the simulation reaches. The
+  // round that would have noticed it never comes, so the balances are read
+  // once more when the loop ends.
+  const result = simulatePayoff(
+    [debt({ id: 'a', balance: 1_200, aprPercent: 0, minimumPayment: 1 })],
+    0,
+    'avalanche',
+  );
+
+  assert.equal(result.paidOff, true);
+  assert.equal(result.months, 1_200);
+  assert.equal(result.payoffMonthById.a, 1_200);
+  assert.equal(result.totalPaid, 1_200);
+  assert.equal(result.totalInterest, 0);
+});
+
+test('a debt that needs one month more than the run is not paid off', () => {
+  const result = simulatePayoff(
+    [debt({ id: 'a', balance: 1_200.01, aprPercent: 0, minimumPayment: 1 })],
+    0,
+    'avalanche',
+  );
+
+  assert.equal(result.paidOff, false);
+  assert.equal(result.months, 1_200);
+});
+
 test('the interest saved is empty when a run never clears the debts', () => {
   // The extra payment of 10 dollars does not cover the 20 dollars of
   // interest a month, so none of the three runs finishes and there is no

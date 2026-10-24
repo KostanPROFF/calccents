@@ -198,6 +198,17 @@ export function simulatePayoff(
     }
   }
 
+  /*
+   * The check for the debts being cleared sits at the top of the round,
+   * because that is where a debt with no balance leaves the plan. A debt
+   * cleared in the very last month never gets that round: the loop stops
+   * at the hard limit first. So the balances are read once more here, and a
+   * plan that ends with every balance at zero is a plan that finished.
+   */
+  if (!paidOff && debts.every((debt) => (balances.get(debt.id) ?? 0) <= 0)) {
+    paidOff = true;
+  }
+
   return {
     order,
     months: month,
