@@ -76,3 +76,19 @@ export function isReusedGuideSlug(
 ): slug is ReusedGuideSlug {
   return slug in TOOL_ILLUSTRATION_BY_GUIDE;
 }
+
+/**
+ * A document-unique id for an inline SVG gradient.
+ *
+ * A gradient is referenced by id, and the pictures are rendered many times on
+ * one page — the same calculator picture can sit on a guide card and again
+ * further down the same guide. An id that repeats in a document makes the
+ * second reference resolve to the first definition, so the ids come from a
+ * counter that runs for the whole build instead of from the picture's name.
+ */
+let figureIdCounter = 0;
+
+export function nextFigureId(prefix: string): string {
+  figureIdCounter += 1;
+  return `${prefix}-${figureIdCounter}`;
+}

@@ -10,13 +10,20 @@
  * Six of the guides describe a calculator that already has a picture, so
  * those guides reuse `ToolIllustration` rather than draw the same shape
  * twice. The rest are drawn here.
+ *
+ * Each drawing is built the same way: a grid of hairlines, a few quiet
+ * background columns, the main shape of the topic in the accent colour, a
+ * soft gradient under it, one second line, sometimes a dashed third line, one
+ * marker on the point that matters and a scatter of small data dots.
  */
 
 import ToolIllustration from './ToolIllustration.astro';
 import {
   isReusedGuideSlug,
+  nextFigureId,
   TOOL_ILLUSTRATION_BY_GUIDE,
   type GuideIllustrationSlug,
+  type ReusedGuideSlug,
 } from './guideIllustrations.ts';
 import type { Locale } from '../../i18n/locales.ts';
 
@@ -30,6 +37,217 @@ interface Props {
 }
 
 const { slug, locale, class: className } = Astro.props;
+
+/** The edges of the drawing area every picture shares. */
+const PLOT = { left: 18, right: 222, floor: 140 } as const;
+
+/**
+ * The furniture every picture carries.
+ *
+ * `grid` is the horizontal hairlines, `columns` the quiet background columns
+ * standing on the floor, and `dots` the small points of data scattered over
+ * the field. They are drawn first, so the shape of the topic sits on top.
+ */
+interface Scene {
+  grid: readonly number[];
+  columns: readonly { x: number; y: number; w: number; h: number }[];
+  dots: readonly { x: number; y: number }[];
+}
+
+/** The slugs this file draws itself. */
+type DrawnSlug = Exclude<GuideIllustrationSlug, ReusedGuideSlug>;
+
+const SCENES: Record<DrawnSlug, Scene> = {
+  // The balance of the loan falls away; behind it the amortization columns
+  // shrink as the loan gets older.
+  'how-mortgage-amortization-works': {
+    grid: [46, 82, 116],
+    columns: [
+      { x: 32, y: 90, w: 5, h: 50 },
+      { x: 56, y: 98, w: 5, h: 42 },
+      { x: 80, y: 104, w: 5, h: 36 },
+      { x: 104, y: 110, w: 5, h: 30 },
+    ],
+    dots: [
+      { x: 66, y: 52 },
+      { x: 146, y: 74 },
+      { x: 196, y: 96 },
+    ],
+  },
+  // The rows of the schedule, one bar each; one row picked out.
+  'how-to-read-an-amortization-schedule': {
+    grid: [40, 76, 112],
+    columns: [
+      { x: 30, y: 120, w: 4, h: 20 },
+      { x: 70, y: 118, w: 4, h: 22 },
+      { x: 150, y: 122, w: 4, h: 18 },
+      { x: 196, y: 116, w: 4, h: 24 },
+    ],
+    dots: [
+      { x: 44, y: 52 },
+      { x: 150, y: 44 },
+      { x: 186, y: 70 },
+    ],
+  },
+  // One bar of cash, cut into what the buyer brings and what is borrowed.
+  'down-payment-and-closing-costs-explained': {
+    grid: [40, 72, 104],
+    columns: [
+      { x: 30, y: 64, w: 6, h: 76 },
+      { x: 76, y: 80, w: 6, h: 60 },
+      { x: 124, y: 56, w: 6, h: 84 },
+      { x: 170, y: 72, w: 6, h: 68 },
+    ],
+    dots: [
+      { x: 32, y: 38 },
+      { x: 120, y: 38 },
+      { x: 196, y: 38 },
+    ],
+  },
+  // Two balances running down: one plain, one fed by the extra payment.
+  'extra-mortgage-payments-math': {
+    grid: [46, 82, 116],
+    columns: [
+      { x: 30, y: 104, w: 5, h: 36 },
+      { x: 56, y: 112, w: 5, h: 28 },
+      { x: 82, y: 108, w: 5, h: 32 },
+      { x: 108, y: 116, w: 5, h: 24 },
+    ],
+    dots: [
+      { x: 70, y: 50 },
+      { x: 150, y: 60 },
+      { x: 190, y: 100 },
+    ],
+  },
+  // Everything the loan costs in the end, and it keeps adding up.
+  'monthly-payment-vs-total-cost-mortgage': {
+    grid: [40, 76, 112],
+    columns: [
+      { x: 32, y: 112, w: 5, h: 28 },
+      { x: 58, y: 120, w: 5, h: 20 },
+      { x: 84, y: 116, w: 5, h: 24 },
+      { x: 110, y: 122, w: 5, h: 18 },
+    ],
+    dots: [
+      { x: 64, y: 64 },
+      { x: 104, y: 72 },
+      { x: 196, y: 66 },
+    ],
+  },
+  // A longer term pulls one way, a higher rate pulls the other.
+  'mortgage-rate-and-term-tradeoffs': {
+    grid: [42, 78, 114],
+    columns: [
+      { x: 36, y: 112, w: 5, h: 28 },
+      { x: 62, y: 106, w: 5, h: 34 },
+      { x: 88, y: 118, w: 5, h: 22 },
+      { x: 114, y: 110, w: 5, h: 30 },
+    ],
+    dots: [
+      { x: 52, y: 60 },
+      { x: 170, y: 110 },
+      { x: 200, y: 52 },
+    ],
+  },
+  // The stated rate and the cost of borrowing, running close together.
+  'understanding-apr': {
+    grid: [40, 76, 112],
+    columns: [
+      { x: 34, y: 110, w: 5, h: 30 },
+      { x: 60, y: 118, w: 5, h: 22 },
+      { x: 86, y: 112, w: 5, h: 28 },
+      { x: 112, y: 120, w: 5, h: 20 },
+    ],
+    dots: [
+      { x: 60, y: 64 },
+      { x: 112, y: 60 },
+      { x: 190, y: 110 },
+    ],
+  },
+  // Two standing costs, and they are not the same size.
+  'estimating-property-tax-and-home-insurance': {
+    grid: [40, 76, 112],
+    columns: [
+      { x: 28, y: 96, w: 5, h: 44 },
+      { x: 58, y: 110, w: 5, h: 30 },
+      { x: 186, y: 104, w: 5, h: 36 },
+      { x: 210, y: 114, w: 5, h: 26 },
+    ],
+    dots: [
+      { x: 40, y: 60 },
+      { x: 126, y: 70 },
+      { x: 196, y: 80 },
+    ],
+  },
+  // The line dips and then shoots up: the mistake in the middle.
+  'rent-vs-buy-common-mistakes': {
+    grid: [40, 76, 112],
+    columns: [
+      { x: 32, y: 100, w: 5, h: 40 },
+      { x: 58, y: 110, w: 5, h: 30 },
+      { x: 84, y: 96, w: 5, h: 44 },
+      { x: 110, y: 106, w: 5, h: 34 },
+    ],
+    dots: [
+      { x: 50, y: 58 },
+      { x: 150, y: 60 },
+      { x: 186, y: 96 },
+    ],
+  },
+  // Compounding, which bends away from the straight line.
+  'compound-vs-simple-interest': {
+    grid: [40, 76, 112],
+    columns: [
+      { x: 32, y: 120, w: 5, h: 20 },
+      { x: 58, y: 114, w: 5, h: 26 },
+      { x: 84, y: 122, w: 5, h: 18 },
+      { x: 110, y: 116, w: 5, h: 24 },
+    ],
+    dots: [
+      { x: 66, y: 62 },
+      { x: 96, y: 86 },
+      { x: 190, y: 44 },
+    ],
+  },
+  // Three ways of compounding, each ending a little higher than the last.
+  'how-compounding-frequency-changes-results': {
+    grid: [40, 76, 112],
+    columns: [
+      { x: 32, y: 118, w: 5, h: 22 },
+      { x: 58, y: 112, w: 5, h: 28 },
+      { x: 84, y: 120, w: 5, h: 20 },
+      { x: 110, y: 114, w: 5, h: 26 },
+    ],
+    dots: [
+      { x: 64, y: 66 },
+      { x: 96, y: 78 },
+      { x: 188, y: 36 },
+    ],
+  },
+  // The nominal balance, climbing with the years.
+  'inflation-and-real-returns-explained': {
+    grid: [40, 76, 112],
+    columns: [
+      { x: 32, y: 114, w: 5, h: 26 },
+      { x: 58, y: 106, w: 5, h: 34 },
+      { x: 84, y: 116, w: 5, h: 24 },
+      { x: 110, y: 108, w: 5, h: 32 },
+    ],
+    dots: [
+      { x: 62, y: 60 },
+      { x: 96, y: 84 },
+      { x: 192, y: 34 },
+    ],
+  },
+};
+
+/** The furniture of the picture this page draws, if it draws one itself. */
+const scene = isReusedGuideSlug(slug) ? null : SCENES[slug];
+
+/** The gradient under the main shape, and a quieter one for the second line. */
+const fillId = nextFigureId(`guide-fill-${slug}`);
+const fillSoftId = nextFigureId(`guide-fill-soft-${slug}`);
+const fillWideId = nextFigureId(`guide-fill-wide-${slug}`);
 ---
 
 {
@@ -48,40 +266,94 @@ const { slug, locale, class: className } = Astro.props;
         aria-hidden="true"
         focusable="false"
       >
+        <defs>
+          <linearGradient id={fillId} x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stop-color="var(--accent)" stop-opacity="0.3"></stop>
+            <stop offset="100%" stop-color="var(--accent)" stop-opacity="0"></stop>
+          </linearGradient>
+          <linearGradient id={fillSoftId} x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stop-color="var(--accent)" stop-opacity="0.16"></stop>
+            <stop offset="100%" stop-color="var(--accent)" stop-opacity="0"></stop>
+          </linearGradient>
+          <linearGradient id={fillWideId} x1="0" y1="0" x2="1" y2="0">
+            <stop offset="0%" stop-color="var(--accent)" stop-opacity="0.3"></stop>
+            <stop offset="100%" stop-color="var(--accent)" stop-opacity="0"></stop>
+          </linearGradient>
+        </defs>
+
+        {/* The quiet background: a grid of hairlines and a few standing columns. */}
+        <g>
+          {
+            scene?.grid.map((y) => (
+              <line
+                x1={PLOT.left}
+                y1={y}
+                x2={PLOT.right}
+                y2={y}
+                stroke="var(--border-subtle)"
+                stroke-width="1"
+                vector-effect="non-scaling-stroke"
+              />
+            ))
+          }
+          {
+            scene?.columns.map((column) => (
+              <rect
+                x={column.x}
+                y={column.y}
+                width={column.w}
+                height={column.h}
+                fill="var(--surface-raised)"
+              />
+            ))
+          }
+          <line
+            x1={PLOT.left}
+            y1={PLOT.floor}
+            x2={PLOT.right}
+            y2={PLOT.floor}
+            stroke="var(--border)"
+            stroke-width="1"
+            vector-effect="non-scaling-stroke"
+          />
+        </g>
+
         {
           slug === 'how-mortgage-amortization-works' && (
             <g>
               {/* The balance left on the loan, falling away fast at first. */}
               <path
-                d="M18 26 C 70 90 140 120 222 134 L222 140 L18 140 Z"
-                fill="var(--accent-subtle)"
+                d="M18 26 C 46 60 78 84 110 100 C 150 118 190 128 222 134 L222 140 L18 140 Z"
+                fill={`url(#${fillId})`}
               />
               <path
-                d="M18 26 C 70 90 140 120 222 134"
+                d="M18 26 C 46 60 78 84 110 100 C 150 118 190 128 222 134"
                 fill="none"
                 stroke="var(--accent)"
-                stroke-width="1.5"
+                stroke-width="2.25"
                 stroke-linecap="round"
                 vector-effect="non-scaling-stroke"
               />
               {/* The share of each payment that goes on interest, also falling. */}
               <path
-                d="M18 44 C 84 66 152 92 222 112"
+                d="M18 44 C 90 62 160 86 222 110"
                 fill="none"
                 stroke="var(--text-muted)"
-                stroke-width="1.25"
+                stroke-width="1.15"
                 stroke-linecap="round"
                 vector-effect="non-scaling-stroke"
               />
-              <line
-                x1="18"
-                y1="140"
-                x2="222"
-                y2="140"
-                stroke="var(--border-strong)"
+              {/* The share that goes on principal, rising as the balance shrinks. */}
+              <path
+                d="M18 114 C 90 116 160 104 222 84"
+                fill="none"
+                stroke="var(--text-muted)"
                 stroke-width="1"
+                stroke-dasharray="4 4"
+                stroke-linecap="round"
                 vector-effect="non-scaling-stroke"
               />
+              <circle cx="110" cy="100" r="3" fill="var(--accent)" />
             </g>
           )
         }
@@ -97,17 +369,17 @@ const { slug, locale, class: className } = Astro.props;
                 height="40"
                 fill="none"
                 stroke="var(--text-muted)"
-                stroke-width="1.25"
+                stroke-width="1.15"
                 vector-effect="non-scaling-stroke"
               />
               <rect
                 x="52"
-                y="80"
+                y="82"
                 width="14"
-                height="60"
+                height="58"
                 fill="none"
                 stroke="var(--text-muted)"
-                stroke-width="1.25"
+                stroke-width="1.15"
                 vector-effect="non-scaling-stroke"
               />
               <rect
@@ -117,47 +389,48 @@ const { slug, locale, class: className } = Astro.props;
                 height="52"
                 fill="none"
                 stroke="var(--text-muted)"
-                stroke-width="1.25"
+                stroke-width="1.15"
                 vector-effect="non-scaling-stroke"
               />
+              {/* The row that carries the most interest, picked out. */}
               <rect
                 x="104"
-                y="54"
+                y="60"
                 width="14"
-                height="86"
-                fill="var(--accent-subtle)"
+                height="80"
+                fill={`url(#${fillId})`}
                 stroke="var(--accent)"
-                stroke-width="1.5"
+                stroke-width="1.75"
                 vector-effect="non-scaling-stroke"
               />
               <rect
                 x="130"
-                y="70"
+                y="72"
                 width="14"
-                height="70"
+                height="68"
                 fill="none"
                 stroke="var(--text-muted)"
-                stroke-width="1.25"
+                stroke-width="1.15"
                 vector-effect="non-scaling-stroke"
               />
               <rect
                 x="156"
-                y="82"
+                y="84"
                 width="14"
-                height="58"
+                height="56"
                 fill="none"
                 stroke="var(--text-muted)"
-                stroke-width="1.25"
+                stroke-width="1.15"
                 vector-effect="non-scaling-stroke"
               />
               <rect
                 x="182"
-                y="94"
+                y="96"
                 width="14"
-                height="46"
+                height="44"
                 fill="none"
                 stroke="var(--text-muted)"
-                stroke-width="1.25"
+                stroke-width="1.15"
                 vector-effect="non-scaling-stroke"
               />
               <rect
@@ -167,18 +440,10 @@ const { slug, locale, class: className } = Astro.props;
                 height="32"
                 fill="none"
                 stroke="var(--text-muted)"
-                stroke-width="1.25"
+                stroke-width="1.15"
                 vector-effect="non-scaling-stroke"
               />
-              <line
-                x1="18"
-                y1="140"
-                x2="222"
-                y2="140"
-                stroke="var(--border-strong)"
-                stroke-width="1"
-                vector-effect="non-scaling-stroke"
-              />
+              <circle cx="111" cy="56" r="3" fill="var(--accent)" />
             </g>
           )
         }
@@ -188,35 +453,38 @@ const { slug, locale, class: className } = Astro.props;
             <g>
               {/* One bar of cash, cut into what the buyer brings and what is borrowed. */}
               <rect
-                x="18"
-                y="58"
-                width="56"
-                height="46"
-                fill="var(--accent-subtle)"
+                x="20"
+                y="64"
+                width="48"
+                height="44"
+                fill={`url(#${fillWideId})`}
                 stroke="var(--accent)"
-                stroke-width="1.5"
+                stroke-width="1.75"
                 vector-effect="non-scaling-stroke"
               />
               <rect
-                x="74"
-                y="58"
-                width="42"
-                height="46"
-                fill="var(--surface-raised)"
+                x="68"
+                y="64"
+                width="40"
+                height="44"
+                fill="var(--text-muted)"
+                fill-opacity="0.22"
                 stroke="var(--border-strong)"
                 stroke-width="1"
                 vector-effect="non-scaling-stroke"
               />
               <rect
-                x="116"
-                y="58"
-                width="106"
-                height="46"
-                fill="var(--surface-raised)"
+                x="108"
+                y="64"
+                width="112"
+                height="44"
+                fill="var(--text-muted)"
+                fill-opacity="0.12"
                 stroke="var(--border-strong)"
                 stroke-width="1"
                 vector-effect="non-scaling-stroke"
               />
+              <circle cx="44" cy="86" r="3" fill="var(--accent)" />
             </g>
           )
         }
@@ -226,31 +494,41 @@ const { slug, locale, class: className } = Astro.props;
             <g>
               {/* The balance with the extra payment, reaching the end sooner. */}
               <path
-                d="M18 30 C 66 96 130 122 222 136"
+                d="M18 28 C 46 66 78 96 110 114 C 148 130 190 136 222 138 L222 140 L18 140 Z"
+                fill={`url(#${fillId})`}
+              />
+              <path
+                d="M18 28 C 46 66 78 96 110 114 C 148 130 190 136 222 138"
                 fill="none"
                 stroke="var(--accent)"
-                stroke-width="1.5"
+                stroke-width="2.25"
                 stroke-linecap="round"
                 vector-effect="non-scaling-stroke"
               />
               {/* The balance without it, flattening out as the loan ages. */}
               <path
-                d="M18 30 C 90 74 160 98 222 110"
+                d="M18 28 C 60 62 120 84 222 104 L222 140 L18 140 Z"
+                fill={`url(#${fillSoftId})`}
+              />
+              <path
+                d="M18 28 C 60 62 120 84 222 104"
                 fill="none"
                 stroke="var(--text-muted)"
                 stroke-width="1.25"
                 stroke-linecap="round"
                 vector-effect="non-scaling-stroke"
               />
-              <line
-                x1="18"
-                y1="140"
-                x2="222"
-                y2="140"
-                stroke="var(--border-strong)"
+              {/* The straight line a balance would follow without interest. */}
+              <path
+                d="M18 28 L222 132"
+                fill="none"
+                stroke="var(--text-muted)"
                 stroke-width="1"
+                stroke-dasharray="4 4"
+                stroke-linecap="round"
                 vector-effect="non-scaling-stroke"
               />
+              <circle cx="110" cy="114" r="3" fill="var(--accent)" />
             </g>
           )
         }
@@ -260,26 +538,36 @@ const { slug, locale, class: className } = Astro.props;
             <g>
               {/* Everything the loan costs in the end, and it keeps adding up. */}
               <path
-                d="M18 132 C 100 130 170 96 222 36 L222 140 L18 140 Z"
-                fill="var(--accent-subtle)"
+                d="M18 134 C 60 132 110 120 150 96 C 180 78 202 56 222 30 L222 140 L18 140 Z"
+                fill={`url(#${fillId})`}
               />
               <path
-                d="M18 132 C 100 130 170 96 222 36"
+                d="M18 134 C 60 132 110 120 150 96 C 180 78 202 56 222 30"
                 fill="none"
                 stroke="var(--accent)"
-                stroke-width="1.5"
+                stroke-width="2.5"
                 stroke-linecap="round"
                 vector-effect="non-scaling-stroke"
               />
               {/* The monthly payment, which barely moves. */}
               <path
-                d="M18 44 C 80 43 160 42 222 41"
+                d="M18 48 C 80 47 160 46 222 45"
                 fill="none"
                 stroke="var(--text-muted)"
                 stroke-width="1.25"
                 stroke-linecap="round"
                 vector-effect="non-scaling-stroke"
               />
+              {/* The price of the house, the level the total cost passes. */}
+              <path
+                d="M18 92 L222 92"
+                fill="none"
+                stroke="var(--text-muted)"
+                stroke-width="1"
+                stroke-dasharray="4 4"
+                vector-effect="non-scaling-stroke"
+              />
+              <circle cx="150" cy="96" r="3" fill="var(--accent)" />
             </g>
           )
         }
@@ -287,23 +575,38 @@ const { slug, locale, class: className } = Astro.props;
         {
           slug === 'mortgage-rate-and-term-tradeoffs' && (
             <g>
-              {/* A longer term pulls one way, a higher rate pulls the other. */}
+              {/* The cost of the longer term, which keeps adding up. */}
               <path
-                d="M18 132 L222 34"
+                d="M18 132 C 60 118 90 98 120 80 C 155 60 190 42 222 30 L222 140 L18 140 Z"
+                fill={`url(#${fillId})`}
+              />
+              <path
+                d="M18 132 C 60 118 90 98 120 80 C 155 60 190 42 222 30"
                 fill="none"
                 stroke="var(--accent)"
-                stroke-width="1.5"
+                stroke-width="2.25"
                 stroke-linecap="round"
                 vector-effect="non-scaling-stroke"
               />
+              {/* The cost of the shorter term, which starts high and falls. */}
               <path
-                d="M18 34 L222 112"
+                d="M18 28 C 60 44 90 62 120 80 C 155 100 190 116 222 124"
                 fill="none"
                 stroke="var(--text-muted)"
                 stroke-width="1.25"
                 stroke-linecap="round"
                 vector-effect="non-scaling-stroke"
               />
+              {/* The level at which the two terms cost the same. */}
+              <path
+                d="M18 80 L222 80"
+                fill="none"
+                stroke="var(--text-muted)"
+                stroke-width="1"
+                stroke-dasharray="4 4"
+                vector-effect="non-scaling-stroke"
+              />
+              <circle cx="120" cy="80" r="3" fill="var(--accent)" />
             </g>
           )
         }
@@ -311,23 +614,39 @@ const { slug, locale, class: className } = Astro.props;
         {
           slug === 'understanding-apr' && (
             <g>
-              {/* The stated rate and the cost of borrowing, running close together. */}
+              {/* The cost of borrowing, which runs slightly above the stated rate. */}
               <path
-                d="M18 118 C 80 104 160 78 222 46"
+                d="M18 122 C 60 116 100 102 140 88 C 170 78 196 62 222 46 L222 140 L18 140 Z"
+                fill={`url(#${fillId})`}
+              />
+              <path
+                d="M18 122 C 60 116 100 102 140 88 C 170 78 196 62 222 46"
                 fill="none"
                 stroke="var(--accent)"
-                stroke-width="1.5"
+                stroke-width="2.25"
                 stroke-linecap="round"
                 vector-effect="non-scaling-stroke"
               />
+              {/* The stated rate, close by and pulling away near the end. */}
               <path
-                d="M18 118 C 80 106 160 84 222 56"
+                d="M18 124 C 60 119 100 107 140 96 C 170 88 196 76 222 64"
                 fill="none"
                 stroke="var(--text-muted)"
                 stroke-width="1.25"
                 stroke-linecap="round"
                 vector-effect="non-scaling-stroke"
               />
+              {/* The fees, which are what widen the gap. */}
+              <path
+                d="M18 128 C 60 124 100 116 140 108 C 170 102 196 96 222 92"
+                fill="none"
+                stroke="var(--text-muted)"
+                stroke-width="1"
+                stroke-dasharray="4 4"
+                stroke-linecap="round"
+                vector-effect="non-scaling-stroke"
+              />
+              <circle cx="140" cy="88" r="3" fill="var(--accent)" />
             </g>
           )
         }
@@ -337,34 +656,26 @@ const { slug, locale, class: className } = Astro.props;
             <g>
               {/* Two standing costs, and they are not the same size. */}
               <rect
-                x="78"
+                x="84"
                 y="44"
                 width="30"
                 height="96"
-                fill="var(--accent-subtle)"
+                fill={`url(#${fillId})`}
                 stroke="var(--accent)"
-                stroke-width="1.5"
+                stroke-width="1.75"
                 vector-effect="non-scaling-stroke"
               />
               <rect
-                x="132"
-                y="88"
+                x="140"
+                y="92"
                 width="30"
-                height="52"
+                height="48"
                 fill="none"
                 stroke="var(--text-muted)"
                 stroke-width="1.25"
                 vector-effect="non-scaling-stroke"
               />
-              <line
-                x1="18"
-                y1="140"
-                x2="222"
-                y2="140"
-                stroke="var(--border-strong)"
-                stroke-width="1"
-                vector-effect="non-scaling-stroke"
-              />
+              <circle cx="99" cy="40" r="3" fill="var(--accent)" />
             </g>
           )
         }
@@ -374,17 +685,36 @@ const { slug, locale, class: className } = Astro.props;
             <g>
               {/* The line dips and then shoots up: the mistake in the middle. */}
               <path
-                d="M18 38 C 52 92 92 118 122 116 C 162 112 196 62 222 26 L222 140 L18 140 Z"
-                fill="var(--accent-subtle)"
+                d="M18 40 C 44 84 76 112 106 114 C 140 116 170 84 194 48 C 204 34 214 26 222 22 L222 140 L18 140 Z"
+                fill={`url(#${fillId})`}
               />
               <path
-                d="M18 38 C 52 92 92 118 122 116 C 162 112 196 62 222 26"
+                d="M18 40 C 44 84 76 112 106 114 C 140 116 170 84 194 48 C 204 34 214 26 222 22"
                 fill="none"
                 stroke="var(--accent)"
-                stroke-width="1.5"
+                stroke-width="2.25"
                 stroke-linecap="round"
                 vector-effect="non-scaling-stroke"
               />
+              {/* The line the comparison would have followed without the mistake. */}
+              <path
+                d="M18 40 C 70 70 130 90 222 108"
+                fill="none"
+                stroke="var(--text-muted)"
+                stroke-width="1.25"
+                stroke-linecap="round"
+                vector-effect="non-scaling-stroke"
+              />
+              {/* The level the comparison should have stayed under. */}
+              <path
+                d="M18 60 L222 60"
+                fill="none"
+                stroke="var(--text-muted)"
+                stroke-width="1"
+                stroke-dasharray="4 4"
+                vector-effect="non-scaling-stroke"
+              />
+              <circle cx="106" cy="114" r="3" fill="var(--accent)" />
             </g>
           )
         }
@@ -394,26 +724,41 @@ const { slug, locale, class: className } = Astro.props;
             <g>
               {/* Compounding, which bends away from the straight line. */}
               <path
-                d="M18 134 C 92 130 158 104 222 28 L222 140 L18 140 Z"
-                fill="var(--accent-subtle)"
+                d="M18 134 C 70 130 120 116 150 90 C 178 66 200 44 222 20 L222 140 L18 140 Z"
+                fill={`url(#${fillId})`}
               />
               <path
-                d="M18 134 C 92 130 158 104 222 28"
+                d="M18 134 C 70 130 120 116 150 90 C 178 66 200 44 222 20"
                 fill="none"
                 stroke="var(--accent)"
-                stroke-width="1.5"
+                stroke-width="2.5"
                 stroke-linecap="round"
                 vector-effect="non-scaling-stroke"
               />
               {/* Simple interest, a straight line all the way. */}
               <path
-                d="M18 134 L222 46"
+                d="M18 134 L222 52 L222 140 L18 140 Z"
+                fill={`url(#${fillSoftId})`}
+              />
+              <path
+                d="M18 134 L222 52"
                 fill="none"
                 stroke="var(--text-muted)"
                 stroke-width="1.25"
                 stroke-linecap="round"
                 vector-effect="non-scaling-stroke"
               />
+              {/* The line the interest alone would follow. */}
+              <path
+                d="M18 134 C 100 128 170 110 222 78"
+                fill="none"
+                stroke="var(--text-muted)"
+                stroke-width="1"
+                stroke-dasharray="4 4"
+                stroke-linecap="round"
+                vector-effect="non-scaling-stroke"
+              />
+              <circle cx="150" cy="90" r="3" fill="var(--accent)" />
             </g>
           )
         }
@@ -423,15 +768,19 @@ const { slug, locale, class: className } = Astro.props;
             <g>
               {/* Three ways of compounding, each ending a little higher than the last. */}
               <path
-                d="M18 136 C 96 132 162 100 222 30"
+                d="M18 136 C 70 132 120 118 150 92 C 178 68 200 46 222 22 L222 140 L18 140 Z"
+                fill={`url(#${fillId})`}
+              />
+              <path
+                d="M18 136 C 70 132 120 118 150 92 C 178 68 200 46 222 22"
                 fill="none"
                 stroke="var(--accent)"
-                stroke-width="1.5"
+                stroke-width="2.5"
                 stroke-linecap="round"
                 vector-effect="non-scaling-stroke"
               />
               <path
-                d="M18 136 C 96 134 162 110 222 52"
+                d="M18 136 C 70 133 120 122 150 102 C 178 82 200 64 222 44"
                 fill="none"
                 stroke="var(--text-muted)"
                 stroke-width="1.25"
@@ -439,13 +788,15 @@ const { slug, locale, class: className } = Astro.props;
                 vector-effect="non-scaling-stroke"
               />
               <path
-                d="M18 136 C 96 136 162 122 222 76"
+                d="M18 136 C 70 134 120 126 150 112 C 178 96 200 82 222 66"
                 fill="none"
                 stroke="var(--text-muted)"
-                stroke-width="1.25"
+                stroke-width="1"
+                stroke-dasharray="4 4"
                 stroke-linecap="round"
                 vector-effect="non-scaling-stroke"
               />
+              <circle cx="150" cy="92" r="3" fill="var(--accent)" />
             </g>
           )
         }
@@ -455,28 +806,46 @@ const { slug, locale, class: className } = Astro.props;
             <g>
               {/* The nominal balance, climbing with the years. */}
               <path
-                d="M18 136 C 90 130 156 100 222 32 L222 140 L18 140 Z"
-                fill="var(--accent-subtle)"
+                d="M18 132 C 70 128 120 114 150 88 C 178 62 200 40 222 18 L222 140 L18 140 Z"
+                fill={`url(#${fillId})`}
               />
               <path
-                d="M18 136 C 90 130 156 100 222 32"
+                d="M18 132 C 70 128 120 114 150 88 C 178 62 200 40 222 18"
                 fill="none"
                 stroke="var(--accent)"
-                stroke-width="1.5"
+                stroke-width="2.5"
                 stroke-linecap="round"
                 vector-effect="non-scaling-stroke"
               />
               {/* What the same balance is really worth after inflation. */}
               <path
-                d="M18 106 C 90 104 156 100 222 92"
+                d="M18 128 C 70 126 120 122 150 116 C 178 111 200 106 222 100"
                 fill="none"
                 stroke="var(--text-muted)"
                 stroke-width="1.25"
                 stroke-linecap="round"
                 vector-effect="non-scaling-stroke"
               />
+              {/* The line inflation itself follows. */}
+              <path
+                d="M18 120 C 80 112 150 96 222 78"
+                fill="none"
+                stroke="var(--text-muted)"
+                stroke-width="1"
+                stroke-dasharray="4 4"
+                stroke-linecap="round"
+                vector-effect="non-scaling-stroke"
+              />
+              <circle cx="150" cy="88" r="3" fill="var(--accent)" />
             </g>
           )
+        }
+
+        {/* A scatter of small points of data over the field. */}
+        {
+          scene?.dots.map((dot) => (
+            <circle cx={dot.x} cy={dot.y} r="1.25" fill="var(--text-muted)" fill-opacity="0.7" />
+          ))
         }
       </svg>
     </div>

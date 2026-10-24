@@ -346,6 +346,17 @@ bars for the debt payoff. They live in `src/components/visuals/` and are
 drawn from the theme variables, so they follow the light and the dark theme
 and cost no request.
 
+The guides index is a grid of cards rather than a list of rows, and each card
+carries the picture of the guide it links to, so the index reads as a set of
+pictures first and a list of titles second.
+
+All eighteen drawings share one house style, and it is deliberately busier than
+a single line on an empty rectangle: a faint grid, a row of dim background
+columns, a baseline, a gradient fill under the main curve, one dashed second
+series, an accent dot on the point that matters and a scatter of quiet data
+points. The drawings carry no text and no numbers, because a number on a
+picture is a claim, and a claim we cannot check does not belong on the page.
+
 A guide carries three of them: one under the title, and two more inside the
 text, placed before the second and the fourth section, each on the subject
 the guide is talking about at that point. The picture under the title is

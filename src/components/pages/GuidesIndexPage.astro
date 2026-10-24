@@ -5,6 +5,7 @@ import { getSite } from '../../config/site.ts';
 import { getUi } from '../../i18n/ui/index.ts';
 import { localePath, type Locale } from '../../i18n/locales.ts';
 import { getGuides, guideSlug } from '../../i18n/guides.ts';
+import GuideIllustration from '../visuals/GuideIllustration.astro';
 
 interface Props {
   locale: Locale;
@@ -55,14 +56,18 @@ const byGroup = groups
           <p class="eyebrow" style="color: var(--text-muted);">
             {ui.guidesIndex.groups[entry.group]}
           </p>
-          <div style="margin-top: var(--space-5);">
+          <div class="guide-grid">
             {entry.guides.map((guide) => (
-              <a class="guide-row" href={localePath(locale, `/guides/${guideSlug(guide.id)}/`)}>
-                <span>
-                  <span class="guide-row__title">{guide.data.title}</span>
-                  <span class="guide-row__desc">{guide.data.description}</span>
+              <a
+                class="guide-card"
+                href={localePath(locale, `/guides/${guideSlug(guide.id)}/`)}
+              >
+                <span class="guide-card__figure">
+                  <GuideIllustration slug={guide.data.illustration} locale={locale} />
                 </span>
-                <span class="guide-row__meta">
+                <span class="guide-card__title">{guide.data.title}</span>
+                <span class="guide-card__desc">{guide.data.description}</span>
+                <span class="guide-card__meta">
                   {ui.ui.minRead.replace('{n}', String(guide.data.readingMinutes))}
                 </span>
               </a>
@@ -93,38 +98,80 @@ const byGroup = groups
 </Base>
 
 <style>
-  .guide-row {
-    display: flex;
-    align-items: baseline;
-    justify-content: space-between;
-    gap: var(--space-8);
-    padding: var(--space-5) 0;
-    border-bottom: 1px solid var(--border-subtle);
-    text-decoration: none;
-    color: inherit;
+  /*
+   * The guides are cards, not rows.
+   *
+   * Every card carries the picture of the guide it links to, so the index
+   * reads as a shelf of the things the site explains rather than as a list
+   * of titles.
+   */
+  .guide-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: var(--space-6);
+    margin-top: var(--space-6);
   }
 
-  .guide-row:hover .guide-row__title {
+  .guide-card {
+    display: flex;
+    flex-direction: column;
+    padding: var(--space-4);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg, 14px);
+    background: var(--surface);
+    text-decoration: none;
+    color: inherit;
+    transition: border-color 150ms ease, background-color 150ms ease;
+  }
+
+  .guide-card:hover {
+    border-color: var(--border-strong);
+    background: var(--surface-raised);
+  }
+
+  .guide-card:hover .guide-card__title {
     color: var(--accent);
   }
 
-  .guide-row__title {
+  .guide-card__figure {
+    display: block;
+    margin-bottom: var(--space-4);
+  }
+
+  .guide-card__title {
     display: block;
     color: var(--text);
     font-weight: 500;
+    line-height: 1.35;
   }
 
-  .guide-row__desc {
-    display: block;
-    margin-top: var(--space-1);
+  .guide-card__desc {
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    margin-top: var(--space-2);
     color: var(--text-muted);
     font-size: var(--text-sm);
-    max-width: 72ch;
+    line-height: 1.55;
   }
 
-  .guide-row__meta {
+  .guide-card__meta {
+    margin-top: var(--space-4);
     color: var(--text-muted);
     font-size: var(--text-sm);
-    white-space: nowrap;
+  }
+
+  @media (max-width: 940px) {
+    .guide-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+
+  @media (max-width: 620px) {
+    .guide-grid {
+      grid-template-columns: minmax(0, 1fr);
+    }
   }
 </style>
