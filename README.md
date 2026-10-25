@@ -188,6 +188,29 @@ the worker that sends the mail. Both are Cloudflare's own runtime and both
 are deployed by the same workflow. Rollback is a matter of promoting an
 earlier deployment from the Cloudflare Pages dashboard.
 
+### Cloudflare Web Analytics
+
+Cloudflare's Web Analytics is switched on for the zone, and Cloudflare adds
+its beacon to every page it serves. The beacon comes from
+`static.cloudflareinsights.com`, it sets no cookie, writes nothing to local
+storage and creates no identifier, and the IP address it carries is used at
+the edge to work out the country and is discarded there. It is still a
+third party that receives a request from every visitor before anyone has
+answered the cookie question, so the banner and the privacy policy name it
+in all three languages. `scripts/check-consent.ts` checks that the policy
+still does, and that the site does not add the beacon a second time.
+
+Two ways to change that, both of them the site owner's call:
+
+- **Turn the automatic setup off** in the Cloudflare dashboard, under Web
+  Analytics. The beacon stops running, and the text in the banner and in
+  the privacy policy has to be removed in all three languages, or the gate
+  fails. The site could then load the beacon by hand after the cookie
+  question is answered, which keeps the numbers and puts the request behind
+  the same answer as everything else.
+- **Leave it as it is.** The beacon sets no cookies, so the cookie question
+  does not cover it, and the policy says so plainly.
+
 ### The domain
 
 The site lives at **https://calccents.com**. The domain zone and the Pages

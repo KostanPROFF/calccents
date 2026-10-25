@@ -7,13 +7,17 @@
  * views. Neither one may be in the document before the reader has
  * answered the cookie question.
  *
- * The gate proves three things over the built output, where the mistake
+ * The gate proves five things over the built output, where the mistake
  * would actually ship:
  *
  *   1. the banner is on every page, and the way back to it is too
  *   2. both script URLs are present, so they can be loaded after consent
  *   3. neither one is loaded as a script tag, so nothing goes out before
  *      the answer
+ *   4. the site does not add the hosting provider's beacon itself, which
+ *      would count every page view twice
+ *   5. the privacy policy names that provider, because its analytics run
+ *      before the question and the policy has to say so
  *
  * The third point is the one that matters. A page that carries the
  * tracker in the head works exactly like a page without a consent banner,
@@ -67,6 +71,22 @@ const PENDING_MARKER = 'consent-granted';
  */
 const CRAWLER_MARKER = 'isCrawler';
 
+/**
+ * The hosting provider's own page analytics.
+ *
+ * Cloudflare adds a small beacon to every page it serves, before the
+ * reader has answered anything. It sets no cookies and stores nothing, so
+ * it is not part of the cookie question, but it is a third party that
+ * receives a request from every visitor, and the privacy policy has to say
+ * so. The gate therefore checks that the policy still names the provider.
+ *
+ * The other half of the check is that the site does not add the beacon
+ * itself: Cloudflare already injects it, and a second copy would count
+ * every page view twice.
+ */
+const HOSTING_MARKER = 'Cloudflare';
+const HOSTING_BEACON = 'static.cloudflareinsights.com';
+
 function collectFiles(dir: string, extensions: string[]): string[] {
   const found: string[] = [];
   let entries: string[];
@@ -104,6 +124,22 @@ let pagesWithStaticTracker = 0;
 let pagesWithoutCrawlerException = 0;
 const staticExamples: string[] = [];
 
+/**
+ * A script tag that loads the hosting provider's beacon.
+ *
+ * Cloudflare injects this one at the edge, so it never appears in the
+ * built output. If it does appear, the site is adding a second copy and
+ * every page view would be counted twice.
+ */
+const HOSTING_TAG = new RegExp(
+  `<script[^>]*src=["'][^"']*${HOSTING_BEACON.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}`,
+  'i',
+);
+
+let pagesWithHostingTag = 0;
+let privacyPages = 0;
+let privacyPagesWithoutHosting = 0;
+
 for (const file of htmlFiles) {
   const html = readFileSync(file, 'utf8');
   const rel = relative(DIST, file);
@@ -119,6 +155,15 @@ for (const file of htmlFiles) {
   if (staticTag) {
     pagesWithStaticTracker += 1;
     if (staticExamples.length < 3) staticExamples.push(rel);
+  }
+
+  if (HOSTING_TAG.test(html)) {
+    pagesWithHostingTag += 1;
+  }
+
+  if (rel.replace(/\\/g, '/').endsWith('privacy/index.html')) {
+    privacyPages += 1;
+    if (!html.includes(HOSTING_MARKER)) privacyPagesWithoutHosting += 1;
   }
 }
 
@@ -164,6 +209,20 @@ if (pagesWithoutCrawlerException > 0) {
       'to Google\'s crawler, so the advertising review sees a site with no advertising on it',
   );
 }
+if (pagesWithHostingTag > 0) {
+  problems.push(
+    `${pagesWithHostingTag} of ${htmlFiles.length} pages add the hosting provider's beacon ` +
+      'as a script tag, and Cloudflare already injects it, so every page view would be counted twice',
+  );
+}
+if (privacyPagesWithoutHosting > 0) {
+  problems.push(
+    `${privacyPagesWithoutHosting} of ${privacyPages} privacy pages do not name the hosting ` +
+      'provider. Its page analytics run before the cookie question on every visit, so the policy ' +
+      'has to say so. If the automatic setup was turned off in Cloudflare, the text has to be ' +
+      'updated instead.',
+  );
+}
 
 if (problems.length > 0) {
   console.error('Consent gating check failed:\n');
@@ -176,5 +235,6 @@ if (problems.length > 0) {
 console.log(
   `Consent gating check passed: ${htmlFiles.length} pages carry the banner, ` +
     `both trackers are loaded only after the answer, the ad units stay hidden until then, ` +
-    `and Google's crawler is served the ad script directly.`,
+    `Google's crawler is served the ad script directly, and the privacy policy names the ` +
+    `hosting provider whose page analytics run before the question.`,
 );

@@ -19,7 +19,7 @@ export const es = {
 
   consent: {
     heading: 'Cookies',
-    body: 'Este sitio usa cookies para servir publicidad y para contar qué páginas se leen. Puedes aceptarlas o rechazarlas, y puedes cambiar tu decisión más tarde desde el pie de página. Qué se recoge y quién lo proporciona está en la {privacyLink}.',
+    body: 'Este sitio usa cookies para servir publicidad y para contar qué páginas se leen. Puedes aceptarlas o rechazarlas, y puedes cambiar tu decisión más tarde desde el pie de página. Por separado, el proveedor de alojamiento mide la velocidad de carga de las páginas con un script que no pone cookies ni guarda nada en tu navegador, así que no forma parte de esta decisión. Qué se recoge y quién lo proporciona está en la {privacyLink}.',
     privacyLink: 'página de privacidad',
     accept: 'Aceptar',
     reject: 'Rechazar',
@@ -434,7 +434,7 @@ export const es = {
       'Nada. La aritmética se ejecuta en tu navegador con JavaScript que se descarga junto con la página. Los valores que introduces no se transmiten a ninguna parte, no se almacenan y no son visibles ni para el sitio ni para nadie más. Al cerrar la pestaña se descartan.',
     cookiesHeading: 'Cookies',
     cookiesBody:
-      '{name} no instala cookies propias. La analítica del sitio funciona con Google Analytics 4, que Google sirve desde sus propios dominios y que guarda en tu navegador un identificador de primera parte para distinguir una visita de otra. Ese identificador no se usa para publicidad ni se comparte con otros sitios.',
+      '{name} no instala cookies propias. La analítica del propio sitio funciona con Google Analytics 4, que Google sirve desde sus propios dominios y que guarda en tu navegador un identificador de primera parte para distinguir una visita de otra. Ese identificador no se usa para publicidad ni se comparte con otros sitios. La analítica del proveedor de alojamiento no guarda nada en tu navegador: ni cookies, ni almacenamiento local, ni identificador de ningún tipo.',
     advertisingHeading: 'Publicidad',
     advertisingBody:
       'El sitio se financia con publicidad gráfica servida por Google AdSense. Google y sus socios pueden instalar cookies o usar tecnologías similares para servir y medir la publicidad, y pueden usarlas para mostrar anuncios según tus visitas anteriores a este u otros sitios web. Puedes revisar y cambiar tus preferencias en {adsSettingsLink}, y la explicación de Google sobre cómo usa los datos de los sitios y las aplicaciones que usan sus servicios está en {policiesLink}.',
@@ -443,13 +443,16 @@ export const es = {
     analyticsPoliciesLink: 'policies.google.com',
     analyticsHeading: 'Analítica',
     analyticsBody:
-      'Las vistas de página se registran con Google Analytics 4, que Google sirve desde googletagmanager.com. Los datos usados se limitan a la página, la fuente de referencia y una ubicación aproximada a nivel de país o ciudad; la dirección IP se trunca en lugar de guardarse entera. Sirven para contar visitas y para saber qué páginas se leen. La explicación de Google sobre cómo usa los datos de los sitios y las aplicaciones que usan sus servicios está en {analyticsPoliciesLink}.',
+      'Las vistas de página se registran con Google Analytics 4, que Google sirve desde googletagmanager.com. Los datos usados se limitan a la página, la fuente de referencia y una ubicación aproximada a nivel de país o ciudad; la dirección IP se trunca en lugar de guardarse entera. Sirven para contar visitas y para saber qué páginas se leen. La explicación de Google sobre cómo usa los datos de los sitios y las aplicaciones que usan sus servicios está en {analyticsPoliciesLink}. El script se carga solo después de que aceptes las cookies.',
+    hostingAnalyticsHeading: 'Alojamiento y velocidad de las páginas',
+    hostingAnalyticsBody:
+      'El sitio está alojado en Cloudflare, y la propia analítica de Cloudflare, Web Analytics, funciona en cada página. Un script pequeño que se sirve desde static.cloudflareinsights.com mide la vista de página: qué página se abrió, de dónde llegó la visita, qué navegador y sistema operativo se usaron, de qué país llegó la petición y cuánto tardó la página en cargar. La dirección IP se usa en el borde de Cloudflare para saber el país y allí se descarta, no se guarda. El script no pone cookies, no escribe nada en el almacenamiento local y no crea ningún identificador que pueda seguirte de una página a otra. Lo que sale de él es un recuento de vistas y visitas y una medida de lo rápido que cargan las páginas.',
     newsletterHeading: 'Boletín',
     newsletterBody:
       'Si te suscribes al boletín, la dirección que introduces la almacena el proveedor de correo para poder enviar el boletín. Esa dirección se usa para el boletín y para nada más, y cada número incluye un enlace para cancelar la suscripción.',
     contactHeading: 'El formulario de contacto',
     contactBody:
-      'Si escribes un mensaje a través del formulario de contacto, el nombre, la dirección de correo, el asunto y el mensaje se envían por correo a quien lleva el sitio, y quedan en ese buzón. El formulario se sirve desde este sitio y la respuesta va a la dirección que escribiste, para que puedas seguir la conversación. El formulario no envía nada a Google ni pone cookies propias; los scripts de publicidad y de analítica que se describen arriba pertenecen a la página entera y se cargan solo si aceptaste las cookies. Nada de lo que escribes queda guardado en el sitio, y el mensaje no se entrega a nadie más.',
+      'Si escribes un mensaje a través del formulario de contacto, el nombre, la dirección de correo, el asunto y el mensaje se envían por correo a quien lleva el sitio, y quedan en ese buzón. El formulario se sirve desde este sitio y la respuesta va a la dirección que escribiste, para que puedas seguir la conversación. El formulario no envía nada a Google ni pone cookies propias; los scripts de publicidad y el script de Google Analytics que se describen arriba pertenecen a la página entera y se cargan solo si aceptaste las cookies, mientras que la analítica sin cookies del proveedor de alojamiento funciona igual en los dos casos. Nada de lo que escribes queda guardado en el sitio, y el mensaje no se entrega a nadie más.',
     thirdPartyHeading: 'Enlaces de terceros',
     thirdPartyBody:
       'Las guías enlazan con fuentes primarias: organismos públicos, la SEC, la Reserva Federal. Esos sitios tienen sus propias políticas de privacidad, que este sitio no controla ni ha leído en tu nombre.',
@@ -458,7 +461,7 @@ export const es = {
       'Si los proveedores de arriba cambian, esta página cambia con ellos. La fecha al pie de la página es la fecha en que se revisó este texto por última vez.',
     consentHeading: 'Tu elección',
     consentBody:
-      'No se carga nada de Google hasta que respondes. Si aceptas, se cargan los scripts de publicidad y de analítica y la respuesta queda guardada en tu navegador; si rechazas, el sitio funciona exactamente igual y no se carga nada. El enlace {settingsLink} del pie de página vuelve a abrir la pregunta. Una excepción: el propio rastreador de Google, que comprueba si el sitio lleva publicidad, recibe el script de publicidad directamente, porque no puede responder la pregunta. No se registra ninguna elección para él y no se guarda nada sobre él.',
+      'No se carga nada de Google hasta que respondes. Si aceptas, se cargan los scripts de publicidad y de analítica y la respuesta queda guardada en tu navegador; si rechazas, el sitio funciona exactamente igual y no se carga nada. El enlace {settingsLink} del pie de página vuelve a abrir la pregunta. Una excepción: el propio rastreador de Google, que comprueba si el sitio lleva publicidad, recibe el script de publicidad directamente, porque no puede responder la pregunta. No se registra ninguna elección para él y no se guarda nada sobre él. Un script funciona antes de la pregunta y da igual la respuesta: la analítica sin cookies del proveedor de alojamiento que se describe arriba. No guarda nada en tu navegador, y la respuesta que des aquí no la cambia.',
     lastReviewed: 'Última revisión: {date}.',
   },
 
