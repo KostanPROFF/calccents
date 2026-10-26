@@ -75,6 +75,11 @@ async function findZone() {
 
 /**
  * The rule this script owns: www to the apex, with the query string kept.
+ *
+ * The source and the target go in action_parameters.from and
+ * action_parameters.to, which is the shape a redirect rule carries when it
+ * is read back from a zone. The expression on the rule says what the rule
+ * matches, and the ruleset engine wants an expression on every rule.
  */
 function buildRule() {
   return {
@@ -83,14 +88,26 @@ function buildRule() {
     description: 'Send www to the apex domain',
     action: 'redirect',
     action_parameters: {
-      from_value: {
-        target_url: {
-          value: `https://${domain}`,
+      from: {
+        value: {
+          http_request: {
+            host: {
+              matches: `www.${domain}`,
+            },
+          },
         },
-        status_code: 301,
-        preserve_query_string: true,
       },
+      to: {
+        value: {
+          url: {
+            value: `https://${domain}`,
+          },
+        },
+      },
+      preserve_query_string: true,
+      status_code: 301,
     },
+    conditions: [],
   };
 }
 
