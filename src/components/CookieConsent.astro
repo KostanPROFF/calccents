@@ -26,6 +26,12 @@
  *               Google
  *   declined   nothing is loaded, the ad units are removed from the page
  *
+ * A reader in the European Union is an exception to the middle one: the
+ * hosting provider's beacon is not loaded for them at all, so that provider
+ * counts no page view of theirs. The country comes from the network the
+ * site is served from, the same place the calculators ask for the state, and
+ * the question goes to this site rather than to a third party.
+ *
  * The banner can be opened again from the footer, so a reader who changes
  * their mind is not stuck with the first answer.
  *
@@ -41,6 +47,7 @@
 import { SITE } from '../config/site.ts';
 import { getUi } from '../i18n/ui/index.ts';
 import { localePath, type Locale } from '../i18n/locales.ts';
+import { EU_COUNTRIES } from '../lib/data/euCountries.ts';
 
 interface Props {
   locale: Locale;
@@ -78,6 +85,9 @@ const bootstrap = `(function () {
   var CLOUDFLARE_URL = '${cloudflareUrl}';
   var CLOUDFLARE_TOKEN = '${cloudflareToken}';
   var BEACON_HOST = 'static.cloudflareinsights.com';
+  var EU_COUNTRIES = ${JSON.stringify(EU_COUNTRIES)};
+  var REGION_URL = '/api/region';
+  var REGION_KEY = 'cc-region';
   var beaconObserver = null;
 
   // The beacon Cloudflare adds by itself is taken out of the document
@@ -151,6 +161,52 @@ const bootstrap = `(function () {
   }
 
   /*
+   * The country of the reader.
+   *
+   * The hosting provider's own dashboard can be told not to count visitors
+   * from the European Union, but that setting only covers the beacon the
+   * edge adds to every page it serves. This site loads the beacon itself,
+   * after the answer, so the country is asked for here and the beacon is
+   * left out for a reader in the EU.
+   *
+   * The answer is kept for the session, so it is asked for once. Nothing
+   * leaves the browser: the question goes to this site, and the country
+   * comes back from the network the site is served from.
+   */
+  function readCountry() {
+    try {
+      var cached = window.sessionStorage.getItem(REGION_KEY);
+      if (cached) { return Promise.resolve(cached); }
+    } catch (error) { /* private mode */ }
+
+    return fetch(REGION_URL, { headers: { accept: 'application/json' } })
+      .then(function (response) { return response.json(); })
+      .then(function (data) {
+        var country = data && data.country ? String(data.country).toUpperCase() : '';
+        try {
+          window.sessionStorage.setItem(REGION_KEY, country);
+        } catch (error) { /* private mode */ }
+        return country;
+      });
+  }
+
+  function loadHostingAnalyticsWhenKnown() {
+    if (typeof window.fetch !== 'function' || typeof window.Promise !== 'function') {
+      loadHostingAnalytics();
+      return;
+    }
+    readCountry().then(function (country) {
+      // A reader in the European Union is not counted at all.
+      if (country && EU_COUNTRIES.indexOf(country) !== -1) { return; }
+      loadHostingAnalytics();
+    }).catch(function () {
+      // The country could not be read. The reader answered the question, so
+      // the beacon is loaded as it was before.
+      loadHostingAnalytics();
+    });
+  }
+
+  /*
    * The beacon Cloudflare adds by itself.
    *
    * Cloudflare adds a beacon to every page it serves, unless the automatic
@@ -195,7 +251,7 @@ const bootstrap = `(function () {
     document.documentElement.classList.add('consent-granted');
     loadAnalytics();
     loadAds();
-    loadHostingAnalytics();
+    loadHostingAnalyticsWhenKnown();
   }
 
   function deny() {

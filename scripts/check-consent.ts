@@ -32,6 +32,8 @@ import { readdirSync, readFileSync, statSync } from 'node:fs';
 import { join, relative } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
+import { EU_COUNTRIES, isEuCountry } from '../src/lib/data/euCountries.ts';
+
 const ROOT = fileURLToPath(new URL('..', import.meta.url)).replace(/\/$/, '');
 const DIST = join(ROOT, 'dist');
 
@@ -120,6 +122,33 @@ const HOSTING_SUPPRESSION_MARKER = 'suppressInjectedBeacon';
  */
 const HOSTING_BEACON_VERSION_MARKER = 'version: CLOUDFLARE_VERSION';
 
+/**
+ * The exclusion of readers in the European Union.
+ *
+ * The hosting provider's dashboard can be told not to count visitors from
+ * the European Union, but that setting only covers the beacon the edge adds
+ * to every page it serves. This site loads the beacon itself, so the country
+ * is asked for and the beacon is left out for a reader in the EU.
+ *
+ * Two things have to stay in place: the branch in the bootstrap that does
+ * it, and the sentence in the privacy policy that tells the reader. The
+ * words of that sentence differ in the three languages, so the gate
+ * accepts any of the three.
+ */
+const EU_EXCLUSION_MARKER = 'loadHostingAnalyticsWhenKnown';
+const EU_POLICY_MARKERS = ['European Union', 'Европейского союза', 'Unión Europea'];
+
+/**
+ * The list of the member states, as it goes into the page.
+ *
+ * The bootstrap is handed the list, and the page has to carry all of it: a
+ * list that lost a country would quietly let a reader in that country be
+ * counted. The list also has to be the list of the member states and not
+ * something longer, because a country that is not a member state is not
+ * covered by the promise the policy makes.
+ */
+const EU_LIST_MARKER = JSON.stringify(EU_COUNTRIES);
+
 function collectFiles(dir: string, extensions: string[]): string[] {
   const found: string[] = [];
   let entries: string[];
@@ -173,8 +202,11 @@ const HOSTING_TAG = new RegExp(
 
 let pagesWithHostingTag = 0;
 let pagesWithBeaconVersion = 0;
+let pagesWithoutEuExclusion = 0;
+let pagesWithoutEuList = 0;
 let privacyPages = 0;
 let privacyPagesWithoutHosting = 0;
+let privacyPagesWithoutEu = 0;
 
 for (const file of htmlFiles) {
   const html = readFileSync(file, 'utf8');
@@ -203,9 +235,20 @@ for (const file of htmlFiles) {
     pagesWithBeaconVersion += 1;
   }
 
+  if (!html.includes(EU_EXCLUSION_MARKER)) {
+    pagesWithoutEuExclusion += 1;
+  }
+
+  if (!html.includes(EU_LIST_MARKER)) {
+    pagesWithoutEuList += 1;
+  }
+
   if (rel.replace(/\\/g, '/').endsWith('privacy/index.html')) {
     privacyPages += 1;
     if (!html.includes(HOSTING_MARKER)) privacyPagesWithoutHosting += 1;
+    if (!EU_POLICY_MARKERS.some((marker) => html.includes(marker))) {
+      privacyPagesWithoutEu += 1;
+    }
   }
 }
 
@@ -282,6 +325,37 @@ if (privacyPagesWithoutHosting > 0) {
       'provider. Its page analytics run on every visit, so the policy has to say so.',
   );
 }
+if (pagesWithoutEuExclusion > 0) {
+  problems.push(
+    `${pagesWithoutEuExclusion} of ${htmlFiles.length} pages do not leave the hosting ` +
+      "provider's beacon out for a reader in the European Union",
+  );
+}
+if (privacyPagesWithoutEu > 0) {
+  problems.push(
+    `${privacyPagesWithoutEu} of ${privacyPages} privacy pages do not say that a reader in ` +
+      'the European Union is not counted by the hosting provider',
+  );
+}
+if (pagesWithoutEuList > 0) {
+  problems.push(
+    `${pagesWithoutEuList} of ${htmlFiles.length} pages do not carry the whole list of the ` +
+      'member states of the European Union, so a reader in a country that fell off the list ' +
+      'would be counted',
+  );
+}
+if (
+  EU_COUNTRIES.length !== 27 ||
+  !isEuCountry('DE') ||
+  !isEuCountry('FR') ||
+  isEuCountry('US') ||
+  isEuCountry('GB')
+) {
+  problems.push(
+    'the list of the member states of the European Union is not the list of twenty-seven ' +
+      'member states, so the promise the policy makes is not the one the code keeps',
+  );
+}
 
 if (problems.length > 0) {
   console.error('Consent gating check failed:\n');
@@ -294,6 +368,7 @@ if (problems.length > 0) {
 console.log(
   `Consent gating check passed: ${htmlFiles.length} pages carry the banner, ` +
     `all three trackers are loaded only after the answer, the ad units stay hidden until then, ` +
-    `Google's crawler is served the ad script directly, and the privacy policy names the ` +
-    `hosting provider whose page analytics run on every visit.`,
+    `Google's crawler is served the ad script directly, the hosting provider's beacon is left ` +
+    `out for a reader in the European Union, and the privacy policy names the hosting provider ` +
+    `whose page analytics run on every visit.`,
 );
