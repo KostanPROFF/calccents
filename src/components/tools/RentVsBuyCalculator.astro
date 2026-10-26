@@ -28,6 +28,8 @@ const copy = ui.tool['rent-vs-buy'];
   novalidate
   data-not-within-horizon={copy.script.notWithinHorizon}
   data-month-label={copy.script.month}
+  data-property-tax-detected={copy.script.propertyTaxDetected}
+  data-detected-from-ip={ui.ui.detectedFromIp}
 >
   <p class="eyebrow" style="color: var(--text-muted);">{copy.sections.theHome}</p>
   <div class="input-group">
@@ -105,17 +107,18 @@ const copy = ui.tool['rent-vs-buy'];
     {copy.sections.runningCosts}
   </p>
   <div class="input-group">
-    <label class="field" for="rb-tax-percent">
-      <span class="field__label">
+    <div class="field">
+      <label class="field__label" for="rb-tax-percent">
         {copy.fields.propertyTax}
         <span class="field__hint">{copy.fields.percentOfPricePerYear}</span>
-      </span>
+      </label>
       <span class="field__control">
         <input class="input" id="rb-tax-percent" type="number" inputmode="decimal"
           step="0.01" min="0" max="10" value="1.1" />
         <span class="field__suffix" aria-hidden="true">%</span>
       </span>
-    </label>
+      <p class="field__note" id="rb-tax-note" role="status" hidden></p>
+    </div>
     <label class="field" for="rb-insurance">
       <span class="field__label">
         {copy.fields.homeInsurance}
@@ -247,9 +250,12 @@ const copy = ui.tool['rent-vs-buy'];
 
 <script>
   import { compareRentAndBuy } from '../../lib/calc/rentVsBuy.ts';
+  import { statePropertyTaxRate } from '../../lib/calc/stateTax.ts';
   import { formatCurrency } from '../../lib/calc/money.ts';
   import { numberValue, setText } from '../../lib/client/dom.ts';
   import { renderChart } from '../../lib/client/chartView.ts';
+  import { detectState, type DetectedState } from '../../lib/client/statePrefill.ts';
+  import { fillTemplate } from '../../lib/client/text.ts';
 
   const copy = document.getElementById('rent-buy-form')?.dataset;
   const ids = [
@@ -268,6 +274,31 @@ const copy = ui.tool['rent-vs-buy'];
     'rb-closing',
     'rb-selling',
   ];
+
+  /*
+    The state the request came from, when the network can work it out, and
+    whether the reader has typed a rate of their own since.
+  */
+  let detected: DetectedState | null = null;
+  let propertyTaxEdited = false;
+
+  function showStateNote(): void {
+    const note = document.getElementById('rb-tax-note');
+    if (!note || !detected || !copy?.propertyTaxDetected) return;
+
+    /*
+      A rate the reader typed is their own, so the sentence that says the
+      field was filled in no longer applies. The disclosure stays: the state
+      was read from the request either way.
+    */
+    const disclosure = copy.detectedFromIp ?? '';
+    const text = propertyTaxEdited
+      ? disclosure
+      : `${fillTemplate(copy.propertyTaxDetected, { state: detected.name })} ${disclosure}`.trim();
+
+    note.textContent = text;
+    note.hidden = text.length === 0;
+  }
 
   function recalculate(): void {
     const homePrice = Math.max(0, numberValue('rb-home-price'));
@@ -340,9 +371,38 @@ const copy = ui.tool['rent-vs-buy'];
     });
   }
 
+  /*
+    A rate the reader types is theirs: the page stops filling the field from
+    that moment. The listener is registered before the recalculation one, so
+    the flag is already set when the recalculation runs.
+  */
+  document.getElementById('rb-tax-percent')?.addEventListener('input', () => {
+    propertyTaxEdited = true;
+    showStateNote();
+  });
+
   for (const id of ids) {
     document.getElementById(id)?.addEventListener('input', recalculate);
     document.getElementById(id)?.addEventListener('change', recalculate);
   }
   recalculate();
+
+  /*
+    The state comes from the edge, so it arrives after the first render. The
+    page works without it, and so does the reader who is not in the United
+    States or whose request the network cannot place.
+  */
+  detectState().then((state) => {
+    if (!state) return;
+    detected = state;
+
+    if (!propertyTaxEdited) {
+      const rate = statePropertyTaxRate(state.code);
+      const input = document.getElementById('rb-tax-percent') as HTMLInputElement | null;
+      if (rate !== null && input) input.value = String(rate);
+    }
+
+    showStateNote();
+    recalculate();
+  });
 </script>

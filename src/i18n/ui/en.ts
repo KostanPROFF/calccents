@@ -114,6 +114,13 @@ export const en = {
     switchTheme: 'Switch theme',
     switchToLight: 'Switch to light theme',
     switchToDark: 'Switch to dark theme',
+    /*
+      Shown under a field the site filled in from the region the request came
+      from. The state is a default, not a fact about the reader, and the
+      sentence says so.
+    */
+    detectedFromIp:
+      'The state is detected from your IP address and is approximate: a VPN, a proxy or a mobile network can point it at the wrong state. The rate stays editable.',
   },
 
   newsletter: {
@@ -351,6 +358,10 @@ export const en = {
         label: 'Market rates',
         body: 'come from the survey that publishes them, and they are dated on the page, because a rate from a different month is a different number.',
       },
+      {
+        label: 'State figures',
+        body: 'come from the Tax Foundation, which compiles the income tax brackets from the statutes and the forms of each state, and the property tax rates from the American Community Survey it publishes.',
+      },
     ],
     sources: [
       {
@@ -396,6 +407,14 @@ export const en = {
       {
         label: 'Bureau of Labor Statistics — CPI calculator and data tables',
         url: 'https://www.bls.gov/data/',
+      },
+      {
+        label: 'Tax Foundation — State Individual Income Tax Rates and Brackets, 2026',
+        url: 'https://taxfoundation.org/data/all/state/state-income-tax-rates-2026/',
+      },
+      {
+        label: 'Tax Foundation — Property Taxes by State and County, 2026',
+        url: 'https://taxfoundation.org/data/all/state/property-taxes-by-state-county/',
       },
     ],
   },
@@ -467,6 +486,9 @@ export const en = {
     calculatorsHeading: 'What the calculators do with your input',
     calculatorsBody:
       'Nothing. The arithmetic runs in your browser using JavaScript that is downloaded with the page. The values you enter are not transmitted anywhere, are not stored, and are not visible to the site or to anyone else. Closing the tab discards them.',
+    stateHeading: 'Your state',
+    stateBody:
+      'Two of the calculators need a state figure: the federal income tax calculator, which adds a state income tax on top of the federal one, and the rent versus buy calculator, which carries a property tax on the cost of owning a home. When one of those pages opens, it asks this site which state the request came from. The answer comes from the network the site is served from, which reads the state from the address of the request, and it is used to fill in one field. Nothing else happens with it: the answer is not stored, not written to a cookie, and not sent to Google or to the hosting provider\'s page analytics. The state is approximate — a VPN, a proxy or a mobile network can point it at the wrong state — and the field it fills can be changed or cleared, in which case the page keeps the rate you typed.',
     cookiesHeading: 'Cookies',
     cookiesBody:
       '{name} sets no cookies of its own. The site\'s own analytics run on Google Analytics 4, which Google serves from its own domains and which stores a first-party identifier in your browser so that one visit can be told from the next. That identifier is not used for advertising and is not shared with other sites. The hosting provider\'s page analytics store nothing in your browser: no cookie, no local storage, no identifier of any kind.',
@@ -496,7 +518,7 @@ export const en = {
       'If the providers above change, this page changes with them. The date at the bottom of the page is the date this text was last reviewed.',
     consentHeading: 'Your choice',
     consentBody:
-      'Nothing is loaded from Google or from the hosting provider until you answer. If you accept, the advertising and analytics scripts are loaded and the answer is remembered in your browser; if you decline, the site works exactly the same and nothing is loaded. The {settingsLink} link in the footer opens the question again. One exception: Google\'s own crawler, which checks whether the site carries advertising, is served the advertising script directly, because it cannot answer the question. No choice is recorded for it and nothing is stored about it.',
+      'Nothing is loaded from Google, and the hosting provider\'s page analytics stay off, until you answer. If you accept, the advertising and analytics scripts are loaded and the answer is remembered in your browser; if you decline, the site works exactly the same and nothing is loaded. The {settingsLink} link in the footer opens the question again. One exception: Google\'s own crawler, which checks whether the site carries advertising, is served the advertising script directly, because it cannot answer the question. No choice is recorded for it and nothing is stored about it. The state described above is read on two calculator pages and is not part of this choice: no cookie is set for it and nothing about it reaches an analytics provider.',
     lastReviewed: 'Last reviewed: {date}.',
   },
 
@@ -765,6 +787,7 @@ export const en = {
         'It does not price a specific loan. The mortgage rate you enter is the rate used; the page carries no live quotes and no lender information.',
         'It does not forecast home prices. The annual change in value you enter is applied month by month for the whole horizon, in both directions if you enter a negative number.',
         'It does not model the cost of moving out of a rented home. A deposit, an agent fee and moving costs sit outside the comparison on the renting side.',
+        'It does not use the rate of a particular county or city. The property tax rate the page can fill in is the average for the state, and property tax is set locally, so the rate in one jurisdiction is usually different from the rate in the next.',
       ],
       faq: [
         {
@@ -795,6 +818,10 @@ export const en = {
           q: 'Does this include the tax consequences of selling a home?',
           a: 'No. Any gain on the sale, and any exclusion that applies to it, is outside the scope of this tool. The comparison here is a cash and equity comparison, not a tax comparison.',
         },
+        {
+          q: 'Where does the property tax rate come from?',
+          a: 'It is an input. When the network can work out which state the request comes from, the page fills the field with the average effective property tax rate for that state, taken from the American Community Survey for 2024 and published by the Tax Foundation for 2026. Property tax is set by local governments, so the rate in a particular county or city is usually different from the state average, and the field stays editable.',
+        },
       ],
       sources: [
         {
@@ -813,6 +840,10 @@ export const en = {
           label: 'FRED — Home price index series used for long-run price movement',
           url: 'https://fred.stlouisfed.org/series/HPINUS',
         },
+        {
+          label: 'Tax Foundation — Property Taxes by State and County, 2026',
+          url: 'https://taxfoundation.org/data/all/state/property-taxes-by-state-county/',
+        },
       ],
       relatedGuides: [
         { slug: 'rent-vs-buy-calculator-explained', title: 'Rent vs buy calculator explained' },
@@ -824,6 +855,7 @@ export const en = {
       script: {
         notWithinHorizon: 'Not within the horizon',
         month: 'Month {n}',
+        propertyTaxDetected: 'Filled with {state}: the average effective property tax rate for the state.',
       },
     },
 
@@ -1101,6 +1133,10 @@ export const en = {
       category: 'Pay',
       methodNote:
         'The brackets and the standard deduction are the 2026 figures from Rev. Proc. 2025-32, published 3 November 2025. The payroll taxes that come out of a wage are not part of this calculation; they are in the take-home pay calculator.',
+      script: {
+        stateRateDetected: 'Filled with {state}: the 2026 rate for your bracket.',
+        stateRateNoTax: '{state} does not tax wages, so the rate is 0.',
+      },
       fields: {
         grossIncome: 'Gross income for the year',
         filingStatus: 'Filing status',
@@ -1160,7 +1196,7 @@ export const en = {
         'It does not model the capital gains and ordinary income distinction, so a year with investment income is calculated at the ordinary rates.',
         'It does not model the senior deduction, or any deduction outside the standard and itemised amounts entered on the left.',
         'It does not model self-employment tax, which is charged on the net earnings of a self-employed person and has its own base and rate.',
-        'The state figure is a rate the reader types in, applied to the whole of the taxable income. Most states tax in bands, so the real state tax is usually lower.',
+        'The state figure is a rate applied to the whole of the taxable income. The page fills it in with the rate for your bracket when the network can work out which state the request comes from, and the reader can change it. Most states tax in bands, so the real state tax is usually lower.',
       ],
       faq: [
         {
@@ -1181,7 +1217,7 @@ export const en = {
         },
         {
           q: 'What is the state tax figure?',
-          a: 'The rate entered on the left, applied to the taxable income. Most states tax in bands, so the true figure for a particular income is usually lower than this estimate.',
+          a: 'The rate applied to the taxable income. When the network can work out which state the request comes from, the page fills the field with the rate for your bracket for that state and follows your income and filing status until you type a rate of your own. Most states tax in bands, so the true figure for a particular income is usually lower than this estimate.',
         },
         {
           q: 'Is this the amount I will owe?',
@@ -1200,6 +1236,10 @@ export const en = {
         {
           label: 'IRS — Tax Topic 611, Income Tax',
           url: 'https://www.irs.gov/taxtopics/tc611',
+        },
+        {
+          label: 'Tax Foundation — State Individual Income Tax Rates and Brackets, 2026',
+          url: 'https://taxfoundation.org/data/all/state/state-income-tax-rates-2026/',
         },
       ],
       relatedGuides: [

@@ -20,9 +20,10 @@
     "lint:consent": "node scripts/check-consent.ts",
     "lint:contrast": "node scripts/check-contrast.ts",
     "lint:scoped": "node scripts/check-scoped-styles.ts",
+    "lint:state": "node scripts/check-state-data.ts",
     "lint:edge": "node scripts/check-edge-analytics.ts",
     "lint": "pnpm lint:advisory && pnpm lint:links",
-    "verify": "pnpm check && pnpm test && pnpm lint && pnpm build && pnpm lint:ads && pnpm lint:consent && pnpm lint:contrast && pnpm lint:scoped && pnpm lint:ids"
+    "verify": "pnpm check && pnpm test && pnpm lint && pnpm build && pnpm lint:ads && pnpm lint:consent && pnpm lint:contrast && pnpm lint:scoped && pnpm lint:state && pnpm lint:ids"
   },
   "dependencies": {
     "@astrojs/mdx": "8.1.0",

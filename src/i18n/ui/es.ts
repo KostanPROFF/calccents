@@ -88,6 +88,13 @@ export const es = {
     switchTheme: 'Cambiar el tema',
     switchToLight: 'Cambiar al tema claro',
     switchToDark: 'Cambiar al tema oscuro',
+    /*
+      Se muestra bajo un campo que el sitio rellenó a partir de la región de
+      la que procede la petición. El estado es un valor por defecto, no un
+      hecho sobre quien lee, y la frase lo dice.
+    */
+    detectedFromIp:
+      'El estado se detecta a partir de tu dirección IP y es aproximado: una VPN, un proxy o una red móvil pueden señalarlo al estado equivocado. El tipo se puede seguir editando.',
   },
 
   newsletter: {
@@ -316,6 +323,10 @@ export const es = {
         label: 'Tipos de mercado',
         body: 'provienen de la encuesta que los publica, y la página lleva su fecha, porque un tipo de otro mes es otra cifra.',
       },
+      {
+        label: 'Cifras por estado',
+        body: 'provienen de la Tax Foundation, que compila los brackets del impuesto sobre la renta a partir de las leyes y los formularios de cada estado, y los tipos del impuesto sobre la propiedad a partir de la American Community Survey que publica.',
+      },
     ],
     sources: [
       {
@@ -361,6 +372,14 @@ export const es = {
       {
         label: 'Bureau of Labor Statistics — calculadora del IPC y tablas de datos',
         url: 'https://www.bls.gov/data/',
+      },
+      {
+        label: 'Tax Foundation — tipos del impuesto sobre la renta por estado, 2026',
+        url: 'https://taxfoundation.org/data/all/state/state-income-tax-rates-2026/',
+      },
+      {
+        label: 'Tax Foundation — impuestos sobre la propiedad por estado y condado, 2026',
+        url: 'https://taxfoundation.org/data/all/state/property-taxes-by-state-county/',
       },
     ],
   },
@@ -432,6 +451,9 @@ export const es = {
     calculatorsHeading: 'Qué hacen las calculadoras con los datos que introduces',
     calculatorsBody:
       'Nada. La aritmética se ejecuta en tu navegador con JavaScript que se descarga junto con la página. Los valores que introduces no se transmiten a ninguna parte, no se almacenan y no son visibles ni para el sitio ni para nadie más. Al cerrar la pestaña se descartan.',
+    stateHeading: 'Tu estado',
+    stateBody:
+      'Dos de las calculadoras necesitan una cifra por estado: la calculadora del impuesto federal sobre la renta, que suma un impuesto estatal al federal, y la calculadora de alquiler frente a compra, que lleva un impuesto sobre la propiedad dentro del coste de ser propietario de una vivienda. Cuando se abre una de esas páginas, le pregunta a este sitio de qué estado procede la petición. La respuesta viene de la red que sirve el sitio, que lee el estado a partir de la dirección de la petición, y se usa para rellenar un campo. No ocurre nada más con ella: la respuesta no se almacena, no se escribe en una cookie y no se envía a Google ni a las analíticas del proveedor de alojamiento. El estado es aproximado: una VPN, un proxy o una red móvil pueden señalarlo al estado equivocado, y el campo que rellena se puede cambiar o vaciar, en cuyo caso la página conserva el tipo que escribiste.',
     cookiesHeading: 'Cookies',
     cookiesBody:
       '{name} no instala cookies propias. La analítica del propio sitio funciona con Google Analytics 4, que Google sirve desde sus propios dominios y que guarda en tu navegador un identificador de primera parte para distinguir una visita de otra. Ese identificador no se usa para publicidad ni se comparte con otros sitios. La analítica del proveedor de alojamiento no guarda nada en tu navegador: ni cookies, ni almacenamiento local, ni identificador de ningún tipo.',
@@ -461,7 +483,7 @@ export const es = {
       'Si los proveedores de arriba cambian, esta página cambia con ellos. La fecha al pie de la página es la fecha en que se revisó este texto por última vez.',
     consentHeading: 'Tu elección',
     consentBody:
-      'No se carga nada de Google ni del proveedor de alojamiento hasta que respondes. Si aceptas, se cargan los scripts de publicidad y de analítica y la respuesta queda guardada en tu navegador; si rechazas, el sitio funciona exactamente igual y no se carga nada. El enlace {settingsLink} del pie de página vuelve a abrir la pregunta. Una excepción: el propio rastreador de Google, que comprueba si el sitio lleva publicidad, recibe el script de publicidad directamente, porque no puede responder la pregunta. No se registra ninguna elección para él y no se guarda nada sobre él.',
+      'Hasta que respondas no se carga nada de Google, y las analíticas de página del proveedor de alojamiento siguen apagadas. Si aceptas, se cargan los scripts de publicidad y de analítica y la respuesta queda guardada en tu navegador; si rechazas, el sitio funciona exactamente igual y no se carga nada. El enlace {settingsLink} del pie de página vuelve a abrir la pregunta. Una excepción: el propio rastreador de Google, que comprueba si el sitio lleva publicidad, recibe el script de publicidad directamente, porque no puede responder la pregunta. No se registra ninguna elección para él y no se guarda nada sobre él. El estado descrito arriba se lee en dos páginas de calculadoras y no forma parte de esta elección: no se le pone ninguna cookie y nada sobre él llega a un proveedor de analítica.',
     lastReviewed: 'Última revisión: {date}.',
   },
 
@@ -729,6 +751,7 @@ export const es = {
         'No cotiza un préstamo concreto. El tipo de interés que introduces es el tipo que se usa; la página no lleva cotizaciones en vivo ni información de entidades prestamistas.',
         'No pronostica los precios de la vivienda. La variación anual del valor que introduces se aplica mes a mes durante todo el horizonte, en ambos sentidos si introduces un número negativo.',
         'No modela el coste de salir de una vivienda alquilada. La fianza, la comisión de la agencia y la mudanza quedan fuera de la comparación en el lado del alquiler.',
+        'No usa el tipo de un condado o una ciudad concretos. El tipo del impuesto sobre la propiedad que la página puede rellenar es la media del estado, y el impuesto sobre la propiedad se fija localmente, así que el tipo en una jurisdicción suele ser distinto del tipo en la siguiente.',
       ],
       faq: [
         {
@@ -759,6 +782,10 @@ export const es = {
           q: '¿Esto incluye las consecuencias fiscales de vender una vivienda?',
           a: 'No. Cualquier ganancia por la venta, y cualquier exclusión que le aplique, queda fuera del alcance de esta herramienta. La comparación de aquí es de efectivo y patrimonio, no fiscal.',
         },
+        {
+          q: '¿De dónde sale el tipo del impuesto sobre la propiedad?',
+          a: 'Es un dato de entrada. Cuando la red puede averiguar de qué estado procede la petición, la página rellena el campo con el tipo medio efectivo del impuesto sobre la propiedad de ese estado, tomado de la American Community Survey de 2024 y publicado por la Tax Foundation en 2026. El impuesto sobre la propiedad lo fijan las administraciones locales, así que el tipo en un condado o una ciudad concretos suele ser distinto de la media del estado, y el campo se puede seguir editando.',
+        },
       ],
       sources: [
         {
@@ -777,6 +804,10 @@ export const es = {
           label: 'FRED — Series del índice de precios de la vivienda usadas para el movimiento de precios a largo plazo',
           url: 'https://fred.stlouisfed.org/series/HPINUS',
         },
+        {
+          label: 'Tax Foundation — impuestos sobre la propiedad por estado y condado, 2026',
+          url: 'https://taxfoundation.org/data/all/state/property-taxes-by-state-county/',
+        },
       ],
       relatedGuides: [
         { slug: 'rent-vs-buy-calculator-explained', title: 'Calculadora de alquiler o compra explicada' },
@@ -788,6 +819,7 @@ export const es = {
       script: {
         notWithinHorizon: 'Fuera del horizonte',
         month: 'Mes {n}',
+        propertyTaxDetected: 'Relleno con {state}: el tipo medio efectivo del impuesto sobre la propiedad del estado.',
       },
     },
 
@@ -1063,6 +1095,10 @@ export const es = {
       category: 'Impuestos',
       methodNote:
         'Los tramos y la deducción estándar son las cifras de 2026 de Rev. Proc. 2025-32, publicadas el 3 de noviembre de 2025. Las cargas sociales que se restan de un salario no forman parte de este cálculo; están en la calculadora de salario neto.',
+      script: {
+        stateRateDetected: 'Relleno con {state}: el tipo de 2026 para tu tramo.',
+        stateRateNoTax: '{state} no grava las rentas del trabajo, así que el tipo es 0.',
+      },
       fields: {
         grossIncome: 'Ingresos brutos del año',
         filingStatus: 'Situación fiscal',
@@ -1122,7 +1158,7 @@ export const es = {
         'No modela la diferencia entre las plusvalías y los ingresos ordinarios, así que un año con ingresos de inversión se calcula con los tipos ordinarios.',
         'No modela la deducción por edad ni ninguna deducción fuera de los importes estándar y detallado que se introducen a la izquierda.',
         'No modela el impuesto por trabajo autónomo, que se cobra sobre los ingresos netos de quien trabaja por cuenta propia y tiene su propia base y su propio tipo.',
-        'La cifra estatal es un tipo que introduces, aplicado a la totalidad de los ingresos gravables. La mayoría de los estados grava por tramos, así que el impuesto estatal real suele ser menor.',
+        'La cifra estatal es un tipo que se aplica a toda la renta imponible. La página lo rellena con el tipo de tu tramo cuando la red puede averiguar de qué estado procede la petición, y el lector puede cambiarlo. La mayoría de los estados grava por tramos, así que el impuesto estatal real suele ser menor.',
       ],
       faq: [
         {
@@ -1143,7 +1179,7 @@ export const es = {
         },
         {
           q: '¿Qué es la cifra del impuesto estatal?',
-          a: 'El tipo que se introduce a la izquierda, aplicado a los ingresos gravables. La mayoría de los estados grava por tramos, así que la cifra real para un ingreso concreto suele ser menor que esta estimación.',
+          a: 'El tipo que se aplica a la renta imponible. Cuando la red puede averiguar de qué estado procede la petición, la página rellena el campo con el tipo de tu tramo en ese estado y lo sigue mientras cambian tus ingresos y tu declaración, hasta que escribes un tipo propio. La mayoría de los estados grava por tramos, así que la cifra real para un ingreso concreto suele ser menor que esta estimación.',
         },
         {
           q: '¿Es esta la cantidad final?',
@@ -1162,6 +1198,10 @@ export const es = {
         {
           label: 'IRS — Tax Topic 611, Impuesto sobre la renta',
           url: 'https://www.irs.gov/taxtopics/tc611',
+        },
+        {
+          label: 'Tax Foundation — tipos del impuesto sobre la renta por estado, 2026',
+          url: 'https://taxfoundation.org/data/all/state/state-income-tax-rates-2026/',
         },
       ],
       relatedGuides: [

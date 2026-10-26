@@ -210,6 +210,21 @@ export function ficaTaxes(annualWages: number, status: FilingStatus): FicaTaxes 
 }
 
 /**
+ * The deduction actually used.
+ *
+ * The standard deduction applies unless the reader claims an itemised
+ * deduction larger than it, in which case the larger of the two is the one
+ * that applies. A taxpayer who itemises may still claim the standard
+ * deduction when it is the larger of the two.
+ */
+export function deductionApplied(itemisedDeduction: number, status: FilingStatus): number {
+  if (!Number.isFinite(itemisedDeduction) || itemisedDeduction <= 0) {
+    return standardDeduction(status);
+  }
+  return Math.max(itemisedDeduction, standardDeduction(status));
+}
+
+/**
  * Taxable income: gross income minus the deduction.
  *
  * A deduction of zero means the standard deduction for the filing status.
@@ -286,10 +301,7 @@ export function computeIncomeTax(input: IncomeTaxInput): IncomeTaxResult {
   // The deduction actually used. A taxpayer who itemises may still claim
   // the standard deduction when it is the larger of the two, so the
   // larger amount is the one that applies.
-  const deduction =
-    Number.isFinite(input.itemisedDeduction) && input.itemisedDeduction > 0
-      ? Math.max(input.itemisedDeduction, standardDeduction(input.filingStatus))
-      : standardDeduction(input.filingStatus);
+  const deduction = deductionApplied(input.itemisedDeduction, input.filingStatus);
 
   const taxable = taxableIncome(gross - preTax, input.filingStatus, deduction);
   const federalTax = federalIncomeTax(taxable, input.filingStatus);

@@ -1,6 +1,6 @@
 ---
 title: "Calculadora de impuesto sobre la renta 2026"
-description: "Cómo se construye el ingreso gravable desde el sueldo bruto, cómo funcionan las escalas federales de 2026 y qué significan la deducción estándar y los dos tipos de tasa."
+description: "Cómo se construye el ingreso gravable desde el sueldo bruto, cómo funcionan las escalas federales de 2026 y qué significan la deducción estándar, los dos tipos de tasa y el tipo estatal."
 locale: "es"
 date: 2026-10-23
 lastReviewed: 2026-10-23
@@ -16,6 +16,8 @@ sources:
     url: "https://www.irs.gov/taxtopics/tc505"
   - label: "IRS — Tax Topic 611, Income Tax"
     url: "https://www.irs.gov/taxtopics/tc611"
+  - label: "Tax Foundation — State Individual Income Tax Rates and Brackets, 2026"
+    url: "https://taxfoundation.org/data/all/state/state-income-tax-rates-2026/"
 relatedTools:
   - "income-tax"
 faq:
@@ -30,7 +32,7 @@ faq:
   - q: "¿Incluye la calculadora los créditos fiscales?"
     a: "No. No modela los créditos fiscales, el crédito por dependientes, las escalas de plusvalías ni la deducción para declarantes mayores. La cifra federal es el impuesto ordinario sobre la renta del ingreso gravable."
   - q: "¿Es exacta la cifra del impuesto estatal?"
-    a: "Es una estimación. El tipo es el que se introduce en la calculadora y se aplica a todo el ingreso gravable. En un estado de tipo plano es exacta, y en uno progresivo sobrestima el impuesto."
+    a: "Es una estimación. El tipo se aplica a todo el ingreso gravable, lo que es exacto en un estado de tipo plano y sobrestima el impuesto en uno progresivo. Cuando la red puede averiguar de qué estado procede la petición, la página rellena el campo con el tipo de tu tramo en ese estado y lo mantiene al día con tus ingresos y tu situación fiscal hasta que escribes un tipo propio."
   - q: "¿Incluye el Seguro Social y Medicare?"
     a: "No. Son impuestos sobre la nómina, retenidos del salario con sus propios tipos y sus propios topes, y van aparte del impuesto sobre la renta de las ganancias."
 ---
@@ -122,11 +124,34 @@ ahí termina el cálculo. No modela:
   para los declarantes de mayor edad no forma parte del cálculo.
 
 El impuesto estatal se maneja aparte y de forma deliberadamente sencilla. El
-tipo es el que introduce quien usa la página y se aplica a todo el ingreso
-gravable. La mayoría de los estados usa escalas progresivas, así que un único
-porcentaje sobre toda la base sobrestima el impuesto en un estado progresivo y
-es exacto en uno de tipo plano. La cifra estatal es una estimación que cambia
-con el tipo introducido.
+tipo se aplica a todo el ingreso gravable. La mayoría de los estados usa
+escalas progresivas, así que un único porcentaje sobre toda la base sobrestima
+el impuesto en un estado progresivo y es exacto en uno de tipo plano. La cifra
+estatal es una estimación que se mueve con el tipo introducido.
+
+## Cómo se encuentra el tipo estatal
+
+La calculadora puede rellenar el tipo estatal antes de que se escriba nada. La
+red que sirve el sitio sabe de dónde procede una petición, así que la página le
+pregunta en qué estado se encuentra quien visita, y la respuesta vuelve con
+los brackets marginales de ese estado para 2026: la tabla que compila la Tax
+Foundation a partir de las leyes y los formularios de cada estado.
+
+Lo que la página hace con esa respuesta es estrecho. Busca el tramo en el que
+cae el ingreso gravable, para el estado civil que está seleccionado, y pone en
+el campo el tipo de ese tramo. Cambia el ingreso y el tipo se mueve con él,
+porque el tramo se movió. Se escribe un tipo propio y la página deja de
+seguir, porque el tipo pasa a ser el que escribiste.
+
+De eso se siguen dos cosas, y las dos importan. La primera es que el estado es
+un valor por defecto y no un hecho sobre quien lee: una red privada virtual, un
+proxy corporativo o una red móvil pueden apuntar la respuesta al estado
+equivocado. La segunda es que el tipo es marginal mientras que el impuesto que
+produce no lo es. El tipo es con el que se grava el próximo dólar de ingreso, y
+se aplica a todo el ingreso gravable, así que el impuesto estatal del resultado
+suele ser mayor que el impuesto que el estado cobraría de verdad. Quien necesite
+que la cifra coincida con su propia declaración introduce el tipo de su propio
+tramo, que es el mismo número que la página habría puesto ahí.
 
 Los impuestos sobre la nómina tampoco entran en este cálculo. El Seguro Social
 y Medicare se retienen del salario con sus propios tipos y sus propios topes, y

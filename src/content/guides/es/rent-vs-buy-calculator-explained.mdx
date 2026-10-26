@@ -18,6 +18,8 @@ sources:
     url: "https://www.bls.gov/cpi/"
   - label: "FRED — Índice de precios de la vivienda en Estados Unidos"
     url: "https://fred.stlouisfed.org/series/HPINUS"
+  - label: "Tax Foundation — Property Taxes by State and County, 2026"
+    url: "https://taxfoundation.org/data/all/state/property-taxes-by-state-county/"
 relatedTools:
   - "rent-vs-buy"
   - "mortgage-payment"
@@ -34,6 +36,8 @@ faq:
     a: "Se introduce una variación anual negativa y el valor baja cada mes. El patrimonio se encoge, el mes de equilibrio se aleja o desaparece por completo, y el coste neto de la propiedad sube. La herramienta gestiona un mercado a la baja sin tratamiento especial."
   - q: "¿Es realista un horizonte de 30 años?"
     a: "El horizonte es un insumo. Un horizonte más corto favorece el alquiler, porque el coste inicial de la compra se recupera a lo largo de más años, y un horizonte más largo favorece la propiedad. La herramienta permite fijar 5, 10, 15 o 30 años para que el efecto de esa elección se vea."
+  - q: "¿De dónde sale el tipo del impuesto sobre la propiedad?"
+    a: "Es un dato de entrada. Cuando la red puede averiguar de qué estado procede la petición, la página rellena el campo con el tipo medio efectivo del impuesto sobre la propiedad de ese estado: el impuesto que se paga realmente como proporción del valor de la vivienda, publicado por la Tax Foundation para 2026 a partir de la American Community Survey de 2024. El impuesto sobre la propiedad lo fijan las administraciones locales, así que el tipo en un condado o una ciudad concretos suele ser distinto de la media del estado, y el campo se puede seguir editando."
 ---
 
 import GuideIllustration from '../../../components/visuals/GuideIllustration.astro';
@@ -72,6 +76,16 @@ seguro, la cuota de HOA y la reserva de mantenimiento pertenecen a la vivienda
 y siguen mientras la vivienda sea tuya. Cuando la comparación llega más allá
 del final del préstamo, los meses siguientes llevan solo los costes
 recurrentes.
+
+La cifra del **impuesto predial** es un dato de entrada, y la página puede
+rellenarla. Cuando la red puede averiguar de qué estado procede la petición, el
+campo se fija con el tipo medio efectivo del impuesto predial de ese estado: el
+impuesto que se paga realmente como proporción del valor de la vivienda,
+publicado por la Tax Foundation para 2026 a partir de la American Community
+Survey de 2024. Es una cifra por estado, y el impuesto predial lo fijan las
+administraciones locales, así que el tipo en un condado o una ciudad concretos
+suele ser otro número. El campo se puede seguir editando, y lo que escribe
+quien lee es lo que usa la comparación.
 
 La reserva de mantenimiento es la que se discute. Las reparaciones no
 aparecen en un acta de cierre, pero llegan, y llegan haya o no una hipoteca

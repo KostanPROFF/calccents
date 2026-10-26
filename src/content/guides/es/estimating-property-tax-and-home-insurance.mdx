@@ -16,6 +16,8 @@ sources:
     url: "https://www.consumerfinance.gov/consumer-tools/mortgages/"
   - label: "BLS — Índice de precios al consumidor"
     url: "https://www.bls.gov/cpi/"
+  - label: "Tax Foundation — Property Taxes by State and County, 2026"
+    url: "https://taxfoundation.org/data/all/state/property-taxes-by-state-county/"
 relatedTools:
   - "mortgage-payment"
   - "rent-vs-buy"
@@ -29,7 +31,7 @@ faq:
   - q: "¿Cambia el seguro si reconstruyo?"
     a: "Puede cambiar. Una reconstrucción que eleve el valor de la estructura puede elevar el coste de reposición y, con ello, la prima. Los límites de cobertura fijados en el precio de compra original también pueden quedar insuficientes después de una reconstrucción."
   - q: "¿Sirve un promedio nacional en su lugar?"
-    a: "Los promedios de este sitio están ahí solo para hacer la primera estimación. El impuesto predial varía enormemente entre jurisdicciones, y un promedio nacional puede desviarse en un factor de varios en cualquiera de los dos sentidos. La calculadora trata las dos cifras como insumos que fijas tú."
+    a: "Un promedio nacional es solo un punto de partida. El impuesto predial varía enormemente entre jurisdicciones, y un promedio nacional puede desviarse en un factor de varios en cualquiera de los dos sentidos. La calculadora de alquiler frente a compra puede rellenar el campo con el tipo medio efectivo del estado del que procede la petición, que está más cerca que un promedio nacional y sigue siendo una cifra por estado y no el tipo de un condado concreto. La calculadora trata la cifra como un insumo que fijas tú."
   - q: "¿Cambian estos costes la cuota?"
     a: "Forman parte del PITI, así que normalmente se cobran mensualmente en el escrow. La cantidad anual es lo que muestra la calculadora; la cifra mensual es la cantidad anual dividida entre doce."
 ---
@@ -70,6 +72,22 @@ aplica el tipo sin que la casa haya cambiado en absoluto.
 
 Los recursos de vivienda de HUD y de CFPB describen esta estructura, y son
 el sitio donde se puede ver cómo funciona una jurisdicción concreta.
+
+## La media por estado que puede usar la calculadora
+
+El tipo se fija localmente, así que ninguna cifra publicada sirve para todas las
+direcciones. La calculadora de alquiler frente a compra puede partir aun así
+de un número más cercano que un promedio nacional: cuando la red puede
+averiguar de qué estado procede la petición, rellena el campo del impuesto
+predial con el tipo medio efectivo de ese estado: el impuesto que se paga
+realmente como proporción del valor de la vivienda, publicado por la Tax
+Foundation para 2026 a partir de la American Community Survey de 2024.
+
+Es una cifra por estado, y es un punto de partida y no una factura. Dos estados
+contiguos pueden diferir en un punto porcentual, y un solo estado puede
+abarcar un rango que cubre buena parte de esa diferencia. El campo se puede
+seguir editando, y la cifra que escribe quien lee es la cifra que usa el
+cálculo.
 
 
 <div class="guide-inline-figure">

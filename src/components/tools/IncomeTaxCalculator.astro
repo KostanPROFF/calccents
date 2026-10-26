@@ -15,7 +15,10 @@ const copy = ui.tool['income-tax'];
 ---
 
 <div>
-  <form class="card" id="income-tax-form" novalidate>
+  <form class="card" id="income-tax-form" novalidate
+    data-state-rate-detected={copy.script.stateRateDetected}
+    data-state-rate-no-tax={copy.script.stateRateNoTax}
+    data-detected-from-ip={ui.ui.detectedFromIp}>
     <label class="field" for="it-gross">
       <span class="field__label">{copy.fields.grossIncome}</span>
       <span class="field__control">
@@ -47,17 +50,18 @@ const copy = ui.tool['income-tax'];
     </div>
 
     <div class="input-group">
-      <label class="field" for="it-state-rate">
-        <span class="field__label">
+      <div class="field">
+        <label class="field__label" for="it-state-rate">
           {copy.fields.stateRate}
           <span class="field__hint">{copy.fields.stateRateHint}</span>
-        </span>
+        </label>
         <span class="field__control">
           <input class="input" id="it-state-rate" type="number" inputmode="decimal"
             step="0.1" min="0" max="20" value="0" />
           <span class="field__suffix" aria-hidden="true">%</span>
         </span>
-      </label>
+        <p class="field__note" id="it-state-note" role="status" hidden></p>
+      </div>
       <label class="field" for="it-pretax">
         <span class="field__label">
           {copy.fields.preTax}
@@ -114,20 +118,78 @@ const copy = ui.tool['income-tax'];
 </div>
 
 <script>
-  import { computeIncomeTax, standardDeduction } from '../../lib/calc/tax.ts';
+  import {
+    computeIncomeTax,
+    deductionApplied,
+    standardDeduction,
+    taxableIncome,
+  } from '../../lib/calc/tax.ts';
   import type { FilingStatus } from '../../lib/calc/tax.ts';
+  import { stateIncomeRate } from '../../lib/calc/stateTax.ts';
   import { formatCurrency, formatPercent } from '../../lib/calc/money.ts';
   import { numberValue, selectValue, setText } from '../../lib/client/dom.ts';
   import { renderChart } from '../../lib/client/chartView.ts';
+  import { detectState, type DetectedState } from '../../lib/client/statePrefill.ts';
+  import { fillTemplate } from '../../lib/client/text.ts';
 
   const ids = ['it-gross', 'it-status', 'it-itemised', 'it-state-rate', 'it-pretax'];
+
+  /*
+    The state the request came from, when the network can work it out. The
+    rate it produces is a default: the reader can type another one, and from
+    that moment the field is theirs.
+  */
+  let detected: DetectedState | null = null;
+  let stateRateEdited = false;
+
+  function stateNoteText(): string {
+    const copy = document.getElementById('income-tax-form')?.dataset;
+    if (!detected || !copy) return '';
+
+    const disclosure = copy.detectedFromIp ?? '';
+
+    /*
+      A rate the reader typed is their own, so the sentence that says the
+      field was filled in no longer applies. The disclosure stays: the state
+      was read from the request either way.
+    */
+    if (stateRateEdited) return disclosure;
+
+    const rate = stateIncomeRate(detected.code, 'single', 0);
+    const template = rate?.hasIncomeTax ? copy.stateRateDetected : copy.stateRateNoTax;
+    if (!template) return disclosure;
+
+    return `${fillTemplate(template, { state: detected.name })} ${disclosure}`.trim();
+  }
+
+  function showStateNote(): void {
+    const note = document.getElementById('it-state-note');
+    if (!note) return;
+    const text = stateNoteText();
+    note.textContent = text;
+    note.hidden = text.length === 0;
+  }
 
   function recalculate(): void {
     const grossIncome = Math.max(0, numberValue('it-gross'));
     const filingStatus = selectValue('it-status', 'single') as FilingStatus;
     const itemisedDeduction = Math.max(0, numberValue('it-itemised'));
-    const stateRatePercent = Math.max(0, numberValue('it-state-rate'));
     const preTaxDeductions = Math.max(0, numberValue('it-pretax'));
+
+    /*
+      The state rate follows the bracket the taxable income falls into, so it
+      moves with the income and the filing status — until the reader types a
+      rate of their own, which is the end of it.
+    */
+    if (detected && !stateRateEdited) {
+      const deduction = deductionApplied(itemisedDeduction, filingStatus);
+      const taxable = taxableIncome(grossIncome - preTaxDeductions, filingStatus, deduction);
+      const rate = stateIncomeRate(detected.code, filingStatus, taxable);
+      const input = document.getElementById('it-state-rate') as HTMLInputElement | null;
+      if (rate && input) input.value = String(rate.rate);
+    }
+
+    const stateRatePercent = Math.max(0, numberValue('it-state-rate'));
 
     const result = computeIncomeTax({
       grossIncome,
@@ -161,6 +223,16 @@ const copy = ui.tool['income-tax'];
     });
   }
 
+  /*
+    A rate the reader types is theirs: the page stops following the state
+    from that moment. The listener is registered before the recalculation
+    one, so the flag is already set when the recalculation runs.
+  */
+  document.getElementById('it-state-rate')?.addEventListener('input', () => {
+    stateRateEdited = true;
+    showStateNote();
+  });
+
   for (const id of ids) {
     document.getElementById(id)?.addEventListener('input', recalculate);
     document.getElementById(id)?.addEventListener('change', recalculate);
@@ -173,4 +245,16 @@ const copy = ui.tool['income-tax'];
   });
 
   recalculate();
+
+  /*
+    The state comes from the edge, so it arrives after the first render. The
+    page works without it, and so does the reader who is not in the United
+    States or whose request the network cannot place.
+  */
+  detectState().then((state) => {
+    if (!state) return;
+    detected = state;
+    showStateNote();
+    recalculate();
+  });
 </script>

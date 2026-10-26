@@ -1,6 +1,6 @@
 ---
 title: "2026 Income Tax Calculator Explained"
-description: "How taxable income is built up from gross pay, how the 2026 federal brackets work, and what the standard deduction and the two tax rates mean."
+description: "How taxable income is built up from gross pay, how the 2026 federal brackets work, and what the standard deduction, the two tax rates and the state rate mean."
 locale: "en"
 date: 2026-10-23
 lastReviewed: 2026-10-23
@@ -16,6 +16,8 @@ sources:
     url: "https://www.irs.gov/taxtopics/tc505"
   - label: "IRS — Tax Topic 611, Income Tax"
     url: "https://www.irs.gov/taxtopics/tc611"
+  - label: "Tax Foundation — State Individual Income Tax Rates and Brackets, 2026"
+    url: "https://taxfoundation.org/data/all/state/state-income-tax-rates-2026/"
 relatedTools:
   - "income-tax"
 faq:
@@ -30,7 +32,7 @@ faq:
   - q: "Does the calculator include tax credits?"
     a: "No. It does not model tax credits, the child tax credit, capital gains rates or the senior deduction. The federal figure it produces is ordinary income tax on taxable income."
   - q: "Is the state tax figure exact?"
-    a: "It is an estimate. The rate is the one typed into the calculator, and it is applied to the whole of taxable income. That is exact in a flat-rate state and overstates the tax in a progressive one."
+    a: "It is an estimate. The rate is applied to the whole of taxable income, which is exact in a flat-rate state and overstates the tax in a progressive one. When the network can work out which state the request comes from, the page fills the field with the rate for your bracket for that state and keeps it in step with your income and filing status until you type a rate of your own."
   - q: "Does this include Social Security and Medicare?"
     a: "No. Those are payroll taxes withheld from wages, with their own rates and their own ceilings, and they are separate from income tax on earnings."
 ---
@@ -120,12 +122,35 @@ calculation stops there. It does not model:
 - **The senior deduction.** The additional amount available to older filers is
   not part of the calculation.
 
-State income tax is handled separately and is deliberately simple. The rate
-is the one typed into the calculator, and it is applied to the whole of
-taxable income. Most states use progressive rates, so a single percentage on
-the whole base overstates the tax in a progressive state and is exact in a
-flat-rate one. The state figure is an estimate that moves with the rate
-entered.
+State income tax is handled separately and is deliberately simple. The rate is
+applied to the whole of taxable income. Most states use progressive rates, so a
+single percentage on the whole base overstates the tax in a progressive state
+and is exact in a flat-rate one. The state figure is an estimate that moves
+with the rate entered.
+
+## How the state rate is found
+
+The calculator can fill the state rate in before the reader types anything.
+The network the site is served from knows where a request came from, so the
+page asks it which state the visitor is in, and the answer comes back with the
+marginal brackets for that state for 2026 — the table the Tax Foundation
+compiles from the statutes and the forms of every state.
+
+What the page does with that answer is narrow. It looks up the bracket the
+taxable income falls into, for the filing status that is selected, and puts
+the rate of that bracket in the field. Change the income and the rate moves
+with it, because the bracket moved. Type a rate of your own and the page stops
+following, because the rate is then yours.
+
+Two things follow from that, and both of them matter. The first is that the
+state is a default and not a fact about the reader: a virtual private
+network, a corporate proxy or a mobile network can point the answer at the
+wrong state. The second is that the rate is marginal while the tax it produces
+is not. The rate is the one the next dollar of income meets, and it is applied
+to the whole of the taxable income, so the state tax in the result is usually
+higher than the tax a state would actually charge. A reader who needs the
+figure to match their own return enters the rate for their own bracket, which
+is the same number the page would have put there.
 
 Payroll taxes are outside this calculation as well. Social Security and
 Medicare are withheld from wages under their own rates and ceilings, which

@@ -16,6 +16,8 @@ sources:
     url: "https://www.consumerfinance.gov/consumer-tools/mortgages/"
   - label: "BLS — Consumer Price Index"
     url: "https://www.bls.gov/cpi/"
+  - label: "Tax Foundation — Property Taxes by State and County, 2026"
+    url: "https://taxfoundation.org/data/all/state/property-taxes-by-state-county/"
 relatedTools:
   - "mortgage-payment"
   - "rent-vs-buy"
@@ -29,7 +31,7 @@ faq:
   - q: "Does the insurance change if I rebuild?"
     a: "It can. A rebuild that raises the value of the structure can raise the replacement cost and therefore the premium. Coverage limits set at the original purchase price can also become inadequate after a rebuild."
   - q: "Can I use a national average instead?"
-    a: "The averages on this site are only there to make the first estimate. Property tax varies enormously between jurisdictions, and a national average can be off by a factor of several in either direction. The calculator treats both figures as inputs you set."
+    a: "A national average is only a starting point. Property tax varies enormously between jurisdictions, and a national average can be off by a factor of several in either direction. The rent versus buy calculator can fill the field with the average effective rate for the state the request comes from, which is closer than a national average and still a state figure rather than the rate of a particular county. The calculator treats the figure as an input you set."
   - q: "Do these costs change the payment?"
     a: "They are part of PITI, so they are usually collected monthly into escrow. The annual amount is what the calculator reports; the monthly figure is the annual amount divided by twelve."
 ---
@@ -69,6 +71,20 @@ house changing at all.
 
 The HUD and CFPB housing resources both describe this structure, and they
 are the right place to look for how a specific jurisdiction works.
+
+## The state average the calculator can use
+
+The rate is set locally, so no published figure is right for every address.
+The rent versus buy calculator can still start from a closer number than a
+national average: when the network can work out which state the request came
+from, it fills the property tax field with the average effective rate for that
+state — the tax actually paid as a share of the value of the home, published
+by the Tax Foundation for 2026 from the American Community Survey for 2024.
+
+It is a state figure, and it is a starting point rather than a bill. Two
+states that sit next to each other can differ by a percentage point, and one
+state can hold a range that spans much of that. The field stays editable, and
+the figure the reader types is the figure the calculation uses.
 
 
 <div class="guide-inline-figure">

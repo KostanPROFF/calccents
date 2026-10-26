@@ -38,6 +38,7 @@ pnpm lint         # advisory-language lint + internal link check
 pnpm build        # static build into dist/
 pnpm lint:ads     # no AdSense code in the build without a publisher ID
 pnpm lint:ids     # no duplicate DOM ids in the built HTML
+pnpm lint:state   # the state rate table is complete and in order
 pnpm verify       # all of the above, in the order CI runs them
 ```
 
@@ -61,14 +62,17 @@ src/
 │  ├─ guides.ts            reading the guides collection by language
 │  └─ ui/{en,ru,es}.ts     every user-visible string, one file per language
 ├─ lib/calc/               calculation engine + unit tests
+├─ lib/data/states.ts      the 2026 state income tax and property tax table
 ├─ lib/client/dom.ts       browser helpers used by the page scripts
 ├─ lib/client/chart.ts     chart geometry, no DOM
 ├─ lib/client/chartView.ts the SVG a chart is drawn into
+├─ lib/client/statePrefill.ts  asks the edge which state the request is from
 ├─ components/             AdSlot, ToolShell, ResultPanel, Faq, SourceList, …
 ├─ components/pages/       the page bodies, one component per page
 ├─ components/tools/       the six calculator forms
 ├─ components/visuals/     the illustrations and the hero picture
 functions/api/contact.ts   the endpoint the contact form posts to
+functions/api/region.ts    the endpoint that reports the state of a request
 worker/src/                the mailer worker, and the rules it checks
 wrangler.toml              the Pages project: build output and the binding
 ├─ layouts/Base.astro      document shell
@@ -85,6 +89,7 @@ scripts/
 ├─ check-consent.ts        consent gating: no tracker before the answer
 ├─ check-contrast.ts       contrast of every text token, in both themes
 ├─ check-scoped-styles.ts  a scoped rule must not target an unscoped element
+├─ check-state-data.ts     every jurisdiction, every bracket, in order
 ├─ check-dom-ids.ts        duplicate id detection in the built HTML
 └─ og-image.html           the source of the social card
 ```
@@ -554,9 +559,55 @@ which is usually in October. A unit test pins each bracket against the
 revenue procedure, so a mistyped digit fails the build rather than the
 reader.
 
-The state income tax is deliberately not modelled: most states tax in bands,
-and a per-state table that is out of date is worse than a rate the reader
-types in. The calculators take the rate as an input and say so on the page.
+The state income tax is not modelled as a tax calculation. Most states tax
+in bands, and a per-state model that misses the state deduction, the state
+exemptions and the credits is worse than a rate the reader can see. The
+calculators take the rate as an input and say so on the page. What the site
+does carry is the bracket table of every state, and that is used for one
+thing: to fill the rate in with the bracket the reader's income falls into.
+See "The state rates" below.
+
+## The state rates
+
+Two of the six calculators take a state rate: the federal income tax
+calculator, which adds a state tax on top of the federal one, and the rent
+versus buy calculator, which carries a property tax on the cost of owning a
+home. Both rates can now be filled in from the state the request comes from.
+
+How it works:
+
+1. The page asks `functions/api/region.ts` which state the request came
+   from. The answer comes from the edge — Cloudflare's `request.cf` — and it
+   is a two-letter code and nothing else. The address is not passed on, and
+   the answer is never cached: it describes the request, not the resource.
+2. `src/lib/data/states.ts` holds the 2026 brackets of every state and the
+   District of Columbia, and the average effective property tax rate of the
+   same jurisdictions. Both come from the Tax Foundation: the income tax
+   brackets from the table as of 1 January 2026, the property tax rates from
+   the American Community Survey 2024 five-year estimate.
+3. The income tax calculator looks up the bracket the taxable income falls
+   into, for the filing status that is selected, and puts the rate of that
+   bracket in the field. The rate follows the income and the filing status
+   until the reader types a rate of their own, and then the field is theirs.
+4. The rent versus buy calculator puts the average effective property tax
+   rate of the state in the field.
+
+Three things this is not, and the pages say all three:
+
+- It is not a state tax return. The rate is marginal — the one the next
+  dollar of income meets — and it is applied to the whole of the taxable
+  income, so the state tax in the result is usually higher than the tax a
+  state would actually charge.
+- It is not a fact about the reader. The state is approximate: a VPN, a
+  proxy or a mobile network can point it at the wrong state. The field stays
+  editable, and a note under it says where the number came from.
+- It is not a county figure. Property tax is set by local governments, so
+  the state average is a starting point rather than a bill.
+
+The state is read on two pages, without the cookie banner and without any
+third party: no cookie is set for it, nothing about it is stored, and nothing
+about it reaches the advertising or the analytics providers. The privacy page
+says so in all three languages.
 
 ## The ladder after AdSense
 
@@ -586,7 +637,7 @@ those markets earns a fraction of the same page view.
 
 ## Verification gates
 
-`pnpm verify` runs nine gates, and all nine block a deployment:
+`pnpm verify` runs ten gates, and all ten block a deployment:
 
 1. `astro check` — no type or template errors.
 2. Unit tests — 90 % line coverage, 90 % function coverage and 85 % branch
@@ -609,9 +660,12 @@ those markets earns a fraction of the same page view.
    targeted by a scoped rule. Astro cannot reach such an element with a
    scoped rule, and the element quietly falls back to the browser's own
    styling.
-9. DOM ids — every id in the built HTML appears exactly once.
+9. State data — every jurisdiction the edge can report is in the table, its
+   brackets run upwards, its rates are rates, and a state that levies no tax
+   on wages says so.
+10. DOM ids — every id in the built HTML appears exactly once.
 
-The last five gates exist because the build proves the code compiles, not that
+The last six gates exist because the build proves the code compiles, not that
 it behaves. A result cell and an input field that shared an id once left the
 monthly rent figure stuck on a placeholder while every test still passed; the
 duplicate-id gate now catches that class of defect before it ships. A muted

@@ -18,6 +18,8 @@ sources:
     url: "https://www.bls.gov/cpi/"
   - label: "FRED — House Price Index for the United States"
     url: "https://fred.stlouisfed.org/series/HPINUS"
+  - label: "Tax Foundation — Property Taxes by State and County, 2026"
+    url: "https://taxfoundation.org/data/all/state/property-taxes-by-state-county/"
 relatedTools:
   - "rent-vs-buy"
   - "mortgage-payment"
@@ -34,6 +36,8 @@ faq:
     a: "Enter a negative annual change and the value falls every month. Equity shrinks, the crossover month moves further away or disappears entirely, and the net cost of owning rises. The tool handles a falling market without special treatment."
   - q: "Is a 30-year horizon realistic?"
     a: "The horizon is an input. A shorter horizon favours renting, because the upfront cost of buying is recovered over more years, and a longer horizon favours owning. The tool lets you set 5, 10, 15 or 30 years so the effect of that choice is visible."
+  - q: "Where does the property tax rate come from?"
+    a: "It is an input. When the network can work out which state the request came from, the page fills the field with the average effective property tax rate for that state: the tax actually paid as a share of the value of the home, published by the Tax Foundation for 2026 from the American Community Survey for 2024. Property tax is set by local governments, so the rate in a particular county or city is usually different from the state average, and the field stays editable."
 ---
 
 import GuideIllustration from '../../components/visuals/GuideIllustration.astro';
@@ -70,6 +74,15 @@ The mortgage payment belongs to the loan and ends with it. Tax, insurance, the
 HOA fee and the maintenance allowance belong to the home, and they run for as
 long as the home is owned. When the comparison reaches past the end of the
 loan, the months after it carry the running costs only.
+
+The **property tax** figure is an input, and the page can fill it in. When the
+network can work out which state the request came from, the field is set to
+the average effective property tax rate for that state — the tax actually paid
+as a share of the value of the home, published by the Tax Foundation for 2026
+from the American Community Survey for 2024. It is a state figure, and
+property tax is set by local governments, so the rate in a particular county
+or city is usually a different number. The field stays editable, and what the
+reader types is what the comparison uses.
 
 The maintenance allowance is the one people argue about. Repairs do not
 appear on a closing statement, but they arrive, and they arrive whether or not
