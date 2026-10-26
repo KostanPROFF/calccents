@@ -96,10 +96,12 @@ const HOSTING_BEACON = 'static.cloudflareinsights.com';
  * The code that takes the beacon Cloudflare adds by itself out of the
  * document.
  *
- * Cloudflare injects a beacon into every page it serves, and that one
+ * Cloudflare can inject a beacon into every page it serves, and that one
  * reports the page view before the reader has answered anything. The
- * consent bootstrap removes it, and the site's own copy is loaded after the
- * answer instead. If the removal is gone, the page view goes out before the
+ * automatic setup is switched off in the Cloudflare dashboard, so there is
+ * nothing to remove; the consent bootstrap removes it anyway, and the site's
+ * own copy is loaded after the answer instead. If the removal is gone and
+ * the setup is ever switched back on, the page view goes out before the
  * answer again.
  */
 const HOSTING_SUPPRESSION_MARKER = 'suppressInjectedBeacon';

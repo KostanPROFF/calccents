@@ -178,9 +178,14 @@ jobs:
       # serves, and that one reports the page view before the reader has
       # answered the cookie question. The site removes it before it runs,
       # so nothing is reported early either way, but the file is still
-      # downloaded while the automatic setup is on. This step says which of
-      # the two states the site is in. It does not fail the pipeline: the
-      # setting lives in the Cloudflare dashboard, not in the repository.
+      # downloaded while the automatic setup is on. The automatic setup is
+      # off now, so the file is not downloaded either, and the promise the
+      # privacy policy makes holds as it is written.
+      #
+      # This step says which of the two states the site is in. It does not
+      # fail the pipeline: the setting lives in the Cloudflare dashboard,
+      # not in the repository, and a step that runs after the deploy has
+      # shipped cannot stop it anyway.
       - name: Hosting beacon at the edge
         continue-on-error: true
         run: pnpm lint:edge

@@ -9,10 +9,12 @@
  * sets none, but it is still a request to a third party, so it waits for
  * the answer as well.
  *
- * Cloudflare adds a beacon of its own to every page it serves, and that
- * one reports the page view before anyone has answered anything. It is
- * taken out of the document before it can run, and the site's own copy
- * takes its place after the answer.
+ * Cloudflare can add a beacon of its own to every page it serves, and that
+ * one reports the page view before anyone has answered anything. The
+ * automatic setup in the Cloudflare dashboard is switched off, so nothing is
+ * added in the first place, and the bootstrap takes the beacon out of the
+ * document anyway, as a net for the day the setup is switched back on. The
+ * site's own copy takes its place after the answer.
  *
  * The script tags are not in the document. They are injected by the
  * bootstrap below once the answer is known, which is why the source of a
@@ -214,6 +216,9 @@ const bootstrap = `(function () {
    * the page view straight away, before the reader has answered the cookie
    * question, so it is taken out of the document before it can run: a
    * script that is removed before it runs does not run.
+   *
+   * The automatic setup is switched off, so there is nothing to take out at
+   * the moment. The code stays as a net for the day it is switched back on.
    *
    * The tag may already be in the document when this runs, or it may still
    * arrive later, so both are covered. The site's own copy is loaded after
