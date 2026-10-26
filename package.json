@@ -18,6 +18,7 @@
     "lint:ads": "node scripts/check-ads.ts",
     "lint:ids": "node scripts/check-dom-ids.ts",
     "lint:consent": "node scripts/check-consent.ts",
+    "lint:edge": "node scripts/check-edge-analytics.ts",
     "lint": "pnpm lint:advisory && pnpm lint:links",
     "verify": "pnpm check && pnpm test && pnpm lint && pnpm build && pnpm lint:ads && pnpm lint:consent && pnpm lint:ids"
   },

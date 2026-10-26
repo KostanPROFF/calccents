@@ -9,6 +9,11 @@
  * sets none, but it is still a request to a third party, so it waits for
  * the answer as well.
  *
+ * Cloudflare adds a beacon of its own to every page it serves, and that
+ * one reports the page view before anyone has answered anything. It is
+ * taken out of the document before it can run, and the site's own copy
+ * takes its place after the answer.
+ *
  * The script tags are not in the document. They are injected by the
  * bootstrap below once the answer is known, which is why the source of a
  * page contains the URLs but no request goes out before the answer.
@@ -53,6 +58,15 @@ const cloudflareToken =
 const gaUrl = `https://www.googletagmanager.com/gtag/js?id=${gaId}`;
 const adsenseUrl = `https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${adsenseClient}`;
 const cloudflareUrl = 'https://static.cloudflareinsights.com/beacon.min.js';
+/**
+ * The beacon configuration version.
+ *
+ * This is the version Cloudflare itself writes into the beacon tag. Its
+ * presence is what tells the beacon to report to the site's own
+ * /cdn-cgi/rum endpoint instead of the cross-origin one, which the browser
+ * refuses for this domain.
+ */
+const cloudflareBeaconVersion = '2024.11.0';
 
 const privacyLink = `<a href="${localePath(locale, '/privacy/')}">${copy.privacyLink}</a>`;
 const body = copy.body.replace('{privacyLink}', privacyLink);
@@ -72,11 +86,17 @@ const bootstrap = `(function () {
   var ADSENSE_URL = '${adsenseUrl}';
   var CLOUDFLARE_URL = '${cloudflareUrl}';
   var CLOUDFLARE_TOKEN = '${cloudflareToken}';
+  var CLOUDFLARE_VERSION = '${cloudflareBeaconVersion}';
+  var BEACON_HOST = 'static.cloudflareinsights.com';
+  var beaconObserver = null;
+
+  // The beacon Cloudflare adds by itself is taken out of the document
+  // before it can report anything.
+  suppressInjectedBeacon();
 
   function read() {
     try { return window.localStorage.getItem(KEY); } catch (error) { return null; }
   }
-
   function write(value) {
     try { window.localStorage.setItem(KEY, value); } catch (error) { /* private mode */ }
   }
@@ -113,17 +133,64 @@ const bootstrap = `(function () {
     /*
      * Cloudflare's own page analytics.
      *
-     * The automatic setup in the Cloudflare dashboard is switched off, so
-     * the beacon is not in the document. It is loaded here instead, which
-     * puts it behind the same answer as everything else. The script sets no
-     * cookie and stores nothing, so it only counts page views and how fast
-     * the pages load.
+     * The beacon reports the page view to the site's own /cdn-cgi/rum
+     * endpoint, so the data never leaves Cloudflare's edge for this
+     * domain. The version field is what tells the beacon to use that
+     * endpoint: without it the beacon posts to cloudflareinsights.com,
+     * and the browser refuses that answer because the endpoint does not
+     * allow this origin.
+     *
+     * The script sets no cookie and stores nothing, so it only counts page
+     * views and how fast the pages load.
      */
+    if (beaconObserver) {
+      beaconObserver.disconnect();
+      beaconObserver = null;
+    }
     var el = document.createElement('script');
     el.defer = true;
     el.src = CLOUDFLARE_URL;
-    el.setAttribute('data-cf-beacon', JSON.stringify({ token: CLOUDFLARE_TOKEN }));
+    el.setAttribute('data-cf-beacon', JSON.stringify({
+      version: CLOUDFLARE_VERSION,
+      token: CLOUDFLARE_TOKEN,
+      r: 1,
+      spa: 2,
+    }));
     document.head.appendChild(el);
+  }
+
+  /*
+   * The beacon Cloudflare adds by itself.
+   *
+   * Cloudflare adds a beacon to every page it serves, unless the automatic
+   * setup is switched off in the Cloudflare dashboard. That beacon reports
+   * the page view straight away, before the reader has answered the cookie
+   * question, so it is taken out of the document before it can run: a
+   * script that is removed before it runs does not run.
+   *
+   * The tag may already be in the document when this runs, or it may still
+   * arrive later, so both are covered. The site's own copy is loaded after
+   * the answer, with the same site token.
+   */
+  function suppressInjectedBeacon() {
+    if (typeof MutationObserver !== 'function') return;
+    beaconObserver = new MutationObserver(function (records) {
+      for (var i = 0; i < records.length; i += 1) {
+        var added = records[i].addedNodes;
+        for (var j = 0; j < added.length; j += 1) {
+          var node = added[j];
+          if (!node || node.tagName !== 'SCRIPT') continue;
+          if (!node.src || node.src.indexOf(BEACON_HOST) === -1) continue;
+          if (node.parentNode) node.parentNode.removeChild(node);
+        }
+      }
+    });
+    beaconObserver.observe(document.documentElement, { childList: true, subtree: true });
+
+    var injected = document.querySelectorAll('script[src*="' + BEACON_HOST + '"]');
+    for (var k = 0; k < injected.length; k += 1) {
+      if (injected[k].parentNode) injected[k].parentNode.removeChild(injected[k]);
+    }
   }
 
   function removeAdUnits() {

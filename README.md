@@ -190,24 +190,42 @@ earlier deployment from the Cloudflare Pages dashboard.
 
 ### Cloudflare Web Analytics
 
-Cloudflare's Web Analytics is switched on for the zone, and it used to add
-its beacon to every page it served. The automatic setup is now switched off
-in the Cloudflare dashboard, under Web Analytics. The beacon is loaded by the
-consent bootstrap instead, so the request goes out only after the reader has
-answered the cookie question, together with the two Google trackers.
+Cloudflare's Web Analytics is switched on for the zone, and Cloudflare can
+add its beacon to every page it serves. That beacon reports the page view
+straight away, before the reader has answered the cookie question, so the
+site takes it out of the document before it can run: a script that is
+removed before it runs does not run. The site's own copy is loaded by the
+consent bootstrap instead, after the answer, with the site token from
+`src/config/site.ts`.
 
-The beacon comes from `static.cloudflareinsights.com` and carries the site
-token from `src/config/site.ts`. It sets no cookie, writes nothing to local
-storage and creates no identifier, and the IP address it carries is used at
-the edge to work out the country and is discarded there. It is still a third
-party that receives a request from every visitor who accepts, so the
-privacy policy names it in all three languages. `scripts/check-consent.ts`
-checks that the policy still does, that the beacon URL is in the source, and
-that it is not in the document as a script tag.
+The beacon reports to the site's own `/cdn-cgi/rum` endpoint, so the data
+does not leave Cloudflare's edge for this domain. That is what the `version`
+field in the beacon configuration is for: without it the beacon posts to
+`cloudflareinsights.com`, and the browser refuses that answer, because the
+endpoint does not allow this origin.
 
-Turning the automatic setup back on in the dashboard would put the beacon
-back into every page, before the answer, and the gate would fail on the
-static script tag.
+The beacon sets no cookie, writes nothing to local storage and creates no
+identifier, and the IP address it carries is used at the edge to work out
+the country and is discarded there. It is still a third party that receives
+a request from every visitor who accepts, so the privacy policy names it in
+all three languages.
+
+Two gates watch this:
+
+- `scripts/check-consent.ts` checks that the policy still names the
+  provider, that the beacon URL is in the source, that the beacon is not in
+  the document as a script tag, and that the code that removes the injected
+  beacon is still on every page.
+- `scripts/check-edge-analytics.ts` asks the live site for a page the way a
+  browser does and reports whether Cloudflare is still adding its own
+  beacon. It is the only way to see this from the outside, because
+  Cloudflare leaves the beacon out of the page for anything that does not
+  look like a browser navigation.
+
+While the automatic setup is on in the Cloudflare dashboard, the beacon file
+is still downloaded before the answer even though nothing is reported.
+Turning it off — Web Analytics, the site, Settings, the automatic setup —
+stops that as well. The site behaves the same either way.
 
 ### The domain
 

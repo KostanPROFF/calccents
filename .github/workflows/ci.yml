@@ -173,3 +173,14 @@ jobs:
         env:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+
+      # The hosting provider can add its own beacon to every page it
+      # serves, and that one reports the page view before the reader has
+      # answered the cookie question. The site removes it before it runs,
+      # so nothing is reported early either way, but the file is still
+      # downloaded while the automatic setup is on. This step says which of
+      # the two states the site is in. It does not fail the pipeline: the
+      # setting lives in the Cloudflare dashboard, not in the repository.
+      - name: Hosting beacon at the edge
+        continue-on-error: true
+        run: pnpm lint:edge

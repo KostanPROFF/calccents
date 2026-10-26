@@ -90,6 +90,18 @@ const CRAWLER_MARKER = 'isCrawler';
 const HOSTING_MARKER = 'Cloudflare';
 const HOSTING_BEACON = 'static.cloudflareinsights.com';
 
+/**
+ * The code that takes the beacon Cloudflare adds by itself out of the
+ * document.
+ *
+ * Cloudflare injects a beacon into every page it serves, and that one
+ * reports the page view before the reader has answered anything. The
+ * consent bootstrap removes it, and the site's own copy is loaded after the
+ * answer instead. If the removal is gone, the page view goes out before the
+ * answer again.
+ */
+const HOSTING_SUPPRESSION_MARKER = 'suppressInjectedBeacon';
+
 function collectFiles(dir: string, extensions: string[]): string[] {
   const found: string[] = [];
   let entries: string[];
@@ -124,6 +136,7 @@ let pagesWithoutDecision = 0;
 let pagesWithoutAnalytics = 0;
 let pagesWithoutAds = 0;
 let pagesWithoutHosting = 0;
+let pagesWithoutSuppression = 0;
 let pagesWithStaticTracker = 0;
 let pagesWithoutCrawlerException = 0;
 const staticExamples: string[] = [];
@@ -154,6 +167,7 @@ for (const file of htmlFiles) {
   if (!html.includes(ANALYTICS_MARKER)) pagesWithoutAnalytics += 1;
   if (!html.includes(ADS_MARKER)) pagesWithoutAds += 1;
   if (!html.includes(HOSTING_BEACON)) pagesWithoutHosting += 1;
+  if (!html.includes(HOSTING_SUPPRESSION_MARKER)) pagesWithoutSuppression += 1;
   if (!html.includes(CRAWLER_MARKER)) pagesWithoutCrawlerException += 1;
 
   const staticTag = html.match(STATIC_TAG);
@@ -203,6 +217,12 @@ if (pagesWithoutHosting > 0) {
   problems.push(
     `${pagesWithoutHosting} of ${htmlFiles.length} pages cannot load the hosting ` +
       'provider\'s page analytics after the answer',
+  );
+}
+if (pagesWithoutSuppression > 0) {
+  problems.push(
+    `${pagesWithoutSuppression} of ${htmlFiles.length} pages do not remove the beacon ` +
+      'the hosting provider adds by itself, so the page view goes out before the answer',
   );
 }
 if (pagesWithStaticTracker > 0) {
