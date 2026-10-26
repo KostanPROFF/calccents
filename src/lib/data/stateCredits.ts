@@ -400,6 +400,18 @@ export const STATE_CREDITS: Record<string, StateCredits> = {
     },
   },
   MD: {
+    /*
+      Maryland gives two earned income tax credits and a taxpayer may not
+      claim both for the same return. The refundable one is 45% of the
+      federal credit for a filer with dependent children and 100% of the
+      federal credit for a filer without, and the nonrefundable one is 50% of
+      the federal credit. The refundable one is the one that is modelled
+      here: it is the one that reaches a filer whose tax is smaller than the
+      credit, which is the point of the credit.
+
+      Comptroller of Maryland, "Earned Income Tax Credit", and the Tax
+      Policy Center, "State Earned Income Tax Credits", 2026.
+    */
     earnedIncome: { kind: 'percent-of-federal', percent: 45, percentWithoutChildren: 100 },
     /*
       The Maryland child tax credit is $500 for a qualified child, which is a

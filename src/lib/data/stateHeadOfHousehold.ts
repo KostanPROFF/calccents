@@ -55,26 +55,51 @@ export interface StateHeadOfHousehold {
  * A state that is not in this list is taxed on the single filer brackets.
  */
 export const STATE_HEAD_OF_HOUSEHOLD: Record<string, StateHeadOfHousehold> = {
+  AZ: {
+    /*
+      Arizona has no head of household schedule: the single filer rate
+      applies, because the rate is a flat one. The standard deduction of a
+      head of household is $24,150, which is the single filer deduction of
+      $16,100 times one and a half, the way the statute sets the three
+      amounts against each other.
+
+      The amounts are not printed on the return yet: the Department of
+      Taxation prints them with the form, and the 2026 form comes out in
+      2027. Arizona ties the deduction to the federal basic standard
+      deduction and indexes it the same way, so the 2026 figure is the
+      federal one for 2026, and the three agree with each other: $16,100 for
+      a single filer, $24,150 for a head of household and $32,200 for a
+      couple.
+    */
+    standardDeduction: { amount: 24150, kind: 'exclusion' },
+    source: 'https://www.azleg.gov/ars/43/01041.htm',
+    sourceDate: '2026-06-13',
+  },
   CA: {
     /*
       California publishes a head of household schedule of its own, Schedule
-      Z. It carries the same rates as the single filer schedule with the
-      brackets twice as wide, which is the schedule below, and the standard
-      deduction of a head of household is the one a couple gets.
+      Z. It is not the single filer schedule with the brackets twice as wide:
+      the two schedules differ in the middle, so the schedule below is the one
+      the state publishes. The standard deduction of a head of household is the
+      one a couple gets.
+
+      The top of the schedule carries the 1% Mental Health Services tax the
+      state adds to taxable income above $1,000,000, which is why the rate
+      above that line is one point more than the schedule itself says.
     */
     brackets: [
       { rate: 1, from: 0 },
-      { rate: 2, from: 22158 },
-      { rate: 4, from: 52528 },
-      { rate: 6, from: 82904 },
-      { rate: 8, from: 115084 },
-      { rate: 9.3, from: 145448 },
-      { rate: 10.3, from: 742958 },
-      { rate: 11.3, from: 891542 },
+      { rate: 2, from: 22927 },
+      { rate: 4, from: 54316 },
+      { rate: 6, from: 70018 },
+      { rate: 8, from: 86654 },
+      { rate: 9.3, from: 102356 },
+      { rate: 10.3, from: 522385 },
+      { rate: 11.3, from: 626864 },
       { rate: 12.3, from: 1000000 },
-      { rate: 13.3, from: 1485906 },
+      { rate: 13.3, from: 1044771 },
     ],
-    standardDeduction: { amount: 11080, kind: 'exclusion' },
+    standardDeduction: { amount: 11800, kind: 'exclusion' },
     source: 'https://www.ftb.ca.gov/about-ftb/newsroom/tax-news/',
     sourceDate: '2026-10-01',
   },
@@ -178,8 +203,9 @@ export const STATE_HEAD_OF_HOUSEHOLD: Record<string, StateHeadOfHousehold> = {
     /*
       Maine publishes a head of household schedule of its own, and the
       standard deduction of a head of household is $23,550. A surcharge of
-      2% applies to the Maine taxable income above $1,500,000, which is the
-      9.15% top bracket.
+      2% applies to the Maine taxable income above $1,500,000, and that
+      surcharge is not carried here: the top bracket is the 9.15% the
+      schedule itself gives.
     */
     brackets: [
       { rate: 5.8, from: 0 },
@@ -304,6 +330,24 @@ export const STATE_HEAD_OF_HOUSEHOLD: Record<string, StateHeadOfHousehold> = {
     standardDeduction: { amount: 4685, kind: 'exclusion' },
     source: 'https://secure.dor.state.or.us/Services/draftforms/api/document/7872/download',
     sourceDate: '2026-10-26',
+  },
+  VT: {
+    /*
+      Vermont publishes a head of household schedule of its own, Schedule Z,
+      in the 2026 instructions of the estimated tax voucher, and it publishes
+      the 2026 schedules as preliminary figures. The standard deduction of a
+      head of household is $11,450, which is the last one the Department
+      published: the 2026 amount comes out with the 2026 return.
+    */
+    brackets: [
+      { rate: 3.35, from: 0 },
+      { rate: 6.6, from: 68000 },
+      { rate: 7.6, from: 175500 },
+      { rate: 8.75, from: 284150 },
+    ],
+    standardDeduction: { amount: 11450, kind: 'exclusion' },
+    source: 'https://tax.vermont.gov/sites/tax/files/documents/IN-114-Instr-2026.pdf',
+    sourceDate: '2025-10-01',
   },
   WI: {
     /*

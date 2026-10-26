@@ -23,6 +23,32 @@
  *     October 2026
  *     https://taxfoundation.org/data/all/state/property-taxes-by-state-county/
  *
+ *   the five states whose tax year 2026 figures were taken from the state
+ *   itself, because what the state had published for 2026 was newer than the
+ *   tables above
+ *     California, Franchise Tax Board, "Tax News", the 2026 indexing table
+ *     of 28 October 2026, and the rate schedules
+ *     https://www.ftb.ca.gov/about-ftb/newsroom/tax-news/
+ *     Hawaii, Department of Taxation, the standard deduction and the personal
+ *     exemption for tax years that begin after 31 December 2025, and the 2026
+ *     rate schedule
+ *     https://tax.hawaii.gov/faq/
+ *     Maine, Revenue Services, "2026 Individual Income Tax Rates", revised
+ *     20 May 2026, and the phaseout worksheet for the standard deduction
+ *     https://www.maine.gov/revenue/tax-return-forms
+ *     Vermont, Department of Taxes, the 2026 preliminary rate schedules in
+ *     the instructions of the 2026 estimated tax voucher
+ *     https://tax.vermont.gov/sites/tax/files/documents/IN-114-Instr-2026.pdf
+ *     Arizona, the standard deduction of the statute as amended by House Bill
+ *     4168 of 2026, and the federal basic standard deduction for 2026, which
+ *     the statute indexes the state figure to
+ *     https://www.azleg.gov/ars/43/01041.htm
+ *
+ * Where a state has not published a figure for 2026 yet, the last one it
+ * published is used and the entry says so. Vermont is the case: it publishes
+ * its 2026 rates as preliminary figures and prints the standard deduction and
+ * the personal exemption with the form, which comes out in 2027.
+ *
  * The two income tax tables disagree for five states, and the April table is
  * the one that carries the rates enacted for 2026 that take effect during the
  * year: Maine, Oklahoma, South Carolina, Utah and West Virginia. For those
@@ -163,12 +189,17 @@ export const STATES: Record<string, State> = {
         { rate: 2.5, from: 0 },
       ],
       standardDeduction: {
-        single: { amount: 8350, kind: 'exclusion' },
-        married: { amount: 16700, kind: 'exclusion' },
+        single: { amount: 16100, kind: 'exclusion' },
+        married: { amount: 32200, kind: 'exclusion' },
       },
-      exemption: {
-        dependent: { amount: 100, kind: 'credit' },
-      },
+      /*
+        Arizona ties its standard deduction to the federal basic standard
+        deduction and indexes it the same way, so the 2026 figure is the
+        federal one for 2026: $16,100 for a single filer and $32,200 for a
+        couple. The credit for a dependent is not here: it is in
+        `stateCredits.ts`, because the amount depends on the age of the
+        dependent and it falls away with the income.
+      */
     },
     propertyTaxRate: 0.48,
   },
@@ -202,36 +233,36 @@ export const STATES: Record<string, State> = {
     incomeTax: {
       single: [
         { rate: 1, from: 0 },
-        { rate: 2, from: 11079 },
-        { rate: 4, from: 26264 },
-        { rate: 6, from: 41452 },
-        { rate: 8, from: 57542 },
-        { rate: 9.3, from: 72724 },
-        { rate: 10.3, from: 371479 },
-        { rate: 11.3, from: 445771 },
-        { rate: 12.3, from: 742953 },
+        { rate: 2, from: 11456 },
+        { rate: 4, from: 27157 },
+        { rate: 6, from: 42861 },
+        { rate: 8, from: 59498 },
+        { rate: 9.3, from: 75197 },
+        { rate: 10.3, from: 384109 },
+        { rate: 11.3, from: 460927 },
+        { rate: 12.3, from: 768213 },
         { rate: 13.3, from: 1000000 },
       ],
       married: [
         { rate: 1, from: 0 },
-        { rate: 2, from: 22158 },
-        { rate: 4, from: 52528 },
-        { rate: 6, from: 82904 },
-        { rate: 8, from: 115084 },
-        { rate: 9.3, from: 145448 },
-        { rate: 10.3, from: 742958 },
-        { rate: 11.3, from: 891542 },
+        { rate: 2, from: 22912 },
+        { rate: 4, from: 54314 },
+        { rate: 6, from: 85722 },
+        { rate: 8, from: 118996 },
+        { rate: 9.3, from: 150394 },
+        { rate: 10.3, from: 768218 },
+        { rate: 11.3, from: 921854 },
         { rate: 12.3, from: 1000000 },
-        { rate: 13.3, from: 1485906 },
+        { rate: 13.3, from: 1536426 },
       ],
       standardDeduction: {
-        single: { amount: 5540, kind: 'exclusion' },
-        married: { amount: 11080, kind: 'exclusion' },
+        single: { amount: 5900, kind: 'exclusion' },
+        married: { amount: 11800, kind: 'exclusion' },
       },
       exemption: {
-        single: { amount: 153, kind: 'credit' },
-        married: { amount: 306, kind: 'credit' },
-        dependent: { amount: 153, kind: 'credit' },
+        single: { amount: 158, kind: 'credit' },
+        married: { amount: 316, kind: 'credit' },
+        dependent: { amount: 491, kind: 'credit' },
       },
     },
     propertyTaxRate: 0.7,
@@ -377,8 +408,8 @@ export const STATES: Record<string, State> = {
         { rate: 11, from: 650000 },
       ],
       standardDeduction: {
-        single: { amount: 4400, kind: 'exclusion' },
-        married: { amount: 8800, kind: 'exclusion' },
+        single: { amount: 8000, kind: 'exclusion' },
+        married: { amount: 16000, kind: 'exclusion' },
       },
       exemption: {
         single: { amount: 1144, kind: 'exclusion' },
@@ -524,27 +555,33 @@ export const STATES: Record<string, State> = {
   ME: {
     code: 'ME',
     name: 'Maine',
+    /*
+      The 2026 rate schedule of Maine Revenue Services. Two rules of that
+      schedule are not carried here, and the guide says so: the standard
+      deduction and the personal exemption both fall away as the Maine income
+      rises, and a surcharge of 2% sits on the income above $1,000,000 for a
+      single filer and above $1,500,000 for a couple or a head of household.
+    */
     incomeTax: {
       single: [
         { rate: 5.8, from: 0 },
-        { rate: 6.75, from: 27399 },
-        { rate: 7.15, from: 64849 },
+        { rate: 6.75, from: 27400 },
+        { rate: 7.15, from: 64850 },
         { rate: 9.15, from: 1000000 },
       ],
       married: [
         { rate: 5.8, from: 0 },
-        { rate: 6.75, from: 54849 },
-        { rate: 7.15, from: 129749 },
-        { rate: 9.15, from: 2000000 },
+        { rate: 6.75, from: 54850 },
+        { rate: 7.15, from: 129750 },
+        { rate: 9.15, from: 1500000 },
       ],
       standardDeduction: {
-        single: { amount: 8350, kind: 'exclusion' },
-        married: { amount: 16700, kind: 'exclusion' },
+        single: { amount: 15700, kind: 'exclusion' },
+        married: { amount: 31400, kind: 'exclusion' },
       },
       exemption: {
         single: { amount: 5300, kind: 'exclusion' },
         married: { amount: 10600, kind: 'exclusion' },
-        dependent: { amount: 305, kind: 'credit' },
       },
     },
     propertyTaxRate: 0.98,
@@ -1090,18 +1127,25 @@ export const STATES: Record<string, State> = {
   VT: {
     code: 'VT',
     name: 'Vermont',
+    /*
+      The brackets are the 2026 schedules of the Vermont Department of Taxes,
+      which it publishes as preliminary figures. The standard deduction and
+      the personal exemption are the ones the Department published last, for
+      the 2025 tax year: the 2026 forms are printed in the spring of 2027 and
+      the amounts are not out yet.
+    */
     incomeTax: {
       single: [
         { rate: 3.35, from: 0 },
-        { rate: 6.6, from: 49400 },
-        { rate: 7.6, from: 119700 },
-        { rate: 8.75, from: 249700 },
+        { rate: 6.6, from: 50750 },
+        { rate: 7.6, from: 122850 },
+        { rate: 8.75, from: 256300 },
       ],
       married: [
         { rate: 3.35, from: 0 },
-        { rate: 6.6, from: 82500 },
-        { rate: 7.6, from: 199450 },
-        { rate: 8.75, from: 304000 },
+        { rate: 6.6, from: 84700 },
+        { rate: 7.6, from: 204750 },
+        { rate: 8.75, from: 312050 },
       ],
       standardDeduction: {
         single: { amount: 7650, kind: 'exclusion' },

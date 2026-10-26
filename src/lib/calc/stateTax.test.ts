@@ -123,17 +123,117 @@ test('a state with a standard deduction takes it off the income', () => {
     adjustedGrossIncome: 68900,
   });
   assert.ok(result);
-  // 68,900 less the 5,540 standard deduction.
-  assert.equal(result.taxableIncome, 63360);
-  assert.equal(result.taxBeforeCredits, 2452.85);
+  // 68,900 less the 5,900 standard deduction.
+  assert.equal(result.taxableIncome, 63000);
+  assert.equal(result.taxBeforeCredits, 2335.12);
   // The personal exemption in California is a credit, not an exclusion.
   assert.equal(result.breakdown.exemption, 0);
-  assert.equal(result.breakdown.exemptionCredit, 153);
-  assert.equal(result.tax, 2299.85);
+  assert.equal(result.breakdown.exemptionCredit, 158);
+  assert.equal(result.tax, 2177.12);
 });
 
-test('a state that gives the exemption as an exclusion takes it off the income', () => {
+test('Maine takes its 2026 standard deduction off the income', () => {
   const result = computeStateTax({
+    stateCode: 'ME',
+    filingStatus: 'single',
+    adjustedGrossIncome: 60000,
+  });
+  assert.ok(result);
+  // 60,000 less the 15,700 standard deduction and the 5,300 exemption.
+  assert.equal(result.taxableIncome, 39000);
+  // 5.8% of the first 27,400 and 6.75% of the rest.
+  assert.equal(result.taxBeforeCredits, 2372.2);
+  assert.equal(result.tax, 2372.2);
+});
+
+test('Maine pays the dependent exemption credit once, not twice', () => {
+  const result = computeStateTax({
+    stateCode: 'ME',
+    filingStatus: 'single',
+    adjustedGrossIncome: 80000,
+    childAges: children('sevenToEleven'),
+  });
+  assert.ok(result);
+  // 80,000 less the 15,700 standard deduction and the 5,300 exemption.
+  assert.equal(result.taxableIncome, 59000);
+  assert.equal(result.taxBeforeCredits, 3722.2);
+  // The credit for a dependent is the $310 of the 2026 schedule, and there is
+  // no second one on the side of the exemption.
+  assert.equal(result.breakdown.exemptionCredit, 0);
+  assert.equal(result.breakdown.childTaxCredit, 310);
+  assert.equal(result.tax, 3412.2);
+});
+
+test('Arizona takes the standard deduction the federal basic deduction gives', () => {
+  const result = computeStateTax({
+    stateCode: 'AZ',
+    filingStatus: 'single',
+    adjustedGrossIncome: 50000,
+    childAges: children('sevenToEleven'),
+  });
+  assert.ok(result);
+  // 50,000 less the 16,100 standard deduction.
+  assert.equal(result.taxableIncome, 33900);
+  assert.equal(result.taxBeforeCredits, 847.5);
+  // A dependent under seventeen is worth $125 in Arizona.
+  assert.equal(result.breakdown.childTaxCredit, 125);
+  assert.equal(result.tax, 722.5);
+});
+
+test('Arizona pays less for a dependent of seventeen', () => {
+  const result = computeStateTax({
+    stateCode: 'AZ',
+    filingStatus: 'single',
+    adjustedGrossIncome: 50000,
+    childAges: children('seventeen'),
+  });
+  assert.ok(result);
+  assert.equal(result.taxBeforeCredits, 847.5);
+  assert.equal(result.breakdown.childTaxCredit, 25);
+  assert.equal(result.tax, 822.5);
+});
+
+test('Hawaii takes the 2026 standard deduction off the income', () => {
+  const result = computeStateTax({
+    stateCode: 'HI',
+    filingStatus: 'single',
+    adjustedGrossIncome: 50000,
+  });
+  assert.ok(result);
+  // 50,000 less the 8,000 standard deduction and the 1,144 exemption.
+  assert.equal(result.taxableIncome, 40856);
+  assert.equal(result.taxBeforeCredits, 2024.83);
+  assert.equal(result.tax, 2024.83);
+});
+
+test('Vermont uses the 2026 preliminary rates', () => {
+  const result = computeStateTax({
+    stateCode: 'VT',
+    filingStatus: 'single',
+    adjustedGrossIncome: 52950,
+  });
+  assert.ok(result);
+  // 52,950 less the 7,650 standard deduction and the 5,300 exemption.
+  assert.equal(result.taxableIncome, 40000);
+  assert.equal(result.taxBeforeCredits, 1340);
+  assert.equal(result.tax, 1340);
+});
+
+test('Vermont has a head of household schedule of its own', () => {
+  const result = computeStateTax({
+    stateCode: 'VT',
+    filingStatus: 'head-of-household',
+    adjustedGrossIncome: 52950,
+  });
+  assert.ok(result);
+  // 52,950 less the 11,450 head of household standard deduction and the 5,300
+  // exemption.
+  assert.equal(result.taxableIncome, 36200);
+  assert.equal(result.taxBeforeCredits, 1212.7);
+  assert.equal(result.tax, 1212.7);
+});
+
+test('a state that gives the exemption as an exclusion takes it off the income', () => {  const result = computeStateTax({
     stateCode: 'OH',
     filingStatus: 'single',
     adjustedGrossIncome: 40000,
