@@ -127,39 +127,14 @@ jobs:
           DOMAIN: ${{ inputs.domain }}
         run: |
           set -euo pipefail
-          zone=$(curl -sS "https://api.cloudflare.com/client/v4/zones?name=${DOMAIN}" \
-            -H "Authorization: Bearer ${CLOUDFLARE_API_TOKEN}" \
-            | node -e 'let r="";process.stdin.on("data",c=>r+=c).on("end",()=>{const z=JSON.parse(r).result?.[0];console.log(z?.id ?? "");});')
-          if [ -z "$zone" ]; then
-            echo "No zone, skipping the www alias."
-            exit 0
-          fi
-
-          # The filter takes the fully qualified name. A short "www" matches
-          # nothing, and an empty answer would send the step on to create a
-          # record that is already there.
-          existing=$(curl -sS "https://api.cloudflare.com/client/v4/zones/${zone}/dns_records?name=www.${DOMAIN}" \
-            -H "Authorization: Bearer ${CLOUDFLARE_API_TOKEN}" \
-            | node -e 'let r="";process.stdin.on("data",c=>r+=c).on("end",()=>{const rs=JSON.parse(r).result??[];console.log(rs.map(x=>`${x.type}|${x.name}|${x.content}`).join("\n"));});')
-          # The API returns names fully qualified, so the check looks for
-          # "CNAME|www.calccents.com|" and not for a bare "www".
-          if echo "$existing" | grep -q "^CNAME|www\.${DOMAIN}|"; then
-            echo "The www record already exists."
-          else
-            echo "Creating CNAME www -> ${DOMAIN}"
-            curl -sS -X POST "https://api.cloudflare.com/client/v4/zones/${zone}/dns_records" \
-              -H 'Content-Type: application/json' \
-              -H "Authorization: Bearer ${CLOUDFLARE_API_TOKEN}" \
-              -d "{\"type\": \"CNAME\", \"name\": \"www\", \"content\": \"${DOMAIN}\", \"proxied\": true, \"ttl\": 1}" \
-              | node -e 'let r="";process.stdin.on("data",c=>r+=c).on("end",()=>{const b=JSON.parse(r);if(!b.success){for(const e of b.errors??[])console.error(`  ${e.code}: ${e.message}`);return;}console.log(`created: ${b.result.name} -> ${b.result.content}`);});'
-          fi
 
           # A redirect is better than a second host serving the same pages:
           # one canonical address, one set of signals.
           #
-          # The rule lives in the Single Redirects phase, which is the one a
-          # normal zone has. The script knows the shape of the rule and how
-          # to leave the other rules of the phase alone.
+          # The script puts the www record in place, as a CNAME to the Pages
+          # project, and writes the redirect rule into the Single Redirects
+          # phase, which is the one a normal zone has. It knows the shape of
+          # the rule and how to leave the other rules of the phase alone.
           node scripts/cloudflare-www-redirect.mjs "${DOMAIN}"
 
       - name: Attach www to the Pages project

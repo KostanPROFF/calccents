@@ -1,27 +1,23 @@
 #!/usr/bin/env node
 /**
- * The www to apex redirect.
+ * The www address of the site.
  *
- * Cloudflare has two products that redirect, and they sit in two different
- * phases of the ruleset engine:
+ * Two things live here:
  *
- *   http_request_redirect         Bulk Redirects, an Enterprise feature
- *   http_request_dynamic_redirect Single Redirects, on every plan
+ *   1. The DNS record of www, a CNAME to the Pages project, proxied.
+ *   2. The redirect rule that sends www to the apex with a 301.
  *
- * Asking a normal zone for the first phase is answered with "phase
- * http_request_redirect not allowed at zone level", which is not a
- * permissions problem: the zone is simply not an Enterprise one. This
- * script uses the second phase.
+ * The rule lives in the Single Redirects phase,
+ * "http_request_dynamic_redirect", which is the phase a normal zone has.
+ * The other redirect phase, "http_request_redirect", is Bulk Redirects, an
+ * Enterprise feature, and asking a normal zone for it is answered with
+ * "phase http_request_redirect not allowed at zone level".
  *
- * The two phases also take the rule in different shapes. Bulk Redirects
- * carries the source and the target in action_parameters.from and
- * action_parameters.to. Single Redirects carries the target in
- * action_parameters.from_value.target_url, and what the rule matches is the
- * expression on the rule itself.
- *
- * The script is idempotent. It looks for its own rule by reference first,
- * and when the phase already has an entry point ruleset it updates that one
- * instead of creating a second, keeping the rules that are not its own.
+ * The rule is written in the shape the phase takes, which puts the target
+ * in action_parameters.from_value.target_url and lets the expression on the
+ * rule say what the rule matches. A rule that is already in the phase is
+ * never rebuilt in another shape: only the target is changed, so a rule
+ * that came from the dashboard keeps the form it was made in.
  *
  * The token needs the Zone > Single Redirect > Edit permission, which the
  * API lists as "Dynamic URL Redirects Write".
@@ -74,12 +70,74 @@ async function findZone() {
 }
 
 /**
+ * The www record: a CNAME to the Pages project, proxied. The CNAME points
+ * at the project and not at the apex, so that the request for www is a
+ * request for www all the way to the edge and the host of the request is
+ * the one the redirect rule matches on.
+ */
+async function ensureWwwRecord(zone) {
+  const name = `www.${domain}`;
+  const target = `${domain.split('.')[0]}.pages.dev`;
+
+  const list = await api(`/zones/${zone.id}/dns_records?name=${encodeURIComponent(name)}`);
+  const records = list.body.result ?? [];
+  const record = records.find((entry) => entry.type === 'CNAME' && entry.name === name);
+
+  if (record && record.content === target && record.proxied) {
+    console.log(`The www record already points at ${target}.`);
+    return;
+  }
+
+  if (record) {
+    console.log(`The www record points at ${record.content}, moving it to ${target}.`);
+    const updated = await api(`/zones/${zone.id}/dns_records/${record.id}`, {
+      method: 'PUT',
+      body: JSON.stringify({ type: 'CNAME', name, content: target, proxied: true, ttl: 1 }),
+    });
+    if (!updated.ok) {
+      console.error(`::warning::The www record could not be moved, it still points at ${record.content}.`);
+      for (const error of updated.body.errors ?? []) {
+        console.error(`  ${error.code}: ${error.message}`);
+      }
+      return;
+    }
+    console.log(`The www record now points at ${target}.`);
+    return;
+  }
+
+  console.log(`Creating the www record: CNAME www -> ${target}.`);
+  const created = await api(`/zones/${zone.id}/dns_records`, {
+    method: 'POST',
+    body: JSON.stringify({ type: 'CNAME', name: 'www', content: target, proxied: true, ttl: 1 }),
+  });
+  if (!created.ok) {
+    console.error(`::warning::The www record could not be created.`);
+    for (const error of created.body.errors ?? []) {
+      console.error(`  ${error.code}: ${error.message}`);
+    }
+    return;
+  }
+  console.log(`The www record now points at ${target}.`);
+}
+
+/** Whether a rule of the phase already sends www to the apex. */
+function isOurRule(rule) {
+  if (rule.ref === RULE_REF) {
+    return true;
+  }
+  const parameters = rule.action_parameters ?? {};
+  const host = parameters.from?.value?.http_request?.host?.matches;
+  if (host === `www.${domain}`) {
+    return true;
+  }
+  return typeof rule.expression === 'string' && rule.expression.includes(`www.${domain}`);
+}
+
+/**
  * The rule this script owns: www to the apex, with the query string kept.
  *
- * The source and the target go in action_parameters.from and
- * action_parameters.to, which is the shape a redirect rule carries when it
- * is read back from a zone. The expression on the rule says what the rule
- * matches, and the ruleset engine wants an expression on every rule.
+ * The target goes in action_parameters.from_value.target_url, and the
+ * expression on the rule says what the rule matches.
  */
 function buildRule() {
   return {
@@ -88,27 +146,34 @@ function buildRule() {
     description: 'Send www to the apex domain',
     action: 'redirect',
     action_parameters: {
-      from: {
-        value: {
-          http_request: {
-            host: {
-              matches: `www.${domain}`,
-            },
-          },
+      from_value: {
+        target_url: {
+          value: `https://${domain}`,
         },
+        status_code: 301,
+        preserve_query_string: true,
       },
-      to: {
-        value: {
-          url: {
-            value: `https://${domain}`,
-          },
-        },
-      },
-      preserve_query_string: true,
-      status_code: 301,
     },
-    conditions: [],
   };
+}
+
+/**
+ * The target of a rule, wherever the rule keeps it. A rule that came from
+ * the dashboard may keep it in another place, and the rule is not rebuilt
+ * in another shape: only the target is changed.
+ */
+function setTarget(rule) {
+  const parameters = rule.action_parameters ?? {};
+
+  if (parameters.from_value?.target_url) {
+    parameters.from_value.target_url.value = `https://${domain}`;
+    return 'from_value.target_url';
+  }
+  if (parameters.to?.value?.url) {
+    parameters.to.value.url.value = `https://${domain}`;
+    return 'to.url';
+  }
+  return null;
 }
 
 /**
@@ -127,6 +192,8 @@ async function main() {
     return;
   }
   console.log(`zone: ${zone.name} (${zone.id})`);
+
+  await ensureWwwRecord(zone);
 
   const rule = buildRule();
 
@@ -169,14 +236,19 @@ async function main() {
   }
 
   const rules = (entrypoint.rules ?? []).map(cleanRule);
-  const index = rules.findIndex((entry) => entry.ref === RULE_REF);
+  const index = rules.findIndex(isOurRule);
 
   if (index === -1) {
     rules.push(rule);
     console.log('The ruleset has no rule of ours yet, adding one.');
   } else {
-    rules[index] = rule;
-    console.log('The ruleset already has our rule, refreshing it.');
+    const where = setTarget(rules[index]);
+    if (where) {
+      console.log(`The ruleset already has our rule, moving the target to ${where}.`);
+    } else {
+      rules[index] = rule;
+      console.log('The ruleset already has our rule in a shape this script does not know, replacing it.');
+    }
   }
 
   const updated = await api(`/zones/${zone.id}/rulesets/${entrypoint.id}`, {
