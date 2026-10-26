@@ -111,12 +111,12 @@ async function main() {
   }
   console.log(`zone: ${zone.name} (${zone.id})`);
 
-  const entry = await api(`/zones/${zone.id}/rulesets/phases/${PHASE}/entrypoint`);
-  const existing = entry.ok ? entry.body.result : null;
-
   const rule = buildRule();
 
-  if (!existing) {
+  const entry = await api(`/zones/${zone.id}/rulesets/phases/${PHASE}/entrypoint`);
+  let entrypoint = entry.ok ? entry.body.result : null;
+
+  if (!entrypoint) {
     console.log(`No ruleset in the ${PHASE} phase yet, creating one.`);
     const created = await api(`/zones/${zone.id}/rulesets`, {
       method: 'POST',
@@ -135,10 +135,23 @@ async function main() {
       return;
     }
     console.log(`redirect created: ruleset ${created.body.result.id}`);
-    return;
+
+    // A ruleset that is not the entry point of its phase is never executed,
+    // so the entry point is read back and the rule is written into it.
+    const after = await api(`/zones/${zone.id}/rulesets/phases/${PHASE}/entrypoint`);
+    entrypoint = after.ok ? after.body.result : null;
+    if (!entrypoint) {
+      console.error(`::warning::The ruleset was created but the phase has no entry point, so the rule would never run.`);
+      return;
+    }
+    if (entrypoint.id !== created.body.result.id) {
+      console.log(`The entry point of the phase is another ruleset (${entrypoint.id}), writing the rule into it.`);
+    }
+  } else {
+    console.log(`entry point: ${entrypoint.id} (${entrypoint.kind}, ${entrypoint.phase})`);
   }
 
-  const rules = (existing.rules ?? []).map(cleanRule);
+  const rules = (entrypoint.rules ?? []).map(cleanRule);
   const index = rules.findIndex((entry) => entry.ref === RULE_REF);
 
   if (index === -1) {
@@ -149,10 +162,10 @@ async function main() {
     console.log('The ruleset already has our rule, refreshing it.');
   }
 
-  const updated = await api(`/zones/${zone.id}/rulesets/${existing.id}`, {
+  const updated = await api(`/zones/${zone.id}/rulesets/${entrypoint.id}`, {
     method: 'PUT',
     body: JSON.stringify({
-      name: existing.name ?? 'Redirect rules ruleset',
+      name: entrypoint.name ?? 'Redirect rules ruleset',
       kind: 'zone',
       phase: PHASE,
       rules,
@@ -168,6 +181,18 @@ async function main() {
   }
 
   console.log(`redirect updated: ruleset ${updated.body.result.id}, ${updated.body.result.rules.length} rule(s)`);
+
+  // What the phase holds, read back from the API. A rule that is in a
+  // ruleset but does not run is usually a rule whose shape the phase does
+  // not take, and this is where that shows.
+  const check = await api(`/zones/${zone.id}/rulesets/phases/${PHASE}/entrypoint`);
+  if (check.ok) {
+    console.log(`phase holds ${check.body.result.rules.length} rule(s):`);
+    for (const stored of check.body.result.rules ?? []) {
+      console.log(`  ref=${stored.ref ?? '(none)'} action=${stored.action} expression=${stored.expression ?? '(none)'}`);
+      console.log(`  parameters=${JSON.stringify(stored.action_parameters)}`);
+    }
+  }
 }
 
 main().catch((error) => {
