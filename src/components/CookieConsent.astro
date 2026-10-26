@@ -58,15 +58,6 @@ const cloudflareToken =
 const gaUrl = `https://www.googletagmanager.com/gtag/js?id=${gaId}`;
 const adsenseUrl = `https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${adsenseClient}`;
 const cloudflareUrl = 'https://static.cloudflareinsights.com/beacon.min.js';
-/**
- * The beacon configuration version.
- *
- * This is the version Cloudflare itself writes into the beacon tag. Its
- * presence is what tells the beacon to report to the site's own
- * /cdn-cgi/rum endpoint instead of the cross-origin one, which the browser
- * refuses for this domain.
- */
-const cloudflareBeaconVersion = '2024.11.0';
 
 const privacyLink = `<a href="${localePath(locale, '/privacy/')}">${copy.privacyLink}</a>`;
 const body = copy.body.replace('{privacyLink}', privacyLink);
@@ -86,7 +77,6 @@ const bootstrap = `(function () {
   var ADSENSE_URL = '${adsenseUrl}';
   var CLOUDFLARE_URL = '${cloudflareUrl}';
   var CLOUDFLARE_TOKEN = '${cloudflareToken}';
-  var CLOUDFLARE_VERSION = '${cloudflareBeaconVersion}';
   var BEACON_HOST = 'static.cloudflareinsights.com';
   var beaconObserver = null;
 
@@ -133,12 +123,16 @@ const bootstrap = `(function () {
     /*
      * Cloudflare's own page analytics.
      *
-     * The beacon reports the page view to the site's own /cdn-cgi/rum
-     * endpoint, so the data never leaves Cloudflare's edge for this
-     * domain. The version field is what tells the beacon to use that
-     * endpoint: without it the beacon posts to cloudflareinsights.com,
-     * and the browser refuses that answer because the endpoint does not
-     * allow this origin.
+     * The configuration is the one Cloudflare's own dashboard hands out for
+     * a manual installation: the site token and nothing else. The beacon
+     * reports the page view to Cloudflare's analytics service at
+     * cloudflareinsights.com, which answers with the CORS headers this
+     * domain needs.
+     *
+     * The configuration must not carry the "version" field. That field
+     * points the beacon at the site's own /cdn-cgi/rum endpoint instead,
+     * and that endpoint answers 404 while the automatic setup in the
+     * dashboard is off, so the page view would be counted nowhere.
      *
      * The script sets no cookie and stores nothing, so it only counts page
      * views and how fast the pages load.
@@ -151,10 +145,7 @@ const bootstrap = `(function () {
     el.defer = true;
     el.src = CLOUDFLARE_URL;
     el.setAttribute('data-cf-beacon', JSON.stringify({
-      version: CLOUDFLARE_VERSION,
       token: CLOUDFLARE_TOKEN,
-      r: 1,
-      spa: 2,
     }));
     document.head.appendChild(el);
   }

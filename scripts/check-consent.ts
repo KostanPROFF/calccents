@@ -102,6 +102,24 @@ const HOSTING_BEACON = 'static.cloudflareinsights.com';
  */
 const HOSTING_SUPPRESSION_MARKER = 'suppressInjectedBeacon';
 
+/**
+ * The beacon configuration on the page.
+ *
+ * The configuration is what tells the beacon where to report the page view.
+ * Cloudflare's own dashboard hands out a configuration with the site token
+ * and nothing else, and the beacon then reports to Cloudflare's analytics
+ * service, which answers with the CORS headers this domain needs.
+ *
+ * The "version" field changes that: with it, the beacon reports to the
+ * site's own /cdn-cgi/rum endpoint instead, and that endpoint answers 404
+ * while the automatic setup in the Cloudflare dashboard is off. The page
+ * view would then be counted nowhere, and nothing on the page would show
+ * it. The field is easy to add back by hand, because it looks like part of
+ * the configuration Cloudflare writes itself, so the gate checks that it is
+ * gone.
+ */
+const HOSTING_BEACON_VERSION_MARKER = 'version: CLOUDFLARE_VERSION';
+
 function collectFiles(dir: string, extensions: string[]): string[] {
   const found: string[] = [];
   let entries: string[];
@@ -154,6 +172,7 @@ const HOSTING_TAG = new RegExp(
 );
 
 let pagesWithHostingTag = 0;
+let pagesWithBeaconVersion = 0;
 let privacyPages = 0;
 let privacyPagesWithoutHosting = 0;
 
@@ -178,6 +197,10 @@ for (const file of htmlFiles) {
 
   if (HOSTING_TAG.test(html)) {
     pagesWithHostingTag += 1;
+  }
+
+  if (html.includes(HOSTING_BEACON_VERSION_MARKER)) {
+    pagesWithBeaconVersion += 1;
   }
 
   if (rel.replace(/\\/g, '/').endsWith('privacy/index.html')) {
@@ -244,6 +267,13 @@ if (pagesWithHostingTag > 0) {
   problems.push(
     `${pagesWithHostingTag} of ${htmlFiles.length} pages carry the hosting provider's beacon ` +
       'as a script tag, so the request goes out before the answer',
+  );
+}
+if (pagesWithBeaconVersion > 0) {
+  problems.push(
+    `${pagesWithBeaconVersion} of ${htmlFiles.length} pages point the hosting provider's beacon ` +
+      "at the site's own /cdn-cgi/rum endpoint, which answers 404 while the automatic setup in " +
+      'the Cloudflare dashboard is off. The page view would be counted nowhere.',
   );
 }
 if (privacyPagesWithoutHosting > 0) {

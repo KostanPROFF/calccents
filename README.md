@@ -190,19 +190,26 @@ earlier deployment from the Cloudflare Pages dashboard.
 
 ### Cloudflare Web Analytics
 
-Cloudflare's Web Analytics is switched on for the zone, and Cloudflare can
-add its beacon to every page it serves. That beacon reports the page view
-straight away, before the reader has answered the cookie question, so the
-site takes it out of the document before it can run: a script that is
-removed before it runs does not run. The site's own copy is loaded by the
-consent bootstrap instead, after the answer, with the site token from
+Cloudflare's Web Analytics is switched on for the zone, and the automatic
+setup in the dashboard is off: Cloudflare no longer adds its beacon to the
+pages it serves, and the site installs the snippet itself. That snippet is
+loaded by the consent bootstrap, after the answer, with the site token from
 `src/config/site.ts`.
 
-The beacon reports to the site's own `/cdn-cgi/rum` endpoint, so the data
-does not leave Cloudflare's edge for this domain. That is what the `version`
-field in the beacon configuration is for: without it the beacon posts to
-`cloudflareinsights.com`, and the browser refuses that answer, because the
-endpoint does not allow this origin.
+The code that takes an automatically added beacon out of the document is
+still on every page. It costs nothing and it covers the case where the
+dashboard setting is turned back on: a script that is removed before it
+runs does not run, so the page view would still wait for the answer.
+
+The beacon reports to Cloudflare's own analytics service, at
+`cloudflareinsights.com/cdn-cgi/rum`, which answers with the CORS headers
+this domain needs. The configuration is the one Cloudflare's dashboard
+hands out for a manual installation: the site token and nothing else. It
+must not carry the `version` field. That field points the beacon at the
+site's own `/cdn-cgi/rum` endpoint instead, and that endpoint answers 404
+while the automatic setup in the dashboard is off, so the page view would
+be counted nowhere. `scripts/check-consent.ts` fails the build if the
+field comes back.
 
 The beacon sets no cookie, writes nothing to local storage and creates no
 identifier, and the IP address it carries is used at the edge to work out
@@ -214,18 +221,17 @@ Two gates watch this:
 
 - `scripts/check-consent.ts` checks that the policy still names the
   provider, that the beacon URL is in the source, that the beacon is not in
-  the document as a script tag, and that the code that removes the injected
-  beacon is still on every page.
+  the document as a script tag, that the code which removes an injected
+  beacon is still on every page, and that the beacon configuration does not
+  carry the `version` field.
 - `scripts/check-edge-analytics.ts` asks the live site for a page the way a
   browser does and reports whether Cloudflare is still adding its own
   beacon. It is the only way to see this from the outside, because
   Cloudflare leaves the beacon out of the page for anything that does not
   look like a browser navigation.
 
-While the automatic setup is on in the Cloudflare dashboard, the beacon file
-is still downloaded before the answer even though nothing is reported.
-Turning it off — Web Analytics, the site, Settings, the automatic setup —
-stops that as well. The site behaves the same either way.
+The automatic setup in the Cloudflare dashboard is off, and the site
+installs the snippet itself, so nothing is downloaded before the answer.
 
 ### The domain
 
