@@ -21,10 +21,14 @@
   --border-subtle: #1a1d20;
   --border-strong: #34383d;
 
-  /* Text */
+  /* Text.
+     The muted tone is used for small print: captions, hints, labels and
+     the lines of a chart. Small print still has to be readable, so it
+     clears 4.5:1 against every surface it can land on, not only against
+     the page. */
   --text: #f3f5f6;
   --text-secondary: #9aa2a8;
-  --text-muted: #6b7379;
+  --text-muted: #828a91;
 
   /* Accents.
      The accent does two jobs, so it has two tokens. As a surface it sits
@@ -39,6 +43,13 @@
   --accent-link-hover: #8aa3ff;
   --link-decoration: rgba(110, 143, 255, 0.4);
   --accent-border: rgba(110, 143, 255, 0.3);
+
+  /* The accent as it is read rather than as it is painted.
+     A label in the accent colour has to clear 4.5:1 against the page, and
+     against the tinted panel a badge sits on, so the light theme needs a
+     deeper blue than the one that works as a button. */
+  --accent-ink: #6e8fff;
+  --accent-ink-strong: #8aa3ff;
 
   --positive: #4ade80;
   --positive-subtle: rgba(74, 222, 128, 0.12);
@@ -129,7 +140,7 @@
 
   --text: #101114;
   --text-secondary: #55575e;
-  --text-muted: #85888f;
+  --text-muted: #65676d;
 
   --accent: #6e8fff;
   --accent-hover: #5a7df0;
@@ -139,6 +150,12 @@
   --accent-link-hover: #2f49b2;
   --link-decoration: rgba(59, 91, 219, 0.4);
   --accent-border: rgba(59, 91, 219, 0.35);
+
+  /* The accent as it is read rather than as it is painted. See the dark
+     theme above: the painted accent is too light to be small text on
+     white, so the light theme reads in a deeper blue. */
+  --accent-ink: #3b5bdb;
+  --accent-ink-strong: #2f49b2;
 
   --positive: #127a3f;
   --positive-subtle: rgba(18, 122, 63, 0.1);
@@ -509,7 +526,7 @@ a:hover {
 
 .language-switcher__check {
   flex: none;
-  color: var(--accent);
+  color: var(--accent-ink);
 }
 
 .site-nav a {
@@ -549,9 +566,22 @@ a:hover {
     links: the Russian and Spanish labels are longer than the English
     ones, and the four links plus two icon buttons do not fit beside the
     full wordmark.
+
+    The name is hidden from the eye and kept for the screen reader. The
+    mark carries no text of its own, so removing the name outright would
+    leave the link with nothing to announce, and a link with no name is
+    a link nobody can follow.
   */
   .brand__name {
-    display: none;
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
   }
 
   .site-nav {
@@ -1120,7 +1150,7 @@ a:hover {
 .badge--accent {
   border-color: var(--accent-border);
   background: var(--accent-subtle);
-  color: var(--accent-hover);
+  color: var(--accent-ink-strong);
 }
 
 .eyebrow {
@@ -1128,7 +1158,7 @@ a:hover {
   font-weight: 600;
   letter-spacing: 0.1em;
   text-transform: uppercase;
-  color: var(--accent);
+  color: var(--accent-ink);
 }
 
 /* --------------------------------------------------------------------------

@@ -97,9 +97,18 @@ const consentBody = fill(copy.consentBody, {
 </Base>
 
 <style>
-  /* A button that reads as a link: it opens the banner instead of
-     navigating anywhere, but the sentence around it is a paragraph. */
-  .link-button {
+  /*
+    A button that reads as a link: it opens the banner instead of
+    navigating anywhere, but the sentence around it is a paragraph.
+
+    The rule is global on purpose. Astro scopes the styles of a component
+    to the elements it renders, and this button arrives through set:html,
+    so it never carries the scope attribute and a scoped rule would not
+    reach it. Left unscoped, the button kept the browser's own grey and
+    its own text colour, and the sentence read at a fraction of the
+    contrast the page is written to.
+  */
+  :global(.link-button) {
     padding: 0;
     background: none;
     border: none;
@@ -110,7 +119,7 @@ const consentBody = fill(copy.consentBody, {
     cursor: pointer;
   }
 
-  .link-button:hover {
+  :global(.link-button:hover) {
     color: var(--accent-link-hover);
   }
 </style>

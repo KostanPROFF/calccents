@@ -83,6 +83,8 @@ scripts/
 ├─ check-links.ts          internal link resolution
 ├─ check-ads.ts            AdSense gating, both directions
 ├─ check-consent.ts        consent gating: no tracker before the answer
+├─ check-contrast.ts       contrast of every text token, in both themes
+├─ check-scoped-styles.ts  a scoped rule must not target an unscoped element
 ├─ check-dom-ids.ts        duplicate id detection in the built HTML
 └─ og-image.html           the source of the social card
 ```
@@ -584,7 +586,7 @@ those markets earns a fraction of the same page view.
 
 ## Verification gates
 
-`pnpm verify` runs seven gates, and all seven block a deployment:
+`pnpm verify` runs nine gates, and all nine block a deployment:
 
 1. `astro check` — no type or template errors.
 2. Unit tests — 90 % line coverage, 90 % function coverage and 85 % branch
@@ -600,12 +602,24 @@ those markets earns a fraction of the same page view.
 6. Consent gating — the banner is on every page, both trackers are present
    in the source, and neither one is loaded as a script tag before the
    reader has answered.
-7. DOM ids — every id in the built HTML appears exactly once.
+7. Colour contrast — every text token clears 4.5:1 against every surface it
+   can land on, in both themes. The palette lives in one file, so one token
+   changes it for every page at once and nothing else notices.
+8. Scoped styles — no class used on an element without a scope attribute is
+   targeted by a scoped rule. Astro cannot reach such an element with a
+   scoped rule, and the element quietly falls back to the browser's own
+   styling.
+9. DOM ids — every id in the built HTML appears exactly once.
 
-The last three gates exist because the build proves the code compiles, not that
+The last five gates exist because the build proves the code compiles, not that
 it behaves. A result cell and an input field that shared an id once left the
 monthly rent figure stuck on a placeholder while every test still passed; the
-duplicate-id gate now catches that class of defect before it ships.
+duplicate-id gate now catches that class of defect before it ships. A muted
+grey that fell below the contrast ratio made small print unreadable while the
+page still looked right in a screenshot, and a button that was written to
+read as a link came back as a grey box, because the rule for it was scoped
+to a component and the button arrived through `set:html`. The contrast gate
+and the scoped-style gate now catch both.
 
 The calculation engine is tested against published loan figures and against
 the invariants the mathematics requires: a schedule sums to the amount
