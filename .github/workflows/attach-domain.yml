@@ -149,19 +149,11 @@ jobs:
 
           # A redirect is better than a second host serving the same pages:
           # one canonical address, one set of signals.
-          have_rule=$(curl -sS "https://api.cloudflare.com/client/v4/zones/${zone}/rulesets/phases/http_request_redirect/entrypoint" \
-            -H "Authorization: Bearer ${CLOUDFLARE_API_TOKEN}" \
-            | node -e 'let r="";process.stdin.on("data",c=>r+=c).on("end",()=>{const b=JSON.parse(r);console.log(b.success&&b.result?.rules?.some(x=>JSON.stringify(x).includes("www.${DOMAIN}"))?"yes":"no");});')
-          if [ "$have_rule" = "yes" ]; then
-            echo "The www redirect already exists."
-          else
-            echo "Creating the www to apex redirect"
-            curl -sS -X POST "https://api.cloudflare.com/client/v4/zones/${zone}/rulesets" \
-              -H 'Content-Type: application/json' \
-              -H "Authorization: Bearer ${CLOUDFLARE_API_TOKEN}" \
-              -d "{\"name\": \"Redirect www to the apex domain\", \"kind\": \"zone\", \"phase\": \"http_request_redirect\", \"rules\": [{\"action\": \"redirect\", \"action_parameters\": {\"from\": {\"value\": {\"http_request\": {\"host\": {\"matches\": \"www.${DOMAIN}\"}}}}, \"to\": {\"value\": {\"url\": {\"value\": \"https://${DOMAIN}\"}}, \"preserve_query_string\": true}, \"status_code\": 301}, \"conditions\": [], \"description\": \"Send www to the apex domain\"}]}" \
-              | node -e 'let r="";process.stdin.on("data",c=>r+=c).on("end",()=>{const b=JSON.parse(r);if(!b.success){console.log("The redirect could not be created, www will still serve the site directly.");for(const e of b.errors??[])console.error(`  ${e.code}: ${e.message}`);return;}console.log("redirect created");});'
-          fi
+          #
+          # The rule lives in the Single Redirects phase, which is the one a
+          # normal zone has. The script knows the shape of the rule and how
+          # to leave the other rules of the phase alone.
+          node scripts/cloudflare-www-redirect.mjs "${DOMAIN}"
 
       - name: Attach www to the Pages project
         env:
@@ -174,7 +166,7 @@ jobs:
           # Cloudflare Pages answers 522 for a hostname the project does not
           # know, so www has to be a custom domain of its own. The redirect
           # above is the nicer form of this, but it needs a token with the
-          # zone rulesets permission; without it the site is served at both
+          # Single Redirect permission; without it the site is served at both
           # addresses and the canonical tag points at the apex either way.
           response=$(curl -sS -X POST \
             "https://api.cloudflare.com/client/v4/accounts/${CLOUDFLARE_ACCOUNT_ID}/pages/projects/${PROJECT}/domains" \
