@@ -30,6 +30,10 @@ jobs:
     name: Attach domain
     runs-on: ubuntu-latest
     steps:
+      # The redirect rule is a script in the repository, so the repository
+      # has to be on disk before the steps below run.
+      - uses: actions/checkout@v4
+
       - name: Attach the domain
         env:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
@@ -131,7 +135,10 @@ jobs:
             exit 0
           fi
 
-          existing=$(curl -sS "https://api.cloudflare.com/client/v4/zones/${zone}/dns_records?name=www" \
+          # The filter takes the fully qualified name. A short "www" matches
+          # nothing, and an empty answer would send the step on to create a
+          # record that is already there.
+          existing=$(curl -sS "https://api.cloudflare.com/client/v4/zones/${zone}/dns_records?name=www.${DOMAIN}" \
             -H "Authorization: Bearer ${CLOUDFLARE_API_TOKEN}" \
             | node -e 'let r="";process.stdin.on("data",c=>r+=c).on("end",()=>{const rs=JSON.parse(r).result??[];console.log(rs.map(x=>`${x.type}|${x.name}|${x.content}`).join("\n"));});')
           # The API returns names fully qualified, so the check looks for
