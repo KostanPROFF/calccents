@@ -24,11 +24,15 @@
  *   - every jurisdiction carries a property tax rate, because every state
  *     levies one
  *   - a state that levies no tax on wages has no brackets at all
+ *   - the deductions and the exemptions are amounts a state could charge
+ *   - the credits name states that exist, with percentages and amounts that
+ *     are worth something
  *
  * Run: node scripts/check-state-data.ts
  */
 
 import { STATES, type State } from '../src/lib/data/states.ts';
+import { STATE_CREDITS } from '../src/lib/data/stateCredits.ts';
 
 /**
  * The codes the edge can report.
@@ -69,6 +73,36 @@ function check(state: State, key: string): void {
     problems.push(
       `${where}: the property tax rate is ${state.propertyTaxRate}, which is not a rate a state charges`,
     );
+  }
+
+  /* The amounts that come off the income or off the tax. */
+  const amounts: { label: string; amount: number }[] = [];
+  if (state.incomeTax.standardDeduction) {
+    amounts.push({ label: 'the standard deduction', amount: state.incomeTax.standardDeduction.single.amount });
+    amounts.push({ label: 'the standard deduction', amount: state.incomeTax.standardDeduction.married.amount });
+  }
+  if (state.incomeTax.standardDeductionCredit) {
+    amounts.push({
+      label: 'the standard deduction credit',
+      amount: state.incomeTax.standardDeductionCredit.single.amount,
+    });
+    amounts.push({
+      label: 'the standard deduction credit',
+      amount: state.incomeTax.standardDeductionCredit.married.amount,
+    });
+  }
+  if (state.incomeTax.exemption) {
+    for (const [label, value] of Object.entries(state.incomeTax.exemption)) {
+      if (value) amounts.push({ label: `the ${label} exemption`, amount: value.amount });
+    }
+  }
+
+  for (const amount of amounts) {
+    if (amount.amount <= 0 || amount.amount > 100000) {
+      problems.push(
+        `${where}: ${amount.label} is ${amount.amount}, which is not an amount a state charges`,
+      );
+    }
   }
 
   for (const [label, brackets] of [
@@ -130,6 +164,49 @@ for (const code of CODES) {
   }
 }
 
+/* The credits. */
+for (const [code, credits] of Object.entries(STATE_CREDITS)) {
+  if (!STATES[code]) {
+    problems.push(`${code}: the credits name a state that is not in the table`);
+    continue;
+  }
+
+  if (credits.earnedIncome) {
+    const eitc = credits.earnedIncome;
+    if (eitc.percent <= 0 || eitc.percent > 200) {
+      problems.push(`${code}: the earned income credit is ${eitc.percent}% of the federal credit`);
+    }
+    if (
+      eitc.percentWithoutChildren !== undefined &&
+      (eitc.percentWithoutChildren <= 0 || eitc.percentWithoutChildren > 200)
+    ) {
+      problems.push(
+        `${code}: the earned income credit for a taxpayer without children is ${eitc.percentWithoutChildren}% of the federal credit`,
+      );
+    }
+    if (eitc.cap !== undefined && eitc.cap <= 0) {
+      problems.push(`${code}: the cap on the earned income credit is ${eitc.cap}`);
+    }
+  }
+
+  if (credits.child) {
+    const child = credits.child;
+    if (child.perChild <= 0 || child.perChild > 10000) {
+      problems.push(`${code}: the child tax credit is ${child.perChild} for each child`);
+    }
+    for (const [label, phaseOut, maxIncome] of [
+      ['a single filer', child.phaseOutSingle, child.maxIncomeSingle],
+      ['a married couple', child.phaseOutMarried, child.maxIncomeMarried],
+    ] as const) {
+      if (phaseOut !== undefined && maxIncome !== undefined && phaseOut > maxIncome) {
+        problems.push(
+          `${code}: the child tax credit starts to fall away for ${label} above ${phaseOut}, which is above the income of ${maxIncome} above which it is gone`,
+        );
+      }
+    }
+  }
+}
+
 if (problems.length > 0) {
   console.error(`The state table has ${problems.length} problem(s):\n`);
   for (const problem of problems) console.error(`  ${problem}`);
@@ -142,9 +219,10 @@ if (problems.length > 0) {
 }
 
 const withBrackets = Object.values(STATES).filter((state) => state.incomeTax.single.length > 0).length;
+const withCredits = Object.keys(STATE_CREDITS).length;
 
 console.log(
   `State table check passed: ${Object.keys(STATES).length} jurisdictions ` +
     `(${withBrackets} taxing wages, ${Object.keys(STATES).length - withBrackets} not), ` +
-    '0 problems.',
+    `${withCredits} with credits, 0 problems.`,
 );

@@ -120,7 +120,7 @@ export const en = {
       sentence says so.
     */
     detectedFromIp:
-      'The state is detected from your IP address and is approximate: a VPN, a proxy or a mobile network can point it at the wrong state. The rate stays editable.',
+      'The state is detected from your IP address and is approximate: a VPN, a proxy or a mobile network can point it at the wrong state. The field stays editable.',
   },
 
   newsletter: {
@@ -416,6 +416,10 @@ export const en = {
         label: 'Tax Foundation — Property Taxes by State and County, 2026',
         url: 'https://taxfoundation.org/data/all/state/property-taxes-by-state-county/',
       },
+      {
+        label: 'Tax Foundation — Facts & Figures 2026, state individual income tax rates as of 28 April 2026',
+        url: 'https://taxfoundation.org/data/all/state/2026-state-tax-data/',
+      },
     ],
   },
 
@@ -488,7 +492,7 @@ export const en = {
       'Nothing. The arithmetic runs in your browser using JavaScript that is downloaded with the page. The values you enter are not transmitted anywhere, are not stored, and are not visible to the site or to anyone else. Closing the tab discards them.',
     stateHeading: 'Your state',
     stateBody:
-      'Two of the calculators need a state figure: the federal income tax calculator, which adds a state income tax on top of the federal one, and the rent versus buy calculator, which carries a property tax on the cost of owning a home. When one of those pages opens, it asks this site which state the request came from. The answer comes from the network the site is served from, which reads the state from the address of the request, and it is used to fill in one field. Nothing else happens with it: the answer is not stored, not written to a cookie, and not sent to Google or to the hosting provider\'s page analytics. The state is approximate — a VPN, a proxy or a mobile network can point it at the wrong state — and the field it fills can be changed or cleared, in which case the page keeps the rate you typed.',
+      'Two of the calculators need a state figure: the federal income tax calculator, which adds a state income tax on top of the federal one, and the rent versus buy calculator, which carries a property tax on the cost of owning a home. When one of those pages opens, it asks this site which state the request came from. The answer comes from the network the site is served from, which reads the state from the address of the request, and it is used to fill in one field. Nothing else happens with it: the answer is not stored, not written to a cookie, and not sent to Google or to the hosting provider\'s page analytics. The state is approximate — a VPN, a proxy or a mobile network can point it at the wrong state — and the field it fills can be changed or cleared, in which case the page keeps the figure you typed.',
     cookiesHeading: 'Cookies',
     cookiesBody:
       '{name} sets no cookies of its own. The site\'s own analytics run on Google Analytics 4, which Google serves from its own domains and which stores a first-party identifier in your browser so that one visit can be told from the next. That identifier is not used for advertising and is not shared with other sites. The hosting provider\'s page analytics store nothing in your browser: no cookie, no local storage, no identifier of any kind.',
@@ -1128,14 +1132,13 @@ export const en = {
       name: 'Federal Income Tax Calculator',
       title: 'Federal Income Tax Calculator for the 2026 Tax Year',
       description:
-        'Calculate the 2026 federal income tax on a year of earnings, with the filing status, the deduction, and the effective and marginal rates side by side.',
-      short: 'Federal income tax on a year of earnings, with both rates shown.',
+        'Calculate the 2026 federal income tax on a year of earnings, with the state tax worked out from that state\'s own brackets, the filing status, the deduction, and the effective and marginal rates side by side.',
+      short: 'Federal and state income tax on a year of earnings, with both rates shown.',
       category: 'Pay',
       methodNote:
-        'The brackets and the standard deduction are the 2026 figures from Rev. Proc. 2025-32, published 3 November 2025. The payroll taxes that come out of a wage are not part of this calculation; they are in the take-home pay calculator.',
+        'The federal brackets and the standard deduction are the 2026 figures from Rev. Proc. 2025-32, published 3 November 2025. The state tax is worked out from the 2026 brackets, the standard deduction, the personal exemption and the credits of the state you pick, taken from the Tax Foundation tables of 28 April 2026. The payroll taxes that come out of a wage are not part of this calculation; they are in the take-home pay calculator.',
       script: {
-        stateRateDetected: 'Filled with {state}: the 2026 rate for your bracket.',
-        stateRateNoTax: '{state} does not tax wages, so the rate is 0.',
+        stateDetected: 'Filled with {state}: the state your request comes from.',
       },
       fields: {
         grossIncome: 'Gross income for the year',
@@ -1143,8 +1146,13 @@ export const en = {
         itemisedDeduction: 'Itemised deduction',
         standardDeduction: 'Standard deduction',
         useStandard: 'Use the standard deduction',
-        stateRate: 'State income tax rate',
-        stateRateHint: 'the rate for your bracket',
+        state: 'State',
+        stateHint: 'for the state tax',
+        stateNone: 'No state',
+        children: 'Qualifying children under 17',
+        childrenHint: 'for the state credits',
+        stateTaxOverride: 'Your own state tax',
+        stateTaxOverrideHint: 'leave empty to use the model',
         preTax: 'Pre-tax deductions',
         preTaxHint: '401(k), HSA, FSA per year',
         perYear: 'per year',
@@ -1163,16 +1171,18 @@ export const en = {
         standardDeduction: 'Standard deduction',
         itemisedDeduction: 'Itemised deduction',
         federalTax: 'Federal income tax',
+        stateTaxableIncome: 'State taxable income',
+        stateCredits: 'State credits',
         stateTax: 'State income tax',
         totalTax: 'Total tax',
         effectiveRate: 'Effective rate',
         marginalRate: 'Marginal rate',
         afterTax: 'Income after tax',
         note:
-          'The deduction applied is the larger of the two: the standard deduction for the filing status, or the itemised deduction entered on the left.',
+          'The deduction applied is the larger of the two: the standard deduction for the filing status, or the itemised deduction entered on the left. The state tax is worked out from the state you pick.',
       },
       resultNote:
-        'The figure is a tax liability, not the amount withheld from a paycheque. It does not include credits or the payments already made during the year.',
+        'The figure is a tax liability, not the amount withheld from a paycheque. The federal figure does not include the federal credits or the payments already made during the year; the state figure includes the state credits the model carries.',
       chart: {
         title: 'What the income is left with',
         note: 'One bar for the year, split into the part that stays with the reader and the part that goes to tax.',
@@ -1184,19 +1194,23 @@ export const en = {
         ],
       },
       formula:
-        'taxable income = gross income − pre-tax deductions − deduction; tax = bracket table applied to taxable income',
+        'taxable income = gross income − pre-tax deductions − deduction; tax = bracket table applied to taxable income; state tax = the state brackets applied to the adjusted gross income less the state deduction and exemption, less the state credits',
       method: [
         'The calculation starts with the gross income for the year and takes the pre-tax deductions off, because a 401(k) contribution or a health account contribution is not taxed as income.',
         'The deduction comes next. The standard deduction for the filing status is used unless the reader enters an itemised deduction, and the larger of the two is the one that applies. The standard deduction for 2026 is $16,100 for a single filer, $32,200 for married filing jointly and $24,150 for head of household.',
         'What is left is the taxable income, and the tax is the 2026 bracket table applied to it. Each bracket is a fixed amount of tax plus a percentage of the income above the bottom of that bracket, the way the IRS publishes it.',
         'The two rates answer different questions. The marginal rate is the rate the next dollar of taxable income is taxed at, which is the highest bracket the income reaches. The effective rate is the total tax divided by the whole income, and it is lower because the higher brackets only touch the part of the income above them.',
+        'The state tax is worked out on its own. The state starts from the adjusted gross income, takes off its own standard deduction and personal exemption where it gives them as exclusions, applies its own brackets slice by slice, and takes off the credits it pays. The states that give the exemption or the standard deduction as a credit instead get it off the tax, which is where those credits are counted.',
       ],
       limits: [
         'It does not model tax credits. The child tax credit, the earned income credit and the education credits reduce the tax and are not in the calculation.',
         'It does not model the capital gains and ordinary income distinction, so a year with investment income is calculated at the ordinary rates.',
         'It does not model the senior deduction, or any deduction outside the standard and itemised amounts entered on the left.',
         'It does not model self-employment tax, which is charged on the net earnings of a self-employed person and has its own base and rate.',
-        'The state figure is a rate applied to the whole of the taxable income. The page fills it in with the rate for your bracket when the network can work out which state the request comes from, and the reader can change it. Most states tax in bands, so the real state tax is usually lower.',
+        'It does not model the federal income tax deduction that a score of states allow, so the state tax is higher than the state charges in those states.',
+        'It does not model capital gains rates, the surtaxes some states charge high earners, or the taxes of city and county governments.',
+        'It does not use the head of household table of each state, because the source does not publish one: the single filer figures are used.',
+        'It does not carry every state credit. The state earned income tax credit is there for the states that set it as a percentage of the federal credit, and the child tax credit for the states whose credit reaches every child under seventeen; the credits of the other states are not in it.',
       ],
       faq: [
         {
@@ -1217,7 +1231,11 @@ export const en = {
         },
         {
           q: 'What is the state tax figure?',
-          a: 'The rate applied to the taxable income. When the network can work out which state the request comes from, the page fills the field with the rate for your bracket for that state and follows your income and filing status until you type a rate of your own. Most states tax in bands, so the true figure for a particular income is usually lower than this estimate.',
+          a: 'The tax the state itself charges, worked out from that state\'s 2026 brackets, its standard deduction, its personal exemption and its credits. The state is picked from the list, and the page fills it in with the state your request comes from when the network can work that out. Change the state and the whole figure changes with it.',
+        },
+        {
+          q: 'Can I put in my own state tax?',
+          a: 'Yes. The field under the state takes a figure and replaces the calculated one with it. It is empty by default, and while it is empty the calculation is what the page shows.',
         },
         {
           q: 'Is this the amount I will owe?',
@@ -1240,6 +1258,10 @@ export const en = {
         {
           label: 'Tax Foundation — State Individual Income Tax Rates and Brackets, 2026',
           url: 'https://taxfoundation.org/data/all/state/state-income-tax-rates-2026/',
+        },
+        {
+          label: 'Tax Foundation — Facts & Figures 2026, state individual income tax rates as of 28 April 2026',
+          url: 'https://taxfoundation.org/data/all/state/2026-state-tax-data/',
         },
       ],
       relatedGuides: [

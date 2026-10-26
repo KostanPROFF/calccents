@@ -8,10 +8,14 @@
  *
  * Where the numbers come from:
  *
- *   income tax brackets
- *     Tax Foundation, "State Individual Income Tax Rates and Brackets, 2026",
- *     the table as of 1 January 2026, read 25 October 2026
- *     https://taxfoundation.org/data/all/state/state-income-tax-rates-2026/
+ *   income tax brackets, single filers, as of 28 April 2026
+ *     Tax Foundation, "Facts & Figures 2026", table 11
+ *     https://taxfoundation.org/wp-content/uploads/2026/05/2026_F_26F26F_ALL_Tables_Master_LAYOUT_post_release_updates_4.30.26_v3.xlsx
+ *
+ *   income tax brackets for married filing jointly, the standard deduction
+ *   and the personal exemption, February 2026
+ *     Tax Foundation, "State Individual Income Tax Rates and Brackets, 2026"
+ *     https://taxfoundation.org/wp-content/uploads/2026/02/2026-State-Individual-Income-Tax-Rates-Brackets.xlsx
  *
  *   property tax
  *     Tax Foundation, "Property Taxes by State and County, 2026", built on
@@ -19,20 +23,28 @@
  *     October 2026
  *     https://taxfoundation.org/data/all/state/property-taxes-by-state-county/
  *
+ * The two income tax tables disagree for five states, and the April table is
+ * the one that carries the rates enacted for 2026 that take effect during the
+ * year: Maine, Oklahoma, South Carolina, Utah and West Virginia. For those
+ * five the joint filing brackets are the February brackets, widened the way
+ * the source says the state widens them, with the April rates.
+ *
  * What the brackets are and are not:
  *
- *   - They are the marginal brackets, so the rate that comes out of them is
- *     the rate the next dollar of income meets, not the rate the whole income
- *     is taxed at.
- *   - The income tax calculator applies a single rate to the whole of the
- *     taxable income, which is exact in a flat-rate state and overstates the
- *     tax in a progressive one. The page says so.
+ *   - They are the marginal brackets, so the tax is what the brackets add up
+ *     to: each slice of income is taxed at the rate of the slice it falls in.
  *   - Head of household is read from the single-filer table, because the
  *     source publishes the single and the married-filing-jointly tables and
  *     no third one.
  *   - A state that levies no tax on wages has no brackets at all. Washington
  *     taxes capital gains only, which is a different tax from the one these
  *     calculators model, so its wage rate is zero.
+ *
+ * The amounts that come off the tax rather than off the income are marked as
+ * such, because that is the difference between them: a state that gives a
+ * personal exemption as a credit takes it off the tax, and a state that gives
+ * it as an exclusion takes it off the income before the brackets are applied.
+ * The source marks the difference in the cell, and the cell is what is here.
  *
  * The property tax rate is the average effective rate for the state: the tax
  * actually paid as a share of the value of the home. It is a state figure,
@@ -47,6 +59,16 @@ export interface StateBracket {
   readonly from: number;
 }
 
+export interface StateAmount {
+  /** The amount in dollars. */
+  readonly amount: number;
+  /**
+   * Whether the amount comes off the income before the brackets are applied
+   * or off the tax after they have been.
+   */
+  readonly kind: 'exclusion' | 'credit';
+}
+
 export interface StateIncomeTax {
   /** The brackets for a single filer. Empty where wages are not taxed. */
   readonly single: readonly StateBracket[];
@@ -56,6 +78,25 @@ export interface StateIncomeTax {
   readonly noIncomeTax?: boolean;
   /** True where the state taxes capital gains but not wages. */
   readonly capitalGainsOnly?: boolean;
+  /** The standard deduction, for the states that have one. */
+  readonly standardDeduction?: {
+    readonly single: StateAmount;
+    readonly married: StateAmount;
+  };
+  /** The credit some states give in place of a standard deduction. */
+  readonly standardDeductionCredit?: {
+    readonly single: StateAmount;
+    readonly married: StateAmount;
+  };
+  /**
+   * The personal exemption. The three amounts are the exemption for a single
+   * filer, the exemption for a couple, and the amount for each dependent.
+   */
+  readonly exemption?: {
+    readonly single?: StateAmount;
+    readonly married?: StateAmount;
+    readonly dependent?: StateAmount;
+  };
 }
 
 export interface State {
@@ -63,7 +104,7 @@ export interface State {
   readonly code: string;
   /** The name of the state. */
   readonly name: string;
-  /** The income tax brackets for 2026. */
+  /** The income tax figures for 2026. */
   readonly incomeTax: StateIncomeTax;
   /**
    * The average effective property tax rate for the state, as a percentage of
@@ -79,15 +120,24 @@ export const STATES: Record<string, State> = {
     name: 'Alabama',
     incomeTax: {
       single: [
-        { rate: 2.0, from: 0 },
-        { rate: 4.0, from: 500 },
-        { rate: 5.0, from: 3000 },
+        { rate: 2, from: 0 },
+        { rate: 4, from: 500 },
+        { rate: 5, from: 3000 },
       ],
       married: [
-        { rate: 2.0, from: 0 },
-        { rate: 4.0, from: 1000 },
-        { rate: 5.0, from: 6000 },
+        { rate: 2, from: 0 },
+        { rate: 4, from: 1000 },
+        { rate: 5, from: 6000 },
       ],
+      standardDeduction: {
+        single: { amount: 3000, kind: 'exclusion' },
+        married: { amount: 8500, kind: 'exclusion' },
+      },
+      exemption: {
+        single: { amount: 1500, kind: 'exclusion' },
+        married: { amount: 3000, kind: 'exclusion' },
+        dependent: { amount: 1000, kind: 'exclusion' },
+      },
     },
     propertyTaxRate: 0.37,
   },
@@ -111,6 +161,13 @@ export const STATES: Record<string, State> = {
       married: [
         { rate: 2.5, from: 0 },
       ],
+      standardDeduction: {
+        single: { amount: 8350, kind: 'exclusion' },
+        married: { amount: 16700, kind: 'exclusion' },
+      },
+      exemption: {
+        dependent: { amount: 100, kind: 'credit' },
+      },
     },
     propertyTaxRate: 0.48,
   },
@@ -119,13 +176,22 @@ export const STATES: Record<string, State> = {
     name: 'Arkansas',
     incomeTax: {
       single: [
-        { rate: 2.0, from: 0 },
+        { rate: 2, from: 0 },
         { rate: 3.9, from: 4600 },
       ],
       married: [
-        { rate: 2.0, from: 0 },
+        { rate: 2, from: 0 },
         { rate: 3.9, from: 4600 },
       ],
+      standardDeduction: {
+        single: { amount: 2470, kind: 'exclusion' },
+        married: { amount: 4940, kind: 'exclusion' },
+      },
+      exemption: {
+        single: { amount: 29, kind: 'credit' },
+        married: { amount: 58, kind: 'credit' },
+        dependent: { amount: 29, kind: 'credit' },
+      },
     },
     propertyTaxRate: 0.56,
   },
@@ -134,11 +200,11 @@ export const STATES: Record<string, State> = {
     name: 'California',
     incomeTax: {
       single: [
-        { rate: 1.0, from: 0 },
-        { rate: 2.0, from: 11079 },
-        { rate: 4.0, from: 26264 },
-        { rate: 6.0, from: 41452 },
-        { rate: 8.0, from: 57542 },
+        { rate: 1, from: 0 },
+        { rate: 2, from: 11079 },
+        { rate: 4, from: 26264 },
+        { rate: 6, from: 41452 },
+        { rate: 8, from: 57542 },
         { rate: 9.3, from: 72724 },
         { rate: 10.3, from: 371479 },
         { rate: 11.3, from: 445771 },
@@ -146,17 +212,26 @@ export const STATES: Record<string, State> = {
         { rate: 13.3, from: 1000000 },
       ],
       married: [
-        { rate: 1.0, from: 0 },
-        { rate: 2.0, from: 22158 },
-        { rate: 4.0, from: 52528 },
-        { rate: 6.0, from: 82904 },
-        { rate: 8.0, from: 115084 },
+        { rate: 1, from: 0 },
+        { rate: 2, from: 22158 },
+        { rate: 4, from: 52528 },
+        { rate: 6, from: 82904 },
+        { rate: 8, from: 115084 },
         { rate: 9.3, from: 145448 },
         { rate: 10.3, from: 742958 },
         { rate: 11.3, from: 891542 },
         { rate: 12.3, from: 1000000 },
         { rate: 13.3, from: 1485906 },
       ],
+      standardDeduction: {
+        single: { amount: 5540, kind: 'exclusion' },
+        married: { amount: 11080, kind: 'exclusion' },
+      },
+      exemption: {
+        single: { amount: 153, kind: 'credit' },
+        married: { amount: 306, kind: 'credit' },
+        dependent: { amount: 153, kind: 'credit' },
+      },
     },
     propertyTaxRate: 0.7,
   },
@@ -170,6 +245,10 @@ export const STATES: Record<string, State> = {
       married: [
         { rate: 4.4, from: 0 },
       ],
+      standardDeduction: {
+        single: { amount: 16100, kind: 'exclusion' },
+        married: { amount: 32200, kind: 'exclusion' },
+      },
     },
     propertyTaxRate: 0.5,
   },
@@ -178,23 +257,27 @@ export const STATES: Record<string, State> = {
     name: 'Connecticut',
     incomeTax: {
       single: [
-        { rate: 2.0, from: 0 },
+        { rate: 2, from: 0 },
         { rate: 4.5, from: 10000 },
         { rate: 5.5, from: 50000 },
-        { rate: 6.0, from: 100000 },
+        { rate: 6, from: 100000 },
         { rate: 6.5, from: 200000 },
         { rate: 6.9, from: 250000 },
         { rate: 6.99, from: 500000 },
       ],
       married: [
-        { rate: 2.0, from: 0 },
+        { rate: 2, from: 0 },
         { rate: 4.5, from: 20000 },
         { rate: 5.5, from: 100000 },
-        { rate: 6.0, from: 200000 },
+        { rate: 6, from: 200000 },
         { rate: 6.5, from: 400000 },
         { rate: 6.9, from: 500000 },
         { rate: 6.99, from: 1000000 },
       ],
+      exemption: {
+        single: { amount: 15000, kind: 'exclusion' },
+        married: { amount: 24000, kind: 'exclusion' },
+      },
     },
     propertyTaxRate: 1.54,
   },
@@ -218,6 +301,15 @@ export const STATES: Record<string, State> = {
         { rate: 5.55, from: 25000 },
         { rate: 6.6, from: 60000 },
       ],
+      standardDeduction: {
+        single: { amount: 3250, kind: 'exclusion' },
+        married: { amount: 6500, kind: 'exclusion' },
+      },
+      exemption: {
+        single: { amount: 110, kind: 'credit' },
+        married: { amount: 220, kind: 'credit' },
+        dependent: { amount: 110, kind: 'credit' },
+      },
     },
     propertyTaxRate: 0.54,
   },
@@ -241,6 +333,13 @@ export const STATES: Record<string, State> = {
       married: [
         { rate: 5.19, from: 0 },
       ],
+      standardDeduction: {
+        single: { amount: 12000, kind: 'exclusion' },
+        married: { amount: 24000, kind: 'exclusion' },
+      },
+      exemption: {
+        dependent: { amount: 4000, kind: 'exclusion' },
+      },
     },
     propertyTaxRate: 0.79,
   },
@@ -258,9 +357,9 @@ export const STATES: Record<string, State> = {
         { rate: 7.6, from: 48000 },
         { rate: 7.9, from: 125000 },
         { rate: 8.25, from: 175000 },
-        { rate: 9.0, from: 225000 },
-        { rate: 10.0, from: 275000 },
-        { rate: 11.0, from: 325000 },
+        { rate: 9, from: 225000 },
+        { rate: 10, from: 275000 },
+        { rate: 11, from: 325000 },
       ],
       married: [
         { rate: 1.4, from: 0 },
@@ -272,10 +371,19 @@ export const STATES: Record<string, State> = {
         { rate: 7.6, from: 96000 },
         { rate: 7.9, from: 250000 },
         { rate: 8.25, from: 350000 },
-        { rate: 9.0, from: 450000 },
-        { rate: 10.0, from: 550000 },
-        { rate: 11.0, from: 650000 },
+        { rate: 9, from: 450000 },
+        { rate: 10, from: 550000 },
+        { rate: 11, from: 650000 },
       ],
+      standardDeduction: {
+        single: { amount: 4400, kind: 'exclusion' },
+        married: { amount: 8800, kind: 'exclusion' },
+      },
+      exemption: {
+        single: { amount: 1144, kind: 'exclusion' },
+        married: { amount: 2288, kind: 'exclusion' },
+        dependent: { amount: 1144, kind: 'exclusion' },
+      },
     },
     propertyTaxRate: 0.29,
   },
@@ -289,6 +397,10 @@ export const STATES: Record<string, State> = {
       married: [
         { rate: 5.3, from: 9622 },
       ],
+      standardDeduction: {
+        single: { amount: 16100, kind: 'exclusion' },
+        married: { amount: 32200, kind: 'exclusion' },
+      },
     },
     propertyTaxRate: 0.5,
   },
@@ -302,6 +414,11 @@ export const STATES: Record<string, State> = {
       married: [
         { rate: 4.95, from: 0 },
       ],
+      exemption: {
+        single: { amount: 2925, kind: 'exclusion' },
+        married: { amount: 5850, kind: 'exclusion' },
+        dependent: { amount: 2925, kind: 'exclusion' },
+      },
     },
     propertyTaxRate: 1.88,
   },
@@ -315,6 +432,11 @@ export const STATES: Record<string, State> = {
       married: [
         { rate: 2.95, from: 0 },
       ],
+      exemption: {
+        single: { amount: 1000, kind: 'exclusion' },
+        married: { amount: 2000, kind: 'exclusion' },
+        dependent: { amount: 1000, kind: 'exclusion' },
+      },
     },
     propertyTaxRate: 0.76,
   },
@@ -328,6 +450,15 @@ export const STATES: Record<string, State> = {
       married: [
         { rate: 3.8, from: 0 },
       ],
+      standardDeduction: {
+        single: { amount: 16100, kind: 'exclusion' },
+        married: { amount: 32200, kind: 'exclusion' },
+      },
+      exemption: {
+        single: { amount: 40, kind: 'credit' },
+        married: { amount: 80, kind: 'credit' },
+        dependent: { amount: 40, kind: 'credit' },
+      },
     },
     propertyTaxRate: 1.33,
   },
@@ -343,6 +474,15 @@ export const STATES: Record<string, State> = {
         { rate: 5.2, from: 0 },
         { rate: 5.58, from: 46000 },
       ],
+      standardDeduction: {
+        single: { amount: 3605, kind: 'exclusion' },
+        married: { amount: 8240, kind: 'exclusion' },
+      },
+      exemption: {
+        single: { amount: 9160, kind: 'exclusion' },
+        married: { amount: 18320, kind: 'exclusion' },
+        dependent: { amount: 2320, kind: 'exclusion' },
+      },
     },
     propertyTaxRate: 1.21,
   },
@@ -356,6 +496,10 @@ export const STATES: Record<string, State> = {
       married: [
         { rate: 3.5, from: 0 },
       ],
+      standardDeduction: {
+        single: { amount: 3360, kind: 'exclusion' },
+        married: { amount: 3360, kind: 'exclusion' },
+      },
     },
     propertyTaxRate: 0.74,
   },
@@ -364,11 +508,15 @@ export const STATES: Record<string, State> = {
     name: 'Louisiana',
     incomeTax: {
       single: [
-        { rate: 3.0, from: 0 },
+        { rate: 3, from: 0 },
       ],
       married: [
-        { rate: 3.0, from: 0 },
+        { rate: 3, from: 0 },
       ],
+      standardDeduction: {
+        single: { amount: 12875, kind: 'exclusion' },
+        married: { amount: 25750, kind: 'exclusion' },
+      },
     },
     propertyTaxRate: 0.55,
   },
@@ -380,12 +528,23 @@ export const STATES: Record<string, State> = {
         { rate: 5.8, from: 0 },
         { rate: 6.75, from: 27399 },
         { rate: 7.15, from: 64849 },
+        { rate: 9.15, from: 1000000 },
       ],
       married: [
         { rate: 5.8, from: 0 },
         { rate: 6.75, from: 54849 },
         { rate: 7.15, from: 129749 },
+        { rate: 9.15, from: 2000000 },
       ],
+      standardDeduction: {
+        single: { amount: 8350, kind: 'exclusion' },
+        married: { amount: 16700, kind: 'exclusion' },
+      },
+      exemption: {
+        single: { amount: 5300, kind: 'exclusion' },
+        married: { amount: 10600, kind: 'exclusion' },
+        dependent: { amount: 305, kind: 'credit' },
+      },
     },
     propertyTaxRate: 0.98,
   },
@@ -394,11 +553,11 @@ export const STATES: Record<string, State> = {
     name: 'Maryland',
     incomeTax: {
       single: [
-        { rate: 2.0, from: 0 },
-        { rate: 3.0, from: 1000 },
-        { rate: 4.0, from: 2000 },
+        { rate: 2, from: 0 },
+        { rate: 3, from: 1000 },
+        { rate: 4, from: 2000 },
         { rate: 4.75, from: 3000 },
-        { rate: 5.0, from: 100000 },
+        { rate: 5, from: 100000 },
         { rate: 5.25, from: 125000 },
         { rate: 5.5, from: 150000 },
         { rate: 5.75, from: 250000 },
@@ -406,17 +565,26 @@ export const STATES: Record<string, State> = {
         { rate: 6.5, from: 1000000 },
       ],
       married: [
-        { rate: 2.0, from: 0 },
-        { rate: 3.0, from: 1000 },
-        { rate: 4.0, from: 2000 },
+        { rate: 2, from: 0 },
+        { rate: 3, from: 1000 },
+        { rate: 4, from: 2000 },
         { rate: 4.75, from: 3000 },
-        { rate: 5.0, from: 150000 },
+        { rate: 5, from: 150000 },
         { rate: 5.25, from: 175000 },
         { rate: 5.5, from: 225000 },
         { rate: 5.75, from: 300000 },
         { rate: 6.25, from: 600000 },
         { rate: 6.5, from: 1200000 },
       ],
+      standardDeduction: {
+        single: { amount: 3350, kind: 'exclusion' },
+        married: { amount: 6700, kind: 'exclusion' },
+      },
+      exemption: {
+        single: { amount: 3200, kind: 'exclusion' },
+        married: { amount: 6400, kind: 'exclusion' },
+        dependent: { amount: 3200, kind: 'exclusion' },
+      },
     },
     propertyTaxRate: 0.92,
   },
@@ -425,13 +593,18 @@ export const STATES: Record<string, State> = {
     name: 'Massachusetts',
     incomeTax: {
       single: [
-        { rate: 5.0, from: 0 },
-        { rate: 9.0, from: 1083150 },
+        { rate: 5, from: 0 },
+        { rate: 9, from: 1083150 },
       ],
       married: [
-        { rate: 5.0, from: 0 },
-        { rate: 9.0, from: 1083150 },
+        { rate: 5, from: 0 },
+        { rate: 9, from: 1083150 },
       ],
+      exemption: {
+        single: { amount: 4400, kind: 'exclusion' },
+        married: { amount: 8800, kind: 'exclusion' },
+        dependent: { amount: 1000, kind: 'exclusion' },
+      },
     },
     propertyTaxRate: 1.0,
   },
@@ -445,6 +618,11 @@ export const STATES: Record<string, State> = {
       married: [
         { rate: 4.25, from: 0 },
       ],
+      exemption: {
+        single: { amount: 5900, kind: 'exclusion' },
+        married: { amount: 11800, kind: 'exclusion' },
+        dependent: { amount: 5900, kind: 'exclusion' },
+      },
     },
     propertyTaxRate: 1.19,
   },
@@ -464,6 +642,13 @@ export const STATES: Record<string, State> = {
         { rate: 7.85, from: 193480 },
         { rate: 9.85, from: 337930 },
       ],
+      standardDeduction: {
+        single: { amount: 15300, kind: 'exclusion' },
+        married: { amount: 30600, kind: 'exclusion' },
+      },
+      exemption: {
+        dependent: { amount: 5300, kind: 'exclusion' },
+      },
     },
     propertyTaxRate: 1.0,
   },
@@ -472,11 +657,20 @@ export const STATES: Record<string, State> = {
     name: 'Mississippi',
     incomeTax: {
       single: [
-        { rate: 4.0, from: 10000 },
+        { rate: 4, from: 10000 },
       ],
       married: [
-        { rate: 4.0, from: 10000 },
+        { rate: 4, from: 10000 },
       ],
+      standardDeduction: {
+        single: { amount: 2300, kind: 'exclusion' },
+        married: { amount: 4600, kind: 'exclusion' },
+      },
+      exemption: {
+        single: { amount: 6000, kind: 'exclusion' },
+        married: { amount: 12000, kind: 'exclusion' },
+        dependent: { amount: 1500, kind: 'exclusion' },
+      },
     },
     propertyTaxRate: 0.58,
   },
@@ -485,23 +679,27 @@ export const STATES: Record<string, State> = {
     name: 'Missouri',
     incomeTax: {
       single: [
-        { rate: 2.0, from: 1348 },
+        { rate: 2, from: 1348 },
         { rate: 2.5, from: 2696 },
-        { rate: 3.0, from: 4044 },
+        { rate: 3, from: 4044 },
         { rate: 3.5, from: 5392 },
-        { rate: 4.0, from: 6740 },
+        { rate: 4, from: 6740 },
         { rate: 4.5, from: 8088 },
         { rate: 4.7, from: 9436 },
       ],
       married: [
-        { rate: 2.0, from: 1348 },
+        { rate: 2, from: 1348 },
         { rate: 2.5, from: 2696 },
-        { rate: 3.0, from: 4044 },
+        { rate: 3, from: 4044 },
         { rate: 3.5, from: 5392 },
-        { rate: 4.0, from: 6740 },
+        { rate: 4, from: 6740 },
         { rate: 4.5, from: 8088 },
         { rate: 4.7, from: 9436 },
       ],
+      standardDeduction: {
+        single: { amount: 16100, kind: 'exclusion' },
+        married: { amount: 32200, kind: 'exclusion' },
+      },
     },
     propertyTaxRate: 0.89,
   },
@@ -517,6 +715,10 @@ export const STATES: Record<string, State> = {
         { rate: 4.7, from: 0 },
         { rate: 5.65, from: 95000 },
       ],
+      standardDeduction: {
+        single: { amount: 16100, kind: 'exclusion' },
+        married: { amount: 32200, kind: 'exclusion' },
+      },
     },
     propertyTaxRate: 0.61,
   },
@@ -534,6 +736,15 @@ export const STATES: Record<string, State> = {
         { rate: 3.51, from: 8250 },
         { rate: 4.55, from: 49530 },
       ],
+      standardDeduction: {
+        single: { amount: 8850, kind: 'exclusion' },
+        married: { amount: 17700, kind: 'exclusion' },
+      },
+      exemption: {
+        single: { amount: 176, kind: 'credit' },
+        married: { amount: 352, kind: 'credit' },
+        dependent: { amount: 176, kind: 'credit' },
+      },
     },
     propertyTaxRate: 1.44,
   },
@@ -565,7 +776,7 @@ export const STATES: Record<string, State> = {
         { rate: 1.4, from: 0 },
         { rate: 1.75, from: 20000 },
         { rate: 3.5, from: 35000 },
-        { rate: 5.53, from: 40000 },
+        { rate: 5.525, from: 40000 },
         { rate: 6.37, from: 75000 },
         { rate: 8.97, from: 500000 },
         { rate: 10.75, from: 1000000 },
@@ -575,11 +786,16 @@ export const STATES: Record<string, State> = {
         { rate: 1.75, from: 20000 },
         { rate: 2.45, from: 50000 },
         { rate: 3.5, from: 70000 },
-        { rate: 5.53, from: 80000 },
+        { rate: 5.525, from: 80000 },
         { rate: 6.37, from: 150000 },
         { rate: 8.97, from: 500000 },
         { rate: 10.75, from: 1000000 },
       ],
+      exemption: {
+        single: { amount: 1000, kind: 'exclusion' },
+        married: { amount: 2000, kind: 'exclusion' },
+        dependent: { amount: 1500, kind: 'exclusion' },
+      },
     },
     propertyTaxRate: 1.88,
   },
@@ -603,6 +819,13 @@ export const STATES: Record<string, State> = {
         { rate: 4.9, from: 100000 },
         { rate: 5.9, from: 315000 },
       ],
+      standardDeduction: {
+        single: { amount: 16100, kind: 'exclusion' },
+        married: { amount: 32200, kind: 'exclusion' },
+      },
+      exemption: {
+        dependent: { amount: 4000, kind: 'exclusion' },
+      },
     },
     propertyTaxRate: 0.63,
   },
@@ -632,6 +855,13 @@ export const STATES: Record<string, State> = {
         { rate: 10.3, from: 5000000 },
         { rate: 10.9, from: 25000000 },
       ],
+      standardDeduction: {
+        single: { amount: 8000, kind: 'exclusion' },
+        married: { amount: 16050, kind: 'exclusion' },
+      },
+      exemption: {
+        dependent: { amount: 1000, kind: 'exclusion' },
+      },
     },
     propertyTaxRate: 1.3,
   },
@@ -645,6 +875,10 @@ export const STATES: Record<string, State> = {
       married: [
         { rate: 3.99, from: 0 },
       ],
+      standardDeduction: {
+        single: { amount: 12750, kind: 'exclusion' },
+        married: { amount: 25500, kind: 'exclusion' },
+      },
     },
     propertyTaxRate: 0.66,
   },
@@ -660,6 +894,10 @@ export const STATES: Record<string, State> = {
         { rate: 1.95, from: 80975 },
         { rate: 2.5, from: 298075 },
       ],
+      standardDeduction: {
+        single: { amount: 16100, kind: 'exclusion' },
+        married: { amount: 32200, kind: 'exclusion' },
+      },
     },
     propertyTaxRate: 0.92,
   },
@@ -673,6 +911,11 @@ export const STATES: Record<string, State> = {
       married: [
         { rate: 2.75, from: 26050 },
       ],
+      exemption: {
+        single: { amount: 2400, kind: 'exclusion' },
+        married: { amount: 4800, kind: 'exclusion' },
+        dependent: { amount: 2400, kind: 'exclusion' },
+      },
     },
     propertyTaxRate: 1.36,
   },
@@ -681,15 +924,26 @@ export const STATES: Record<string, State> = {
     name: 'Oklahoma',
     incomeTax: {
       single: [
+        { rate: 0, from: 0 },
         { rate: 2.5, from: 3750 },
         { rate: 3.5, from: 4900 },
         { rate: 4.5, from: 7200 },
       ],
       married: [
+        { rate: 0, from: 0 },
         { rate: 2.5, from: 7500 },
         { rate: 3.5, from: 9800 },
         { rate: 4.5, from: 14400 },
       ],
+      standardDeduction: {
+        single: { amount: 6350, kind: 'exclusion' },
+        married: { amount: 12700, kind: 'exclusion' },
+      },
+      exemption: {
+        single: { amount: 1000, kind: 'exclusion' },
+        married: { amount: 2000, kind: 'exclusion' },
+        dependent: { amount: 1000, kind: 'exclusion' },
+      },
     },
     propertyTaxRate: 0.79,
   },
@@ -709,6 +963,15 @@ export const STATES: Record<string, State> = {
         { rate: 8.75, from: 22800 },
         { rate: 9.9, from: 250000 },
       ],
+      standardDeduction: {
+        single: { amount: 2910, kind: 'exclusion' },
+        married: { amount: 5820, kind: 'exclusion' },
+      },
+      exemption: {
+        single: { amount: 256, kind: 'credit' },
+        married: { amount: 512, kind: 'credit' },
+        dependent: { amount: 256, kind: 'credit' },
+      },
     },
     propertyTaxRate: 0.81,
   },
@@ -739,6 +1002,15 @@ export const STATES: Record<string, State> = {
         { rate: 4.75, from: 82050 },
         { rate: 5.99, from: 186450 },
       ],
+      standardDeduction: {
+        single: { amount: 11200, kind: 'exclusion' },
+        married: { amount: 22400, kind: 'exclusion' },
+      },
+      exemption: {
+        single: { amount: 5250, kind: 'exclusion' },
+        married: { amount: 10500, kind: 'exclusion' },
+        dependent: { amount: 5250, kind: 'exclusion' },
+      },
     },
     propertyTaxRate: 1.12,
   },
@@ -747,15 +1019,20 @@ export const STATES: Record<string, State> = {
     name: 'South Carolina',
     incomeTax: {
       single: [
-        { rate: 0.0, from: 0 },
-        { rate: 3.0, from: 3640 },
-        { rate: 6.0, from: 18230 },
+        { rate: 1.99, from: 0 },
+        { rate: 5.21, from: 29999 },
       ],
       married: [
-        { rate: 0.0, from: 0 },
-        { rate: 3.0, from: 3640 },
-        { rate: 6.0, from: 18230 },
+        { rate: 1.99, from: 0 },
+        { rate: 5.21, from: 29999 },
       ],
+      standardDeduction: {
+        single: { amount: 8350, kind: 'exclusion' },
+        married: { amount: 16700, kind: 'exclusion' },
+      },
+      exemption: {
+        dependent: { amount: 4930, kind: 'exclusion' },
+      },
     },
     propertyTaxRate: 0.49,
   },
@@ -794,11 +1071,18 @@ export const STATES: Record<string, State> = {
     name: 'Utah',
     incomeTax: {
       single: [
-        { rate: 4.5, from: 0 },
+        { rate: 4.45, from: 0 },
       ],
       married: [
-        { rate: 4.5, from: 0 },
+        { rate: 4.45, from: 0 },
       ],
+      standardDeductionCredit: {
+        single: { amount: 966, kind: 'credit' },
+        married: { amount: 1932, kind: 'credit' },
+      },
+      exemption: {
+        dependent: { amount: 2111, kind: 'exclusion' },
+      },
     },
     propertyTaxRate: 0.48,
   },
@@ -818,6 +1102,15 @@ export const STATES: Record<string, State> = {
         { rate: 7.6, from: 199450 },
         { rate: 8.75, from: 304000 },
       ],
+      standardDeduction: {
+        single: { amount: 7650, kind: 'exclusion' },
+        married: { amount: 15300, kind: 'exclusion' },
+      },
+      exemption: {
+        single: { amount: 5300, kind: 'exclusion' },
+        married: { amount: 10600, kind: 'exclusion' },
+        dependent: { amount: 5300, kind: 'exclusion' },
+      },
     },
     propertyTaxRate: 1.51,
   },
@@ -826,17 +1119,26 @@ export const STATES: Record<string, State> = {
     name: 'Virginia',
     incomeTax: {
       single: [
-        { rate: 2.0, from: 0 },
-        { rate: 3.0, from: 3000 },
-        { rate: 5.0, from: 5000 },
+        { rate: 2, from: 0 },
+        { rate: 3, from: 3000 },
+        { rate: 5, from: 5000 },
         { rate: 5.75, from: 17000 },
       ],
       married: [
-        { rate: 2.0, from: 0 },
-        { rate: 3.0, from: 3000 },
-        { rate: 5.0, from: 5000 },
+        { rate: 2, from: 0 },
+        { rate: 3, from: 3000 },
+        { rate: 5, from: 5000 },
         { rate: 5.75, from: 17000 },
       ],
+      standardDeduction: {
+        single: { amount: 8750, kind: 'exclusion' },
+        married: { amount: 17500, kind: 'exclusion' },
+      },
+      exemption: {
+        single: { amount: 930, kind: 'exclusion' },
+        married: { amount: 1860, kind: 'exclusion' },
+        dependent: { amount: 930, kind: 'exclusion' },
+      },
     },
     propertyTaxRate: 0.78,
   },
@@ -855,19 +1157,24 @@ export const STATES: Record<string, State> = {
     name: 'West Virginia',
     incomeTax: {
       single: [
-        { rate: 2.22, from: 0 },
-        { rate: 2.96, from: 10000 },
-        { rate: 3.33, from: 25000 },
-        { rate: 4.44, from: 40000 },
-        { rate: 4.82, from: 60000 },
+        { rate: 2.11, from: 0 },
+        { rate: 2.81, from: 10000 },
+        { rate: 3.16, from: 25000 },
+        { rate: 4.22, from: 40000 },
+        { rate: 4.58, from: 60000 },
       ],
       married: [
-        { rate: 2.22, from: 0 },
-        { rate: 2.96, from: 10000 },
-        { rate: 3.33, from: 25000 },
-        { rate: 4.44, from: 40000 },
-        { rate: 4.82, from: 60000 },
+        { rate: 2.11, from: 0 },
+        { rate: 2.81, from: 10000 },
+        { rate: 3.16, from: 25000 },
+        { rate: 4.22, from: 40000 },
+        { rate: 4.58, from: 60000 },
       ],
+      exemption: {
+        single: { amount: 2000, kind: 'exclusion' },
+        married: { amount: 4000, kind: 'exclusion' },
+        dependent: { amount: 2000, kind: 'exclusion' },
+      },
     },
     propertyTaxRate: 0.51,
   },
@@ -887,6 +1194,15 @@ export const STATES: Record<string, State> = {
         { rate: 5.3, from: 69260 },
         { rate: 7.65, from: 443630 },
       ],
+      standardDeduction: {
+        single: { amount: 13960, kind: 'exclusion' },
+        married: { amount: 25840, kind: 'exclusion' },
+      },
+      exemption: {
+        single: { amount: 700, kind: 'exclusion' },
+        married: { amount: 1400, kind: 'exclusion' },
+        dependent: { amount: 700, kind: 'exclusion' },
+      },
     },
     propertyTaxRate: 1.32,
   },
@@ -902,11 +1218,11 @@ export const STATES: Record<string, State> = {
   },
   DC: {
     code: 'DC',
-    name: 'Washington DC',
+    name: 'District of Columbia',
     incomeTax: {
       single: [
-        { rate: 4.0, from: 0 },
-        { rate: 6.0, from: 10000 },
+        { rate: 4, from: 0 },
+        { rate: 6, from: 10000 },
         { rate: 6.5, from: 40000 },
         { rate: 8.5, from: 60000 },
         { rate: 9.25, from: 250000 },
@@ -914,15 +1230,19 @@ export const STATES: Record<string, State> = {
         { rate: 10.75, from: 1000000 },
       ],
       married: [
-        { rate: 4.0, from: 0 },
-        { rate: 6.0, from: 10000 },
+        { rate: 4, from: 0 },
+        { rate: 6, from: 10000 },
         { rate: 6.5, from: 40000 },
         { rate: 8.5, from: 60000 },
         { rate: 9.25, from: 250000 },
         { rate: 9.75, from: 500000 },
         { rate: 10.75, from: 1000000 },
       ],
+      standardDeduction: {
+        single: { amount: 16100, kind: 'exclusion' },
+        married: { amount: 32200, kind: 'exclusion' },
+      },
     },
     propertyTaxRate: 0.6,
-  },
+  }
 };

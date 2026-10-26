@@ -63,6 +63,7 @@ src/
 │  └─ ui/{en,ru,es}.ts     every user-visible string, one file per language
 ├─ lib/calc/               calculation engine + unit tests
 ├─ lib/data/states.ts      the 2026 state income tax and property tax table
+├─ lib/data/stateCredits.ts the state earned income and child tax credits
 ├─ lib/client/dom.ts       browser helpers used by the page scripts
 ├─ lib/client/chart.ts     chart geometry, no DOM
 ├─ lib/client/chartView.ts the SVG a chart is drawn into
@@ -559,50 +560,70 @@ which is usually in October. A unit test pins each bracket against the
 revenue procedure, so a mistyped digit fails the build rather than the
 reader.
 
-The state income tax is not modelled as a tax calculation. Most states tax
-in bands, and a per-state model that misses the state deduction, the state
-exemptions and the credits is worse than a rate the reader can see. The
-calculators take the rate as an input and say so on the page. What the site
-does carry is the bracket table of every state, and that is used for one
-thing: to fill the rate in with the bracket the reader's income falls into.
-See "The state rates" below.
+The federal side of the site models ordinary income tax: the 2026 brackets
+and the standard deduction. The state side is a real calculation too, and
+what it does not carry is written down in the guides and on the pages
+themselves. See "The state tax" below.
 
-## The state rates
+## The state tax
 
-Two of the six calculators take a state rate: the federal income tax
-calculator, which adds a state tax on top of the federal one, and the rent
-versus buy calculator, which carries a property tax on the cost of owning a
-home. Both rates can now be filled in from the state the request comes from.
+Two of the six calculators need a state figure: the federal income tax
+calculator, which adds a state income tax on top of the federal one, and the
+rent versus buy calculator, which carries a property tax on the cost of
+owning a home.
 
-How it works:
+### The state income tax is a calculation
 
-1. The page asks `functions/api/region.ts` which state the request came
-   from. The answer comes from the edge — Cloudflare's `request.cf` — and it
-   is a two-letter code and nothing else. The address is not passed on, and
-   the answer is never cached: it describes the request, not the resource.
-2. `src/lib/data/states.ts` holds the 2026 brackets of every state and the
-   District of Columbia, and the average effective property tax rate of the
-   same jurisdictions. Both come from the Tax Foundation: the income tax
-   brackets from the table as of 1 January 2026, the property tax rates from
-   the American Community Survey 2024 five-year estimate.
-3. The income tax calculator looks up the bracket the taxable income falls
-   into, for the filing status that is selected, and puts the rate of that
-   bracket in the field. The rate follows the income and the filing status
-   until the reader types a rate of their own, and then the field is theirs.
-4. The rent versus buy calculator puts the average effective property tax
-   rate of the state in the field.
+The state tax in the income tax calculator is worked out the way a state
+works it out, from published figures for every state and the District of
+Columbia:
 
-Three things this is not, and the pages say all three:
+1. The state starts from the adjusted gross income, the gross income less
+   the pre-tax deductions.
+2. The state standard deduction and the state personal exemption come off,
+   where the state gives them as exclusions.
+3. The state brackets are applied slice by slice, so each part of the income
+   is taxed at the rate of the bracket it falls into.
+4. The credits come off the tax: the credit some states give in place of a
+   standard deduction, the personal exemption where the state gives it as a
+   credit, the state earned income tax credit and the state child tax credit.
 
-- It is not a state tax return. The rate is marginal — the one the next
-  dollar of income meets — and it is applied to the whole of the taxable
-  income, so the state tax in the result is usually higher than the tax a
-  state would actually charge.
-- It is not a fact about the reader. The state is approximate: a VPN, a
-  proxy or a mobile network can point it at the wrong state. The field stays
-  editable, and a note under it says where the number came from.
-- It is not a county figure. Property tax is set by local governments, so
-  the state average is a starting point rather than a bill.
+`src/lib/data/states.ts` holds the figures: the brackets as of 28 April 2026
+from the Tax Foundation's Facts & Figures workbook, the joint filing
+brackets, the standard deduction and the personal exemption from the Tax
+Foundation's brackets table of February 2026, and the average effective
+property tax rate of the same jurisdictions. A personal exemption that a
+state gives as a credit rather than an exclusion is marked as such in the
+data, because that is the difference between the two.
+
+`src/lib/data/stateCredits.ts` holds the credits, and the research behind
+every number is in `stateEitc.source.json` and `stateCtc.source.json` next to
+it: the percentage each state pays, the amount per child, the phase-out, the
+source and the date.
+
+What the state tax does not carry, and what the pages say:
+
+- the federal income tax deduction that a score of states allow;
+- capital gains rates, surtaxes on high earners and local taxes;
+- the head of household tables, because the source publishes none, so the
+  single filer figures are used;
+- every state credit. The earned income tax credit is there for the states
+  that set it as a percentage of the federal credit, and the child tax
+  credit for the states whose credit reaches every child under seventeen.
+
+### The state is a default, not a fact about the reader
+
+The state can be filled in from the request. The page asks
+`functions/api/region.ts` which state the request came from; the answer comes
+from the edge, Cloudflare's `request.cf`, and it is a two-letter code and
+nothing else. The address is not passed on, and the answer is never cached:
+it describes the request, not the resource.
+
+The state is approximate: a VPN, a proxy or a mobile network can point it at
+the wrong state. The picker is right there, a note under it says where the
+number came from, and a reader who wants their own figure from their return
+can type it into the field under the state, which replaces the calculated
+one.
 
 The state is read on two pages, without the cookie banner and without any
 third party: no cookie is set for it, nothing about it is stored, and nothing
@@ -661,8 +682,9 @@ those markets earns a fraction of the same page view.
    scoped rule, and the element quietly falls back to the browser's own
    styling.
 9. State data — every jurisdiction the edge can report is in the table, its
-   brackets run upwards, its rates are rates, and a state that levies no tax
-   on wages says so.
+   brackets run upwards, its rates are rates, its deductions and exemptions
+   are amounts a state could charge, a state that levies no tax on wages says
+   so, and the credits name states that exist.
 10. DOM ids — every id in the built HTML appears exactly once.
 
 The last six gates exist because the build proves the code compiles, not that

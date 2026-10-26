@@ -3,6 +3,7 @@ import { getUi } from '../../i18n/ui/index.ts';
 import ResultPanel from '../ResultPanel.astro';
 import ResultChart from '../ResultChart.astro';
 import AdSlot from '../AdSlot.astro';
+import { stateList } from '../../lib/calc/stateTax.ts';
 import type { Locale } from '../../i18n/locales.ts';
 
 interface Props {
@@ -12,12 +13,12 @@ interface Props {
 const { locale } = Astro.props;
 const ui = getUi(locale);
 const copy = ui.tool['income-tax'];
+const states = stateList();
 ---
 
 <div>
   <form class="card" id="income-tax-form" novalidate
-    data-state-rate-detected={copy.script.stateRateDetected}
-    data-state-rate-no-tax={copy.script.stateRateNoTax}
+    data-state-detected={copy.script.stateDetected}
     data-detected-from-ip={ui.ui.detectedFromIp}>
     <label class="field" for="it-gross">
       <span class="field__label">{copy.fields.grossIncome}</span>
@@ -51,17 +52,33 @@ const copy = ui.tool['income-tax'];
 
     <div class="input-group">
       <div class="field">
-        <label class="field__label" for="it-state-rate">
-          {copy.fields.stateRate}
-          <span class="field__hint">{copy.fields.stateRateHint}</span>
+        <label class="field__label" for="it-state">
+          {copy.fields.state}
+          <span class="field__hint">{copy.fields.stateHint}</span>
         </label>
         <span class="field__control">
-          <input class="input" id="it-state-rate" type="number" inputmode="decimal"
-            step="0.1" min="0" max="20" value="0" />
-          <span class="field__suffix" aria-hidden="true">%</span>
+          <select class="input" id="it-state">
+            <option value="" selected>{copy.fields.stateNone}</option>
+            {states.map((state) => (
+              <option value={state.code}>{state.name}</option>
+            ))}
+          </select>
         </span>
         <p class="field__note" id="it-state-note" role="status" hidden></p>
       </div>
+      <label class="field" for="it-children">
+        <span class="field__label">
+          {copy.fields.children}
+          <span class="field__hint">{copy.fields.childrenHint}</span>
+        </span>
+        <span class="field__control">
+          <input class="input" id="it-children" type="number" inputmode="numeric"
+            step="1" min="0" max="12" value="0" />
+        </span>
+      </label>
+    </div>
+
+    <div class="input-group">
       <label class="field" for="it-pretax">
         <span class="field__label">
           {copy.fields.preTax}
@@ -73,6 +90,17 @@ const copy = ui.tool['income-tax'];
             inputmode="decimal" step="100" min="0" value="0" />
         </span>
       </label>
+      <div class="field">
+        <label class="field__label" for="it-state-tax">
+          {copy.fields.stateTaxOverride}
+          <span class="field__hint">{copy.fields.stateTaxOverrideHint}</span>
+        </label>
+        <span class="field__control">
+          <span class="field__prefix" aria-hidden="true">$</span>
+          <input class="input input--prefixed" id="it-state-tax" type="number"
+            inputmode="decimal" step="100" min="0" value="" />
+        </span>
+      </div>
     </div>
 
     <button type="button" class="btn" id="it-use-standard" style="margin-top: var(--space-5);">
@@ -91,7 +119,9 @@ const copy = ui.tool['income-tax'];
       { id: 'it-deduction', label: copy.result.deductionApplied, value: '—' },
       { id: 'it-standard', label: copy.result.standardDeduction, value: '—' },
       { id: 'it-itemised-out', label: copy.result.itemisedDeduction, value: '—' },
-      { id: 'it-state', label: copy.result.stateTax, value: '—' },
+      { id: 'it-state-taxable', label: copy.result.stateTaxableIncome, value: '—' },
+      { id: 'it-state-credits', label: copy.result.stateCredits, value: '—' },
+      { id: 'it-state-tax-out', label: copy.result.stateTax, value: '—' },
       { id: 'it-total', label: copy.result.totalTax, value: '—' },
       { id: 'it-effective', label: copy.result.effectiveRate, value: '—' },
       { id: 'it-marginal', label: copy.result.marginalRate, value: '—' },
@@ -118,29 +148,32 @@ const copy = ui.tool['income-tax'];
 </div>
 
 <script>
-  import {
-    computeIncomeTax,
-    deductionApplied,
-    standardDeduction,
-    taxableIncome,
-  } from '../../lib/calc/tax.ts';
+  import { computeIncomeTax, standardDeduction } from '../../lib/calc/tax.ts';
   import type { FilingStatus } from '../../lib/calc/tax.ts';
-  import { stateIncomeRate } from '../../lib/calc/stateTax.ts';
+  import { computeStateTax } from '../../lib/calc/stateTax.ts';
   import { formatCurrency, formatPercent } from '../../lib/calc/money.ts';
   import { numberValue, selectValue, setText } from '../../lib/client/dom.ts';
   import { renderChart } from '../../lib/client/chartView.ts';
   import { detectState, type DetectedState } from '../../lib/client/statePrefill.ts';
   import { fillTemplate } from '../../lib/client/text.ts';
 
-  const ids = ['it-gross', 'it-status', 'it-itemised', 'it-state-rate', 'it-pretax'];
+  const ids = [
+    'it-gross',
+    'it-status',
+    'it-itemised',
+    'it-pretax',
+    'it-state',
+    'it-children',
+    'it-state-tax',
+  ];
 
   /*
-    The state the request came from, when the network can work it out. The
-    rate it produces is a default: the reader can type another one, and from
-    that moment the field is theirs.
+    The state the request came from, when the network can work it out. It is
+    a default: the reader can pick another state, and from that moment the
+    picker is theirs.
   */
   let detected: DetectedState | null = null;
-  let stateRateEdited = false;
+  let stateEdited = false;
 
   function stateNoteText(): string {
     const copy = document.getElementById('income-tax-form')?.dataset;
@@ -149,14 +182,13 @@ const copy = ui.tool['income-tax'];
     const disclosure = copy.detectedFromIp ?? '';
 
     /*
-      A rate the reader typed is their own, so the sentence that says the
+      A state the reader picked is theirs, so the sentence that says the
       field was filled in no longer applies. The disclosure stays: the state
       was read from the request either way.
     */
-    if (stateRateEdited) return disclosure;
+    if (stateEdited) return disclosure;
 
-    const rate = stateIncomeRate(detected.code, 'single', 0);
-    const template = rate?.hasIncomeTax ? copy.stateRateDetected : copy.stateRateNoTax;
+    const template = copy.stateDetected;
     if (!template) return disclosure;
 
     return `${fillTemplate(template, { state: detected.name })} ${disclosure}`.trim();
@@ -170,45 +202,62 @@ const copy = ui.tool['income-tax'];
     note.hidden = text.length === 0;
   }
 
+  /** The figure the reader typed, when there is one. */
+  function overrideValue(): number | null {
+    const input = document.getElementById('it-state-tax') as HTMLInputElement | null;
+    if (!input || input.value.trim() === '') return null;
+    const parsed = Number.parseFloat(input.value.replace(/[^0-9.]/g, ''));
+    if (!Number.isFinite(parsed)) return null;
+    return Math.max(0, parsed);
+  }
+
   function recalculate(): void {
     const grossIncome = Math.max(0, numberValue('it-gross'));
     const filingStatus = selectValue('it-status', 'single') as FilingStatus;
     const itemisedDeduction = Math.max(0, numberValue('it-itemised'));
     const preTaxDeductions = Math.max(0, numberValue('it-pretax'));
-
-    /*
-      The state rate follows the bracket the taxable income falls into, so it
-      moves with the income and the filing status — until the reader types a
-      rate of their own, which is the end of it.
-    */
-    if (detected && !stateRateEdited) {
-      const deduction = deductionApplied(itemisedDeduction, filingStatus);
-      const taxable = taxableIncome(grossIncome - preTaxDeductions, filingStatus, deduction);
-      const rate = stateIncomeRate(detected.code, filingStatus, taxable);
-      const input = document.getElementById('it-state-rate') as HTMLInputElement | null;
-      if (rate && input) input.value = String(rate.rate);
-    }
-
-    const stateRatePercent = Math.max(0, numberValue('it-state-rate'));
+    const children = Math.max(0, Math.trunc(numberValue('it-children')));
+    const stateCode = selectValue('it-state', '');
+    const override = overrideValue();
 
     const result = computeIncomeTax({
       grossIncome,
       filingStatus,
       preTaxDeductions,
       itemisedDeduction,
-      stateRatePercent,
+      stateRatePercent: 0,
     });
+
+    /*
+      The state tax is worked out from the state's own brackets, standard
+      deduction, exemption and credits. The figure the reader typed, if
+      there is one, is theirs and replaces the calculation.
+    */
+    const adjustedGrossIncome = Math.max(0, grossIncome - preTaxDeductions);
+    const state = computeStateTax({
+      stateCode,
+      filingStatus,
+      adjustedGrossIncome,
+      children,
+    });
+
+    const stateTax = override !== null ? override : (state?.tax ?? 0);
+    const totalTax = result.federalTax + stateTax;
+    const afterTaxIncome = Math.max(0, grossIncome - preTaxDeductions - totalTax);
+    const effectiveRate = grossIncome > 0 ? (totalTax / grossIncome) * 100 : 0;
 
     setText('it-tax', formatCurrency(result.federalTax));
     setText('it-taxable', formatCurrency(result.taxableIncome));
     setText('it-deduction', formatCurrency(result.deduction));
     setText('it-standard', formatCurrency(standardDeduction(filingStatus)));
     setText('it-itemised-out', formatCurrency(itemisedDeduction));
-    setText('it-state', formatCurrency(result.stateTax));
-    setText('it-total', formatCurrency(result.totalTax));
-    setText('it-effective', formatPercent(result.effectiveRate));
+    setText('it-state-taxable', formatCurrency(state?.taxableIncome ?? 0));
+    setText('it-state-credits', formatCurrency(state?.credits ?? 0));
+    setText('it-state-tax-out', formatCurrency(stateTax));
+    setText('it-total', formatCurrency(totalTax));
+    setText('it-effective', formatPercent(effectiveRate));
     setText('it-marginal', formatPercent(result.marginalRate * 100));
-    setText('it-after', formatCurrency(result.afterTaxIncome));
+    setText('it-after', formatCurrency(afterTaxIncome));
 
     /*
      * One bar for the year: the income that stays and the tax that goes.
@@ -216,20 +265,20 @@ const copy = ui.tool['income-tax'];
     renderChart('income-tax-chart', {
       kind: 'bar',
       series: [
-        { key: 'afterTax', values: [result.afterTaxIncome] },
+        { key: 'afterTax', values: [afterTaxIncome] },
         { key: 'federal', values: [result.federalTax] },
-        { key: 'state', values: [result.stateTax] },
+        { key: 'state', values: [stateTax] },
       ],
     });
   }
 
   /*
-    A rate the reader types is theirs: the page stops following the state
-    from that moment. The listener is registered before the recalculation
-    one, so the flag is already set when the recalculation runs.
+    A state the reader picks is theirs. The listener is registered before
+    the recalculation one, so the flag is already set when the
+    recalculation runs.
   */
-  document.getElementById('it-state-rate')?.addEventListener('input', () => {
-    stateRateEdited = true;
+  document.getElementById('it-state')?.addEventListener('change', () => {
+    stateEdited = true;
     showStateNote();
   });
 
@@ -254,6 +303,10 @@ const copy = ui.tool['income-tax'];
   detectState().then((state) => {
     if (!state) return;
     detected = state;
+
+    const picker = document.getElementById('it-state') as HTMLSelectElement | null;
+    if (picker && !stateEdited) picker.value = state.code;
+
     showStateNote();
     recalculate();
   });

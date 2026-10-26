@@ -32,7 +32,7 @@ faq:
   - q: "Does the calculator include tax credits?"
     a: "No. It does not model tax credits, the child tax credit, capital gains rates or the senior deduction. The federal figure it produces is ordinary income tax on taxable income."
   - q: "Is the state tax figure exact?"
-    a: "It is an estimate. The rate is applied to the whole of taxable income, which is exact in a flat-rate state and overstates the tax in a progressive one. When the network can work out which state the request comes from, the page fills the field with the rate for your bracket for that state and keeps it in step with your income and filing status until you type a rate of your own."
+    a: "It is a calculation, not a return. The brackets, the standard deduction, the personal exemption and the credits are the published figures for the state, applied in the order the state applies them. The federal income tax deduction that some states allow, capital gains rates, local taxes and the head of household tables are not in it, so a figure from a return can be lower."
   - q: "Does this include Social Security and Medicare?"
     a: "No. Those are payroll taxes withheld from wages, with their own rates and their own ceilings, and they are separate from income tax on earnings."
 ---
@@ -128,35 +128,70 @@ single percentage on the whole base overstates the tax in a progressive state
 and is exact in a flat-rate one. The state figure is an estimate that moves
 with the rate entered.
 
-## How the state rate is found
+## How the state tax is worked out
 
-The calculator can fill the state rate in before the reader types anything.
-The network the site is served from knows where a request came from, so the
-page asks it which state the visitor is in, and the answer comes back with the
-marginal brackets for that state for 2026 — the table the Tax Foundation
-compiles from the statutes and the forms of every state.
+The state tax is not a rate applied to the whole of the income. It is
+calculated the way a state calculates it, from the figures the Tax Foundation
+publishes for every state and the District of Columbia: the brackets for 2026
+as of 28 April 2026, the standard deduction, and the personal exemption.
 
-What the page does with that answer is narrow. It looks up the bracket the
-taxable income falls into, for the filing status that is selected, and puts
-the rate of that bracket in the field. Change the income and the rate moves
-with it, because the bracket moved. Type a rate of your own and the page stops
-following, because the rate is then yours.
+The calculation runs in this order.
 
-Two things follow from that, and both of them matter. The first is that the
-state is a default and not a fact about the reader: a virtual private
-network, a corporate proxy or a mobile network can point the answer at the
-wrong state. The second is that the rate is marginal while the tax it produces
-is not. The rate is the one the next dollar of income meets, and it is applied
-to the whole of the taxable income, so the state tax in the result is usually
-higher than the tax a state would actually charge. A reader who needs the
-figure to match their own return enters the rate for their own bracket, which
-is the same number the page would have put there.
+1. The state starts from the adjusted gross income, which is the gross income
+   less the pre-tax deductions.
+2. The state's own standard deduction comes off, where the state has one, and
+   so does the personal exemption where the state gives it as an exclusion.
+3. What is left is taxed with the state's own brackets, slice by slice: each
+   part of the income is taxed at the rate of the bracket it falls into, which
+   is why a progressive state costs more than a flat one.
+4. The credits come off the tax. A state that gives its exemption or its
+   standard deduction as a credit instead of an exclusion gets it here, and so
+   do the state earned income tax credit and the state child tax credit where
+   the model carries them.
+
+The result is a figure that behaves like a state tax: it moves with the
+income, it moves with the filing status, and it is zero in the nine states
+that levy no tax on wages at all.
+
+### The state is a default, not a fact about the reader
+
+The page can fill the state in before the reader touches anything. The network
+the site is served from knows where a request came from, so the page asks it
+which state the visitor is in. The state it gets back is approximate: a
+virtual private network, a corporate proxy or a mobile network can point the
+answer at the wrong state. The picker is right there, so a reader in the
+wrong state changes it in one click and every figure moves with it.
+
+A reader who wants the figure from their own return can type the state tax
+into the field under the state, and that figure replaces the calculated one.
+
+### What the state tax does not carry
+
+Three things are left out, and they are worth knowing about.
+
+- The federal income tax deduction. A score of states let a taxpayer deduct
+  some or all of the federal income tax from the state taxable income, and
+  this model does not, so the state tax is higher than the state charges in
+  those states.
+- Capital gains rates, the surtaxes a few states charge high earners, and the
+  taxes of city and county governments.
+- The head of household tables. The source publishes the single filer and the
+  married filing jointly tables and no third one, so a head of household
+  filer is calculated with the single filer figures.
+
+The state credits are partial as well. The earned income tax credit is there
+for the states that set it as a percentage of the federal credit, and the
+child tax credit for the states whose credit reaches every child under
+seventeen. California, Minnesota, Washington and Wisconsin calculate their
+earned income credit on their own schedule, and the child tax credit of the
+states that only credit younger children needs the age of each child, which a
+single number cannot carry.
 
 Payroll taxes are outside this calculation as well. Social Security and
 Medicare are withheld from wages under their own rates and ceilings, which
 belong to the net pay calculation rather than to income tax on earnings.
 
-Every figure in the result follows from the published 2026 table and from the
-values on the page. Change the income, the filing status, the deduction or
-the state rate, and the tax, the effective rate and the income left over all
+Every figure in the result follows from the published 2026 tables and from the
+values on the page. Change the income, the filing status, the deduction or the
+state, and the tax, the effective rate and the income left over all
 move with them.

@@ -94,7 +94,7 @@ export const es = {
       hecho sobre quien lee, y la frase lo dice.
     */
     detectedFromIp:
-      'El estado se detecta a partir de tu dirección IP y es aproximado: una VPN, un proxy o una red móvil pueden señalarlo al estado equivocado. El tipo se puede seguir editando.',
+      'El estado se detecta a partir de tu dirección IP y es aproximado: una VPN, un proxy o una red móvil pueden señalarlo al estado equivocado. El campo se puede seguir editando.',
   },
 
   newsletter: {
@@ -453,7 +453,7 @@ export const es = {
       'Nada. La aritmética se ejecuta en tu navegador con JavaScript que se descarga junto con la página. Los valores que introduces no se transmiten a ninguna parte, no se almacenan y no son visibles ni para el sitio ni para nadie más. Al cerrar la pestaña se descartan.',
     stateHeading: 'Tu estado',
     stateBody:
-      'Dos de las calculadoras necesitan una cifra por estado: la calculadora del impuesto federal sobre la renta, que suma un impuesto estatal al federal, y la calculadora de alquiler frente a compra, que lleva un impuesto sobre la propiedad dentro del coste de ser propietario de una vivienda. Cuando se abre una de esas páginas, le pregunta a este sitio de qué estado procede la petición. La respuesta viene de la red que sirve el sitio, que lee el estado a partir de la dirección de la petición, y se usa para rellenar un campo. No ocurre nada más con ella: la respuesta no se almacena, no se escribe en una cookie y no se envía a Google ni a las analíticas del proveedor de alojamiento. El estado es aproximado: una VPN, un proxy o una red móvil pueden señalarlo al estado equivocado, y el campo que rellena se puede cambiar o vaciar, en cuyo caso la página conserva el tipo que escribiste.',
+      'Dos de las calculadoras necesitan una cifra por estado: la calculadora del impuesto federal sobre la renta, que suma un impuesto estatal al federal, y la calculadora de alquiler frente a compra, que lleva un impuesto sobre la propiedad dentro del coste de ser propietario de una vivienda. Cuando se abre una de esas páginas, le pregunta a este sitio de qué estado procede la petición. La respuesta viene de la red que sirve el sitio, que lee el estado a partir de la dirección de la petición, y se usa para rellenar un campo. No ocurre nada más con ella: la respuesta no se almacena, no se escribe en una cookie y no se envía a Google ni a las analíticas del proveedor de alojamiento. El estado es aproximado: una VPN, un proxy o una red móvil pueden señalarlo al estado equivocado, y el campo que rellena se puede cambiar o vaciar, en cuyo caso la página conserva la cifra que escribiste.',
     cookiesHeading: 'Cookies',
     cookiesBody:
       '{name} no instala cookies propias. La analítica del propio sitio funciona con Google Analytics 4, que Google sirve desde sus propios dominios y que guarda en tu navegador un identificador de primera parte para distinguir una visita de otra. Ese identificador no se usa para publicidad ni se comparte con otros sitios. La analítica del proveedor de alojamiento no guarda nada en tu navegador: ni cookies, ni almacenamiento local, ni identificador de ningún tipo.',
@@ -1090,14 +1090,14 @@ export const es = {
       name: 'Calculadora del impuesto federal sobre la renta',
       title: 'Calculadora del impuesto federal sobre la renta para el ejercicio fiscal 2026',
       description:
-        'Calcula el impuesto federal sobre la renta de 2026 sobre un año de ingresos, con la situación fiscal, la deducción y los tipos efectivo y marginal uno al lado del otro.',
-      short: 'Impuesto federal sobre la renta de un año de ingresos, con los dos tipos a la vista.',
+        'Calcula el impuesto federal sobre la renta de 2026 de un año de ingresos, con el impuesto estatal calculado a partir de los brackets de ese propio estado, el estado civil, la deducción y las tasas efectiva y marginal, uno al lado del otro.',
+      short:
+        'Impuesto federal y estatal sobre la renta de un año de ingresos, con ambas tasas a la vista.',
       category: 'Impuestos',
       methodNote:
-        'Los tramos y la deducción estándar son las cifras de 2026 de Rev. Proc. 2025-32, publicadas el 3 de noviembre de 2025. Las cargas sociales que se restan de un salario no forman parte de este cálculo; están en la calculadora de salario neto.',
+        'Los brackets y la deducción estándar federales son las cifras de 2026 de la Rev. Proc. 2025-32, publicada el 3 de noviembre de 2025. El impuesto estatal se calcula a partir de los brackets de 2026, la deducción estándar, la exención personal y los créditos del estado que elijas, tomados de las tablas de Tax Foundation del 28 de abril de 2026. Los impuestos sobre la nómina que salen de un sueldo no forman parte de este cálculo; están en la calculadora de sueldo neto.',
       script: {
-        stateRateDetected: 'Relleno con {state}: el tipo de 2026 para tu tramo.',
-        stateRateNoTax: '{state} no grava las rentas del trabajo, así que el tipo es 0.',
+        stateDetected: 'Relleno con {state}: el estado del que viene la petición.',
       },
       fields: {
         grossIncome: 'Ingresos brutos del año',
@@ -1105,8 +1105,13 @@ export const es = {
         itemisedDeduction: 'Deducciones detalladas',
         standardDeduction: 'Deducción estándar',
         useStandard: 'Usar la deducción estándar',
-        stateRate: 'Tipo de impuesto estatal sobre la renta',
-        stateRateHint: 'el tipo de tu tramo',
+        state: 'Estado',
+        stateHint: 'para el impuesto estatal',
+        stateNone: 'Sin estado',
+        children: 'Hijos calificados menores de 17 años',
+        childrenHint: 'para los créditos estatales',
+        stateTaxOverride: 'Tu propio impuesto estatal',
+        stateTaxOverrideHint: 'déjalo vacío para usar el cálculo',
         preTax: 'Deducciones antes de impuestos',
         preTaxHint: '401(k), HSA, FSA al año',
         perYear: 'al año',
@@ -1125,16 +1130,18 @@ export const es = {
         standardDeduction: 'Deducción estándar',
         itemisedDeduction: 'Deducción detallada',
         federalTax: 'Impuesto federal sobre la renta',
+        stateTaxableIncome: 'Renta imponible estatal',
+        stateCredits: 'Créditos estatales',
         stateTax: 'Impuesto estatal sobre la renta',
         totalTax: 'Impuesto total',
         effectiveRate: 'Tipo efectivo',
         marginalRate: 'Tipo marginal',
         afterTax: 'Ingresos después de impuestos',
         note:
-          'La deducción que se aplica es la mayor de las dos: la deducción estándar o la deducción detallada que se introduce a la izquierda.',
+          'La deducción que se aplica es la mayor de las dos: la deducción estándar o la deducción detallada que se introduce a la izquierda. El impuesto estatal se calcula a partir del estado que eliges.',
       },
       resultNote:
-        'La cifra es una obligación tributaria, no el importe retenido de una nómina. No incluye créditos ni los pagos ya realizados durante el año.',
+        'La cifra es una obligación tributaria, no la cantidad retenida en una nómina. La cifra federal no incluye los créditos federales ni los pagos ya hechos durante el año; la cifra estatal incluye los créditos estatales que lleva el modelo.',
       chart: {
         title: 'Qué queda del ingreso',
         note: 'Una barra para el año, partida entre la parte que se queda con quien lee y la parte que va a impuestos.',
@@ -1146,19 +1153,23 @@ export const es = {
         ],
       },
       formula:
-        'ingresos gravables = ingresos brutos − deducciones antes de impuestos − deducción; impuesto = tabla de tramos aplicada a los ingresos gravables',
+        'renta imponible = ingresos brutos − deducciones antes de impuestos − deducción; impuesto = tabla de brackets aplicada a la renta imponible; impuesto estatal = los brackets del estado aplicados a los ingresos brutos ajustados menos la deducción y la exención estatales, menos los créditos estatales',
       method: [
         'El cálculo parte de los ingresos brutos del año y resta las deducciones antes de impuestos, porque una aportación a un 401(k) o a una cuenta de salud no tributa como ingreso.',
         'Después viene la deducción. Se usa la deducción estándar de la situación fiscal salvo que se introduzcan deducciones detalladas, y se aplica la mayor de las dos. La deducción estándar de 2026 es $16,100 para un declarante soltero, $32,200 para una declaración conjunta de casados y $24,150 para cabeza de familia.',
         'Lo que queda son los ingresos gravables, y el impuesto es la tabla de tramos de 2026 aplicada a esa cifra. Cada tramo es un importe fijo de impuesto más un porcentaje de los ingresos por encima del suelo de ese tramo, tal como lo publica el IRS.',
         'Los dos tipos responden a preguntas distintas. El tipo marginal es el tipo al que se grava el siguiente dólar de ingresos gravables, que es el tramo más alto al que llega el ingreso. El tipo efectivo es el impuesto total dividido por todos los ingresos, y es menor porque los tramos más altos solo alcanzan a la parte de los ingresos que los supera.',
+        'El impuesto estatal se calcula por su cuenta. El estado parte de los ingresos brutos ajustados, resta su propia deducción estándar y su exención personal cuando las concede como exclusiones, aplica sus brackets tramo a tramo y resta sus créditos. Los estados que conceden la exención o la deducción estándar como crédito en lugar de exclusión lo reciben sobre el impuesto, que es donde se cuentan esos créditos.',
       ],
       limits: [
         'No modela los créditos fiscales. El crédito fiscal por hijos, el crédito fiscal por ingresos del trabajo y los créditos educativos reducen el impuesto y no están en el cálculo.',
         'No modela la diferencia entre las plusvalías y los ingresos ordinarios, así que un año con ingresos de inversión se calcula con los tipos ordinarios.',
         'No modela la deducción por edad ni ninguna deducción fuera de los importes estándar y detallado que se introducen a la izquierda.',
         'No modela el impuesto por trabajo autónomo, que se cobra sobre los ingresos netos de quien trabaja por cuenta propia y tiene su propia base y su propio tipo.',
-        'La cifra estatal es un tipo que se aplica a toda la renta imponible. La página lo rellena con el tipo de tu tramo cuando la red puede averiguar de qué estado procede la petición, y el lector puede cambiarlo. La mayoría de los estados grava por tramos, así que el impuesto estatal real suele ser menor.',
+        'No modela la deducción del impuesto federal sobre la renta que permiten varios estados, así que el impuesto estatal sale más alto de lo que cobra el estado en esos estados.',
+        'No modela los tipos de las ganancias de capital, los recargos que algunos estados aplican a los contribuyentes con ingresos altos ni los impuestos de ciudades y condados.',
+        'No usa la tabla de head of household de cada estado, porque la fuente no la publica: se usan las cifras de un solo declarante.',
+        'No lleva todos los créditos estatales. El crédito por ingresos ganados estatal está disponible para los estados que lo fijan como un porcentaje del crédito federal, y el crédito por hijo está disponible para los estados cuyo crédito llega a cada hijo menor de diecisiete años; los créditos de los demás estados no están en el modelo.',
       ],
       faq: [
         {
@@ -1179,11 +1190,15 @@ export const es = {
         },
         {
           q: '¿Qué es la cifra del impuesto estatal?',
-          a: 'El tipo que se aplica a la renta imponible. Cuando la red puede averiguar de qué estado procede la petición, la página rellena el campo con el tipo de tu tramo en ese estado y lo sigue mientras cambian tus ingresos y tu declaración, hasta que escribes un tipo propio. La mayoría de los estados grava por tramos, así que la cifra real para un ingreso concreto suele ser menor que esta estimación.',
+          a: 'El impuesto que cobra el propio estado, calculado a partir de sus brackets de 2026, su deducción estándar, su exención personal y sus créditos. El estado se elige en la lista y la página lo rellena con el estado del que viene la petición cuando la red puede averiguarlo. Cambia el estado y toda la cifra cambia con él.',
         },
         {
           q: '¿Es esta la cantidad final?',
           a: 'Es el impuesto antes de los créditos y antes de los pagos ya realizados durante el año. Una declaración suma los créditos, suma todo lo demás que no se gravó por nómina y resta lo ya pagado.',
+        },
+        {
+          q: '¿Puedo poner mi propio impuesto estatal?',
+          a: 'Sí. El campo que hay bajo el estado acepta una cifra y sustituye el cálculo por ella. Por defecto está vacío y, mientras esté vacío, la página muestra el cálculo.',
         },
       ],
       sources: [
@@ -1202,6 +1217,10 @@ export const es = {
         {
           label: 'Tax Foundation — tipos del impuesto sobre la renta por estado, 2026',
           url: 'https://taxfoundation.org/data/all/state/state-income-tax-rates-2026/',
+        },
+        {
+          label: 'Tax Foundation — Facts & Figures 2026, tipos del impuesto sobre la renta por estado a 28 de abril de 2026',
+          url: 'https://taxfoundation.org/data/all/state/2026-state-tax-data/',
         },
       ],
       relatedGuides: [

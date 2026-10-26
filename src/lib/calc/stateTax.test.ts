@@ -2,15 +2,15 @@ import { test } from 'node:test';
 import assert from 'node:assert/strict';
 
 import { STATES } from '../data/states.ts';
+import { STATE_CREDITS } from '../data/stateCredits.ts';
 import {
+  bracketTax,
+  computeStateTax,
   stateByCode,
-  stateIncomeRate,
+  stateList,
   stateName,
   statePropertyTaxRate,
 } from './stateTax.ts';
-
-/** The states that levy no tax on wages. */
-const NO_WAGE_TAX = ['AK', 'FL', 'NV', 'NH', 'SD', 'TN', 'TX', 'WY'];
 
 test('the table holds every state and the District of Columbia', () => {
   assert.equal(Object.keys(STATES).length, 51);
@@ -49,76 +49,206 @@ test('a code that is not a state has no rate', () => {
 test('a code off the wire is normalised before it is used', () => {
   assert.equal(stateName(' tx '), 'Texas');
   assert.equal(statePropertyTaxRate('ny'), 1.3);
-  assert.equal(stateName('XX'), null);
 });
 
-test('the states without a wage tax report a rate of zero', () => {
-  for (const code of NO_WAGE_TAX) {
-    const rate = stateIncomeRate(code, 'single', 100_000);
-    assert.ok(rate, `${code} is known`);
-    assert.equal(rate.rate, 0);
-    assert.equal(rate.hasIncomeTax, false);
-    assert.equal(rate.topRate, 0);
+test('the state picker lists every state by name', () => {
+  const list = stateList();
+  assert.equal(list.length, 51);
+  assert.equal(list[0].name, 'Alabama');
+  assert.ok(list.some((state) => state.code === 'WY' && state.name === 'Wyoming'));
+});
+
+test('the states without a wage tax pay no tax', () => {
+  for (const code of ['AK', 'FL', 'NV', 'NH', 'SD', 'TN', 'TX', 'WY', 'WA']) {
+    const result = computeStateTax({
+      stateCode: code,
+      filingStatus: 'single',
+      adjustedGrossIncome: 250_000,
+      children: 2,
+    });
+    assert.ok(result, `${code} is known`);
+    assert.equal(result.tax, 0);
+    assert.equal(result.taxableIncome, 0);
+    assert.equal(result.taxBeforeCredits, 0);
   }
 });
 
-test('Washington is a capital gains state and its wage rate is zero', () => {
-  const rate = stateIncomeRate('WA', 'single', 250_000);
-  assert.ok(rate);
-  assert.equal(rate.hasIncomeTax, false);
-  assert.equal(rate.rate, 0);
-  assert.equal(rate.capitalGainsOnly, true);
+test('a code that is not a state has no tax', () => {
+  assert.equal(
+    computeStateTax({
+      stateCode: 'XX',
+      filingStatus: 'single',
+      adjustedGrossIncome: 100_000,
+      children: 0,
+    }),
+    null,
+  );
 });
 
-test('a flat rate state charges the same rate at every income', () => {
-  assert.equal(stateIncomeRate('AZ', 'single', 20_000)?.rate, 2.5);
-  assert.equal(stateIncomeRate('AZ', 'single', 900_000)?.rate, 2.5);
-  assert.equal(stateIncomeRate('PA', 'single', 50_000)?.rate, 3.07);
-  assert.equal(stateIncomeRate('IN', 'single', 50_000)?.rate, 2.95);
-  assert.equal(stateIncomeRate('UT', 'single', 50_000)?.rate, 4.5);
+test('the brackets tax each slice of the income at the rate of its own bracket', () => {
+  // California, single filer: 1% to 11,079, 2% to 26,264, 4% to 41,452,
+  // 6% to 57,542 and 8% above that.
+  const tax = bracketTax(
+    [
+      { rate: 1, from: 0 },
+      { rate: 2, from: 11079 },
+      { rate: 4, from: 26264 },
+      { rate: 6, from: 41452 },
+      { rate: 8, from: 57542 },
+    ],
+    68900,
+  );
+  assert.equal(tax, 2896.05);
 });
 
-test('a progressive state reports the rate of the bracket the income reaches', () => {
-  const california = stateIncomeRate('CA', 'single', 68_900);
-  assert.ok(california);
-  assert.equal(california.rate, 8);
-  assert.equal(california.topRate, 13.3);
-  assert.equal(california.stateName, 'California');
-
-  assert.equal(stateIncomeRate('CA', 'single', 11_078)?.rate, 1);
-  assert.equal(stateIncomeRate('CA', 'single', 11_079)?.rate, 2);
-  assert.equal(stateIncomeRate('CA', 'single', 26_264)?.rate, 4);
-  assert.equal(stateIncomeRate('CA', 'single', 41_452)?.rate, 6);
-  assert.equal(stateIncomeRate('CA', 'single', 57_542)?.rate, 8);
-  assert.equal(stateIncomeRate('CA', 'single', 72_724)?.rate, 9.3);
-  assert.equal(stateIncomeRate('CA', 'single', 1_000_000)?.rate, 13.3);
+test('a state with a standard deduction takes it off the income', () => {
+  const result = computeStateTax({
+    stateCode: 'CA',
+    filingStatus: 'single',
+    adjustedGrossIncome: 68900,
+    children: 0,
+  });
+  assert.ok(result);
+  // 68,900 less the 5,540 standard deduction.
+  assert.equal(result.taxableIncome, 63360);
+  assert.equal(result.taxBeforeCredits, 2452.85);
+  // The personal exemption in California is a credit, not an exclusion.
+  assert.equal(result.breakdown.exemption, 0);
+  assert.equal(result.breakdown.exemptionCredit, 153);
+  assert.equal(result.tax, 2299.85);
 });
 
-test('the filing status changes which table is read', () => {
-  // New Jersey: a single filer is in the 5.53% band at $60,000, a married
-  // couple filing jointly is in the 2.45% band at the same income.
-  assert.equal(stateIncomeRate('NJ', 'single', 60_000)?.rate, 5.53);
-  assert.equal(stateIncomeRate('NJ', 'married', 60_000)?.rate, 2.45);
+test('a state that gives the exemption as an exclusion takes it off the income', () => {
+  const result = computeStateTax({
+    stateCode: 'OH',
+    filingStatus: 'single',
+    adjustedGrossIncome: 40000,
+    children: 0,
+  });
+  assert.ok(result);
+  // Ohio has no standard deduction and a 2,400 exemption, and its first
+  // bracket starts at 26,050: the income below that is not taxed.
+  assert.equal(result.taxableIncome, 37600);
+  assert.equal(result.taxBeforeCredits, 317.63);
+  assert.equal(result.tax, 317.63);
+});
+
+test('the filing status changes the brackets and the exemption', () => {
+  const single = computeStateTax({
+    stateCode: 'OH',
+    filingStatus: 'single',
+    adjustedGrossIncome: 80000,
+    children: 0,
+  });
+  const married = computeStateTax({
+    stateCode: 'OH',
+    filingStatus: 'married',
+    adjustedGrossIncome: 80000,
+    children: 0,
+  });
+  assert.ok(single && married);
+  assert.equal(single.taxableIncome, 77600);
+  assert.equal(married.taxableIncome, 75200);
+  assert.ok(married.tax < single.tax);
 });
 
 test('head of household is read from the single filer table', () => {
-  assert.equal(stateIncomeRate('CA', 'head-of-household', 68_900)?.rate, 8);
-  assert.equal(stateIncomeRate('NJ', 'head-of-household', 60_000)?.rate, 5.53);
+  const single = computeStateTax({
+    stateCode: 'OH',
+    filingStatus: 'single',
+    adjustedGrossIncome: 80000,
+    children: 0,
+  });
+  const head = computeStateTax({
+    stateCode: 'OH',
+    filingStatus: 'head-of-household',
+    adjustedGrossIncome: 80000,
+    children: 0,
+  });
+  assert.ok(single && head);
+  assert.equal(head.taxableIncome, single.taxableIncome);
+  assert.equal(head.tax, single.tax);
 });
 
-test('a state that exempts its lowest band taxes nothing below it', () => {
-  assert.equal(stateIncomeRate('OH', 'single', 20_000)?.rate, 0);
-  assert.equal(stateIncomeRate('OH', 'single', 30_000)?.rate, 2.75);
-  assert.equal(stateIncomeRate('ID', 'single', 4_000)?.rate, 0);
-  assert.equal(stateIncomeRate('ID', 'single', 5_000)?.rate, 5.3);
-  assert.equal(stateIncomeRate('DE', 'single', 1_999)?.rate, 0);
-  assert.equal(stateIncomeRate('DE', 'single', 2_000)?.rate, 2.2);
+test('no income means no tax', () => {
+  const result = computeStateTax({
+    stateCode: 'CA',
+    filingStatus: 'single',
+    adjustedGrossIncome: 0,
+    children: 0,
+  });
+  assert.ok(result);
+  assert.equal(result.tax, 0);
+  assert.equal(result.taxableIncome, 0);
 });
 
-test('no income means no rate', () => {
-  assert.equal(stateIncomeRate('CA', 'single', 0)?.rate, 0);
-  assert.equal(stateIncomeRate('CA', 'single', -1_000)?.rate, 0);
-  assert.equal(stateIncomeRate('CA', 'single', Number.NaN)?.rate, 0);
+test('the state earned income credit comes off the tax', () => {
+  // Illinois: 20% of the federal credit. A single parent with one child and
+  // $30,000 of income has a federal credit of 4,427 less 15.98% of the
+  // 6,110 above the phase-out threshold.
+  const result = computeStateTax({
+    stateCode: 'IL',
+    filingStatus: 'single',
+    adjustedGrossIncome: 30000,
+    children: 1,
+  });
+  assert.ok(result);
+  const federal = 4427 - (30000 - 23890) * 0.1598;
+  assert.equal(result.breakdown.earnedIncomeCredit, Math.round(federal * 0.2 * 100) / 100);
+  assert.ok(result.tax < result.taxBeforeCredits);
+});
+
+test('a state without a state earned income credit gets none', () => {
+  const result = computeStateTax({
+    stateCode: 'TX',
+    filingStatus: 'single',
+    adjustedGrossIncome: 30000,
+    children: 3,
+  });
+  assert.ok(result);
+  assert.equal(result.breakdown.earnedIncomeCredit, 0);
+});
+
+test('the state child tax credit comes off the tax', () => {
+  const result = computeStateTax({
+    stateCode: 'MN',
+    filingStatus: 'single',
+    adjustedGrossIncome: 60000,
+    children: 2,
+  });
+  assert.ok(result);
+  // Minnesota gives 1,800 for each child, and the credit falls away above
+  // 32,680 for a single filer, so an income of 60,000 is past it.
+  assert.equal(result.breakdown.childTaxCredit, 0);
+});
+
+test('a credit that falls away above an income is not paid', () => {
+  const result = computeStateTax({
+    stateCode: 'MN',
+    filingStatus: 'single',
+    adjustedGrossIncome: 30000,
+    children: 2,
+  });
+  assert.ok(result);
+  assert.equal(result.breakdown.childTaxCredit, 3600);
+});
+
+test('the credits never push the tax below zero', () => {
+  const result = computeStateTax({
+    stateCode: 'MN',
+    filingStatus: 'single',
+    adjustedGrossIncome: 20000,
+    children: 2,
+  });
+  assert.ok(result);
+  assert.equal(result.tax, 0);
+  assert.ok(result.credits > result.taxBeforeCredits);
+});
+
+test('the credits table only names states that exist', () => {
+  for (const code of Object.keys(STATE_CREDITS)) {
+    assert.ok(STATES[code], `${code} is a state`);
+  }
 });
 
 test('the rates of every bracket of every state are in order', () => {
@@ -137,11 +267,14 @@ test('the rates of every bracket of every state are in order', () => {
   }
 });
 
-test('the married table is never shorter than the single table', () => {
+test('every state that taxes wages has brackets, and every state that does not says so', () => {
   for (const [code, state] of Object.entries(STATES)) {
-    assert.ok(
-      state.incomeTax.married.length >= state.incomeTax.single.length,
-      `${code} has both tables`,
-    );
+    const brackets = state.incomeTax.single;
+    if (brackets.length === 0) {
+      assert.ok(
+        state.incomeTax.noIncomeTax || state.incomeTax.capitalGainsOnly,
+        `${code} has no brackets and says why`,
+      );
+    }
   }
 });
