@@ -2,11 +2,12 @@
 /**
  * Cookie consent.
  *
- * The site loads two things from Google: the AdSense script, which serves
- * the advertising, and the Google Analytics script, which counts the page
- * views. Both of them set cookies. So neither of them is loaded until the
- * reader has answered the question, and the answer is remembered in the
- * browser.
+ * The site loads three things once the reader has answered: the AdSense
+ * script from Google, which serves the advertising, the Google Analytics
+ * script, which counts the page views, and the Cloudflare beacon, which
+ * measures how fast the pages load. The first two set cookies. The third
+ * sets none, but it is still a request to a third party, so it waits for
+ * the answer as well.
  *
  * The script tags are not in the document. They are injected by the
  * bootstrap below once the answer is known, which is why the source of a
@@ -16,7 +17,8 @@
  *
  *   no answer   the banner is shown, the ad units stay hidden and no
  *               request leaves the browser
- *   accepted   both scripts are loaded, the ad units are pushed to Google
+ *   accepted   all three scripts are loaded, the ad units are pushed to
+ *               Google
  *   declined   nothing is loaded, the ad units are removed from the page
  *
  * The banner can be opened again from the footer, so a reader who changes
@@ -45,9 +47,12 @@ const copy = ui.consent;
 
 const gaId = import.meta.env.PUBLIC_GA_ID || SITE.gaMeasurementId;
 const adsenseClient = import.meta.env.PUBLIC_ADSENSE_CLIENT || SITE.adsensePublisherId;
+const cloudflareToken =
+  import.meta.env.PUBLIC_CLOUDFLARE_BEACON_TOKEN || SITE.cloudflareBeaconToken;
 
 const gaUrl = `https://www.googletagmanager.com/gtag/js?id=${gaId}`;
 const adsenseUrl = `https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${adsenseClient}`;
+const cloudflareUrl = 'https://static.cloudflareinsights.com/beacon.min.js';
 
 const privacyLink = `<a href="${localePath(locale, '/privacy/')}">${copy.privacyLink}</a>`;
 const body = copy.body.replace('{privacyLink}', privacyLink);
@@ -65,6 +70,8 @@ const bootstrap = `(function () {
   var GA_ID = '${gaId}';
   var GA_URL = '${gaUrl}';
   var ADSENSE_URL = '${adsenseUrl}';
+  var CLOUDFLARE_URL = '${cloudflareUrl}';
+  var CLOUDFLARE_TOKEN = '${cloudflareToken}';
 
   function read() {
     try { return window.localStorage.getItem(KEY); } catch (error) { return null; }
@@ -102,6 +109,23 @@ const bootstrap = `(function () {
     document.head.appendChild(el);
   }
 
+  function loadHostingAnalytics() {
+    /*
+     * Cloudflare's own page analytics.
+     *
+     * The automatic setup in the Cloudflare dashboard is switched off, so
+     * the beacon is not in the document. It is loaded here instead, which
+     * puts it behind the same answer as everything else. The script sets no
+     * cookie and stores nothing, so it only counts page views and how fast
+     * the pages load.
+     */
+    var el = document.createElement('script');
+    el.defer = true;
+    el.src = CLOUDFLARE_URL;
+    el.setAttribute('data-cf-beacon', JSON.stringify({ token: CLOUDFLARE_TOKEN }));
+    document.head.appendChild(el);
+  }
+
   function removeAdUnits() {
     var units = document.querySelectorAll('ins.adsbygoogle');
     for (var i = 0; i < units.length; i += 1) {
@@ -113,6 +137,7 @@ const bootstrap = `(function () {
     document.documentElement.classList.add('consent-granted');
     loadAnalytics();
     loadAds();
+    loadHostingAnalytics();
   }
 
   function deny() {
@@ -130,8 +155,9 @@ const bootstrap = `(function () {
    * a crawler user agent. It does not answer the cookie question, so the
    * advertising script would never load for it and the site would be
    * reviewed as a site with no advertising on it. The crawler is therefore
-   * given the ad script straight away. The analytics are not loaded for it:
-   * a page view counted from a crawler is noise, not a reader.
+   * given the ad script straight away. Neither of the two analytics are
+   * loaded for it: a page view counted from a crawler is noise, not a
+   * reader.
    */
   function isCrawler() {
     return /bot|crawler|spider|slurp|mediapartners/i.test(navigator.userAgent || '');

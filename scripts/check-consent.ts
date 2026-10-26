@@ -11,13 +11,14 @@
  * would actually ship:
  *
  *   1. the banner is on every page, and the way back to it is too
- *   2. both script URLs are present, so they can be loaded after consent
- *   3. neither one is loaded as a script tag, so nothing goes out before
+ *   2. all three script URLs are present, so they can be loaded after
+ *      consent
+ *   3. none of them is loaded as a script tag, so nothing goes out before
  *      the answer
- *   4. the site does not add the hosting provider's beacon itself, which
- *      would count every page view twice
- *   5. the privacy policy names that provider, because its analytics run
- *      before the question and the policy has to say so
+ *   4. the hosting provider's beacon is loaded by the bootstrap, so the
+ *      request waits for the answer as well
+ *   5. the privacy policy names that provider, because it is the one that
+ *      receives the request
  *
  * The third point is the one that matters. A page that carries the
  * tracker in the head works exactly like a page without a consent banner,
@@ -74,15 +75,17 @@ const CRAWLER_MARKER = 'isCrawler';
 /**
  * The hosting provider's own page analytics.
  *
- * Cloudflare adds a small beacon to every page it serves, before the
- * reader has answered anything. It sets no cookies and stores nothing, so
- * it is not part of the cookie question, but it is a third party that
- * receives a request from every visitor, and the privacy policy has to say
- * so. The gate therefore checks that the policy still names the provider.
+ * Cloudflare used to add its beacon to every page it served, which meant a
+ * request left the browser before the reader had answered anything. The
+ * automatic setup is switched off in the Cloudflare dashboard, and the
+ * beacon is loaded by the consent bootstrap instead, so it goes out only
+ * after the answer.
  *
- * The other half of the check is that the site does not add the beacon
- * itself: Cloudflare already injects it, and a second copy would count
- * every page view twice.
+ * The gate therefore treats the beacon like the two Google trackers: the
+ * URL has to be in the source, so it can be loaded after the answer, and it
+ * must not be in the document as a script tag, because then the request
+ * would go out before the answer. The privacy policy has to name the
+ * provider as well, since it is the one that receives the request.
  */
 const HOSTING_MARKER = 'Cloudflare';
 const HOSTING_BEACON = 'static.cloudflareinsights.com';
@@ -120,6 +123,7 @@ let pagesWithoutReopen = 0;
 let pagesWithoutDecision = 0;
 let pagesWithoutAnalytics = 0;
 let pagesWithoutAds = 0;
+let pagesWithoutHosting = 0;
 let pagesWithStaticTracker = 0;
 let pagesWithoutCrawlerException = 0;
 const staticExamples: string[] = [];
@@ -149,6 +153,7 @@ for (const file of htmlFiles) {
   if (!html.includes(DECISION_MARKER)) pagesWithoutDecision += 1;
   if (!html.includes(ANALYTICS_MARKER)) pagesWithoutAnalytics += 1;
   if (!html.includes(ADS_MARKER)) pagesWithoutAds += 1;
+  if (!html.includes(HOSTING_BEACON)) pagesWithoutHosting += 1;
   if (!html.includes(CRAWLER_MARKER)) pagesWithoutCrawlerException += 1;
 
   const staticTag = html.match(STATIC_TAG);
@@ -194,6 +199,12 @@ if (pagesWithoutAds > 0) {
     `${pagesWithoutAds} of ${htmlFiles.length} pages cannot load the ad script`,
   );
 }
+if (pagesWithoutHosting > 0) {
+  problems.push(
+    `${pagesWithoutHosting} of ${htmlFiles.length} pages cannot load the hosting ` +
+      'provider\'s page analytics after the answer',
+  );
+}
 if (pagesWithStaticTracker > 0) {
   problems.push(
     `${pagesWithStaticTracker} of ${htmlFiles.length} pages load a tracker as a script tag, ` +
@@ -211,16 +222,14 @@ if (pagesWithoutCrawlerException > 0) {
 }
 if (pagesWithHostingTag > 0) {
   problems.push(
-    `${pagesWithHostingTag} of ${htmlFiles.length} pages add the hosting provider's beacon ` +
-      'as a script tag, and Cloudflare already injects it, so every page view would be counted twice',
+    `${pagesWithHostingTag} of ${htmlFiles.length} pages carry the hosting provider's beacon ` +
+      'as a script tag, so the request goes out before the answer',
   );
 }
 if (privacyPagesWithoutHosting > 0) {
   problems.push(
     `${privacyPagesWithoutHosting} of ${privacyPages} privacy pages do not name the hosting ` +
-      'provider. Its page analytics run before the cookie question on every visit, so the policy ' +
-      'has to say so. If the automatic setup was turned off in Cloudflare, the text has to be ' +
-      'updated instead.',
+      'provider. Its page analytics run on every visit, so the policy has to say so.',
   );
 }
 
@@ -234,7 +243,7 @@ if (problems.length > 0) {
 
 console.log(
   `Consent gating check passed: ${htmlFiles.length} pages carry the banner, ` +
-    `both trackers are loaded only after the answer, the ad units stay hidden until then, ` +
+    `all three trackers are loaded only after the answer, the ad units stay hidden until then, ` +
     `Google's crawler is served the ad script directly, and the privacy policy names the ` +
-    `hosting provider whose page analytics run before the question.`,
+    `hosting provider whose page analytics run on every visit.`,
 );

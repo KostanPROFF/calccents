@@ -44,7 +44,7 @@ export const en = {
 
   consent: {
     heading: 'Cookies',
-    body: 'This site uses cookies to serve advertising and to count which pages are read. You can accept them or decline them, and you can change your answer later from the footer. Separately, the hosting provider measures how fast the pages load with a script that sets no cookies and stores nothing in your browser, so it is not part of this choice. What is collected and who provides it is on the {privacyLink}.',
+    body: 'This site uses cookies to serve advertising and to count which pages are read. Accepting loads the advertising and the page analytics, including the hosting provider\'s cookieless beacon; declining loads nothing at all. You can change your answer later from the footer. What is collected and who provides it is on the {privacyLink}.',
     privacyLink: 'privacy page',
     accept: 'Accept',
     reject: 'Decline',
@@ -481,13 +481,13 @@ export const en = {
       'Page views are recorded with Google Analytics 4, served by Google from googletagmanager.com. The data used is limited to the page, the referring source and a coarse country or city level location; the IP address is truncated rather than stored in full. It is used to count visits and to find out which pages are read. Google\'s own explanation of how it uses data from sites and apps that use its services is at {analyticsPoliciesLink}. The script is loaded only after you accept the cookie question.',
     hostingAnalyticsHeading: 'Hosting and page performance',
     hostingAnalyticsBody:
-      'The site is hosted on Cloudflare, and Cloudflare\'s own Web Analytics run on every page. A small script served from static.cloudflareinsights.com measures the page view: which page was opened, where the visit came from, which browser and operating system were used, the country the request came from, and how long the page took to load. The IP address is used at Cloudflare\'s edge to work out the country and is discarded there rather than stored. The script sets no cookie, writes nothing to local storage, and creates no identifier that could follow you from one page to the next. What comes out of it is a count of page views and visits, and a reading of how fast the pages load.',
+      'The site is hosted on Cloudflare, and Cloudflare\'s own Web Analytics run on every page. A small script served from static.cloudflareinsights.com measures the page view: which page was opened, where the visit came from, which browser and operating system were used, the country the request came from, and how long the page took to load. The IP address is used at Cloudflare\'s edge to work out the country and is discarded there rather than stored. The script sets no cookie, writes nothing to local storage, and creates no identifier that could follow you from one page to the next. What comes out of it is a count of page views and visits, and a reading of how fast the pages load. The script is loaded only after you accept the cookie question.',
     newsletterHeading: 'Newsletter',
     newsletterBody:
       'If you subscribe to the newsletter, the address you enter is stored by the email provider so that the newsletter can be sent. That address is used for the newsletter and for nothing else, and every issue carries an unsubscribe link.',
     contactHeading: 'The contact form',
     contactBody:
-      'If you write a message through the contact form, the name, the email address, the subject and the message itself are sent by email to the person who runs the site, and are kept in that mailbox. The form is served from this site and the reply goes to the address you wrote, so that you can continue the conversation. The form sends nothing to Google and sets no cookie of its own; the advertising scripts and the Google analytics script described above belong to the page as a whole and load only if you accepted cookies, while the hosting provider\'s cookieless page analytics run either way. Nothing you type is stored on the site itself, and the message is not passed to anyone else.',
+      'If you write a message through the contact form, the name, the email address, the subject and the message itself are sent by email to the person who runs the site, and are kept in that mailbox. The form is served from this site and the reply goes to the address you wrote, so that you can continue the conversation. The form sends nothing to Google and sets no cookie of its own; the advertising scripts and the analytics scripts described above belong to the page as a whole and load only if you accepted cookies. Nothing you type is stored on the site itself, and the message is not passed to anyone else.',
     thirdPartyHeading: 'Third-party links',
     thirdPartyBody:
       'Guides link to primary sources — government agencies, the SEC, the Federal Reserve. Those sites have their own privacy policies, which this site does not control and has not read on your behalf.',
@@ -496,7 +496,7 @@ export const en = {
       'If the providers above change, this page changes with them. The date at the bottom of the page is the date this text was last reviewed.',
     consentHeading: 'Your choice',
     consentBody:
-      'Nothing is loaded from Google until you answer. If you accept, the advertising and analytics scripts are loaded and the answer is remembered in your browser; if you decline, the site works exactly the same and nothing is loaded. The {settingsLink} link in the footer opens the question again. One exception: Google\'s own crawler, which checks whether the site carries advertising, is served the advertising script directly, because it cannot answer the question. No choice is recorded for it and nothing is stored about it. One script runs before the question and regardless of the answer: the hosting provider\'s cookieless page analytics described above. They store nothing in your browser, and the answer given here does not change them.',
+      'Nothing is loaded from Google or from the hosting provider until you answer. If you accept, the advertising and analytics scripts are loaded and the answer is remembered in your browser; if you decline, the site works exactly the same and nothing is loaded. The {settingsLink} link in the footer opens the question again. One exception: Google\'s own crawler, which checks whether the site carries advertising, is served the advertising script directly, because it cannot answer the question. No choice is recorded for it and nothing is stored about it.',
     lastReviewed: 'Last reviewed: {date}.',
   },
 

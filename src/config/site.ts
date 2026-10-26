@@ -68,6 +68,20 @@ export const SITE = {
    * of every page that loads the tag.
    */
   gaMeasurementId: 'G-J8H5VGPMS5',
+  /**
+   * The Cloudflare Web Analytics site token.
+   *
+   * Cloudflare used to add its beacon to every page it served, which meant
+   * a request left the browser before anyone had answered the cookie
+   * question. The automatic setup is switched off in the Cloudflare
+   * dashboard, and the beacon is loaded by the consent bootstrap instead,
+   * so it goes out only after the answer.
+   *
+   * A site token is public by design: Cloudflare says so itself, because
+   * the token is visible in the source of every page that carries the
+   * beacon and it only works on the domain it belongs to.
+   */
+  cloudflareBeaconToken: 'd7eea760851f48348f05f7a316598dc0',
 } as const;
 
 export type NavItem = { href: string; label: string };

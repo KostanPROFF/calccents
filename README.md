@@ -190,26 +190,24 @@ earlier deployment from the Cloudflare Pages dashboard.
 
 ### Cloudflare Web Analytics
 
-Cloudflare's Web Analytics is switched on for the zone, and Cloudflare adds
-its beacon to every page it serves. The beacon comes from
-`static.cloudflareinsights.com`, it sets no cookie, writes nothing to local
+Cloudflare's Web Analytics is switched on for the zone, and it used to add
+its beacon to every page it served. The automatic setup is now switched off
+in the Cloudflare dashboard, under Web Analytics. The beacon is loaded by the
+consent bootstrap instead, so the request goes out only after the reader has
+answered the cookie question, together with the two Google trackers.
+
+The beacon comes from `static.cloudflareinsights.com` and carries the site
+token from `src/config/site.ts`. It sets no cookie, writes nothing to local
 storage and creates no identifier, and the IP address it carries is used at
-the edge to work out the country and is discarded there. It is still a
-third party that receives a request from every visitor before anyone has
-answered the cookie question, so the banner and the privacy policy name it
-in all three languages. `scripts/check-consent.ts` checks that the policy
-still does, and that the site does not add the beacon a second time.
+the edge to work out the country and is discarded there. It is still a third
+party that receives a request from every visitor who accepts, so the
+privacy policy names it in all three languages. `scripts/check-consent.ts`
+checks that the policy still does, that the beacon URL is in the source, and
+that it is not in the document as a script tag.
 
-Two ways to change that, both of them the site owner's call:
-
-- **Turn the automatic setup off** in the Cloudflare dashboard, under Web
-  Analytics. The beacon stops running, and the text in the banner and in
-  the privacy policy has to be removed in all three languages, or the gate
-  fails. The site could then load the beacon by hand after the cookie
-  question is answered, which keeps the numbers and puts the request behind
-  the same answer as everything else.
-- **Leave it as it is.** The beacon sets no cookies, so the cookie question
-  does not cover it, and the policy says so plainly.
+Turning the automatic setup back on in the dashboard would put the beacon
+back into every page, before the answer, and the gate would fail on the
+static script tag.
 
 ### The domain
 
