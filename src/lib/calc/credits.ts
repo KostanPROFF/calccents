@@ -32,6 +32,20 @@ export const FEDERAL_EITC_PHASE_OUT_MARRIED = [18140, 31160, 31160, 31160] as co
 export const FEDERAL_EITC_PHASE_OUT_RATE = [0.0765, 0.1598, 0.2106, 0.2106] as const;
 
 /**
+ * The federal child tax credit for each qualifying child.
+ *
+ * The federal credit itself is not part of the federal income tax on this
+ * site, because the federal calculator models ordinary income tax only. It
+ * is here for the one state that pays a share of it: Oklahoma pays 5% of
+ * the federal child tax credit, which is $2,200 for a child under seventeen
+ * in tax year 2026.
+ *
+ * Rev. Proc. 2025-32, the same notice the earned income credit figures come
+ * from.
+ */
+export const FEDERAL_CHILD_TAX_CREDIT = 2200;
+
+/**
  * The federal credit for an amount of income.
  *
  * The credit is earned at one rate up to a point, is at its maximum between

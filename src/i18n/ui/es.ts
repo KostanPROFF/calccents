@@ -325,7 +325,7 @@ export const es = {
       },
       {
         label: 'Cifras por estado',
-        body: 'provienen de la Tax Foundation, que compila los brackets del impuesto sobre la renta a partir de las leyes y los formularios de cada estado, y los tipos del impuesto sobre la propiedad a partir de la American Community Survey que publica.',
+        body: 'provienen de la Tax Foundation, que compila los brackets del impuesto sobre la renta a partir de las leyes y los formularios de cada estado, y los tipos del impuesto sobre la propiedad a partir de la American Community Survey que publica. Las tablas de head of household, la deducción del impuesto federal pagado y los créditos estatales vienen de las declaraciones y las instrucciones de los propios estados.',
       },
     ],
     sources: [
@@ -380,6 +380,18 @@ export const es = {
       {
         label: 'Tax Foundation — impuestos sobre la propiedad por estado y condado, 2026',
         url: 'https://taxfoundation.org/data/all/state/property-taxes-by-state-county/',
+      },
+      {
+        label: 'National Conference of State Legislatures (NCSL) — créditos estatales por ingresos ganados y por hijos',
+        url: 'https://www.ncsl.org/human-services/',
+      },
+      {
+        label: 'Tax Policy Center — tipos del impuesto sobre la renta y créditos por estado',
+        url: 'https://taxpolicycenter.org/',
+      },
+      {
+        label: 'Prenatal-to-3 Policy Impact Center — políticas de crédito fiscal por hijos en los estados',
+        url: 'https://pn3policy.org/',
       },
     ],
   },
@@ -1095,9 +1107,10 @@ export const es = {
         'Impuesto federal y estatal sobre la renta de un año de ingresos, con ambas tasas a la vista.',
       category: 'Impuestos',
       methodNote:
-        'Los brackets y la deducción estándar federales son las cifras de 2026 de la Rev. Proc. 2025-32, publicada el 3 de noviembre de 2025. El impuesto estatal se calcula a partir de los brackets de 2026, la deducción estándar, la exención personal y los créditos del estado que elijas, tomados de las tablas de Tax Foundation del 28 de abril de 2026. Los impuestos sobre la nómina que salen de un sueldo no forman parte de este cálculo; están en la calculadora de sueldo neto.',
+        'Los brackets y la deducción estándar federales son las cifras de 2026 de la Rev. Proc. 2025-32, publicada el 3 de noviembre de 2025. El impuesto estatal se calcula a partir de los brackets de 2026, la deducción estándar, la exención personal y los créditos del estado que elijas, tomados de las tablas de Tax Foundation del 28 de abril de 2026. Las tablas de head of household, la deducción del impuesto federal y los créditos estatales vienen de los formularios de los propios estados. Los impuestos sobre la nómina que salen de un sueldo no forman parte de este cálculo; están en la calculadora de sueldo neto.',
       script: {
         stateDetected: 'Relleno con {state}: el estado del que viene la petición.',
+        childrenTotal: 'Total de hijos que cumplen los requisitos: {count}',
       },
       fields: {
         grossIncome: 'Ingresos brutos del año',
@@ -1108,8 +1121,9 @@ export const es = {
         state: 'Estado',
         stateHint: 'para el impuesto estatal',
         stateNone: 'Sin estado',
-        children: 'Hijos calificados menores de 17 años',
-        childrenHint: 'para los créditos estatales',
+        children: 'Hijos que cumplen los requisitos',
+        childrenHint: 'por edad al final del año fiscal',
+        childBand: 'Hijos de {range} años',
         stateTaxOverride: 'Tu propio impuesto estatal',
         stateTaxOverrideHint: 'déjalo vacío para usar el cálculo',
         preTax: 'Deducciones antes de impuestos',
@@ -1132,6 +1146,8 @@ export const es = {
         federalTax: 'Impuesto federal sobre la renta',
         stateTaxableIncome: 'Renta imponible estatal',
         stateCredits: 'Créditos estatales',
+        stateChildCredit: 'Crédito estatal por hijos',
+        federalTaxDeducted: 'Impuesto federal deducido',
         stateTax: 'Impuesto estatal sobre la renta',
         totalTax: 'Impuesto total',
         effectiveRate: 'Tipo efectivo',
@@ -1153,23 +1169,26 @@ export const es = {
         ],
       },
       formula:
-        'renta imponible = ingresos brutos − deducciones antes de impuestos − deducción; impuesto = tabla de brackets aplicada a la renta imponible; impuesto estatal = los brackets del estado aplicados a los ingresos brutos ajustados menos la deducción y la exención estatales, menos los créditos estatales',
+        'renta imponible = ingresos brutos − deducciones antes de impuestos − deducción; impuesto = tabla de brackets aplicada a la renta imponible; impuesto estatal = los brackets del estado aplicados a los ingresos brutos ajustados menos la deducción estándar y la exención estatales, menos el impuesto federal pagado donde el estado lo permite, menos los créditos estatales',
       method: [
         'El cálculo parte de los ingresos brutos del año y resta las deducciones antes de impuestos, porque una aportación a un 401(k) o a una cuenta de salud no tributa como ingreso.',
         'Después viene la deducción. Se usa la deducción estándar de la situación fiscal salvo que se introduzcan deducciones detalladas, y se aplica la mayor de las dos. La deducción estándar de 2026 es $16,100 para un declarante soltero, $32,200 para una declaración conjunta de casados y $24,150 para cabeza de familia.',
         'Lo que queda son los ingresos gravables, y el impuesto es la tabla de tramos de 2026 aplicada a esa cifra. Cada tramo es un importe fijo de impuesto más un porcentaje de los ingresos por encima del suelo de ese tramo, tal como lo publica el IRS.',
         'Los dos tipos responden a preguntas distintas. El tipo marginal es el tipo al que se grava el siguiente dólar de ingresos gravables, que es el tramo más alto al que llega el ingreso. El tipo efectivo es el impuesto total dividido por todos los ingresos, y es menor porque los tramos más altos solo alcanzan a la parte de los ingresos que los supera.',
         'El impuesto estatal se calcula por su cuenta. El estado parte de los ingresos brutos ajustados, resta su propia deducción estándar y su exención personal cuando las concede como exclusiones, aplica sus brackets tramo a tramo y resta sus créditos. Los estados que conceden la exención o la deducción estándar como crédito en lugar de exclusión lo reciben sobre el impuesto, que es donde se cuentan esos créditos.',
+        'Se usa la tabla de la situación fiscal elegida. Los estados que publican su propia tabla de head of household la usan, tomada de sus propios formularios, y los demás se calculan con la tabla de un solo declarante.',
+        'Tres estados permiten deducir el impuesto federal sobre la renta pagado: Alabama, Misuri y Oregón. Allí la deducción sale del ingreso antes de aplicar los brackets del estado, con el límite y la parte que fija cada estado.',
+        'Los créditos estatales se calculan con la edad de los hijos, porque es justo lo que determina. Nueva York paga $1,000 por un hijo menor de cuatro años y $500 por uno de cuatro a dieciséis, Minnesota paga $1,800 por un hijo menor de dieciocho y algunos estados no pagan nada por un hijo que pasa de cierta edad.',
       ],
       limits: [
         'No modela los créditos fiscales. El crédito fiscal por hijos, el crédito fiscal por ingresos del trabajo y los créditos educativos reducen el impuesto y no están en el cálculo.',
         'No modela la diferencia entre las plusvalías y los ingresos ordinarios, así que un año con ingresos de inversión se calcula con los tipos ordinarios.',
         'No modela la deducción por edad ni ninguna deducción fuera de los importes estándar y detallado que se introducen a la izquierda.',
         'No modela el impuesto por trabajo autónomo, que se cobra sobre los ingresos netos de quien trabaja por cuenta propia y tiene su propia base y su propio tipo.',
-        'No modela la deducción del impuesto federal sobre la renta que permiten varios estados, así que el impuesto estatal sale más alto de lo que cobra el estado en esos estados.',
+        'No modela la deducción de los impuestos estatales y locales pagados que muchos estados permiten dentro de sus deducciones detalladas.',
         'No modela los tipos de las ganancias de capital, los recargos que algunos estados aplican a los contribuyentes con ingresos altos ni los impuestos de ciudades y condados.',
-        'No usa la tabla de head of household de cada estado, porque la fuente no la publica: se usan las cifras de un solo declarante.',
-        'No lleva todos los créditos estatales. El crédito por ingresos ganados estatal está disponible para los estados que lo fijan como un porcentaje del crédito federal, y el crédito por hijo está disponible para los estados cuyo crédito llega a cada hijo menor de diecisiete años; los créditos de los demás estados no están en el modelo.',
+        'No usa la tabla de head of household de Vermont, cuyos tipos de 2026 se publicaron como cifras preliminares, así que un head of household de Vermont se calcula con la tabla de un solo declarante.',
+        'No lleva todos los créditos estatales. El crédito por ingresos ganados estatal está disponible para los estados que lo fijan como un porcentaje del crédito federal y para los cuatro que lo calculan con su propia escala, y el crédito por hijo está disponible para los estados cuyo crédito depende de la edad del hijo. Los créditos de los demás estados no están en el modelo.',
       ],
       faq: [
         {
@@ -1199,6 +1218,10 @@ export const es = {
         {
           q: '¿Puedo poner mi propio impuesto estatal?',
           a: 'Sí. El campo que hay bajo el estado acepta una cifra y sustituye el cálculo por ella. Por defecto está vacío y, mientras esté vacío, la página muestra el cálculo.',
+        },
+        {
+          q: '¿Por qué la página pide la edad de cada hijo?',
+          a: 'Porque los créditos fiscales estatales por hijos dependen de la edad del hijo. Nueva York paga $1,000 por un hijo menor de cuatro años y $500 por uno de cuatro a dieciséis, Minnesota paga $1,800 por un hijo menor de dieciocho y algunos estados no pagan nada por un hijo que pasa de cierta edad. Las bandas son las edades en las que los estados cortan, y el número de hijos en ellas cuenta también para el crédito por ingresos ganados.',
         },
       ],
       sources: [

@@ -4,6 +4,8 @@ import ResultPanel from '../ResultPanel.astro';
 import ResultChart from '../ResultChart.astro';
 import AdSlot from '../AdSlot.astro';
 import { stateList } from '../../lib/calc/stateTax.ts';
+import { CHILD_AGE_BANDS } from '../../lib/data/childAges.ts';
+import { fillTemplate } from '../../lib/client/text.ts';
 import type { Locale } from '../../i18n/locales.ts';
 
 interface Props {
@@ -14,12 +16,14 @@ const { locale } = Astro.props;
 const ui = getUi(locale);
 const copy = ui.tool['income-tax'];
 const states = stateList();
+const childBands = CHILD_AGE_BANDS;
 ---
 
 <div>
   <form class="card" id="income-tax-form" novalidate
     data-state-detected={copy.script.stateDetected}
-    data-detected-from-ip={ui.ui.detectedFromIp}>
+    data-detected-from-ip={ui.ui.detectedFromIp}
+    data-children-total={copy.script.childrenTotal}>
     <label class="field" for="it-gross">
       <span class="field__label">{copy.fields.grossIncome}</span>
       <span class="field__control">
@@ -66,19 +70,6 @@ const states = stateList();
         </span>
         <p class="field__note" id="it-state-note" role="status" hidden></p>
       </div>
-      <label class="field" for="it-children">
-        <span class="field__label">
-          {copy.fields.children}
-          <span class="field__hint">{copy.fields.childrenHint}</span>
-        </span>
-        <span class="field__control">
-          <input class="input" id="it-children" type="number" inputmode="numeric"
-            step="1" min="0" max="12" value="0" />
-        </span>
-      </label>
-    </div>
-
-    <div class="input-group">
       <label class="field" for="it-pretax">
         <span class="field__label">
           {copy.fields.preTax}
@@ -90,6 +81,35 @@ const states = stateList();
             inputmode="decimal" step="100" min="0" value="0" />
         </span>
       </label>
+    </div>
+
+    <div class="field field--wide">
+      <span class="field__label" id="it-children-label">
+        {copy.fields.children}
+        <span class="field__hint">{copy.fields.childrenHint}</span>
+      </span>
+      <div class="age-bands" role="group" aria-labelledby="it-children-label">
+        {childBands.map((band) => (
+          <label class="age-band" for={`it-children-${band.id}`}>
+            <span class="age-band__age">{band.label}</span>
+            <input
+              class="input input--band"
+              id={`it-children-${band.id}`}
+              type="number"
+              inputmode="numeric"
+              step="1"
+              min="0"
+              max="12"
+              value="0"
+              aria-label={fillTemplate(copy.fields.childBand, { range: band.label })}
+            />
+          </label>
+        ))}
+      </div>
+      <p class="field__note" id="it-children-note" role="status"></p>
+    </div>
+
+    <div class="input-group">
       <div class="field">
         <label class="field__label" for="it-state-tax">
           {copy.fields.stateTaxOverride}
@@ -121,6 +141,8 @@ const states = stateList();
       { id: 'it-itemised-out', label: copy.result.itemisedDeduction, value: '—' },
       { id: 'it-state-taxable', label: copy.result.stateTaxableIncome, value: '—' },
       { id: 'it-state-credits', label: copy.result.stateCredits, value: '—' },
+      { id: 'it-state-child-credit', label: copy.result.stateChildCredit, value: '—', hidden: true },
+      { id: 'it-state-federal-deduction', label: copy.result.federalTaxDeducted, value: '—', hidden: true },
       { id: 'it-state-tax-out', label: copy.result.stateTax, value: '—' },
       { id: 'it-total', label: copy.result.totalTax, value: '—' },
       { id: 'it-effective', label: copy.result.effectiveRate, value: '—' },
@@ -151,6 +173,7 @@ const states = stateList();
   import { computeIncomeTax, standardDeduction } from '../../lib/calc/tax.ts';
   import type { FilingStatus } from '../../lib/calc/tax.ts';
   import { computeStateTax } from '../../lib/calc/stateTax.ts';
+  import { CHILD_AGE_BANDS, emptyChildAges, totalChildren, type ChildAgeCounts } from '../../lib/data/childAges.ts';
   import { formatCurrency, formatPercent } from '../../lib/calc/money.ts';
   import { numberValue, selectValue, setText } from '../../lib/client/dom.ts';
   import { renderChart } from '../../lib/client/chartView.ts';
@@ -163,8 +186,8 @@ const states = stateList();
     'it-itemised',
     'it-pretax',
     'it-state',
-    'it-children',
     'it-state-tax',
+    ...CHILD_AGE_BANDS.map((band) => `it-children-${band.id}`),
   ];
 
   /*
@@ -211,12 +234,46 @@ const states = stateList();
     return Math.max(0, parsed);
   }
 
+  /**
+   * The children, by the age band they fall in.
+   *
+   * The age is what the state child tax credits turn on, and the count of
+   * them is what the earned income credit turns on, so the bands carry both.
+   */
+  function readChildAges(): ChildAgeCounts {
+    const counts = emptyChildAges();
+    for (const band of CHILD_AGE_BANDS) {
+      counts[band.id] = Math.max(0, Math.trunc(numberValue(`it-children-${band.id}`)));
+    }
+    return counts;
+  }
+
+  /** The line that says how many children there are in total. */
+  function showChildrenNote(count: number): void {
+    const note = document.getElementById('it-children-note');
+    if (!note) return;
+    const template = document.getElementById('income-tax-form')?.dataset.childrenTotal;
+    note.textContent = template ? fillTemplate(template, { count: String(count) }) : '';
+  }
+
+  /**
+   * A figure that only means something for some readers stays out of the way
+   * until it does.
+   */
+  function showStat(id: string, value: number): void {
+    const element = document.getElementById(id);
+    if (!element) return;
+    setText(id, formatCurrency(value));
+    const tile = element.closest('.stat');
+    if (tile) tile.toggleAttribute('hidden', value <= 0);
+  }
+
   function recalculate(): void {
     const grossIncome = Math.max(0, numberValue('it-gross'));
     const filingStatus = selectValue('it-status', 'single') as FilingStatus;
     const itemisedDeduction = Math.max(0, numberValue('it-itemised'));
     const preTaxDeductions = Math.max(0, numberValue('it-pretax'));
-    const children = Math.max(0, Math.trunc(numberValue('it-children')));
+    const childAges = readChildAges();
     const stateCode = selectValue('it-state', '');
     const override = overrideValue();
 
@@ -238,7 +295,8 @@ const states = stateList();
       stateCode,
       filingStatus,
       adjustedGrossIncome,
-      children,
+      childAges,
+      federalTax: result.federalTax,
     });
 
     const stateTax = override !== null ? override : (state?.tax ?? 0);
@@ -253,11 +311,14 @@ const states = stateList();
     setText('it-itemised-out', formatCurrency(itemisedDeduction));
     setText('it-state-taxable', formatCurrency(state?.taxableIncome ?? 0));
     setText('it-state-credits', formatCurrency(state?.credits ?? 0));
+    showStat('it-state-child-credit', state?.breakdown.childTaxCredit ?? 0);
+    showStat('it-state-federal-deduction', state?.breakdown.federalTaxDeduction ?? 0);
     setText('it-state-tax-out', formatCurrency(stateTax));
     setText('it-total', formatCurrency(totalTax));
     setText('it-effective', formatPercent(effectiveRate));
     setText('it-marginal', formatPercent(result.marginalRate * 100));
     setText('it-after', formatCurrency(afterTaxIncome));
+    showChildrenNote(totalChildren(childAges));
 
     /*
      * One bar for the year: the income that stays and the tax that goes.

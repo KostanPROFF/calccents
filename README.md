@@ -601,15 +601,36 @@ every number is in `stateEitc.source.json` and `stateCtc.source.json` next to
 it: the percentage each state pays, the amount per child, the phase-out, the
 source and the date.
 
+Two more files carry the figures that did not come from the Tax Foundation
+tables:
+
+- `src/lib/data/stateHeadOfHousehold.ts` holds the head of household tables
+  of the states that publish one, with the standard deduction and the personal
+  exemption where they differ from the single filer ones. The sources are the
+  forms of the states themselves. The file is separate from `states.ts` on
+  purpose, so a regeneration of the state table does not wipe it.
+- `src/lib/data/stateFederalDeduction.ts` holds the three states that let a
+  taxpayer deduct the federal income tax paid: Alabama, Missouri and Oregon.
+  The list is the footnote of the Tax Foundation state table, and the rules
+  come from the returns of those three states.
+
+`src/lib/data/childAges.ts` holds the age bands the children are counted in.
+The state child tax credits turn on the age of the child, and the bands are
+the ages the states cut at, so the credits come out exact rather than
+approximate. The count of children in the bands is what the earned income
+credit counts as well.
+
 What the state tax does not carry, and what the pages say:
 
-- the federal income tax deduction that a score of states allow;
 - capital gains rates, surtaxes on high earners and local taxes;
-- the head of household tables, because the source publishes none, so the
-  single filer figures are used;
+- the deduction for state and local income taxes paid;
+- the head of household table of Vermont, whose rates for 2026 are published
+  as preliminary figures, so a Vermont head of household is calculated with
+  the single filer figures;
 - every state credit. The earned income tax credit is there for the states
-  that set it as a percentage of the federal credit, and the child tax
-  credit for the states whose credit reaches every child under seventeen.
+  that set it as a percentage of the federal credit and for the four that
+  calculate it on their own, and the child tax credit for the states whose
+  credit turns on the age of the child.
 
 ### The state is a default, not a fact about the reader
 

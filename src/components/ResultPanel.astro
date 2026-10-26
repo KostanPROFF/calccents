@@ -11,6 +11,11 @@ interface Stat {
   label: string;
   value: string;
   tone?: 'positive' | 'negative';
+  /**
+   * True where the figure only means something for some of the readers, and
+   * the tile stays out of the way until it does.
+   */
+  hidden?: boolean;
 }
 
 interface Props {
@@ -30,7 +35,7 @@ const { headlineId, headlineLabel, headline, stats, note } = Astro.props;
   <div class="stat-grid">
     {
       stats.map((stat) => (
-        <div class="stat">
+        <div class="stat" hidden={stat.hidden}>
           <p class="stat__label">{stat.label}</p>
           <p
             class={`stat__value${stat.tone ? ` stat__value--${stat.tone}` : ''}`}

@@ -125,11 +125,7 @@ ahí termina el cálculo. No modela:
 - **La deducción para declarantes mayores.** El importe adicional disponible
   para los declarantes de mayor edad no forma parte del cálculo.
 
-El impuesto estatal se maneja aparte y de forma deliberadamente sencilla. El
-tipo se aplica a todo el ingreso gravable. La mayoría de los estados usa
-escalas progresivas, así que un único porcentaje sobre toda la base sobrestima
-el impuesto en un estado progresivo y es exacto en uno de tipo plano. La cifra
-estatal es una estimación que se mueve con el tipo introducido.
+El impuesto estatal es un cálculo aparte y tiene su propia sección más abajo.
 
 ## Cómo se calcula el impuesto estatal
 
@@ -152,9 +148,45 @@ El cálculo sigue este orden.
    mismo ocurre con el crédito estatal por ingresos ganados y con el crédito por
    hijo en los estados que el modelo lleva.
 
+La tabla que se usa es la de la situación fiscal elegida. Los estados que publican
+su propia tabla de head of household la usan, tomada de sus propios formularios:
+Nueva York, Nueva Jersey, Minnesota, Hawái, Connecticut, Maryland, Maine,
+Montana, Nuevo México, Oregón, Vermont, California e Idaho. Los estados que no
+publican una se calculan con las cifras de un solo declarante.
+
+Tres estados permiten deducir del ingreso imponible estatal el impuesto federal
+sobre la renta pagado, y donde el modelo lo hace, la deducción sale del ingreso
+antes de aplicar los brackets del estado.
+
+- Alabama lo toma entero, sin límite de importe.
+- Misuri toma una parte que depende del ingreso de Misuri: 35% por debajo de
+  $25 000, 25% hasta $50 000, 15% hasta $100 000, 5% hasta $125 000 y nada por
+  encima. El resultado no puede pasar de $5 000, ni de $10 000 en una
+  declaración conjunta.
+- Oregón lo toma hasta $8 750, y el límite baja con los ingresos.
+
 El resultado es una cifra que se comporta como un impuesto estatal: se mueve con los
 ingresos, se mueve con el estado civil y es cero en los nueve estados que no gravan
 el sueldo.
+
+### La edad de los hijos
+
+Los créditos fiscales estatales por hijos dependen de la edad del hijo, y la edad se
+pide por bandas y no como un solo número:
+
+| Banda | Por qué está esa frontera |
+| --- | --- |
+| 0–3 | Nueva York paga $1 000 por un hijo menor de cuatro años |
+| 4–5 | el resto de la banda de Nueva York |
+| 6 | Vermont es el único estado que paga por un hijo de seis años |
+| 7–11 | Illinois corta en los doce |
+| 12 | Massachusetts corta en los trece |
+| 13–16 | el resto de la banda de los menores de diecisiete |
+| 17 | Minnesota paga por un hijo menor de dieciocho |
+
+Las bandas son las edades en las que cortan los estados, y por eso los créditos son
+exactos y no aproximados. El número de hijos en ellas cuenta también para el crédito
+por ingresos ganados.
 
 ### El estado es un valor por defecto, no un dato sobre quien lee
 
@@ -172,23 +204,21 @@ el campo que hay bajo el estado, y esa cifra sustituye a la calculada.
 
 Quedan fuera tres cosas, y conviene conocerlas.
 
-- La deducción del impuesto federal sobre la renta. Una treintena de estados permiten
-  deducir del ingreso imponible estatal parte o todo el impuesto federal, y este
-  modelo no lo hace, así que el impuesto estatal sale más alto de lo que cobra el
-  estado en esos casos.
 - Los tipos de las ganancias de capital, los recargos que unos pocos estados aplican
   a los contribuyentes con ingresos altos y los impuestos de ciudades y condados.
-- Las tablas de head of household. La fuente publica las tablas de un solo declarante
-  y de casados que declaran juntos, y no una tercera, así que a quien declara como
-  head of household se le aplican las cifras de un solo declarante.
+- La deducción de los impuestos estatales y locales pagados, que muchos estados
+  permiten dentro de sus deducciones detalladas.
+- La tabla de head of household de Vermont, cuyos tipos de 2026 se publicaron como
+  cifras preliminares. A quien declara como head of household en Vermont se le
+  aplican las cifras de un solo declarante.
 
 Los créditos estatales también están a medias. El crédito por ingresos ganados está
-para los estados que lo fijan como un porcentaje del crédito federal, y el crédito
-por hijo para los estados cuyo crédito llega a cada hijo menor de diecisiete años.
-California, Minnesota, Washington y Wisconsin calculan su crédito por ingresos
-ganados con su propia escala, y el crédito por hijo de los estados que solo acreditan
-a los hijos más pequeños necesita la edad de cada hijo, que un solo número no puede
-llevar.
+para los estados que lo fijan como un porcentaje del crédito federal y para los
+cuatro que lo calculan con su propia escala: California, Minnesota, Wisconsin y, en
+parte, Washington. El crédito por hijo está para los estados cuyo crédito depende de
+la edad del hijo. Los créditos de los demás estados no están en el modelo, y los que
+sí están en él no llevan toda la parte de la regla: la cifra es el crédito que paga
+el estado, y una declaración puede ser distinta.
 
 Los impuestos sobre la nómina tampoco entran en este cálculo. El Seguro Social
 y Medicare se retienen del salario con sus propios tipos y sus propios topes, y

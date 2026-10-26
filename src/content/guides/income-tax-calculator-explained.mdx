@@ -122,11 +122,7 @@ calculation stops there. It does not model:
 - **The senior deduction.** The additional amount available to older filers is
   not part of the calculation.
 
-State income tax is handled separately and is deliberately simple. The rate is
-applied to the whole of taxable income. Most states use progressive rates, so a
-single percentage on the whole base overstates the tax in a progressive state
-and is exact in a flat-rate one. The state figure is an estimate that moves
-with the rate entered.
+The state tax is a separate calculation and has its own section below.
 
 ## How the state tax is worked out
 
@@ -149,9 +145,45 @@ The calculation runs in this order.
    do the state earned income tax credit and the state child tax credit where
    the model carries them.
 
+The table that is used is the one of the filing status. The states that
+publish a head of household table of their own have it here, taken from their
+own forms: New York, New Jersey, Minnesota, Hawaii, Connecticut, Maryland,
+Maine, Montana, New Mexico, Oregon, Vermont, California and Idaho. The states
+that do not publish one are calculated with the single filer figures.
+
+Three states let a taxpayer deduct the federal income tax paid from the state
+taxable income, and where the model does, the deduction comes off the income
+before the state brackets are applied.
+
+- Alabama takes the whole of it, with no limit on the amount.
+- Missouri takes a share of it that depends on the Missouri income: 35% below
+  $25,000, 25% up to $50,000, 15% up to $100,000, 5% up to $125,000 and
+  nothing above that. The result may not exceed $5,000, or $10,000 on a
+  combined return.
+- Oregon takes it up to $8,750, and the limit falls away with the income.
+
 The result is a figure that behaves like a state tax: it moves with the
 income, it moves with the filing status, and it is zero in the nine states
 that levy no tax on wages at all.
+
+### The age of the children
+
+The state child tax credits turn on the age of the child, and the age is
+asked for band by band rather than as a single number:
+
+| Band | Why the band is there |
+| --- | --- |
+| 0–3 | New York pays $1,000 for a child under four |
+| 4–5 | the rest of New York's band |
+| 6 | Vermont is the one state that pays for a child of six |
+| 7–11 | Illinois cuts at twelve |
+| 12 | Massachusetts cuts at thirteen |
+| 13–16 | the rest of the under-seventeen band |
+| 17 | Minnesota pays for a child under eighteen |
+
+The bands are the ages the states cut at, which is what makes the credits
+exact rather than approximate. The number of children in them is what the
+earned income credit counts as well.
 
 ### The state is a default, not a fact about the reader
 
@@ -169,23 +201,21 @@ into the field under the state, and that figure replaces the calculated one.
 
 Three things are left out, and they are worth knowing about.
 
-- The federal income tax deduction. A score of states let a taxpayer deduct
-  some or all of the federal income tax from the state taxable income, and
-  this model does not, so the state tax is higher than the state charges in
-  those states.
 - Capital gains rates, the surtaxes a few states charge high earners, and the
   taxes of city and county governments.
-- The head of household tables. The source publishes the single filer and the
-  married filing jointly tables and no third one, so a head of household
-  filer is calculated with the single filer figures.
+- The deduction for state and local income taxes paid, which many states allow
+  inside their itemised deductions.
+- The head of household table of Vermont, whose rates for 2026 are published
+  as preliminary figures. A Vermont head of household is calculated with the
+  single filer figures.
 
 The state credits are partial as well. The earned income tax credit is there
-for the states that set it as a percentage of the federal credit, and the
-child tax credit for the states whose credit reaches every child under
-seventeen. California, Minnesota, Washington and Wisconsin calculate their
-earned income credit on their own schedule, and the child tax credit of the
-states that only credit younger children needs the age of each child, which a
-single number cannot carry.
+for the states that set it as a percentage of the federal credit, and for the
+four that calculate it on their own: California, Minnesota, Wisconsin and,
+in part, Washington. The child tax credit is there for the states whose credit
+turns on the age of the child. The credits of the other states are not in the
+model, and the ones that are in it do not carry every part of the rule: the
+figure is the credit the state pays, and a tax return can differ from it.
 
 Payroll taxes are outside this calculation as well. Social Security and
 Medicare are withheld from wages under their own rates and ceilings, which

@@ -901,6 +901,48 @@ a:hover {
 }
 
 /* --------------------------------------------------------------------------
+   Children by age
+   -------------------------------------------------------------------------- */
+
+/*
+  The bands the state child tax credits are grouped by. The numbers are the
+  ages, so they read the same in every language, and they are narrow enough
+  to sit in a row of seven without crowding the field.
+*/
+.age-bands {
+  display: grid;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  gap: var(--space-2);
+  margin-top: var(--space-2);
+}
+
+.age-band {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  margin: 0;
+}
+
+.age-band__age {
+  font-size: var(--text-xs);
+  color: var(--text-secondary);
+  text-align: center;
+  font-variant-numeric: tabular-nums;
+}
+
+.input--band {
+  padding-left: var(--space-2);
+  padding-right: var(--space-2);
+  text-align: center;
+}
+
+@media (max-width: 720px) {
+  .age-bands {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}
+
+/* --------------------------------------------------------------------------
    Results
    -------------------------------------------------------------------------- */
 
@@ -976,6 +1018,15 @@ a:hover {
 
 .stat__value--positive {
   color: var(--positive);
+}
+
+/*
+  A figure that only means something for some readers stays out of the way
+  until it does. The rule is here because the tile sets its own display, and
+  that would otherwise win over the hidden attribute.
+*/
+.stat[hidden] {
+  display: none;
 }
 
 .stat__value--negative {

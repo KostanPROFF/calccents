@@ -360,7 +360,7 @@ export const en = {
       },
       {
         label: 'State figures',
-        body: 'come from the Tax Foundation, which compiles the income tax brackets from the statutes and the forms of each state, and the property tax rates from the American Community Survey it publishes.',
+        body: 'come from the Tax Foundation, which compiles the income tax brackets from the statutes and the forms of each state, and the property tax rates from the American Community Survey it publishes. The head of household tables, the deduction for the federal income tax paid and the state credits come from the returns and the instructions of the states themselves.',
       },
     ],
     sources: [
@@ -419,6 +419,18 @@ export const en = {
       {
         label: 'Tax Foundation — Facts & Figures 2026, state individual income tax rates as of 28 April 2026',
         url: 'https://taxfoundation.org/data/all/state/2026-state-tax-data/',
+      },
+      {
+        label: 'National Conference of State Legislatures (NCSL) — state earned income tax credits and child tax credits',
+        url: 'https://www.ncsl.org/human-services/',
+      },
+      {
+        label: 'Tax Policy Center — state income tax rates and credits',
+        url: 'https://taxpolicycenter.org/',
+      },
+      {
+        label: 'Prenatal-to-3 Policy Impact Center — state child tax credit policies',
+        url: 'https://pn3policy.org/',
       },
     ],
   },
@@ -1136,9 +1148,10 @@ export const en = {
       short: 'Federal and state income tax on a year of earnings, with both rates shown.',
       category: 'Pay',
       methodNote:
-        'The federal brackets and the standard deduction are the 2026 figures from Rev. Proc. 2025-32, published 3 November 2025. The state tax is worked out from the 2026 brackets, the standard deduction, the personal exemption and the credits of the state you pick, taken from the Tax Foundation tables of 28 April 2026. The payroll taxes that come out of a wage are not part of this calculation; they are in the take-home pay calculator.',
+        'The federal brackets and the standard deduction are the 2026 figures from Rev. Proc. 2025-32, published 3 November 2025. The state tax is worked out from the 2026 brackets, the standard deduction, the personal exemption and the credits of the state you pick, taken from the Tax Foundation tables of 28 April 2026. The head of household tables, the federal income tax deduction and the state credits come from the forms of the states themselves. The payroll taxes that come out of a wage are not part of this calculation; they are in the take-home pay calculator.',
       script: {
         stateDetected: 'Filled with {state}: the state your request comes from.',
+        childrenTotal: 'Qualifying children in total: {count}',
       },
       fields: {
         grossIncome: 'Gross income for the year',
@@ -1149,8 +1162,9 @@ export const en = {
         state: 'State',
         stateHint: 'for the state tax',
         stateNone: 'No state',
-        children: 'Qualifying children under 17',
-        childrenHint: 'for the state credits',
+        children: 'Qualifying children',
+        childrenHint: 'by age at the end of the tax year',
+        childBand: 'Children aged {range}',
         stateTaxOverride: 'Your own state tax',
         stateTaxOverrideHint: 'leave empty to use the model',
         preTax: 'Pre-tax deductions',
@@ -1173,6 +1187,8 @@ export const en = {
         federalTax: 'Federal income tax',
         stateTaxableIncome: 'State taxable income',
         stateCredits: 'State credits',
+        stateChildCredit: 'State child tax credit',
+        federalTaxDeducted: 'Federal tax deducted',
         stateTax: 'State income tax',
         totalTax: 'Total tax',
         effectiveRate: 'Effective rate',
@@ -1194,23 +1210,26 @@ export const en = {
         ],
       },
       formula:
-        'taxable income = gross income − pre-tax deductions − deduction; tax = bracket table applied to taxable income; state tax = the state brackets applied to the adjusted gross income less the state deduction and exemption, less the state credits',
+        'taxable income = gross income − pre-tax deductions − deduction; tax = bracket table applied to taxable income; state tax = the state brackets applied to the adjusted gross income less the state standard deduction and exemption, less the federal income tax paid where the state allows it, less the state credits',
       method: [
         'The calculation starts with the gross income for the year and takes the pre-tax deductions off, because a 401(k) contribution or a health account contribution is not taxed as income.',
         'The deduction comes next. The standard deduction for the filing status is used unless the reader enters an itemised deduction, and the larger of the two is the one that applies. The standard deduction for 2026 is $16,100 for a single filer, $32,200 for married filing jointly and $24,150 for head of household.',
         'What is left is the taxable income, and the tax is the 2026 bracket table applied to it. Each bracket is a fixed amount of tax plus a percentage of the income above the bottom of that bracket, the way the IRS publishes it.',
         'The two rates answer different questions. The marginal rate is the rate the next dollar of taxable income is taxed at, which is the highest bracket the income reaches. The effective rate is the total tax divided by the whole income, and it is lower because the higher brackets only touch the part of the income above them.',
         'The state tax is worked out on its own. The state starts from the adjusted gross income, takes off its own standard deduction and personal exemption where it gives them as exclusions, applies its own brackets slice by slice, and takes off the credits it pays. The states that give the exemption or the standard deduction as a credit instead get it off the tax, which is where those credits are counted.',
+        'The table of the filing status is used. The states that publish a head of household table of their own have it here, taken from their own forms, and the states that do not publish one are worked out from the single filer table.',
+        'Three states let a taxpayer deduct the federal income tax paid: Alabama, Missouri and Oregon. Where a state does, the deduction comes off the income before the state brackets are applied, with the limit and the share each state sets.',
+        'The state credits are worked out from the age of the children, because that is what they turn on. New York pays $1,000 for a child under four and $500 for a child from four to sixteen, Minnesota pays $1,800 for a child under eighteen, and a few states pay nothing for a child who is past a certain age.',
       ],
       limits: [
         'It does not model tax credits. The child tax credit, the earned income credit and the education credits reduce the tax and are not in the calculation.',
         'It does not model the capital gains and ordinary income distinction, so a year with investment income is calculated at the ordinary rates.',
         'It does not model the senior deduction, or any deduction outside the standard and itemised amounts entered on the left.',
         'It does not model self-employment tax, which is charged on the net earnings of a self-employed person and has its own base and rate.',
-        'It does not model the federal income tax deduction that a score of states allow, so the state tax is higher than the state charges in those states.',
+        'It does not model the state and local income tax deduction that many states allow inside their itemised deductions.',
         'It does not model capital gains rates, the surtaxes some states charge high earners, or the taxes of city and county governments.',
-        'It does not use the head of household table of each state, because the source does not publish one: the single filer figures are used.',
-        'It does not carry every state credit. The state earned income tax credit is there for the states that set it as a percentage of the federal credit, and the child tax credit for the states whose credit reaches every child under seventeen; the credits of the other states are not in it.',
+        'It does not use the head of household table of Vermont, whose rates for 2026 are published as preliminary figures, so a Vermont head of household is worked out from the single filer table.',
+        'It does not carry every state credit. The state earned income tax credit is there for the states that set it as a percentage of the federal credit and for the four that work it out on their own, and the child tax credit is there for the states whose credit turns on the age of the child. The credits of the other states are not in it.',
       ],
       faq: [
         {
@@ -1236,6 +1255,10 @@ export const en = {
         {
           q: 'Can I put in my own state tax?',
           a: 'Yes. The field under the state takes a figure and replaces the calculated one with it. It is empty by default, and while it is empty the calculation is what the page shows.',
+        },
+        {
+          q: 'Why does the page ask for the age of each child?',
+          a: 'Because the state child tax credits turn on the age of the child. New York pays $1,000 for a child under four and $500 for a child from four to sixteen, Minnesota pays $1,800 for a child under eighteen, and some states pay nothing for a child who is past a certain age. The bands are the ages the states cut at, and the number of children in them is what the earned income credit counts as well.',
         },
         {
           q: 'Is this the amount I will owe?',
