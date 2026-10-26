@@ -32,9 +32,9 @@ faq:
   - q: "¿Cómo trata la calculadora la deducción por partidas?"
     a: "Usa la cifra por partidas cuando esa cifra es mayor que la deducción estándar del estado civil. Cuando es menor, se aplica la deducción estándar y el ingreso gravable queda más alto."
   - q: "¿Incluye la calculadora los créditos fiscales?"
-    a: "No. No modela los créditos fiscales, el crédito por dependientes, las escalas de plusvalías ni la deducción para declarantes mayores. La cifra federal es el impuesto ordinario sobre la renta del ingreso gravable."
+    a: "No los federales. El crédito federal por hijos, el crédito federal por ingresos ganados y los créditos educativos reducen el impuesto y no están en el cálculo, así que la cifra federal es el impuesto ordinario sobre la renta del ingreso gravable. Los créditos estatales que lleva el modelo se cuentan en la cifra estatal."
   - q: "¿Es exacta la cifra del impuesto estatal?"
-    a: "Es un cálculo, no una declaración. Los brackets, la deducción estándar, la exención personal y los créditos son las cifras publicadas del estado, aplicadas en el mismo orden en que las aplica el estado. No están en él la deducción del impuesto federal sobre la renta que permiten algunos estados, los tipos de las ganancias de capital, los impuestos locales ni las tablas de head of household, así que una cifra de una declaración puede ser menor."
+    a: "Es un cálculo, no una declaración. Los brackets, la deducción estándar, la exención personal y los créditos son las cifras publicadas del estado, aplicadas en el mismo orden en que las aplica el estado. No están en él los tipos de las ganancias de capital ni los impuestos locales, así que una cifra de una declaración puede ser menor."
   - q: "¿Incluye el Seguro Social y Medicare?"
     a: "No. Son impuestos sobre la nómina, retenidos del salario con sus propios tipos y sus propios topes, y van aparte del impuesto sobre la renta de las ganancias."
 ---
@@ -151,8 +151,11 @@ El cálculo sigue este orden.
 La tabla que se usa es la de la situación fiscal elegida. Los estados que publican
 su propia tabla de head of household la usan, tomada de sus propios formularios:
 Nueva York, Nueva Jersey, Minnesota, Hawái, Connecticut, Maryland, Maine,
-Montana, Nuevo México, Oregón, Vermont, California e Idaho. Los estados que no
-publican una se calculan con las cifras de un solo declarante.
+Montana, Nuevo México, Oregón y California. Idaho trata una declaración de head of
+household como conjunta, así que se aplica la tabla conjunta. Otros cuatro estados
+no publican una tabla pero dan a head of household su propia deducción o exención,
+y esas cifras también están aquí: Kansas, Oklahoma, Wisconsin y Massachusetts. Los
+demás se calculan con las cifras de un solo declarante.
 
 Tres estados permiten deducir del ingreso imponible estatal el impuesto federal
 sobre la renta pagado, y donde el modelo lo hace, la deducción sale del ingreso
@@ -214,8 +217,10 @@ Quedan fuera tres cosas, y conviene conocerlas.
 
 Los créditos estatales también están a medias. El crédito por ingresos ganados está
 para los estados que lo fijan como un porcentaje del crédito federal y para los
-cuatro que lo calculan con su propia escala: California, Minnesota, Wisconsin y, en
-parte, Washington. El crédito por hijo está para los estados cuyo crédito depende de
+tres que lo calculan con su propia escala: California, Minnesota y Wisconsin.
+Washington tiene su propio crédito por ingresos ganados, pero se paga con una
+solicitud aparte y no forma parte de una declaración, así que no está en el modelo.
+El crédito por hijo está para los estados cuyo crédito depende de
 la edad del hijo. Los créditos de los demás estados no están en el modelo, y los que
 sí están en él no llevan toda la parte de la regla: la cifra es el crédito que paga
 el estado, y una declaración puede ser distinta.

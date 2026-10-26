@@ -1222,14 +1222,14 @@ export const en = {
         'The state credits are worked out from the age of the children, because that is what they turn on. New York pays $1,000 for a child under four and $500 for a child from four to sixteen, Minnesota pays $1,800 for a child under eighteen, and a few states pay nothing for a child who is past a certain age.',
       ],
       limits: [
-        'It does not model tax credits. The child tax credit, the earned income credit and the education credits reduce the tax and are not in the calculation.',
+        'It does not model the federal tax credits. The federal child tax credit, the federal earned income credit and the education credits reduce the tax and are not in the calculation.',
         'It does not model the capital gains and ordinary income distinction, so a year with investment income is calculated at the ordinary rates.',
         'It does not model the senior deduction, or any deduction outside the standard and itemised amounts entered on the left.',
         'It does not model self-employment tax, which is charged on the net earnings of a self-employed person and has its own base and rate.',
         'It does not model the state and local income tax deduction that many states allow inside their itemised deductions.',
         'It does not model capital gains rates, the surtaxes some states charge high earners, or the taxes of city and county governments.',
         'It does not use the head of household table of Vermont, whose rates for 2026 are published as preliminary figures, so a Vermont head of household is worked out from the single filer table.',
-        'It does not carry every state credit. The state earned income tax credit is there for the states that set it as a percentage of the federal credit and for the four that work it out on their own, and the child tax credit is there for the states whose credit turns on the age of the child. The credits of the other states are not in it.',
+        'It does not carry every state credit. The state earned income tax credit is there for the states that set it as a percentage of the federal credit and for the three that work it out on their own, and the child tax credit is there for the states whose credit turns on the age of the child. The credits of the other states are not in it.',
       ],
       faq: [
         {

@@ -606,9 +606,12 @@ tables:
 
 - `src/lib/data/stateHeadOfHousehold.ts` holds the head of household tables
   of the states that publish one, with the standard deduction and the personal
-  exemption where they differ from the single filer ones. The sources are the
-  forms of the states themselves. The file is separate from `states.ts` on
-  purpose, so a regeneration of the state table does not wipe it.
+  exemption where they differ from the single filer ones. It also holds the
+  four states that publish no table but give a head of household its own
+  deduction or exemption, and the states that treat a head of household
+  return as a joint return. The sources are the forms of the states
+  themselves. The file is separate from `states.ts` on purpose, so a
+  regeneration of the state table does not wipe it.
 - `src/lib/data/stateFederalDeduction.ts` holds the three states that let a
   taxpayer deduct the federal income tax paid: Alabama, Missouri and Oregon.
   The list is the footnote of the Tax Foundation state table, and the rules
@@ -628,7 +631,7 @@ What the state tax does not carry, and what the pages say:
   as preliminary figures, so a Vermont head of household is calculated with
   the single filer figures;
 - every state credit. The earned income tax credit is there for the states
-  that set it as a percentage of the federal credit and for the four that
+  that set it as a percentage of the federal credit and for the three that
   calculate it on their own, and the child tax credit for the states whose
   credit turns on the age of the child.
 

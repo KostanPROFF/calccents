@@ -1181,14 +1181,14 @@ export const es = {
         'Los créditos estatales se calculan con la edad de los hijos, porque es justo lo que determina. Nueva York paga $1,000 por un hijo menor de cuatro años y $500 por uno de cuatro a dieciséis, Minnesota paga $1,800 por un hijo menor de dieciocho y algunos estados no pagan nada por un hijo que pasa de cierta edad.',
       ],
       limits: [
-        'No modela los créditos fiscales. El crédito fiscal por hijos, el crédito fiscal por ingresos del trabajo y los créditos educativos reducen el impuesto y no están en el cálculo.',
+        'No modela los créditos fiscales federales. El crédito federal por hijos, el crédito federal por ingresos del trabajo y los créditos educativos reducen el impuesto y no están en el cálculo.',
         'No modela la diferencia entre las plusvalías y los ingresos ordinarios, así que un año con ingresos de inversión se calcula con los tipos ordinarios.',
         'No modela la deducción por edad ni ninguna deducción fuera de los importes estándar y detallado que se introducen a la izquierda.',
         'No modela el impuesto por trabajo autónomo, que se cobra sobre los ingresos netos de quien trabaja por cuenta propia y tiene su propia base y su propio tipo.',
         'No modela la deducción de los impuestos estatales y locales pagados que muchos estados permiten dentro de sus deducciones detalladas.',
         'No modela los tipos de las ganancias de capital, los recargos que algunos estados aplican a los contribuyentes con ingresos altos ni los impuestos de ciudades y condados.',
         'No usa la tabla de head of household de Vermont, cuyos tipos de 2026 se publicaron como cifras preliminares, así que un head of household de Vermont se calcula con la tabla de un solo declarante.',
-        'No lleva todos los créditos estatales. El crédito por ingresos ganados estatal está disponible para los estados que lo fijan como un porcentaje del crédito federal y para los cuatro que lo calculan con su propia escala, y el crédito por hijo está disponible para los estados cuyo crédito depende de la edad del hijo. Los créditos de los demás estados no están en el modelo.',
+        'No lleva todos los créditos estatales. El crédito por ingresos ganados estatal está disponible para los estados que lo fijan como un porcentaje del crédito federal y para los tres que lo calculan con su propia escala, y el crédito por hijo está disponible para los estados cuyo crédito depende de la edad del hijo. Los créditos de los demás estados no están en el modelo.',
       ],
       faq: [
         {

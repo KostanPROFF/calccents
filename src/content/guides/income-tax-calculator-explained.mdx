@@ -30,9 +30,9 @@ faq:
   - q: "How does the calculator treat the itemised deduction?"
     a: "It uses the itemised figure when that figure is larger than the standard deduction for the filing status. Where the itemised amount is smaller, the standard deduction stands and taxable income is higher."
   - q: "Does the calculator include tax credits?"
-    a: "No. It does not model tax credits, the child tax credit, capital gains rates or the senior deduction. The federal figure it produces is ordinary income tax on taxable income."
+    a: "Not the federal ones. The federal child tax credit, the federal earned income credit and the education credits reduce the tax and are not in the calculation, so the federal figure is ordinary income tax on taxable income. The state credits the model carries are counted in the state figure."
   - q: "Is the state tax figure exact?"
-    a: "It is a calculation, not a return. The brackets, the standard deduction, the personal exemption and the credits are the published figures for the state, applied in the order the state applies them. The federal income tax deduction that some states allow, capital gains rates, local taxes and the head of household tables are not in it, so a figure from a return can be lower."
+    a: "It is a calculation, not a return. The brackets, the standard deduction, the personal exemption and the credits are the published figures for the state, applied in the order the state applies them. Capital gains rates and local taxes are not in it, so a figure from a return can be lower."
   - q: "Does this include Social Security and Medicare?"
     a: "No. Those are payroll taxes withheld from wages, with their own rates and their own ceilings, and they are separate from income tax on earnings."
 ---
@@ -148,8 +148,12 @@ The calculation runs in this order.
 The table that is used is the one of the filing status. The states that
 publish a head of household table of their own have it here, taken from their
 own forms: New York, New Jersey, Minnesota, Hawaii, Connecticut, Maryland,
-Maine, Montana, New Mexico, Oregon, Vermont, California and Idaho. The states
-that do not publish one are calculated with the single filer figures.
+Maine, Montana, New Mexico, Oregon and California. Idaho treats a head of
+household return as a joint return, so the joint schedule is the one that
+applies. Four more states publish no table but give a head of household its own
+deduction or exemption, and those figures are here as well: Kansas, Oklahoma,
+Wisconsin and Massachusetts. The rest are calculated with the single filer
+figures.
 
 Three states let a taxpayer deduct the federal income tax paid from the state
 taxable income, and where the model does, the deduction comes off the income
@@ -211,11 +215,13 @@ Three things are left out, and they are worth knowing about.
 
 The state credits are partial as well. The earned income tax credit is there
 for the states that set it as a percentage of the federal credit, and for the
-four that calculate it on their own: California, Minnesota, Wisconsin and,
-in part, Washington. The child tax credit is there for the states whose credit
-turns on the age of the child. The credits of the other states are not in the
-model, and the ones that are in it do not carry every part of the rule: the
-figure is the credit the state pays, and a tax return can differ from it.
+three that calculate it on their own: California, Minnesota and Wisconsin.
+Washington has an earned income credit of its own, but it is paid on a
+separate application and is not part of a tax return, so it is not in the
+model. The child tax credit is there for the states whose credit turns on the
+age of the child. The credits of the other states are not in the model, and
+the ones that are in it do not carry every part of the rule: the figure is the
+credit the state pays, and a tax return can differ from it.
 
 Payroll taxes are outside this calculation as well. Social Security and
 Medicare are withheld from wages under their own rates and ceilings, which

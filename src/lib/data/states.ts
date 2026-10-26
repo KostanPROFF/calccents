@@ -33,9 +33,10 @@
  *
  *   - They are the marginal brackets, so the tax is what the brackets add up
  *     to: each slice of income is taxed at the rate of the slice it falls in.
- *   - Head of household is read from the single-filer table, because the
+ *   - Head of household is read from the single-filer table here, because the
  *     source publishes the single and the married-filing-jointly tables and
- *     no third one.
+ *     no third one. The states that publish a head of household schedule of
+ *     their own are in `stateHeadOfHousehold.ts`, which is read first.
  *   - A state that levies no tax on wages has no brackets at all. Washington
  *     taxes capital gains only, which is a different tax from the one these
  *     calculators model, so its wage rate is zero.
