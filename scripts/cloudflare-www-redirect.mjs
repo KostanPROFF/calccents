@@ -146,7 +146,7 @@ function isOurRule(rule) {
  * the apex. The query string is kept by the rule itself.
  */
 function targetUrl() {
-  return `concat("https://${domain}", wildcard_replace(http.request.uri.path, "/*", "/${1}"))`;
+  return `concat("https://${domain}", wildcard_replace(http.request.uri.path, "/*", "/\${1}"))`;
 }
 
 /**
@@ -182,13 +182,11 @@ function buildRule() {
 function setTarget(rule) {
   const parameters = rule.action_parameters ?? {};
 
-  if (parameters.from_value?.target_url?.expression !== undefined) {
-    parameters.from_value.target_url.expression = targetUrl();
-    return 'from_value.target_url.expression';
-  }
   if (parameters.from_value?.target_url) {
-    parameters.from_value.target_url.value = targetUrl();
-    return 'from_value.target_url.value';
+    // The target is an expression. A rule that kept a plain value is given
+    // the expression in its place.
+    parameters.from_value.target_url = { expression: targetUrl() };
+    return 'from_value.target_url.expression';
   }
   if (parameters.to?.value?.url) {
     parameters.to.value.url.value = targetUrl();
