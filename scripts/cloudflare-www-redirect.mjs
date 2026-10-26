@@ -138,11 +138,15 @@ function isOurRule(rule) {
  *
  * A static target sends every request to one address, and the path of the
  * request is lost on the way: /tools/income-tax/ would land on the front
- * page. The target is therefore an expression that puts the path of the
- * request back onto the apex, and the query string is kept by the rule.
+ * page. The target is therefore an expression, which is what a redirect
+ * rule carries when it is to keep the path.
+ *
+ * The path of the request is matched with the wildcard "/*", which leaves
+ * the path itself in the first capture group, and the path is put back onto
+ * the apex. The query string is kept by the rule itself.
  */
 function targetUrl() {
-  return `concat("https://${domain}", http.request.uri.path)`;
+  return `concat("https://${domain}", wildcard_replace(http.request.uri.path, "/*", "/${1}"))`;
 }
 
 /**
@@ -161,7 +165,7 @@ function buildRule() {
     action_parameters: {
       from_value: {
         target_url: {
-          value: targetUrl(),
+          expression: targetUrl(),
         },
         status_code: 301,
         preserve_query_string: true,
@@ -178,9 +182,13 @@ function buildRule() {
 function setTarget(rule) {
   const parameters = rule.action_parameters ?? {};
 
+  if (parameters.from_value?.target_url?.expression !== undefined) {
+    parameters.from_value.target_url.expression = targetUrl();
+    return 'from_value.target_url.expression';
+  }
   if (parameters.from_value?.target_url) {
     parameters.from_value.target_url.value = targetUrl();
-    return 'from_value.target_url';
+    return 'from_value.target_url.value';
   }
   if (parameters.to?.value?.url) {
     parameters.to.value.url.value = targetUrl();
