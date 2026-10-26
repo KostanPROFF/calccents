@@ -134,7 +134,20 @@ function isOurRule(rule) {
 }
 
 /**
- * The rule this script owns: www to the apex, with the query string kept.
+ * The target of the redirect.
+ *
+ * A static target sends every request to one address, and the path of the
+ * request is lost on the way: /tools/income-tax/ would land on the front
+ * page. The target is therefore an expression that puts the path of the
+ * request back onto the apex, and the query string is kept by the rule.
+ */
+function targetUrl() {
+  return `concat("https://${domain}", http.request.uri.path)`;
+}
+
+/**
+ * The rule this script owns: www to the apex, with the path and the query
+ * string kept.
  *
  * The target goes in action_parameters.from_value.target_url, and the
  * expression on the rule says what the rule matches.
@@ -148,7 +161,7 @@ function buildRule() {
     action_parameters: {
       from_value: {
         target_url: {
-          value: `https://${domain}`,
+          value: targetUrl(),
         },
         status_code: 301,
         preserve_query_string: true,
@@ -166,11 +179,11 @@ function setTarget(rule) {
   const parameters = rule.action_parameters ?? {};
 
   if (parameters.from_value?.target_url) {
-    parameters.from_value.target_url.value = `https://${domain}`;
+    parameters.from_value.target_url.value = targetUrl();
     return 'from_value.target_url';
   }
   if (parameters.to?.value?.url) {
-    parameters.to.value.url.value = `https://${domain}`;
+    parameters.to.value.url.value = targetUrl();
     return 'to.url';
   }
   return null;
