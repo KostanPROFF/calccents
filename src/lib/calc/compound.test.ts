@@ -147,6 +147,27 @@ test('a horizon of less than a year at an annual frequency has a row too', () =>
   assert.equal(result.yearly[0]?.balance, result.futureValue);
 });
 
+test('the figure in today\'s dollars is the balance shown, converted', () => {
+  // The card above the table and the last row of the table carry the same
+  // figure, so they have to agree to the cent.
+  for (const years of [0.5, 1.5, 2.1, 10]) {
+    const result = projectCompoundInterest(baseInput({ years }));
+    const last = result.yearly.at(-1);
+    assert.ok(last, `no row for a horizon of ${years} years`);
+    assert.equal(
+      last?.realBalance,
+      result.realValue,
+      `a horizon of ${years} years: ${last?.realBalance} vs ${result.realValue}`,
+    );
+    const factor = 1 + 2.5 / 100;
+    assert.equal(
+      last?.realBalance,
+      Math.round((last?.balance ?? 0) / factor ** years * 100) / 100,
+      `a horizon of ${years} years does not follow the balance it shows`,
+    );
+  }
+});
+
 test('projectCompoundInterest reports the effective annual rate for each frequency', () => {
   const monthly = projectCompoundInterest(baseInput({ compoundsPerYear: 12 }));
   const annual = projectCompoundInterest(baseInput({ compoundsPerYear: 1 }));

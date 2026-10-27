@@ -201,12 +201,13 @@ export function projectCompoundInterest(input: CompoundInput): CompoundResult {
 
     if (period % periodsPerYear === 0) {
       const year = period / periodsPerYear;
+      const rowBalance = roundCents(balance);
       yearly.push({
         year,
-        balance: roundCents(balance),
+        balance: rowBalance,
         contributed: roundCents(contributed),
         earned: roundCents(earned),
-        realBalance: roundCents(balance / inflationFactor ** year),
+        realBalance: roundCents(rowBalance / inflationFactor ** year),
       });
     }
   }
@@ -244,18 +245,25 @@ export function projectCompoundInterest(input: CompoundInput): CompoundResult {
    */
   const lastRow = yearly.at(-1);
   if (input.years > 0 && (!lastRow || lastRow.year !== input.years)) {
+    const rowBalance = roundCents(balance);
     yearly.push({
       year: input.years,
-      balance: roundCents(balance),
+      balance: rowBalance,
       contributed: roundCents(contributed),
       earned: roundCents(earned),
-      realBalance: roundCents(balance / inflationFactor ** input.years),
+      realBalance: roundCents(rowBalance / inflationFactor ** input.years),
     });
   }
 
   const futureValue = roundCents(balance);
   const totalContributions = roundCents(contributed);
   const totalInterest = roundCents(futureValue - input.principal - totalContributions);
+  /*
+   * The figure in today's dollars is the balance that is shown, converted.
+   * Rounding the balance first and then dividing it keeps the card and the
+   * last row of the table on the same number, so the reader never finds two
+   * versions of one figure on the same page.
+   */
   const realValue = roundCents(futureValue / inflationFactor ** input.years);
   const realTotalContributions = roundCents(
     totalContributions / inflationFactor ** input.years,
