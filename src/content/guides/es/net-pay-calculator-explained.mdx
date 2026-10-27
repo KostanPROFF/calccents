@@ -18,6 +18,10 @@ sources:
     url: "https://www.ssa.gov/pubs/EN-05-10035.pdf"
   - label: "IRS — Tax Topic 511, Withholding"
     url: "https://www.irs.gov/taxtopics/tc511"
+  - label: "IRS — Tax Topic 401, Wages and salaries"
+    url: "https://www.irs.gov/taxtopics/tc401"
+  - label: "Social Security Administration — POMS RS 01402.038, Tax-favored health plans"
+    url: "https://secure.ssa.gov/poms.nsf/lnx/0301402038"
 relatedTools:
   - "net-pay"
 faq:
@@ -26,7 +30,7 @@ faq:
   - q: "¿Por qué la tasa efectiva es menor que la marginal?"
     a: "La tasa marginal es el tipo con que se grava el siguiente dólar de base imponible, es decir, el del tramo en el que ya ha entrado la renta. La tasa efectiva divide el impuesto total entre el sueldo bruto completo, y por eso promedia todos los tramos por los que pasó la renta y la parte del bruto que no se gravó en absoluto, porque las deducciones salieron antes."
   - q: "¿Una aportación a un 401(k) reduce los impuestos del resto del sueldo?"
-    a: "En el cálculo, sí. Una aportación a un 401(k), a una HSA o a una FSA se resta antes de que el sueldo se grave, y reduce a la vez la base del impuesto federal, la de Social Security y la de Medicare. El salario neto también queda más bajo, porque la aportación salió del sueldo antes de calcular los impuestos."
+    a: "Reduce el impuesto federal sobre la renta, y no los impuestos de nómina. El IRS excluye una aportación a un 401(k) o a un 403(b) del ingreso, pero la sigue contando como wages para el Social Security y el Medicare, así que esos dos impuestos se aplican sobre ella. Una aportación a una HSA o a una FSA que sale de la nómina es distinta: también sale de la base de los impuestos de nómina. Por eso la calculadora las toma por separado."
   - q: "¿Desde qué cantidad se aplica el impuesto adicional de Medicare?"
     a: "Desde un sueldo superior a $200,000 para quien presenta en individual, para matrimonio que presenta por separado y para jefe de hogar, y superior a $250,000 para matrimonio conjunto. El tipo es del 0.9% sobre el exceso, y esos umbrales no se indexan con la inflación, de modo que no cambian desde 2013."
   - q: "¿Cómo pasa un precio por hora a un año de sueldo?"
@@ -52,8 +56,8 @@ El sueldo llega como un único importe bruto. A partir de ahí, el dinero sale e
 un orden fijo.
 
 1. Primero se descuentan las deducciones previas: las aportaciones a un 401(k),
-   a una HSA y a una FSA. Sobre lo que queda se calculan tanto el impuesto
-   sobre la renta como los impuestos de nómina.
+   a una HSA y a una FSA. Lo que cada una hace con los impuestos no es lo
+   mismo, y más abajo se explica cuál es cuál.
 2. Después se aplica la deducción estándar. Para 2026 es de $16,100 para
    quien presenta en individual, de $32,200 para matrimonio conjunto y de
    $24,150 para jefe de hogar. Lo que queda es la base imponible, y a esa base
@@ -70,10 +74,41 @@ un orden fijo.
 Lo que sobrevive a esos pasos es el salario neto, y la calculadora lo divide
 entre el número de periodos del año para obtener la cifra de cada periodo.
 
-Los impuestos de nómina se calculan sobre el sueldo que queda tras las
-deducciones previas y antes de la deducción estándar. La diferencia importa:
-la deducción estándar reduce el impuesto federal y el estatal, mientras que
-Social Security y Medicare se cobran sobre una base mayor.
+Los impuestos de nómina se calculan sobre el sueldo que queda tras una
+aportación a una HSA o FSA y antes de la deducción estándar. Una aportación a un
+401(k) sigue dentro de esa base. La diferencia importa: la deducción estándar
+reduce el impuesto federal y el estatal, mientras que Social Security y
+Medicare se cobran sobre una base mayor.
+
+## Las dos deducciones previas no son lo mismo
+
+El IRS excluye una aportación a un 401(k) del ingreso, y cuenta esa misma
+aportación como wages para el Social Security y el Medicare. El Tax Topic 401
+del IRS lo dice sin rodeos: el importe no entra en los wages sujetos al
+impuesto sobre la renta, "pero esas cantidades siguen sujetas a los impuestos
+del Social Security y del Medicare en el año en que se retienen". La
+Publication 525 dice lo mismo sobre las deducciones electivas.
+
+Con una aportación a una HSA o a una FSA es al revés. Cuando sale de la nómina
+a través de un plan de cafetería de la sección 125, queda fuera del ingreso y
+tampoco cuenta como wages para el Social Security. El manual de políticas de
+la SSA, RS 01402.038, lo dice de forma directa: una aportación del empleado a
+una FSA "via a qualified salary reduction agreement" no son wages a efectos de
+la cobertura del Social Security, y una aportación a una HSA hecha así
+tampoco.
+
+Por eso la calculadora tiene dos campos:
+
+- una aportación a un 401(k) o a un 403(b) baja el impuesto federal sobre la
+  renta y deja Social Security y Medicare donde están;
+- una aportación a una HSA o a una FSA baja el impuesto federal y también los
+  impuestos de nómina.
+
+El segundo caso tiene una excepción que conviene conocer: una aportación a una
+HSA hecha directamente desde una cuenta corriente, en lugar de salir de la
+nómina, cuenta como wages para el Social Security. La calculadora trata la
+aportación como una reducción del sueldo, porque ese es el montaje que produce
+la exención.
 
 
 <div class="guide-inline-figure">
@@ -146,10 +181,18 @@ $60,000 se gravó al 10% o al 12%, y $16,100 no se gravaron en absoluto, así
 que el promedio queda por debajo del tipo que encuentra el siguiente dólar.
 
 Añadir una aportación de $5,000 a un 401(k) al mismo caso muestra el mismo
-efecto desde el otro lado. El sueldo imponible baja a $55,000, el impuesto
-federal a $4,420, Social Security a $3,410 y Medicare a $797.50, y la tasa
-efectiva cae al 17.62%. El salario neto también baja, porque esos $5,000
-salieron del sueldo antes de calcular los impuestos.
+efecto desde el otro lado, y deja ver por qué las dos deducciones se toman por
+separado. El sueldo imponible baja a $55,000 y el impuesto federal a $4,420,
+pero Social Security se queda en $3,720 y Medicare en $870, porque para los
+impuestos de nómina la aportación sigue siendo wages. El impuesto estatal baja a
+$1,945, el total a $10,955 y la tasa efectiva al 18.26%. El salario neto también
+baja, porque esos $5,000 salieron del sueldo antes de calcular los impuestos.
+
+Una aportación de $5,000 a una HSA o FSA en el mismo caso llega más lejos. El
+impuesto federal son los mismos $4,420, y esta vez los impuestos de nómina
+también se mueven: Social Security baja a $3,410 y Medicare a $797.50. El
+impuesto total es de $10,572.50, la tasa efectiva del 17.62% y el salario neto
+de $44,427.50, frente a $44,045.00 del caso con 401(k).
 
 ## Lo que el cálculo no incluye
 

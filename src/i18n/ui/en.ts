@@ -943,7 +943,7 @@ export const en = {
         'The projection advances one compounding period at a time. In each period the balance earns interest at the period rate, and then the contribution for that period is added — at the end of the period or the start of it, depending on the setting. Running the periods in sequence rather than using one closed expression is what produces the year-by-year table, and the final balance is the same either way.',
         'In closed form the same result is:',
         'where P is the starting balance, r is the annual rate divided by the number of compounding periods per year, n is the number of periods, and PMT is the contribution made in each period. A contribution made at the start of the period earns interest for that whole period, so the contribution term is multiplied by (1 + r) in that case.',
-        'The real figures come from two adjustments. The effective annual rate is (1 + r) raised to the number of periods per year, which is what a 7 % nominal rate actually becomes once a year of monthly compounding is applied. The real rate divides the nominal rate by the inflation factor, and the balance in today\'s dollars is the nominal balance divided by inflation compounded over the same period.',
+        'The real figures come from two adjustments. The effective annual rate is (1 + r) raised to the number of periods per year, which is what a 7 % nominal rate actually becomes once a year of monthly compounding is applied. The real rate takes that effective rate and divides it by the inflation factor, and the balance in today\'s dollars is the nominal balance divided by inflation compounded over the same period.',
       ],
       formula: 'FV = P(1 + r)ⁿ + PMT · ((1 + r)ⁿ − 1) / r',
       limits: [
@@ -1023,8 +1023,10 @@ export const en = {
         filingStatus: 'Filing status',
         stateRate: 'State income tax rate',
         stateRateHint: 'the rate for your bracket',
-        preTax: 'Pre-tax deductions',
-        preTaxHint: '401(k), HSA, FSA per year',
+        retirementContribution: '401(k) or 403(b) contribution',
+        retirementHint: 'per year — still subject to the payroll taxes',
+        healthContribution: 'HSA or FSA contribution',
+        healthHint: 'per year — not subject to the payroll taxes',
         perYear: 'per year',
         debtName: 'Debt',
         balance: 'Balance',
@@ -1076,9 +1078,10 @@ export const en = {
       formula:
         'take-home = gross pay − pre-tax deductions − federal income tax − Social Security − Medicare − state income tax',
       method: [
-        'The calculation starts from the gross pay and works backwards through the deductions, in the order a payroll system applies them. Pre-tax deductions come out first, because a contribution to a 401(k) or a health account is taken out of the wage before it is taxed. What is left is the taxable wage.',
+        'The calculation starts from the gross pay and works backwards through the deductions, in the order a payroll system applies them. The pre-tax deductions come out first, because a contribution to a 401(k) or to a health account is taken out of the wage before it is taxed. What is left is the taxable wage.',
+        'The two deductions are not treated the same way. A 401(k) or 403(b) contribution is excluded from income, but it is still wages for Social Security and Medicare, so it lowers the federal tax and leaves the payroll taxes alone. An HSA or FSA contribution taken out of the paycheque is excluded from income and from Social Security wages, so it lowers both.',
         'Federal income tax is calculated on that taxable wage. The standard deduction for the filing status is subtracted, and the result is run through the 2026 bracket table. Each bracket is a fixed amount of tax plus a percentage of the income above the bottom of that bracket, which is how the IRS publishes the table.',
-        'The payroll taxes come next. Social Security is 6.2% of the wage up to the taxable maximum of $184,500 for 2026. Medicare is 1.45% of the whole wage with no ceiling, and the Additional Medicare Tax is 0.9% of the part above $200,000 for a single filer, or above $250,000 for married filing jointly.',
+        'The payroll taxes come next. They are worked out on the wage less any HSA or FSA contribution, because a 401(k) contribution stays in the wage for these purposes. Social Security is 6.2% of the wage up to the taxable maximum of $184,500 for 2026. Medicare is 1.45% of the whole wage with no ceiling, and the Additional Medicare Tax is 0.9% of the part above $200,000 for a single filer, or above $250,000 for married filing jointly.',
         'The state income tax is the rate the reader types in, applied to the taxable income. It is an estimate: most states tax in bands, so one number applied to the whole income overstates what most people pay. The final figure is what is left, divided by the number of pay periods in the year.',
       ],
       limits: [
@@ -1086,12 +1089,17 @@ export const en = {
         'It does not model capital gains, self-employment income, or the treatment of income above the Social Security wage base, where Medicare still applies and Social Security does not.',
         'It does not model local taxes. City and county income taxes are separate from the state rate.',
         'The pay period counts are conventional: 12 months, 52 weeks, 260 working days, or 2,080 hours for a 40-hour week over 52 weeks. A reader paid on a different schedule can enter the yearly figure instead.',
-        'A 401(k) contribution above the annual limit is not fully exempt from the payroll taxes, and this calculation treats the whole pre-tax amount as exempt.',
+        'The HSA and FSA contribution is treated as a salary reduction taken out of the paycheque, which is what makes it free of Social Security and Medicare. An HSA contribution made straight from a bank account is wages for Social Security, and that case is not in the calculation.',
+        'A 401(k) contribution above the annual limit for 2026 is partly subject to the payroll taxes again, and this calculation charges the payroll taxes on the whole contribution.',
       ],
       faq: [
         {
           q: 'Why is my take-home pay lower than the gross minus the income tax?',
           a: 'Because the wage is reduced by Social Security and Medicare before the income tax is calculated. Those are payroll taxes on the job itself, separate from the income tax on the paycheque.',
+        },
+        {
+          q: 'Does a 401(k) contribution reduce my Social Security and Medicare?',
+          a: 'No. It comes off the wage before the federal income tax is worked out, but it is still wages for the payroll taxes, so Social Security and Medicare are charged on it. An HSA or FSA contribution taken out of the paycheque is different: it comes off the base for those taxes as well. That is why the two are entered separately.',
         },
         {
           q: 'Does this use my actual tax bracket?',
@@ -1126,6 +1134,14 @@ export const en = {
         {
           label: 'Social Security Administration — Publication 15, Employer Tax Guide',
           url: 'https://www.ssa.gov/pubs/EN-05-10035.pdf',
+        },
+        {
+          label: 'IRS — Tax Topic 401, Wages and salaries',
+          url: 'https://www.irs.gov/taxtopics/tc401',
+        },
+        {
+          label: 'Social Security Administration — POMS RS 01402.038, Tax-favored health plans',
+          url: 'https://secure.ssa.gov/poms.nsf/lnx/0301402038',
         },
         {
           label: 'IRS — Tax Topic 511, Withholding',

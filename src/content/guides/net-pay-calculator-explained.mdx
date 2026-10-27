@@ -18,6 +18,10 @@ sources:
     url: "https://www.ssa.gov/pubs/EN-05-10035.pdf"
   - label: "IRS — Tax Topic 511, Withholding"
     url: "https://www.irs.gov/taxtopics/tc511"
+  - label: "IRS — Tax Topic 401, Wages and salaries"
+    url: "https://www.irs.gov/taxtopics/tc401"
+  - label: "Social Security Administration — POMS RS 01402.038, Tax-favored health plans"
+    url: "https://secure.ssa.gov/poms.nsf/lnx/0301402038"
 relatedTools:
   - "net-pay"
 faq:
@@ -26,7 +30,7 @@ faq:
   - q: "Why is the effective rate lower than the marginal rate?"
     a: "The marginal rate is the rate the next dollar of taxable income is taxed at, so it sits in the bracket the income has reached. The effective rate divides the total tax by the whole gross pay, and most of that gross is taxed at lower rates or not taxed at all, because the standard deduction and any pre-tax deductions come out first."
   - q: "Does a 401(k) contribution reduce the taxes on the rest of the pay?"
-    a: "In the calculation, yes. A 401(k), HSA or FSA contribution is subtracted before the wages are taxed, so it reduces the base for federal income tax, for Social Security and for Medicare at the same time. The take-home amount is then lower by the contribution itself, and the tax on the rest is lower too."
+    a: "It reduces the federal income tax, and not the payroll taxes. The IRS treats a 401(k) or 403(b) contribution as excluded from income but still counted as wages for Social Security and Medicare, so those two taxes are charged on it. An HSA or FSA contribution taken out of the paycheque is different: it comes off the base for the payroll taxes as well. That is why the calculator takes the two separately."
   - q: "When does the Additional Medicare Tax start?"
     a: "At wages above $200,000 for a single filer, a married filer filing separately, or a head of household, and above $250,000 for married filing jointly. The rate is 0.9% on the excess, and those thresholds are not indexed for inflation, so they have been the same since 2013."
   - q: "How does an hourly rate become a year of pay?"
@@ -52,8 +56,9 @@ A wage arrives as a single gross amount. From there the money leaves in a
 fixed sequence.
 
 1. Pre-tax deductions come out first. A 401(k) contribution, an HSA
-   contribution and an FSA contribution are taken out of the wage before
-   anything else, and the payroll taxes are charged on what is left.
+   contribution and an FSA contribution are all taken out of the wage before
+   anything else. What each one does to the taxes is not the same, and the
+   section below sets out which is which.
 2. The standard deduction comes out of the remaining wages. For 2026 it is
    $16,100 for a single filer, $32,200 for married filing jointly and $24,150
    for head of household. What is left is taxable income, and that is the
@@ -69,10 +74,40 @@ fixed sequence.
 What survives those steps is the take-home amount, and the calculator divides
 it by the number of periods in the year to get the figure per period.
 
-The wages that the payroll taxes are charged on are the ones left after the
-pre-tax deductions, before the standard deduction. That distinction matters:
-the standard deduction reduces federal income tax and state tax, while Social
-Security and Medicare are charged on the larger base.
+The wages that the payroll taxes are charged on are the ones left after an HSA
+or FSA contribution and before the standard deduction. A 401(k) contribution
+stays inside that base. That distinction matters: the standard deduction
+reduces federal income tax and state tax, while Social Security and Medicare
+are charged on the larger base.
+
+## The two pre-tax deductions are not the same
+
+The IRS excludes a 401(k) contribution from income, and it counts the same
+contribution as wages for Social Security and Medicare. IRS Tax Topic 401 puts
+it plainly: the amount is not included in wages subject to income tax, "but
+those amounts remain subject to Social Security and Medicare taxes in the year
+they're withheld." Publication 525 says the same thing about elective
+deferrals.
+
+An HSA or FSA contribution is the other case. Where it comes out of the paycheque
+through a section 125 cafeteria plan, it is excluded from income and it is not
+wages for Social Security either. SSA's policy manual RS 01402.038 states it
+directly: an employee contribution to an FSA "via a qualified salary reduction
+agreement" is not wages for Social Security coverage, and an HSA contribution
+made that way is not either.
+
+So the calculator has two fields for the two cases:
+
+- a 401(k) or 403(b) contribution lowers the federal income tax and leaves
+  Social Security and Medicare where they are;
+- an HSA or FSA contribution lowers the federal income tax and the payroll
+  taxes as well.
+
+There is one exception to the second case, and it is the kind worth knowing
+about: an HSA contribution made straight from a bank account, rather than out of
+the paycheque, is wages for Social Security. The calculator treats the
+contribution as a salary reduction, because that is the arrangement that
+produces the exemption.
 
 
 <div class="guide-inline-figure">
@@ -144,11 +179,19 @@ bracket. Most of that $60,000 was taxed at 10% or at 12%, and $16,100 of it
 was not taxed at all, so the average lands below the rate that the next dollar
 would meet.
 
-Adding a $5,000 401(k) contribution to the same case shows the same effect
-from the other direction. The taxable wages fall to $55,000, the federal tax
-falls to $4,420, Social Security to $3,410 and Medicare to $797.50, and the
-effective rate drops to 17.62%. The take-home amount falls as well, because
-the $5,000 left the wage before the taxes were computed.
+Adding a $5,000 401(k) contribution to the same case shows the effect from the
+other direction, and shows why the two deductions are entered separately. The
+taxable wages fall to $55,000 and the federal tax falls to $4,420, but Social
+Security stays at $3,720 and Medicare at $870, because the contribution is
+still wages for the payroll taxes. The state tax falls to $1,945, the total tax
+to $10,955 and the effective rate to 18.26%. The take-home amount falls as
+well, because the $5,000 left the wage before the taxes were computed.
+
+A $5,000 HSA or FSA contribution in the same case reaches further. The federal
+tax is the same $4,420, and this time the payroll taxes move too: Social
+Security falls to $3,410 and Medicare to $797.50. The total tax is $10,572.50,
+the effective rate 17.62%, and the take-home amount $44,427.50 against
+$44,045.00 for the 401(k).
 
 ## What the calculation leaves out
 

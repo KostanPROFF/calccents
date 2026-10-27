@@ -903,7 +903,7 @@ export const es = {
         'La proyección avanza un periodo de capitalización cada vez. En cada periodo el saldo genera intereses al tipo del periodo, y luego se suma la aportación de ese periodo, al final del periodo o al principio, según el ajuste. Recorrer los periodos en secuencia en lugar de usar una sola expresión cerrada es lo que produce la tabla año a año, y el saldo final es el mismo en ambos casos.',
         'En forma cerrada, el mismo resultado es:',
         'donde P es el saldo inicial, r es el tipo anual dividido por el número de periodos de capitalización al año, n es el número de periodos y PMT es la aportación hecha en cada periodo. Una aportación hecha al principio del periodo genera intereses durante todo ese periodo, así que en ese caso el término de la aportación se multiplica por (1 + r).',
-        'Las cifras reales salen de dos ajustes. El tipo anual efectivo es (1 + r) elevado al número de periodos al año, que es lo que un tipo nominal del 7 % se convierte realmente en cuanto se aplica un año de capitalización mensual. El tipo real divide el tipo nominal por el factor de inflación, y el saldo en dólares de hoy es el saldo nominal dividido por la inflación capitalizada en el mismo periodo.',
+        'Las cifras reales salen de dos ajustes. El tipo anual efectivo es (1 + r) elevado al número de periodos al año, que es lo que un tipo nominal del 7 % se convierte realmente en cuanto se aplica un año de capitalización mensual. El tipo real toma ese tipo efectivo y lo divide por el factor de inflación, y el saldo en dólares de hoy es el saldo nominal dividido por la inflación capitalizada en el mismo periodo.',
       ],
       formula: 'FV = P(1 + r)ⁿ + PMT · ((1 + r)ⁿ − 1) / r',
       limits: [
@@ -984,8 +984,10 @@ export const es = {
         filingStatus: 'Situación fiscal',
         stateRate: 'Tipo de impuesto estatal sobre la renta',
         stateRateHint: 'el tipo de tu tramo',
-        preTax: 'Deducciones antes de impuestos',
-        preTaxHint: '401(k), HSA, FSA al año',
+        retirementContribution: 'Aportación a un 401(k) o 403(b)',
+        retirementHint: 'al año — las cargas sociales siguen aplicando',
+        healthContribution: 'Aportación a una HSA o FSA',
+        healthHint: 'al año — las cargas sociales no aplican',
         perYear: 'al año',
         debtName: 'Deuda',
         balance: 'Saldo',
@@ -1038,8 +1040,9 @@ export const es = {
         'salario neto = salario bruto − deducciones antes de impuestos − impuesto federal sobre la renta − Social Security − Medicare − impuesto estatal sobre la renta',
       method: [
         'El cálculo parte del salario bruto y retrocede por las deducciones, en el mismo orden en que las aplica un sistema de nóminas. Las deducciones antes de impuestos salen primero, porque una aportación a un 401(k) o a una cuenta de salud se resta del salario antes de que este se grave. Lo que queda es el salario gravable.',
+        'Las dos deducciones no se tratan igual. Una aportación a un 401(k) o a un 403(b) queda fuera del ingreso, pero sigue siendo wages para el Social Security y el Medicare, así que baja solo el impuesto federal. Una aportación a una HSA o a una FSA que sale de la nómina queda fuera del ingreso y de los wages del Social Security, así que baja los dos.',
         'El impuesto federal sobre la renta se calcula sobre ese salario gravable. Se resta la deducción estándar de la situación fiscal y el resultado pasa por la tabla de tramos de 2026. Cada tramo es un importe fijo de impuesto más un porcentaje de los ingresos por encima del suelo de ese tramo, que es como el IRS publica la tabla.',
-        'Después vienen las cargas sociales. El Social Security es el 6.2% del salario hasta el máximo imponible de $184,500 para 2026. El Medicare es el 1.45% de todo el salario sin techo, y el impuesto adicional de Medicare es el 0.9% de la parte por encima de $200,000 para un declarante soltero, o por encima de $250,000 para una declaración conjunta de casados.',
+        'Después vienen las cargas sociales. Se calculan sobre el salario menos la aportación a una HSA o FSA, porque una aportación a un 401(k) sigue dentro del salario a estos efectos. El Social Security es el 6.2% del salario hasta el máximo imponible de $184,500 para 2026. El Medicare es el 1.45% de todo el salario sin techo, y el impuesto adicional de Medicare es el 0.9% de la parte por encima de $200,000 para un declarante soltero, o por encima de $250,000 para una declaración conjunta de casados.',
         'El impuesto estatal sobre la renta es el tipo que introduces, aplicado a los ingresos gravables. Es una estimación: la mayoría de los estados grava por tramos, así que un único tipo aplicado a todos los ingresos sobreestima lo que paga la mayoría de la gente. La cifra final es lo que queda, dividido por el número de periodos de pago del año.',
       ],
       limits: [
@@ -1047,12 +1050,17 @@ export const es = {
         'No modela las plusvalías, los ingresos por trabajo autónomo ni el tratamiento de los ingresos por encima de la base imponible del Social Security, donde el Medicare se sigue aplicando y el Social Security no.',
         'No modela los impuestos locales. Los impuestos sobre la renta de ciudad y de condado son distintos del tipo estatal.',
         'Los recuentos de periodos de pago son convencionales: 12 meses, 52 semanas, 260 días laborables o 2,080 horas para una semana de 40 horas a lo largo de 52 semanas. Quien cobra con otro calendario puede introducir la cifra anual.',
-        'Una aportación a un 401(k) por encima del límite anual no queda exenta de las cargas sociales en su totalidad, y este cálculo trata todo el importe antes de impuestos como exento.',
+        'La aportación a una HSA o FSA se trata como una reducción del salario bajo la sección 125, que es lo que la libera del Social Security y del Medicare. Una aportación a una HSA hecha directamente desde una cuenta corriente cuenta como wages para el Social Security, y ese caso no está en el cálculo.',
+        'Una aportación a un 401(k) por encima del límite anual de 2026 vuelve a estar parcialmente sujeta a las cargas sociales, y este cálculo las aplica sobre toda la aportación.',
       ],
       faq: [
         {
           q: '¿Por qué mi salario neto es menor que el bruto menos el impuesto sobre la renta?',
           a: 'Porque el salario se reduce por el Social Security y el Medicare antes de calcular el impuesto sobre la renta. Esas son cargas sociales sobre el empleo, distintas del impuesto sobre la renta de la nómina.',
+        },
+        {
+          q: '¿Una aportación a un 401(k) baja mi Social Security y mi Medicare?',
+          a: 'No. Sale del salario antes de calcular el impuesto federal sobre la renta, pero para las cargas sociales sigue contando como wages, así que el Social Security y el Medicare se aplican sobre ella. Una aportación a una HSA o FSA que sale de la nómina es distinta: también sale de la base de esas cargas. Por eso se introducen por separado.',
         },
         {
           q: '¿Esto usa mi tramo de impuestos real?',
@@ -1087,6 +1095,14 @@ export const es = {
         {
           label: 'Social Security Administration — Publicación 15, Guía de impuestos del empleador',
           url: 'https://www.ssa.gov/pubs/EN-05-10035.pdf',
+        },
+        {
+          label: 'IRS — Tax Topic 401, Salarios y wages',
+          url: 'https://www.irs.gov/taxtopics/tc401',
+        },
+        {
+          label: 'Social Security Administration — POMS RS 01402.038, Planes de salud con beneficios fiscales',
+          url: 'https://secure.ssa.gov/poms.nsf/lnx/0301402038',
         },
         {
           label: 'IRS — Tax Topic 511, Retenciones',

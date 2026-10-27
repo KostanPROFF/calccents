@@ -93,7 +93,24 @@ test('buildAmortization sums extra payments into the principal total', () => {
 
 test('buildAmortization reports the payoff month', () => {
   const result = buildAmortization(baseInput());
-  assert.equal(result.payoffDate.getTime(), new Date(2056, 0, 1).getTime());
+  // The first payment is made in January 2026, so the 360th is made in
+  // December 2055, and that is the month the loan closes in.
+  assert.equal(result.payoffDate.getTime(), new Date(2055, 11, 1).getTime());
+});
+
+test('buildAmortization reports the month of a loan that closes on the first payment', () => {
+  const result = buildAmortization(baseInput({ principal: 1_000, termYears: 1 }));
+  assert.equal(result.numberOfPayments, 12);
+  assert.equal(result.payoffDate.getTime(), new Date(2026, 11, 1).getTime());
+});
+
+test('computeMonthlyPayment stays finite at a rate that is almost zero', () => {
+  const payment = computeMonthlyPayment(300_000, 1e-18, 360);
+  assert.ok(Number.isFinite(payment));
+  // The payment tends to the loan spread over the term.
+  assert.ok(Math.abs(payment - 300_000 / 360) < 0.01);
+  const tiny = computeMonthlyPayment(300_000, 1e-30, 360);
+  assert.ok(Number.isFinite(tiny));
 });
 
 test('buildAmortization handles a zero interest rate', () => {

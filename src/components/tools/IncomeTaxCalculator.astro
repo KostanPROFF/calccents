@@ -175,7 +175,7 @@ const childBands = CHILD_AGE_BANDS;
   import { computeStateTax } from '../../lib/calc/stateTax.ts';
   import { CHILD_AGE_BANDS, emptyChildAges, totalChildren, type ChildAgeCounts } from '../../lib/data/childAges.ts';
   import { formatCurrency, formatPercent } from '../../lib/calc/money.ts';
-  import { numberValue, selectValue, setText } from '../../lib/client/dom.ts';
+  import { numberValue, parseNumber, selectValue, setText } from '../../lib/client/dom.ts';
   import { renderChart } from '../../lib/client/chartView.ts';
   import { detectState, type DetectedState } from '../../lib/client/statePrefill.ts';
   import { fillTemplate } from '../../lib/client/text.ts';
@@ -225,13 +225,20 @@ const childBands = CHILD_AGE_BANDS;
     note.hidden = text.length === 0;
   }
 
-  /** The figure the reader typed, when there is one. */
+  /**
+   * The figure the reader typed, when there is one.
+   *
+   * The sign belongs to the reader: a negative figure is a credit they are
+   * claiming, and a figure that is not a number at all is no figure. The
+   * number is read the same way as every other number on the site, so
+   * "1e3" is a thousand and "-500" stays negative.
+   */
   function overrideValue(): number | null {
     const input = document.getElementById('it-state-tax') as HTMLInputElement | null;
     if (!input || input.value.trim() === '') return null;
-    const parsed = Number.parseFloat(input.value.replace(/[^0-9.]/g, ''));
+    const parsed = parseNumber(input.value);
     if (!Number.isFinite(parsed)) return null;
-    return Math.max(0, parsed);
+    return parsed;
   }
 
   /**

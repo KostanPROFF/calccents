@@ -49,6 +49,7 @@ export interface CompoundResult {
   /** Inflation-adjusted annual rate, in percent. */
   realAnnualRatePercent: number;
   years: number;
+  /** Compounding periods the horizon covers. It is a whole number unless the horizon ends part-way through a period. */
   periods: number;
   yearly: CompoundYearRow[];
 }
@@ -65,6 +66,48 @@ function assertNonNegative(value: number, label: string): void {
 const MAX_YEARS = 100;
 
 /**
+ * The shape of the horizon.
+ *
+ * A horizon of 1.5 years with annual compounding is eighteen months of
+ * contributions and one and a half compounding periods. Rounding the
+ * periods to a whole number would drop the last six months of deposits, so
+ * the last period is kept as a fraction: it carries the part of the period
+ * that is left, with the contribution and the interest in the same
+ * proportion.
+ */
+interface Horizon {
+  /** The number of compounding periods, as a whole number plus a fraction. */
+  exactPeriods: number;
+  /** The number of whole compounding periods. */
+  fullPeriods: number;
+  /** The part of the last period the horizon covers, from 0 to 1. */
+  remainder: number;
+  /** The contribution made in one whole compounding period. */
+  contributionPerPeriod: number;
+  /** The contribution made in the part of the last period the horizon covers. */
+  partialContribution: number;
+}
+
+/** Work out the horizon from the number of years and the compounding frequency. */
+function describeHorizon(input: CompoundInput): Horizon {
+  const periodsPerYear = input.compoundsPerYear;
+  const exactPeriods = input.years * periodsPerYear;
+  // The rounding guard keeps 10 years at a monthly frequency out of the
+  // partial-period branch, where floating point arithmetic would put it.
+  const fullPeriods = Math.floor(exactPeriods + 1e-9);
+  const remainder = Math.max(0, exactPeriods - fullPeriods);
+  const contributionPerPeriod = input.monthlyContribution * (12 / periodsPerYear);
+
+  return {
+    exactPeriods,
+    fullPeriods,
+    remainder,
+    contributionPerPeriod,
+    partialContribution: contributionPerPeriod * remainder,
+  };
+}
+
+/**
  * Closed-form future value.
  *
  *   FV = P * (1 + r)^n + PMT * [((1 + r)^n - 1) / r]
@@ -72,6 +115,10 @@ const MAX_YEARS = 100;
  * Contributions made at the start of each period earn one extra period of
  * interest, which is the annuity-due adjustment of multiplying the
  * contribution part by (1 + r).
+ *
+ * When the horizon ends part-way through a compounding period, the
+ * contribution for that part is carried at the same proportion as the
+ * interest, and it earns no interest of its own.
  */
 export function compoundFutureValue(input: CompoundInput): number {
   assertNonNegative(input.principal, 'Starting balance');
@@ -90,21 +137,27 @@ export function compoundFutureValue(input: CompoundInput): number {
 
   const periodsPerYear = input.compoundsPerYear;
   const periodRate = input.annualRatePercent / 100 / periodsPerYear;
-  const periods = Math.round(input.years * periodsPerYear);
-  const contributionPerPeriod =
-    input.monthlyContribution * (12 / periodsPerYear);
+  const { exactPeriods, fullPeriods, remainder, contributionPerPeriod, partialContribution } =
+    describeHorizon(input);
 
-  if (periods === 0) {
+  if (exactPeriods === 0) {
     return roundCents(input.principal);
   }
 
-  const growth = (1 + periodRate) ** periods;
-  const annuity = periodRate === 0 ? periods : (growth - 1) / periodRate;
+  const growth = (1 + periodRate) ** exactPeriods;
+  const periodGrowth = 1 + periodRate;
+  const annuity =
+    periodRate === 0 ? fullPeriods : (periodGrowth ** fullPeriods - 1) / periodRate;
   const annuityFactor =
-    input.contributionTiming === 'begin' ? annuity * (1 + periodRate) : annuity;
+    input.contributionTiming === 'begin' ? annuity * periodGrowth : annuity;
+
+  // The contribution in the part period is made at the end of it, so it
+  // earns no interest of its own. When it is made at the start, it earns
+  // the part of the period that is left.
+  const partial = input.contributionTiming === 'begin' ? partialContribution * periodGrowth ** remainder : partialContribution;
 
   return roundCents(
-    input.principal * growth + contributionPerPeriod * annuityFactor,
+    input.principal * growth + contributionPerPeriod * annuityFactor * periodGrowth ** remainder + partial,
   );
 }
 
@@ -119,8 +172,8 @@ export function projectCompoundInterest(input: CompoundInput): CompoundResult {
 
   const periodsPerYear = input.compoundsPerYear;
   const periodRate = input.annualRatePercent / 100 / periodsPerYear;
-  const periods = Math.round(input.years * periodsPerYear);
-  const contributionPerPeriod = input.monthlyContribution * (12 / periodsPerYear);
+  const { exactPeriods, fullPeriods, remainder, contributionPerPeriod, partialContribution } =
+    describeHorizon(input);
   const inflationFactor = 1 + input.inflationPercent / 100;
 
   let balance = input.principal;
@@ -128,7 +181,7 @@ export function projectCompoundInterest(input: CompoundInput): CompoundResult {
   let earned = 0;
   const yearly: CompoundYearRow[] = [];
 
-  for (let period = 1; period <= periods; period += 1) {
+  for (let period = 1; period <= fullPeriods; period += 1) {
     let contribution = 0;
     if (input.contributionTiming === 'begin') {
       contribution = contributionPerPeriod;
@@ -158,6 +211,47 @@ export function projectCompoundInterest(input: CompoundInput): CompoundResult {
     }
   }
 
+  /*
+   * The last part of a period, when the horizon ends part-way through one.
+   * The interest is the part of the period's growth that is left, and the
+   * contribution is the part of the deposits that falls in it.
+   */
+  if (remainder > 0) {
+    let contribution = 0;
+    if (input.contributionTiming === 'begin') {
+      contribution = partialContribution;
+      balance += contribution;
+      contributed += contribution;
+    }
+
+    const interest = balance * ((1 + periodRate) ** remainder - 1);
+    balance += interest;
+    earned += interest;
+
+    if (input.contributionTiming === 'end') {
+      contribution = partialContribution;
+      balance += contribution;
+      contributed += contribution;
+    }
+  }
+
+  /*
+   * The last row has to sit at the end of the horizon. A horizon of one
+   * and a half years at a monthly frequency crosses one year boundary and
+   * then stops, and the balance at that point is what the reader asked
+   * about.
+   */
+  const lastRow = yearly.at(-1);
+  if (lastRow && lastRow.year !== input.years) {
+    yearly.push({
+      year: input.years,
+      balance: roundCents(balance),
+      contributed: roundCents(contributed),
+      earned: roundCents(earned),
+      realBalance: roundCents(balance / inflationFactor ** input.years),
+    });
+  }
+
   const futureValue = roundCents(balance);
   const totalContributions = roundCents(contributed);
   const totalInterest = roundCents(futureValue - input.principal - totalContributions);
@@ -169,8 +263,15 @@ export function projectCompoundInterest(input: CompoundInput): CompoundResult {
     ((1 + periodRate) ** periodsPerYear - 1) * 100,
     4,
   );
+  /*
+   * The real rate is the Fisher equation on the rate the money actually
+   * earns: the effective annual rate, because that is what the balance
+   * grows by in a year, divided by the inflation factor. Using the nominal
+   * rate here would understate it, because the nominal rate is not what
+   * lands in the account once compounding is applied.
+   */
   const realAnnualRatePercent = roundTo(
-    ((1 + input.annualRatePercent / 100) / inflationFactor - 1) * 100,
+    ((1 + effectiveAnnualRatePercent / 100) / inflationFactor - 1) * 100,
     4,
   );
 
@@ -183,7 +284,7 @@ export function projectCompoundInterest(input: CompoundInput): CompoundResult {
     effectiveAnnualRatePercent,
     realAnnualRatePercent,
     years: input.years,
-    periods,
+    periods: exactPeriods,
     yearly,
   };
 }

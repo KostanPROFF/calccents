@@ -85,9 +85,46 @@ test('projectCompoundInterest reports a real value below the nominal one when in
 test('projectCompoundInterest leaves the real value equal to the nominal one at zero inflation', () => {
   const result = projectCompoundInterest(baseInput({ inflationPercent: 0 }));
   assert.ok(Math.abs(result.realValue - result.futureValue) < 0.05);
-  // With no inflation the real annual rate is the nominal rate, which is
-  // not the same number as the effective rate once compounding is applied.
-  assert.ok(Math.abs(result.realAnnualRatePercent - 7) < 0.0001);
+  // With no inflation the real annual rate is the rate the money actually
+  // earns in a year, which is the effective rate once the compounding has
+  // been applied.
+  assert.ok(
+    Math.abs(result.realAnnualRatePercent - result.effectiveAnnualRatePercent) < 0.0001,
+  );
+});
+
+test('projectCompoundInterest works the real rate out of the effective rate', () => {
+  const result = projectCompoundInterest(
+    baseInput({ compoundsPerYear: 12, inflationPercent: 2.5 }),
+  );
+  const effective = (1 + 0.07 / 12) ** 12 - 1;
+  const expected = ((1 + effective) / 1.025 - 1) * 100;
+  assert.ok(Math.abs(result.realAnnualRatePercent - expected) < 0.0001);
+  // 7% a year compounded monthly, against 2.5% inflation.
+  assert.ok(Math.abs(result.realAnnualRatePercent - 4.6138) < 0.001);
+});
+
+test('a horizon of 1.5 years carries eighteen months of contributions', () => {
+  const result = projectCompoundInterest(
+    baseInput({ years: 1.5, compoundsPerYear: 1, monthlyContribution: 100 }),
+  );
+  assert.equal(result.totalContributions, 1_800);
+  const analytical = compoundFutureValue({
+    ...baseInput({ years: 1.5, compoundsPerYear: 1, monthlyContribution: 100 }),
+  });
+  assert.ok(Math.abs(result.futureValue - analytical) < 0.05);
+  // The year boundary and the part period are both reported.
+  assert.equal(result.yearly.length, 2);
+  assert.equal(result.yearly[0]?.year, 1);
+  assert.equal(result.yearly.at(-1)?.year, 1.5);
+});
+
+test('a horizon of 1.5 years at a monthly frequency is eighteen months of deposits', () => {
+  const result = projectCompoundInterest(
+    baseInput({ years: 1.5, compoundsPerYear: 12, monthlyContribution: 100 }),
+  );
+  assert.equal(result.totalContributions, 1_800);
+  assert.equal(result.yearly.length, 2);
 });
 
 test('projectCompoundInterest reports the effective annual rate for each frequency', () => {

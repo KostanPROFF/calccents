@@ -59,10 +59,15 @@ const siteLinks = site.footer.filter((item) => !item.href.startsWith('/tools/'))
     </div>
     <p class="site-footer__note">
       {
+        /*
+          The name is in the note twice, so every occurrence has to be
+          replaced. A plain replace leaves the second one standing there as
+          a literal {name}.
+        */
         ui.footer.note
-          .replace('{name}', site.name)
-          .replace('{founded}', site.founded)
-          .replace('{year}', String(new Date().getFullYear()))
+          .replaceAll('{name}', site.name)
+          .replaceAll('{founded}', site.founded)
+          .replaceAll('{year}', String(new Date().getFullYear()))
       }
     </p>
     {/*

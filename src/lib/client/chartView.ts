@@ -395,8 +395,14 @@ export function renderChart(chartId: string, update: ChartUpdate): void {
   const empty = figure.querySelector('[data-chart-empty]');
 
   const config = readConfig(figure);
+  /*
+   * A series is drawn when it holds a figure. A series that is nothing but
+   * zeros is an empty line and is left out; a series that is entirely
+   * below zero is a real line, and the cost of owning can be lower than
+   * the cost of renting for every year of the comparison.
+   */
   const drawn = update.series.filter((entry) =>
-    entry.values.some((value) => Number.isFinite(value) && value > 0),
+    entry.values.some((value) => Number.isFinite(value) && value !== 0),
   );
 
   clear(svg);

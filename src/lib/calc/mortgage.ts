@@ -84,6 +84,12 @@ function assertNonNegative(value: number, label: string): void {
  *
  * where r is the monthly rate and n the number of months. At a zero rate
  * the formula degenerates to P / n.
+ *
+ * The same thing is true as the rate gets very small: the payment tends to
+ * P / n, and the denominator (1 + r)^n - 1 tends to zero with it. So the
+ * growth is worked out with exp and expm1, which keep their accuracy when
+ * the exponent is tiny, and a rate that is too small to divide by falls
+ * back on P / n instead of running off to infinity.
  */
 export function computeMonthlyPayment(
   principal: number,
@@ -105,8 +111,13 @@ export function computeMonthlyPayment(
   if (monthlyRate === 0) {
     return roundCents(principal / termMonths);
   }
-  const growth = (1 + monthlyRate) ** termMonths;
-  return roundCents((principal * monthlyRate * growth) / (growth - 1));
+  const exponent = termMonths * Math.log1p(monthlyRate);
+  const growth = Math.exp(exponent);
+  const denominator = Math.expm1(exponent);
+  if (denominator <= 0) {
+    return roundCents(principal / termMonths);
+  }
+  return roundCents((principal * monthlyRate * growth) / denominator);
 }
 
 /**
@@ -207,7 +218,13 @@ export function buildAmortization(input: MortgageInput): MortgageResult {
     monthlyPiti,
     numberOfPayments: month,
     payoffMonths: month,
-    payoffDate: addMonths(input.startDate, month),
+    /*
+     * The first payment is made in the start month, so a loan that is paid
+     * off in the first month is paid off in the start month itself. The
+     * number of months between the two is one less than the number of
+     * payments made.
+     */
+    payoffDate: month > 0 ? addMonths(input.startDate, month - 1) : input.startDate,
     totalInterest,
     totalPrincipal,
     totalExtraPayments: totalExtra,

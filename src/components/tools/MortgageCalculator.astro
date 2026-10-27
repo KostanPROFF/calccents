@@ -224,6 +224,10 @@ const copy = ui.tool['mortgage-payment'];
         setText(id, '—');
       }
       renderChart('mortgage-chart', { kind: 'line', series: [] });
+      // The table belongs to the price that was just cleared, so it goes
+      // with it.
+      const table = document.getElementById('amortization-body');
+      if (table) table.innerHTML = '';
       return;
     }
 

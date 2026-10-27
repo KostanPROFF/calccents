@@ -63,14 +63,26 @@ const copy = ui.tool['net-pay'];
       </label>
     </div>
 
-    <label class="field" for="np-pretax">
+    <label class="field" for="np-retirement">
       <span class="field__label">
-        {copy.fields.preTax}
-        <span class="field__hint">{copy.fields.preTaxHint}</span>
+        {copy.fields.retirementContribution}
+        <span class="field__hint">{copy.fields.retirementHint}</span>
       </span>
       <span class="field__control">
         <span class="field__prefix" aria-hidden="true">$</span>
-        <input class="input input--prefixed" id="np-pretax" type="number"
+        <input class="input input--prefixed" id="np-retirement" type="number"
+          inputmode="decimal" step="100" min="0" value="0" />
+      </span>
+    </label>
+
+    <label class="field" for="np-health">
+      <span class="field__label">
+        {copy.fields.healthContribution}
+        <span class="field__hint">{copy.fields.healthHint}</span>
+      </span>
+      <span class="field__control">
+        <span class="field__prefix" aria-hidden="true">$</span>
+        <input class="input input--prefixed" id="np-health" type="number"
           inputmode="decimal" step="100" min="0" value="0" />
       </span>
     </label>
@@ -120,21 +132,23 @@ const copy = ui.tool['net-pay'];
   import { numberValue, selectValue, setText } from '../../lib/client/dom.ts';
   import { renderChart } from '../../lib/client/chartView.ts';
 
-  const ids = ['np-gross', 'np-period', 'np-status', 'np-state-rate', 'np-pretax'];
+  const ids = ['np-gross', 'np-period', 'np-status', 'np-state-rate', 'np-retirement', 'np-health'];
 
   function recalculate(): void {
     const grossPay = Math.max(0, numberValue('np-gross'));
     const period = selectValue('np-period', 'month') as PayPeriod;
     const filingStatus = selectValue('np-status', 'single') as FilingStatus;
     const stateRatePercent = Math.max(0, numberValue('np-state-rate'));
-    const preTaxDeductionsAnnual = Math.max(0, numberValue('np-pretax'));
+    const retirementContributionAnnual = Math.max(0, numberValue('np-retirement'));
+    const healthAccountDeductionsAnnual = Math.max(0, numberValue('np-health'));
 
     const result = computeNetPay({
       grossPay,
       period,
       filingStatus,
       stateRatePercent,
-      preTaxDeductionsAnnual,
+      retirementContributionAnnual,
+      healthAccountDeductionsAnnual,
     });
 
     setText('np-net', formatCurrency(result.netPerPeriod));

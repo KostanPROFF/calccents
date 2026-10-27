@@ -31,6 +31,13 @@ const copy = ui.contactForm;
     action="/api/contact"
     data-contact-form-form
   >
+    {/*
+      The language of the page. The endpoint reads it when a browser posts
+      the form without JavaScript, so the answer comes back in the reader's
+      own language.
+    */}
+    <input type="hidden" name="lang" value={locale} />
+
     <div class="contact-form__row">
       <label class="contact-form__label" for="contact-name">
         {copy.nameLabel}
