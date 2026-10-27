@@ -127,6 +127,26 @@ test('a horizon of 1.5 years at a monthly frequency is eighteen months of deposi
   assert.equal(result.yearly.length, 2);
 });
 
+test('a horizon of less than a year still has a row to draw', () => {
+  const result = projectCompoundInterest(
+    baseInput({ years: 0.5, compoundsPerYear: 12, monthlyContribution: 100 }),
+  );
+  assert.equal(result.totalContributions, 600);
+  assert.equal(result.yearly.length, 1);
+  assert.equal(result.yearly[0]?.year, 0.5);
+  assert.equal(result.yearly[0]?.balance, result.futureValue);
+});
+
+test('a horizon of less than a year at an annual frequency has a row too', () => {
+  const result = projectCompoundInterest(
+    baseInput({ years: 0.25, compoundsPerYear: 1, monthlyContribution: 100 }),
+  );
+  assert.equal(result.totalContributions, 300);
+  assert.equal(result.yearly.length, 1);
+  assert.equal(result.yearly[0]?.year, 0.25);
+  assert.equal(result.yearly[0]?.balance, result.futureValue);
+});
+
 test('projectCompoundInterest reports the effective annual rate for each frequency', () => {
   const monthly = projectCompoundInterest(baseInput({ compoundsPerYear: 12 }));
   const annual = projectCompoundInterest(baseInput({ compoundsPerYear: 1 }));

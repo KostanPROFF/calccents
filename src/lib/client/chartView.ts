@@ -14,7 +14,7 @@ import {
   formatTick,
   linePath,
   plotArea,
-  scaleX,
+  scaleXByValue,
   scaleY,
   stackSegments,
   type Point,
@@ -116,6 +116,12 @@ function lineClass(index: number): string {
   return 'chart-line chart-line--accent chart-line--dashed';
 }
 
+/** The colour of the marker that stands for a series of one point. */
+function dotClass(index: number): string {
+  if (index === 0) return 'chart-dot chart-dot--accent';
+  return 'chart-dot chart-dot--muted';
+}
+
 /** The fill of a part of a stacked bar. */
 function segmentClass(index: number): string {
   const classes = [
@@ -180,14 +186,20 @@ function drawAxis(
     }),
   ).textContent = first;
 
-  svg.appendChild(
-    element('text', {
-      x: plot.left + plot.width,
-      y: plot.baseline + 13,
-      class: 'chart-tick',
-      'text-anchor': 'end',
-    }),
-  ).textContent = last;
+  /*
+   * A horizon of less than a year has one point, and the number on the
+   * right would be the same number as the one on the left.
+   */
+  if (last !== first) {
+    svg.appendChild(
+      element('text', {
+        x: plot.left + plot.width,
+        y: plot.baseline + 13,
+        class: 'chart-tick',
+        'text-anchor': 'end',
+      }),
+    ).textContent = last;
+  }
 
   svg.appendChild(
     element('text', {
@@ -217,6 +229,9 @@ function drawAxis(
   ).textContent = config.endLabel;
 }
 
+/**
+ * Draw the lines of a chart, the band between them, and the axis.
+ */
 function drawLines(
   svg: SVGSVGElement,
   config: ChartConfig,
@@ -229,10 +244,11 @@ function drawLines(
 
   const domain = computeDomain(series.map((entry) => entry.values));
   const count = Math.max(1, ...series.map((entry) => entry.values.length));
+  const xAt = scaleXByValue(xValues, count, plot);
 
   const pointsFor = (values: number[]): Point[] =>
     values.map((value, index) => ({
-      x: scaleX(index, count, plot),
+      x: xAt(index),
       y: scaleY(value, domain, plot),
     }));
 
@@ -255,6 +271,25 @@ function drawLines(
   series.forEach((entry, index) => {
     const own = points[index];
     if (!own) return;
+    /*
+     * A series of one point has no line to draw, and a horizon of less
+     * than a year leaves the chart with exactly one point. The marker
+     * stands for it, so the figure is on the chart rather than only in
+     * the table above it.
+     */
+    if (own.length === 1) {
+      const point = own[0];
+      if (!point) return;
+      svg.appendChild(
+        element('circle', {
+          cx: point.x,
+          cy: point.y,
+          r: 3,
+          class: dotClass(index),
+        }),
+      );
+      return;
+    }
     if (entry.style === 'band') {
       svg.appendChild(
         element('path', { d: linePath(own), class: 'chart-line chart-line--muted' }),

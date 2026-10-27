@@ -185,6 +185,23 @@ const config = JSON.stringify({
     stroke: none;
   }
 
+  /*
+   * The marker for a series of one point. A horizon of less than a year
+   * leaves the chart with a single figure, and a line of no length would
+   * show nothing at all.
+   */
+  .chart__svg :global(.chart-dot) {
+    stroke: none;
+  }
+
+  .chart__svg :global(.chart-dot--accent) {
+    fill: var(--accent);
+  }
+
+  .chart__svg :global(.chart-dot--muted) {
+    fill: var(--text-muted);
+  }
+
   .chart__svg :global(.chart-band--muted) {
     fill: var(--text-muted);
     opacity: 0.2;

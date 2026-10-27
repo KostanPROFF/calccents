@@ -29,8 +29,14 @@ const TO = 'info@constantinecs.com';
 /** The address the mail appears to come from. */
 const FROM = 'hello@calccents.com';
 
-/** The page the form is on. */
-const ORIGIN = 'https://calccents.com';
+/**
+ * The addresses the site is served from.
+ *
+ * The check is an exact match rather than a prefix. A prefix would let
+ * "https://www.calccents.com.attacker.example" through, and that address
+ * belongs to somebody else.
+ */
+const ORIGINS = new Set(['https://calccents.com', 'https://www.calccents.com']);
 
 interface Env {
   EMAIL: {
@@ -61,16 +67,25 @@ export default {
      * visitor's browser.
      */
     const origin = request.headers.get('Origin');
-    if (origin && origin !== ORIGIN && !origin.startsWith('https://www.calccents.com')) {
+    if (origin && !ORIGINS.has(origin)) {
       return fail(403, 'origin');
     }
 
-    let body: RawSubmission;
+    let parsed: unknown;
     try {
-      body = (await request.json()) as RawSubmission;
+      parsed = await request.json();
     } catch {
       return fail(400, 'body');
     }
+    /*
+     * A body of null, or a number, or a list, is not a submission. Reading
+     * a field out of it would throw, and a thrown error is an answer the
+     * caller cannot do anything with.
+     */
+    if (parsed === null || typeof parsed !== 'object' || Array.isArray(parsed)) {
+      return fail(400, 'body');
+    }
+    const body = parsed as RawSubmission;
 
     /* A robot fills the field it cannot see. A person leaves it empty. */
     if (isTrapFilled(body)) {

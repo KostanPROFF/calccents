@@ -118,6 +118,38 @@ export function scaleX(index: number, count: number, plot: PlotArea): number {
   return round(plot.left + (index / (count - 1)) * plot.width);
 }
 
+/**
+ * Where a point sits on the horizontal axis, when the x values carry the
+ * time.
+ *
+ * The position follows the value, not the place of the point in the list.
+ * A horizon of two and a tenth of a year has three points — the end of
+ * year one, the end of year two and the end of the tenth — and the last of
+ * them covers a tenth of a year, not a whole one. Spacing the points by
+ * their index would give that last segment the same width as the year
+ * before it and stretch the time axis.
+ *
+ * When the values cannot be used, the points are spread evenly instead.
+ */
+export function scaleXByValue(
+  xValues: number[],
+  count: number,
+  plot: PlotArea,
+): (index: number) => number {
+  const usable =
+    xValues.length === count && xValues.every((value) => Number.isFinite(value));
+
+  if (!usable || count <= 1) return (index) => scaleX(index, count, plot);
+
+  const min = Math.min(...xValues);
+  const max = Math.max(...xValues);
+  const span = max - min;
+  if (span <= 0) return (index) => scaleX(index, count, plot);
+
+  return (index) =>
+    round(plot.left + ((xValues[index] - min) / span) * plot.width);
+}
+
 /** The path of a line through the given points. */
 export function linePath(points: Point[]): string {
   if (points.length === 0) return '';

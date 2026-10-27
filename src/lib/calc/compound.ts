@@ -239,10 +239,11 @@ export function projectCompoundInterest(input: CompoundInput): CompoundResult {
    * The last row has to sit at the end of the horizon. A horizon of one
    * and a half years at a monthly frequency crosses one year boundary and
    * then stops, and the balance at that point is what the reader asked
-   * about.
+   * about. A horizon of less than a year crosses no boundary at all, so
+   * the row for the end of it is the only row there is.
    */
   const lastRow = yearly.at(-1);
-  if (lastRow && lastRow.year !== input.years) {
+  if (input.years > 0 && (!lastRow || lastRow.year !== input.years)) {
     yearly.push({
       year: input.years,
       balance: roundCents(balance),

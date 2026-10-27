@@ -8,6 +8,7 @@ import {
   linePath,
   plotArea,
   scaleX,
+  scaleXByValue,
   scaleY,
   stackSegments,
 } from '../client/chart.ts';
@@ -63,6 +64,36 @@ test('scaleX puts the first point on the left and the last on the right', () => 
 test('scaleX puts a single point in the middle of the plot', () => {
   const plot = plotArea(320, 170, 40, 30);
   assert.equal(scaleX(0, 1, plot), plot.left + plot.width / 2);
+});
+
+test('scaleXByValue spreads points that are evenly spaced the same way', () => {
+  const plot = plotArea(320, 170, 40, 30);
+  const at = scaleXByValue([1, 2, 3, 4, 5], 5, plot);
+  assert.equal(at(0), plot.left);
+  assert.equal(at(4), plot.left + plot.width);
+  assert.equal(at(2), plot.left + plot.width / 2);
+});
+
+test('scaleXByValue gives a part year the width it covers in time', () => {
+  const plot = plotArea(320, 170, 40, 30);
+  // A horizon of 2.1 years: the last point covers a tenth of a year, and
+  // it is placed a tenth of the way along the axis, not a third.
+  const at = scaleXByValue([1, 2, 2.1], 3, plot);
+  assert.equal(at(0), plot.left);
+  assert.equal(at(2), plot.left + plot.width);
+  assert.ok(at(1) > plot.left + plot.width * 0.9);
+  assert.ok(at(1) < plot.left + plot.width);
+});
+
+test('scaleXByValue falls back on even spacing when the values cannot be used', () => {
+  const plot = plotArea(320, 170, 40, 30);
+  const byValue = scaleXByValue([1, 2, 3], 3, plot);
+  const even = scaleXByValue([1, Number.NaN, 3], 3, plot);
+  assert.equal(even(1), scaleX(1, 3, plot));
+  assert.equal(byValue(1), scaleX(1, 3, plot));
+
+  const mismatched = scaleXByValue([1, 2], 3, plot);
+  assert.equal(mismatched(1), scaleX(1, 3, plot));
 });
 
 test('linePath draws a move and then the lines', () => {
