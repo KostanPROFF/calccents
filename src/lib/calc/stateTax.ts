@@ -180,12 +180,12 @@ function standardDeductionFor(state: State, status: FilingStatus): number {
  * The personal exemption for a filing status.
  *
  * The exemption for the filer comes first, and the exemption for each
- * dependent comes on top of it.
+ * dependent comes on top of it. The dependent amount is the one for a
+ * single dependent, and the caller applies the number of children to it.
  */
 function exemptionFor(
   state: State,
   status: FilingStatus,
-  children: number,
 ): { readonly filer?: StateAmount; readonly dependent?: StateAmount } {
   const exemption = state.incomeTax.exemption;
   if (!exemption) return {};
@@ -220,7 +220,7 @@ export function computeStateTax(input: StateTaxInput): StateTaxResult | null {
   const children = totalChildren(counts);
   const brackets = bracketsFor(state, input.filingStatus);
 
-  const exemption = exemptionFor(state, input.filingStatus, children);
+  const exemption = exemptionFor(state, input.filingStatus);
 
   /*
     The personal exemption comes either off the income or off the tax,

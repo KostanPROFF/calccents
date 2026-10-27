@@ -75,7 +75,7 @@ for (const file of htmlFiles) {
   const rel = relative(DIST, file);
 
   for (const match of html.matchAll(/<([a-z][a-z0-9-]*)\b([^>]*)>/gi)) {
-    const [, tag, attributes] = match;
+    const [, , attributes] = match;
     if (SCOPE.test(attributes)) continue;
     const classMatch = attributes.match(/class=["']([^"']+)["']/i);
     if (!classMatch) continue;
