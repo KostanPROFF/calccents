@@ -1060,6 +1060,8 @@ export const en = {
         effectiveRate: 'Effective tax rate',
         note:
           'The take-home amount is the gross pay less the deductions above, divided by the number of pay periods in the year.',
+        negativeNote:
+          'The deductions are as large as the gross pay, and the payroll taxes are still charged on them, so the take-home figure is below zero. The annual limits on the contributions are not checked here.',
       },
       resultNote:
         'A payroll system uses the withholding elections on the W-4 and the amounts already withheld during the year, so the figure on a real paycheque moves a little from month to month.',
@@ -1091,6 +1093,7 @@ export const en = {
         'The pay period counts are conventional: 12 months, 52 weeks, 260 working days, or 2,080 hours for a 40-hour week over 52 weeks. A reader paid on a different schedule can enter the yearly figure instead.',
         'The HSA and FSA contribution is treated as a salary reduction taken out of the paycheque, which is what makes it free of Social Security and Medicare. An HSA contribution made straight from a bank account is wages for Social Security, and that case is not in the calculation.',
         'A 401(k) contribution above the annual limit for 2026 is partly subject to the payroll taxes again, and this calculation charges the payroll taxes on the whole contribution.',
+        'It does not check the annual limits on the contributions. A 401(k) or HSA contribution as large as the whole pay leaves the take-home figure below zero, because the payroll taxes are still charged on it.',
       ],
       faq: [
         {

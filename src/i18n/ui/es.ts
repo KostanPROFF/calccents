@@ -1021,6 +1021,8 @@ export const es = {
         effectiveRate: 'Tipo efectivo de impuesto',
         note:
           'El importe neto es el salario bruto menos las deducciones anteriores, dividido por el número de periodos de pago del año.',
+        negativeNote:
+          'Las deducciones son iguales al salario bruto, y los impuestos sobre la nómina siguen aplicándose a ellas, así que el salario neto queda por debajo de cero. Los límites anuales de las aportaciones no se comprueban aquí.',
       },
       resultNote:
         'Un sistema de nóminas aplica las elecciones de retención del W-4 y los importes ya retenidos durante el año, así que la cifra de una nómina real se mueve un poco de un mes a otro.',
@@ -1052,6 +1054,7 @@ export const es = {
         'Los recuentos de periodos de pago son convencionales: 12 meses, 52 semanas, 260 días laborables o 2,080 horas para una semana de 40 horas a lo largo de 52 semanas. Quien cobra con otro calendario puede introducir la cifra anual.',
         'La aportación a una HSA o FSA se trata como una reducción del salario bajo la sección 125, que es lo que la libera del Social Security y del Medicare. Una aportación a una HSA hecha directamente desde una cuenta corriente cuenta como wages para el Social Security, y ese caso no está en el cálculo.',
         'Una aportación a un 401(k) por encima del límite anual de 2026 vuelve a estar parcialmente sujeta a las cargas sociales, y este cálculo las aplica sobre toda la aportación.',
+        'No comprueba los límites anuales de las aportaciones. Una aportación a un 401(k) o a una HSA igual al sueldo entero deja el salario neto por debajo de cero, porque las cargas sociales siguen aplicándose.',
       ],
       faq: [
         {

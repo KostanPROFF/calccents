@@ -86,6 +86,10 @@ const copy = ui.tool['net-pay'];
           inputmode="decimal" step="100" min="0" value="0" />
       </span>
     </label>
+
+    <p class="field__note" id="np-negative-note" role="status" hidden>
+      {copy.result.negativeNote}
+    </p>
   </form>
 </div>
 
@@ -161,6 +165,15 @@ const copy = ui.tool['net-pay'];
     setText('np-total', formatCurrency(result.totalTax));
     setText('np-month', formatCurrency(result.netPerMonth));
     setText('np-rate', formatPercent(result.effectiveTaxRate));
+
+    /*
+     * A contribution as large as the whole pay leaves nothing over the
+     * payroll taxes, so the take-home figure comes out below zero. The
+     * arithmetic is right, so the note explains it rather than the figure
+     * being quietly replaced with a nicer one.
+     */
+    const note = document.getElementById('np-negative-note');
+    if (note) note.hidden = result.annualNet >= 0;
 
     /*
      * One bar for the year: the take-home pay and the parts taken out of
