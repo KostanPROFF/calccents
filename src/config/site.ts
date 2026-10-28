@@ -23,7 +23,7 @@ export const SITE = {
    * A date rather than a string, because the pages print it and a page in
    * Russian should not print a date written the English way.
    */
-  reviewedOn: new Date('2026-10-23T00:00:00Z'),
+  reviewedOn: new Date('2026-10-28T00:00:00Z'),
   /**
    * One person writes the guides and maintains the calculation engine.
    *
@@ -68,6 +68,19 @@ export const SITE = {
    * of every page that loads the tag.
    */
   gaMeasurementId: 'G-J8H5VGPMS5',
+  /**
+   * The Google Tag Manager container ID.
+   *
+   * The container holds the tags the site fires, so that a tag can be added
+   * or changed without a new build of the site. It is a fact about the site
+   * in the same way the analytics ID is: it is public by design, and the
+   * environment variable overrides it, which is how a build can prove the
+   * path works with a dummy ID.
+   *
+   * The container is loaded by the consent bootstrap after the reader has
+   * answered, not from the document, so nothing goes out before the answer.
+   */
+  gtmId: 'GTM-MTPSQG64',
   /**
    * The Cloudflare Web Analytics site token.
    *

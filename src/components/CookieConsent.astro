@@ -2,12 +2,13 @@
 /**
  * Cookie consent.
  *
- * The site loads three things once the reader has answered: the AdSense
+ * The site loads four things once the reader has answered: the AdSense
  * script from Google, which serves the advertising, the Google Analytics
- * script, which counts the page views, and the Cloudflare beacon, which
- * measures how fast the pages load. The first two set cookies. The third
- * sets none, but it is still a request to a third party, so it waits for
- * the answer as well.
+ * script, which counts the page views, the Google Tag Manager container,
+ * which holds the tags the site fires, and the Cloudflare beacon, which
+ * measures how fast the pages load. The first three set cookies. The last
+ * one sets none, but it is still a request to a third party, so it waits
+ * for the answer as well.
  *
  * Cloudflare can add a beacon of its own to every page it serves, and that
  * one reports the page view before anyone has answered anything. The
@@ -24,7 +25,7 @@
  *
  *   no answer   the banner is shown, the ad units stay hidden and no
  *               request leaves the browser
- *   accepted   all three scripts are loaded, the ad units are pushed to
+ *   accepted   all four scripts are loaded, the ad units are pushed to
  *               Google
  *   declined   nothing is loaded, the ad units are removed from the page
  *
@@ -63,8 +64,10 @@ const gaId = import.meta.env.PUBLIC_GA_ID || SITE.gaMeasurementId;
 const adsenseClient = import.meta.env.PUBLIC_ADSENSE_CLIENT || SITE.adsensePublisherId;
 const cloudflareToken =
   import.meta.env.PUBLIC_CLOUDFLARE_BEACON_TOKEN || SITE.cloudflareBeaconToken;
+const gtmId = import.meta.env.PUBLIC_GTM_ID || SITE.gtmId;
 
 const gaUrl = `https://www.googletagmanager.com/gtag/js?id=${gaId}`;
+const gtmUrl = `https://www.googletagmanager.com/gtm.js?id=${gtmId}`;
 const adsenseUrl = `https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${adsenseClient}`;
 const cloudflareUrl = 'https://static.cloudflareinsights.com/beacon.min.js';
 
@@ -84,6 +87,7 @@ const bootstrap = `(function () {
   var GA_ID = '${gaId}';
   var GA_URL = '${gaUrl}';
   var ADSENSE_URL = '${adsenseUrl}';
+  var GTM_URL = '${gtmUrl}';
   var CLOUDFLARE_URL = '${cloudflareUrl}';
   var CLOUDFLARE_TOKEN = '${cloudflareToken}';
   var BEACON_HOST = 'static.cloudflareinsights.com';
@@ -112,6 +116,41 @@ const bootstrap = `(function () {
     var el = document.createElement('script');
     el.async = true;
     el.src = GA_URL;
+    document.head.appendChild(el);
+  }
+
+  /*
+   * The tag manager.
+   *
+   * The container holds the tags the site fires, so a tag can be added or
+   * changed without a new build of the site. It is a Google script that
+   * sets cookies, so it waits for the answer like the other two.
+   *
+   * The container is not in the document: it is injected here, after the
+   * answer, which is why the source of a page carries the URL and no
+   * request goes out before the answer.
+   *
+   * The noscript frame that Google's own installation snippet carries is
+   * left out on purpose. It would load the container for a reader whose
+   * browser has no JavaScript, and that reader has no way to answer the
+   * cookie question, so the request would go out with no consent behind it.
+   */
+  function loadTagManager() {
+    window.dataLayer = window.dataLayer || [];
+    /*
+     * The container reads the queue it finds on the page. The gtag shim is
+     * what the tags in it call, and the gtm.start event is what tells the
+     * container when the page began, so that a page view is timed from the
+     * start of the page rather than from the moment the answer was given.
+     */
+    if (typeof window.gtag !== 'function') {
+      window.gtag = function () { window.dataLayer.push(arguments); };
+      window.gtag('js', new Date());
+    }
+    window.dataLayer.push({ 'gtm.start': Date.now(), event: 'gtm.js' });
+    var el = document.createElement('script');
+    el.async = true;
+    el.src = GTM_URL;
     document.head.appendChild(el);
   }
 
@@ -255,6 +294,7 @@ const bootstrap = `(function () {
   function grant() {
     document.documentElement.classList.add('consent-granted');
     loadAnalytics();
+    loadTagManager();
     loadAds();
     loadHostingAnalyticsWhenKnown();
   }

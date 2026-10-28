@@ -44,7 +44,7 @@ export const en = {
 
   consent: {
     heading: 'Cookies',
-    body: 'This site uses cookies to serve advertising and to count which pages are read. Accepting loads the advertising and the page analytics, including the hosting provider\'s cookieless beacon; declining loads nothing at all. For a reader in the European Union the hosting provider\'s beacon is not loaded at all. You can change your answer later from the footer. What is collected and who provides it is on the {privacyLink}.',
+    body: 'This site uses cookies to serve advertising and to count which pages are read. Accepting loads the advertising and the page analytics — the analytics through Google Tag Manager, and the hosting provider\'s cookieless beacon; declining loads nothing at all. For a reader in the European Union the hosting provider\'s beacon is not loaded at all. You can change your answer later from the footer. What is collected and who provides it is on the {privacyLink}.',
     privacyLink: 'privacy page',
     accept: 'Accept',
     reject: 'Decline',
@@ -516,7 +516,7 @@ export const en = {
     analyticsPoliciesLink: 'policies.google.com',
     analyticsHeading: 'Analytics',
     analyticsBody:
-      'Page views are recorded with Google Analytics 4, served by Google from googletagmanager.com. The data used is limited to the page, the referring source and a coarse country or city level location; the IP address is truncated rather than stored in full. It is used to count visits and to find out which pages are read. Google\'s own explanation of how it uses data from sites and apps that use its services is at {analyticsPoliciesLink}. The script is loaded only after you accept the cookie question, and it is loaded for readers in the European Union as well.',
+      'Page views are recorded with Google Analytics 4, served by Google from googletagmanager.com. The tags that do the recording sit in a Google Tag Manager container, which Google serves from the same domain; the container is loaded only after you accept the cookie question, and the tags in it are loaded with it. The data used is limited to the page, the referring source and a coarse country or city level location; the IP address is truncated rather than stored in full. It is used to count visits and to find out which pages are read. Google\'s own explanation of how it uses data from sites and apps that use its services is at {analyticsPoliciesLink}. The script is loaded only after you accept the cookie question, and it is loaded for readers in the European Union as well.',
     hostingAnalyticsHeading: 'Hosting and page performance',
     hostingAnalyticsBody:
       'The site is hosted on Cloudflare, and Cloudflare\'s own Web Analytics run on every page. A small script served from static.cloudflareinsights.com measures the page view: which page was opened, where the visit came from, which browser and operating system were used, the country the request came from, and how long the page took to load. The IP address is used at Cloudflare\'s edge to work out the country and is discarded there rather than stored. The script sets no cookie, writes nothing to local storage, and creates no identifier that could follow you from one page to the next. What comes out of it is a count of page views and visits, and a reading of how fast the pages load. The script is loaded only after you accept the cookie question. A reader in the European Union is not counted at all: the script is not loaded for them.',
