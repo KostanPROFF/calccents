@@ -3,6 +3,15 @@ import { defineConfig } from 'astro/config';
 import mdx from '@astrojs/mdx';
 import sitemap from '@astrojs/sitemap';
 import { SITE } from './src/config/site.ts';
+import { formatLastModified, lastModifiedFor, sitemapLastModified } from './src/config/sitemapDates.ts';
+
+/**
+ * The date each page was last changed.
+ *
+ * Read once, while the configuration is loaded, and handed to the sitemap
+ * below.
+ */
+const lastModified = sitemapLastModified();
 
 export default defineConfig({
   site: SITE.origin,
@@ -48,6 +57,24 @@ export default defineConfig({
           ru: 'ru',
           es: 'es',
         },
+      },
+      /**
+       * The date each page was last changed.
+       *
+       * A crawler uses it to decide what to come back for, so the date has
+       * to be the one the page itself prints: the day a guide was last
+       * reviewed, the day a calculator's figures were last checked, and the
+       * day the site was last reviewed for the pages that stand on their own.
+       *
+       * Without it the sitemap says that every page has stood still since
+       * the site first appeared, which is not what has happened.
+       */
+      serialize(item) {
+        const path = new URL(item.url).pathname;
+        return {
+          ...item,
+          lastmod: formatLastModified(lastModifiedFor(path, lastModified)),
+        };
       },
     }),
   ],
