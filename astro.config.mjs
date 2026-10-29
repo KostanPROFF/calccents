@@ -81,7 +81,6 @@ export default defineConfig({
   vite: {
     build: {
       assetsInlineLimit: 2048,
-      cssMinify: 'esbuild',
     },
   },
 });
