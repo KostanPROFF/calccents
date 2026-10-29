@@ -69,19 +69,6 @@ export const SITE = {
    */
   gaMeasurementId: 'G-J8H5VGPMS5',
   /**
-   * The Google Tag Manager container ID.
-   *
-   * The container holds the tags the site fires, so that a tag can be added
-   * or changed without a new build of the site. It is a fact about the site
-   * in the same way the analytics ID is: it is public by design, and the
-   * environment variable overrides it, which is how a build can prove the
-   * path works with a dummy ID.
-   *
-   * The container is loaded by the consent bootstrap after the reader has
-   * answered, not from the document, so nothing goes out before the answer.
-   */
-  gtmId: 'GTM-MTPSQG64',
-  /**
    * The Cloudflare Web Analytics site token.
    *
    * Cloudflare used to add its beacon to every page it served, which meant

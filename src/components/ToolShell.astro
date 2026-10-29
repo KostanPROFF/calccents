@@ -151,7 +151,7 @@ const faqPage = {
             <Fragment>
               <p>{paragraph}</p>
               {FORMULA_AFTER[slug] === index && (
-                <p>
+                <p class="formula-callout">
                   <strong>{copy.formula}</strong>
                 </p>
               )}
@@ -175,7 +175,7 @@ const faqPage = {
             {relatedGuides.map((guide) => (
               <a class="tile" href={localePath(locale, `/guides/${guide.slug}/`)}>
                 <span class="tile__title">{guide.title}</span>
-                <span class="tile__text text-muted">{ui.ui.readTheGuide}</span>
+                <span class="tile__meta">{ui.ui.readTheGuide}</span>
               </a>
             ))}
           </div>

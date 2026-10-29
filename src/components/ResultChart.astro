@@ -99,17 +99,23 @@ const config = JSON.stringify({
    */
   .chart {
     margin: var(--space-5) 0 0;
-    padding: var(--space-4);
-    border: 1px solid var(--border-subtle);
-    border-radius: var(--radius-md);
-    background: var(--surface-inset);
+    padding: var(--space-5);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    background:
+      linear-gradient(180deg, var(--surface-shine) 0%, transparent 100%),
+      var(--surface-inset);
+    box-shadow:
+      inset 0 1px 0 0 var(--surface-shine),
+      var(--shadow-sm);
   }
 
   .chart__title {
     margin: 0 0 var(--space-3);
-    color: var(--text-secondary);
+    color: var(--text);
     font-size: var(--text-sm);
-    font-weight: 600;
+    font-weight: 650;
+    letter-spacing: -0.01em;
     line-height: var(--leading-snug);
   }
 

@@ -47,12 +47,12 @@ const organization = {
   locale={locale}
   jsonLd={[webSite, organization]}
 >
-  <section class="section-sm">
+  <section class="section-sm hero-section">
     <div class="container">
       <div class="hero">
         <div>
           <p class="eyebrow">{ui.home.eyebrow}</p>
-          <h1 style="margin-top: var(--space-4); font-size: var(--text-4xl);">
+          <h1 class="hero__heading">
             {ui.home.heading}
           </h1>
           <p class="page-head__lede">{ui.home.lede}</p>
@@ -69,8 +69,8 @@ const organization = {
 
   <section class="section-sm">
     <div class="container">
-      <p class="eyebrow" style="color: var(--text-muted);">{ui.home.calculatorsEyebrow}</p>
-      <h2 style="margin-top: var(--space-3); font-size: var(--text-2xl);">
+      <p class="eyebrow">{ui.home.calculatorsEyebrow}</p>
+      <h2 style="margin-top: var(--space-2); font-size: var(--text-2xl);">
         {ui.home.calculatorsHeading}
       </h2>
       <div class="grid grid--3" style="margin-top: var(--space-8);">
@@ -92,22 +92,17 @@ const organization = {
 
   <section class="section-sm">
     <div class="container">
-      <div
-        class="card card--raised"
-        style="display: grid; grid-template-columns: 1.1fr 0.9fr; gap: var(--space-10); align-items: center;"
-      >
+      <div class="card card--raised showcase-grid">
         <div>
           <h2 style="font-size: var(--text-2xl);">{ui.home.workHeading}</h2>
-          <ul
-            style="margin-top: var(--space-5); padding-left: var(--space-6); display: grid; gap: var(--space-3); color: var(--text-secondary);"
-          >
+          <ul class="check-list">
             {ui.home.workPoints.map((point) => <li>{point}</li>)}
           </ul>
           <p style="margin-top: var(--space-6);">
-            <a href={localePath(locale, '/about/')}>{ui.home.workLink}</a>
+            <a class="btn" href={localePath(locale, '/about/')}>{ui.home.workLink}</a>
           </p>
         </div>
-        <div class="card">
+        <div class="result">
           <p class="result__label">{ui.home.sampleMonthlyPayment}</p>
           <p class="result__headline" style="font-size: var(--text-3xl);">$2,358.42</p>
           <div class="stat-grid">
@@ -131,11 +126,16 @@ const organization = {
 
   <section class="section-sm">
     <div class="container">
-      <p class="eyebrow" style="color: var(--text-muted);">{ui.home.guidesEyebrow}</p>
-      <h2 style="margin-top: var(--space-3); font-size: var(--text-2xl);">
-        {ui.home.guidesHeading}
-      </h2>
-      <div style="margin-top: var(--space-6);">
+      <div class="guides-header">
+        <div>
+          <p class="eyebrow">{ui.home.guidesEyebrow}</p>
+          <h2 style="margin-top: var(--space-2); font-size: var(--text-2xl);">
+            {ui.home.guidesHeading}
+          </h2>
+        </div>
+        <a class="btn" href={localePath(locale, '/guides/')}>{ui.ui.allGuides}</a>
+      </div>
+      <div class="guide-list">
         {
           featured.map((guide) => (
             <a
@@ -150,9 +150,6 @@ const organization = {
           ))
         }
       </div>
-      <p style="margin-top: var(--space-6);">
-        <a href={localePath(locale, '/guides/')}>{ui.ui.allGuides}</a>
-      </p>
     </div>
   </section>
 
@@ -160,23 +157,41 @@ const organization = {
 
   <section class="section-sm">
     <div class="container" style="max-width: 720px;">
-      <h2 style="font-size: var(--text-xl);">{ui.home.newsletterHeading}</h2>
-      <p class="text-secondary" style="margin-top: var(--space-3);">
-        {ui.home.newsletterLede}
-      </p>
-      <div style="margin-top: var(--space-5);">
-        <Newsletter locale={locale} />
+      <div class="card">
+        <h2 style="font-size: var(--text-xl);">{ui.home.newsletterHeading}</h2>
+        <p class="text-secondary" style="margin-top: var(--space-2);">
+          {ui.home.newsletterLede}
+        </p>
+        <div style="margin-top: var(--space-5);">
+          <Newsletter locale={locale} />
+        </div>
       </div>
     </div>
   </section>
 </Base>
 
 <style>
+  .hero-section {
+    padding-top: var(--space-12);
+    padding-bottom: var(--space-10);
+  }
+
   .hero {
     display: grid;
-    grid-template-columns: minmax(0, 1.05fr) minmax(0, 0.95fr);
+    grid-template-columns: minmax(0, 1.08fr) minmax(0, 0.92fr);
     gap: var(--space-10);
     align-items: center;
+  }
+
+  .hero__heading {
+    margin-top: var(--space-4);
+    font-size: clamp(2.4rem, 4.6vw, 3.4rem);
+    letter-spacing: -0.04em;
+    line-height: 1.05;
+    background: linear-gradient(135deg, var(--text) 0%, var(--accent-ink-strong) 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
   }
 
   @media (max-width: 940px) {
@@ -186,20 +201,43 @@ const organization = {
     }
   }
 
-  .tile__figure {
-    margin-bottom: var(--space-2);
+  .guides-header {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: var(--space-4);
+  }
+
+  .guide-list {
+    margin-top: var(--space-6);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    background: var(--surface);
+    overflow: hidden;
+    box-shadow: var(--shadow-sm);
   }
 
   .guide-row {
     display: flex;
-    align-items: baseline;
+    align-items: center;
     justify-content: space-between;
     gap: var(--space-6);
-    padding: var(--space-4) 0;
+    padding: var(--space-4) var(--space-5);
     border-bottom: 1px solid var(--border-subtle);
     text-decoration: none;
     color: inherit;
-    transition: color var(--transition);
+    transition:
+      background-color var(--transition),
+      color var(--transition);
+  }
+
+  .guide-row:last-child {
+    border-bottom: none;
+  }
+
+  .guide-row:hover {
+    background: var(--surface-raised);
   }
 
   .guide-row:hover .guide-row__title {
@@ -208,12 +246,28 @@ const organization = {
 
   .guide-row__title {
     color: var(--text);
-    font-weight: 500;
+    font-weight: 550;
+    transition: color var(--transition);
   }
 
   .guide-row__meta {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2);
     color: var(--text-muted);
-    font-size: var(--text-sm);
+    font-size: var(--text-xs);
+    font-weight: 550;
+    font-variant-numeric: tabular-nums;
     white-space: nowrap;
+  }
+
+  .guide-row__meta::after {
+    content: '→';
+    color: var(--accent-ink);
+    transition: transform var(--transition);
+  }
+
+  .guide-row:hover .guide-row__meta::after {
+    transform: translateX(3px);
   }
 </style>

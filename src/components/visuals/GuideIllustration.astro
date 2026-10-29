@@ -854,9 +854,12 @@ const fillWideId = nextFigureId(`guide-fill-wide-${slug}`);
 
 <style>
   .fig__frame {
-    background: var(--surface-inset);
+    background:
+      radial-gradient(90% 90% at 50% 0%, var(--surface-glow) 0%, transparent 75%),
+      var(--surface-inset);
     border: 1px solid var(--border);
     border-radius: var(--radius-md);
+    box-shadow: inset 0 1px 0 0 var(--surface-shine);
     overflow: hidden;
     /*
      * The frame keeps the proportion of the drawing, so the picture is

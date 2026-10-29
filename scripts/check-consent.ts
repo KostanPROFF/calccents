@@ -2,17 +2,16 @@
 /**
  * Consent gating check.
  *
- * Three scripts on this site set cookies: the AdSense loader, which serves
- * the advertising, the Google Analytics loader, which counts the page views,
- * and the Google Tag Manager container, which holds the tags the site fires.
- * None of them may be in the document before the reader has answered the
- * cookie question.
+ * Two scripts on this site set cookies: the AdSense loader, which serves
+ * the advertising, and the Google Analytics loader, which counts the page
+ * views. Neither one may be in the document before the reader has answered
+ * the cookie question.
  *
- * The gate proves six things over the built output, where the mistake
+ * The gate proves five things over the built output, where the mistake
  * would actually ship:
  *
  *   1. the banner is on every page, and the way back to it is too
- *   2. all four script URLs are present, so they can be loaded after
+ *   2. all three script URLs are present, so they can be loaded after
  *      consent
  *   3. none of them is loaded as a script tag, so nothing goes out before
  *      the answer
@@ -20,8 +19,6 @@
  *      request waits for the answer as well
  *   5. the privacy policy names that provider, because it is the one that
  *      receives the request
- *   6. the privacy policy names the tag manager, because it is a third
- *      party that receives the request too
  *
  * The third point is the one that matters. A page that carries the
  * tracker in the head works exactly like a page without a consent banner,
@@ -52,32 +49,13 @@ const ANALYTICS_MARKER = 'googletagmanager.com/gtag/js?id=';
 const ADS_MARKER = 'pagead2.googlesyndication.com';
 
 /**
- * The tag manager container.
- *
- * The container holds the tags the site fires, so a tag can be added or
- * changed without a new build. It is served by Google from the same host as
- * the analytics script, but from another path, so it needs a marker of its
- * own: a check that only knew about the analytics path would let the
- * container through in the document.
- *
- * The container sets cookies, so it is treated like the other two Google
- * trackers: the URL has to be in the source, so it can be loaded after the
- * answer, and it must not be in the document as a script tag.
- */
-const GTM_MARKER = 'googletagmanager.com/gtm.js?id=';
-
-/**
  * A script tag that loads a tracker.
  *
  * The tag is what makes the request. The URL inside the bootstrap is just
  * a string in a script; the tag is what the browser fetches.
  */
 const STATIC_TAG = new RegExp(
-  `<script[^>]*src=["'][^"']*(${[
-    ANALYTICS_MARKER,
-    GTM_MARKER,
-    ADS_MARKER,
-  ]
+  `<script[^>]*src=["'][^"']*(${[ANALYTICS_MARKER, ADS_MARKER]
     .map((marker) => marker.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'))
     .join('|')})`,
   'i',
@@ -208,7 +186,6 @@ let pagesWithoutReopen = 0;
 let pagesWithoutDecision = 0;
 let pagesWithoutAnalytics = 0;
 let pagesWithoutAds = 0;
-let pagesWithoutGtm = 0;
 let pagesWithoutHosting = 0;
 let pagesWithoutSuppression = 0;
 let pagesWithStaticTracker = 0;
@@ -234,16 +211,6 @@ let pagesWithoutEuList = 0;
 let privacyPages = 0;
 let privacyPagesWithoutHosting = 0;
 let privacyPagesWithoutEu = 0;
-let privacyPagesWithoutGtm = 0;
-
-/**
- * The tag manager, named in the privacy policy.
- *
- * The container is a third party that receives a request on every visit a
- * reader accepts, so the policy has to name it. The name of the service is
- * the same in the three languages, so one marker covers all of them.
- */
-const GTM_POLICY_MARKER = 'Google Tag Manager';
 
 for (const file of htmlFiles) {
   const html = readFileSync(file, 'utf8');
@@ -254,7 +221,6 @@ for (const file of htmlFiles) {
   if (!html.includes(DECISION_MARKER)) pagesWithoutDecision += 1;
   if (!html.includes(ANALYTICS_MARKER)) pagesWithoutAnalytics += 1;
   if (!html.includes(ADS_MARKER)) pagesWithoutAds += 1;
-  if (!html.includes(GTM_MARKER)) pagesWithoutGtm += 1;
   if (!html.includes(HOSTING_BEACON)) pagesWithoutHosting += 1;
   if (!html.includes(HOSTING_SUPPRESSION_MARKER)) pagesWithoutSuppression += 1;
   if (!html.includes(CRAWLER_MARKER)) pagesWithoutCrawlerException += 1;
@@ -284,7 +250,6 @@ for (const file of htmlFiles) {
   if (rel.replace(/\\/g, '/').endsWith('privacy/index.html')) {
     privacyPages += 1;
     if (!html.includes(HOSTING_MARKER)) privacyPagesWithoutHosting += 1;
-    if (!html.includes(GTM_POLICY_MARKER)) privacyPagesWithoutGtm += 1;
     if (!EU_POLICY_MARKERS.some((marker) => html.includes(marker))) {
       privacyPagesWithoutEu += 1;
     }
@@ -322,12 +287,6 @@ if (pagesWithoutHosting > 0) {
   problems.push(
     `${pagesWithoutHosting} of ${htmlFiles.length} pages cannot load the hosting ` +
       'provider\'s page analytics after the answer',
-  );
-}
-if (pagesWithoutGtm > 0) {
-  problems.push(
-    `${pagesWithoutGtm} of ${htmlFiles.length} pages cannot load the tag manager ` +
-      'after the answer',
   );
 }
 if (pagesWithoutSuppression > 0) {
@@ -382,13 +341,6 @@ if (privacyPagesWithoutEu > 0) {
       'the European Union is not counted by the hosting provider',
   );
 }
-if (privacyPagesWithoutGtm > 0) {
-  problems.push(
-    `${privacyPagesWithoutGtm} of ${privacyPages} privacy pages do not name the tag manager. ` +
-      'It is a third party that receives a request on every visit a reader accepts, so the ' +
-      'policy has to say so.',
-  );
-}
 if (pagesWithoutEuList > 0) {
   problems.push(
     `${pagesWithoutEuList} of ${htmlFiles.length} pages do not carry the whole list of the ` +
@@ -419,8 +371,8 @@ if (problems.length > 0) {
 
 console.log(
   `Consent gating check passed: ${htmlFiles.length} pages carry the banner, ` +
-    `all four trackers are loaded only after the answer, the ad units stay hidden until then, ` +
+    `all three trackers are loaded only after the answer, the ad units stay hidden until then, ` +
     `Google's crawler is served the ad script directly, the hosting provider's beacon is left ` +
     `out for a reader in the European Union, and the privacy policy names the hosting provider ` +
-    `whose page analytics run on every visit and the tag manager that holds the site's tags.`,
+    `whose page analytics run on every visit.`,
 );
