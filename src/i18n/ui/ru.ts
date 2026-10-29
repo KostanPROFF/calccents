@@ -81,8 +81,8 @@ export const ru = {
             : 'руководств';
       return `${n} ${word}`;
     },
-    calculate: 'Рассчитать →',
-    open: 'Открыть →',
+    calculate: 'Рассчитать',
+    open: 'Открыть',
     allGuides: 'Все руководства →',
     readTheGuide: 'Читать руководство',
     guidesThatGoDeeper: 'Руководства, которые копают глубже',
