@@ -57,3 +57,28 @@ export function currentMonthValue(): string {
   const month = String(now.getMonth() + 1).padStart(2, '0');
   return `${now.getFullYear()}-${month}`;
 }
+
+/**
+ * Fill a table body with rows of text, one array of cells per row.
+ *
+ * Every cell carries the name of its column in `data-label`, read from the
+ * table's own header. On a narrow screen the stylesheet drops the header
+ * and stacks each row into a card, and the label is what tells the reader
+ * which figure is which.
+ */
+export function fillTableBody(body: HTMLElement, rows: readonly (readonly string[])[]): void {
+  const headers = body.closest('table')?.querySelectorAll('thead th') ?? [];
+  const labels = Array.from(headers, (header) => header.textContent?.trim() ?? '');
+  const fragment = document.createDocumentFragment();
+  for (const cells of rows) {
+    const row = document.createElement('tr');
+    cells.forEach((text, index) => {
+      const cell = document.createElement('td');
+      cell.textContent = text;
+      if (labels[index]) cell.dataset.label = labels[index];
+      row.append(cell);
+    });
+    fragment.append(row);
+  }
+  body.replaceChildren(fragment);
+}

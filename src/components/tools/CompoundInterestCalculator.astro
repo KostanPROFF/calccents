@@ -171,7 +171,7 @@ const copy = ui.tool['compound-interest'];
 <script>
   import { projectCompoundInterest } from '../../lib/calc/compound.ts';
   import { formatCurrency, formatPercent } from '../../lib/calc/money.ts';
-  import { numberValue, setText } from '../../lib/client/dom.ts';
+  import { fillTableBody, numberValue, setText } from '../../lib/client/dom.ts';
   import { renderChart } from '../../lib/client/chartView.ts';
 
   const form = document.getElementById('compound-form');
@@ -234,15 +234,16 @@ const copy = ui.tool['compound-interest'];
 
     const body = document.getElementById('compound-body');
     if (body) {
-      body.innerHTML = result.yearly
-        .map(
-          (row) =>
-            `<tr><td>${row.year}</td><td>${formatCurrency(row.balance)}</td>` +
-            `<td>${formatCurrency(row.contributed)}</td>` +
-            `<td>${formatCurrency(row.earned)}</td>` +
-            `<td>${formatCurrency(row.realBalance)}</td></tr>`,
-        )
-        .join('');
+      fillTableBody(
+        body,
+        result.yearly.map((row) => [
+          String(row.year),
+          formatCurrency(row.balance),
+          formatCurrency(row.contributed),
+          formatCurrency(row.earned),
+          formatCurrency(row.realBalance),
+        ]),
+      );
     }
   }
 
