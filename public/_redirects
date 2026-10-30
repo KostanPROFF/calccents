@@ -1,0 +1,5 @@
+# Cloudflare Pages redirects.
+#
+# The sitemap is built as /sitemap-index.xml, but /sitemap.xml is the
+# address people and many tools try first, so it forwards there.
+/sitemap.xml /sitemap-index.xml 301
