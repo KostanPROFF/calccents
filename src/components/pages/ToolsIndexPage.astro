@@ -1,7 +1,8 @@
 ---
 import Base from '../../layouts/Base.astro';
 import AdSlot from '../AdSlot.astro';
-import ToolIllustration from '../visuals/ToolIllustration.astro';
+import ToolGlyph from '../visuals/ToolGlyph.astro';
+import { tileHue } from '../visuals/toolGlyphs.ts';
 import { getTools } from '../../config/tools.ts';
 import { getUi } from '../../i18n/ui/index.ts';
 import { localePath, type Locale } from '../../i18n/locales.ts';
@@ -42,11 +43,11 @@ const countFor = (slug: string) =>
     <div class="grid grid--2">
       {
         tools.map((tool) => (
-          <a class="tile" href={localePath(locale, `/tools/${tool.slug}/`)}>
-            <div class="tile__figure">
-              <ToolIllustration slug={tool.slug} locale={locale} />
-            </div>
-            <span class="badge">{tool.category}</span>
+          <a class="tile" href={localePath(locale, `/tools/${tool.slug}/`)} style={tileHue(tool.slug)}>
+            <span class="tile__head">
+              <ToolGlyph slug={tool.slug} />
+              <span class="badge">{tool.category}</span>
+            </span>
             <span class="tile__title">{tool.name}</span>
             <span class="tile__text">{tool.short}</span>
             <span class="tile__meta">

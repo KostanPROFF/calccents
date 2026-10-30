@@ -5,7 +5,9 @@ import { getSite } from '../../config/site.ts';
 import { getUi } from '../../i18n/ui/index.ts';
 import { localePath, type Locale } from '../../i18n/locales.ts';
 import { getGuides, guideSlug } from '../../i18n/guides.ts';
-import GuideIllustration from '../visuals/GuideIllustration.astro';
+import ToolGlyph from '../visuals/ToolGlyph.astro';
+import { tileHue } from '../visuals/toolGlyphs.ts';
+import { isToolSlug, type ToolSlug } from '../../config/tools.ts';
 
 interface Props {
   locale: Locale;
@@ -18,6 +20,17 @@ const ui = getUi(locale);
 const guides = await getGuides(locale);
 
 const groups = ['home', 'renting', 'investing'] as const;
+
+/** The calculator a guide card wears the badge of: the first one it explains. */
+const FALLBACK_TOOL: Record<(typeof groups)[number], ToolSlug> = {
+  home: 'mortgage-payment',
+  renting: 'rent-vs-buy',
+  investing: 'compound-interest',
+};
+
+function badgeFor(related: string[], group: (typeof groups)[number]): ToolSlug {
+  return related.find(isToolSlug) ?? FALLBACK_TOOL[group];
+}
 const byGroup = groups
   .map((group) => ({ group, guides: guides.filter((guide) => guide.data.group === group) }))
   .filter((entry) => entry.guides.length > 0);
@@ -53,7 +66,7 @@ const byGroup = groups
     {
       byGroup.map((entry) => (
         <section class="section-sm">
-          <p class="eyebrow" style="color: var(--text-muted);">
+          <p class="eyebrow">
             {ui.guidesIndex.groups[entry.group]}
           </p>
           <div class="guide-grid">
@@ -61,9 +74,10 @@ const byGroup = groups
               <a
                 class="guide-card"
                 href={localePath(locale, `/guides/${guideSlug(guide.id)}/`)}
+                style={tileHue(badgeFor(guide.data.relatedTools, guide.data.group))}
               >
                 <span class="guide-card__figure">
-                  <GuideIllustration slug={guide.data.illustration} locale={locale} />
+                  <ToolGlyph slug={badgeFor(guide.data.relatedTools, guide.data.group)} size="sm" />
                 </span>
                 <span class="guide-card__title">{guide.data.title}</span>
                 <span class="guide-card__desc">{guide.data.description}</span>
@@ -101,9 +115,9 @@ const byGroup = groups
   /*
    * The guides are cards, not rows.
    *
-   * Every card carries the picture of the guide it links to, so the index
-   * reads as a shelf of the things the site explains rather than as a list
-   * of titles.
+   * Every card wears the badge of the calculator it explains, so the
+   * index reads as a shelf of the things the site explains rather than as
+   * a list of titles.
    */
   .guide-grid {
     display: grid;
@@ -113,14 +127,19 @@ const byGroup = groups
   }
 
   .guide-card {
+    position: relative;
+    isolation: isolate;
+    overflow: hidden;
     display: flex;
     flex-direction: column;
-    padding: var(--space-5);
+    padding: var(--space-6);
     border: 1px solid var(--border);
     border-radius: var(--radius-lg, 16px);
     background:
-      linear-gradient(180deg, var(--surface-shine) 0%, transparent 100%),
-      var(--surface);
+      radial-gradient(120% 80% at 0% 0%, var(--tile-hue, transparent) 0%, transparent 55%),
+      var(--glass);
+    -webkit-backdrop-filter: blur(16px);
+    backdrop-filter: blur(16px);
     box-shadow:
       inset 0 1px 0 0 var(--surface-shine),
       var(--shadow-sm);
@@ -135,13 +154,10 @@ const byGroup = groups
 
   .guide-card:hover {
     border-color: var(--accent-border);
-    background:
-      linear-gradient(180deg, var(--surface-shine) 0%, transparent 100%),
-      var(--surface-raised);
     box-shadow:
       inset 0 1px 0 0 var(--surface-shine),
-      var(--shadow-md);
-    transform: translateY(-2px);
+      var(--glow-accent);
+    transform: translateY(-4px);
   }
 
   .guide-card:hover .guide-card__title {

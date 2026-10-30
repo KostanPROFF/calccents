@@ -1,0 +1,29 @@
+---
+/**
+ * The badge a calculator is known by: its icon on a square of its own
+ * gradient. It is decoration, the card it sits on already names the tool,
+ * so it is hidden from screen readers.
+ */
+
+import type { ToolSlug } from '../../config/tools.ts';
+import { TOOL_GLYPHS } from './toolGlyphs.ts';
+
+interface Props {
+  slug: ToolSlug;
+  /** `lg` is the size on a calculator card, `sm` the size beside a title. */
+  size?: 'sm' | 'lg';
+}
+
+const { slug, size = 'lg' } = Astro.props;
+const glyph = TOOL_GLYPHS[slug];
+---
+
+<span
+  class:list={['glyph', `glyph--${size}`]}
+  style={`--glyph-from: ${glyph.from}; --glyph-to: ${glyph.to};`}
+  aria-hidden="true"
+>
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
+    {glyph.paths.map((d) => <path d={d} />)}
+  </svg>
+</span>

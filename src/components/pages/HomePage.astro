@@ -2,12 +2,13 @@
 import Base from '../../layouts/Base.astro';
 import AdSlot from '../AdSlot.astro';
 import Newsletter from '../Newsletter.astro';
-import HeroVisual from '../visuals/HeroVisual.astro';
-import ToolIllustration from '../visuals/ToolIllustration.astro';
+import HeroCalc from '../visuals/HeroCalc.astro';
+import ToolGlyph from '../visuals/ToolGlyph.astro';
+import { tileHue } from '../visuals/toolGlyphs.ts';
 import { getSite } from '../../config/site.ts';
 import { getTools } from '../../config/tools.ts';
 import { getUi } from '../../i18n/ui/index.ts';
-import { localePath, type Locale } from '../../i18n/locales.ts';
+import { LOCALES, localePath, type Locale } from '../../i18n/locales.ts';
 import { getGuides, guideSlug } from '../../i18n/guides.ts';
 
 interface Props {
@@ -21,6 +22,13 @@ const tools = getTools(locale);
 
 const guides = await getGuides(locale);
 const featured = guides.slice(0, 5);
+
+const stats = [
+  { value: String(tools.length), label: ui.home.statCalculators },
+  { value: String(guides.length), label: ui.home.statGuides },
+  { value: String(LOCALES.length), label: ui.home.statLanguages },
+  { value: '0', label: ui.home.statSignups },
+];
 
 const webSite = {
   '@context': 'https://schema.org',
@@ -47,39 +55,55 @@ const organization = {
   locale={locale}
   jsonLd={[webSite, organization]}
 >
-  <section class="section-sm hero-section">
+  <section class="hero-section">
+    <div class="hero-grid-bg" aria-hidden="true"></div>
     <div class="container">
       <div class="hero">
-        <div>
+        <div class="hero__copy">
           <p class="eyebrow">{ui.home.eyebrow}</p>
           <h1 class="hero__heading">
             {ui.home.heading}
           </h1>
-          <p class="page-head__lede">{ui.home.lede}</p>
-          <div style="margin-top: var(--space-8);">
-            <a class="btn btn--primary" href={localePath(locale, '/tools/')}>
-              {ui.home.cta}
+          <p class="hero__lede">{ui.home.lede}</p>
+          <div class="hero__actions">
+            <a class="btn btn--primary btn--lg" href={localePath(locale, '/tools/')}>
+              {ui.home.cta} →
+            </a>
+            <a class="btn btn--lg" href={localePath(locale, '/guides/')}>
+              {ui.nav.guides}
             </a>
           </div>
         </div>
-        <HeroVisual locale={locale} />
+        <HeroCalc locale={locale} />
       </div>
+
+      <dl class="stats-strip">
+        {
+          stats.map((stat) => (
+            <div class="stats-strip__item">
+              <dt>{stat.label}</dt>
+              <dd class="gradient-text">{stat.value}</dd>
+            </div>
+          ))
+        }
+      </dl>
     </div>
   </section>
 
   <section class="section-sm">
     <div class="container">
       <p class="eyebrow">{ui.home.calculatorsEyebrow}</p>
-      <h2 style="margin-top: var(--space-2); font-size: var(--text-2xl);">
+      <h2 class="section-heading">
         {ui.home.calculatorsHeading}
       </h2>
       <div class="grid grid--3" style="margin-top: var(--space-8);">
         {
           tools.map((tool) => (
-            <a class="tile" href={localePath(locale, `/tools/${tool.slug}/`)}>
-              <div class="tile__figure">
-                <ToolIllustration slug={tool.slug} locale={locale} />
-              </div>
+            <a class="tile" href={localePath(locale, `/tools/${tool.slug}/`)} style={tileHue(tool.slug)}>
+              <span class="tile__head">
+                <ToolGlyph slug={tool.slug} />
+                <span class="badge">{tool.category}</span>
+              </span>
               <span class="tile__title">{tool.name}</span>
               <span class="tile__text">{tool.short}</span>
               <span class="tile__meta">{ui.ui.calculate}</span>
@@ -94,7 +118,7 @@ const organization = {
     <div class="container">
       <div class="card card--raised showcase-grid">
         <div>
-          <h2 style="font-size: var(--text-2xl);">{ui.home.workHeading}</h2>
+          <h2 class="section-heading" style="margin-top: 0;">{ui.home.workHeading}</h2>
           <ul class="check-list">
             {ui.home.workPoints.map((point) => <li>{point}</li>)}
           </ul>
@@ -129,7 +153,7 @@ const organization = {
       <div class="guides-header">
         <div>
           <p class="eyebrow">{ui.home.guidesEyebrow}</p>
-          <h2 style="margin-top: var(--space-2); font-size: var(--text-2xl);">
+          <h2 class="section-heading">
             {ui.home.guidesHeading}
           </h2>
         </div>
@@ -157,8 +181,8 @@ const organization = {
 
   <section class="section-sm">
     <div class="container" style="max-width: 720px;">
-      <div class="card">
-        <h2 style="font-size: var(--text-xl);">{ui.home.newsletterHeading}</h2>
+      <div class="card card--raised newsletter-card">
+        <h2 style="font-size: var(--text-2xl);">{ui.home.newsletterHeading}</h2>
         <p class="text-secondary" style="margin-top: var(--space-2);">
           {ui.home.newsletterLede}
         </p>
@@ -172,32 +196,137 @@ const organization = {
 
 <style>
   .hero-section {
-    padding-top: var(--space-12);
-    padding-bottom: var(--space-10);
+    position: relative;
+    isolation: isolate;
+    padding-block: var(--space-16) var(--space-12);
+    overflow: hidden;
+  }
+
+  /* A faint grid that fades out towards the edges of the hero. */
+  .hero-grid-bg {
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background-image:
+      linear-gradient(var(--border-subtle) 1px, transparent 1px),
+      linear-gradient(90deg, var(--border-subtle) 1px, transparent 1px);
+    background-size: 56px 56px;
+    -webkit-mask-image: radial-gradient(ellipse 70% 60% at 50% 30%, #000 0%, transparent 75%);
+    mask-image: radial-gradient(ellipse 70% 60% at 50% 30%, #000 0%, transparent 75%);
+    opacity: 0.7;
   }
 
   .hero {
     display: grid;
-    grid-template-columns: minmax(0, 1.08fr) minmax(0, 0.92fr);
-    gap: var(--space-10);
+    grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.9fr);
+    gap: var(--space-12);
     align-items: center;
   }
 
   .hero__heading {
-    margin-top: var(--space-4);
-    font-size: clamp(2.4rem, 4.6vw, 3.4rem);
-    letter-spacing: -0.04em;
-    line-height: 1.05;
-    background: linear-gradient(135deg, var(--text) 0%, var(--accent-ink-strong) 100%);
+    margin-top: var(--space-6);
+    font-size: clamp(2.75rem, 6vw, 4.75rem);
+    font-weight: 800;
+    letter-spacing: -0.055em;
+    line-height: 0.98;
+    background: var(--gradient-heading);
     -webkit-background-clip: text;
     background-clip: text;
     -webkit-text-fill-color: transparent;
   }
 
+  .hero__lede {
+    margin-top: var(--space-6);
+    max-width: 52ch;
+    color: var(--text-secondary);
+    font-size: var(--text-lg);
+    line-height: 1.6;
+  }
+
+  .hero__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-3);
+    margin-top: var(--space-8);
+  }
+
+  .stats-strip {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    margin-top: var(--space-16);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    background: var(--glass);
+    -webkit-backdrop-filter: blur(16px);
+    backdrop-filter: blur(16px);
+    overflow: hidden;
+  }
+
+  .stats-strip__item {
+    display: flex;
+    flex-direction: column-reverse;
+    gap: var(--space-1);
+    padding: var(--space-5) var(--space-6);
+    border-left: 1px solid var(--border);
+  }
+
+  .stats-strip__item:first-child {
+    border-left: 0;
+  }
+
+  .stats-strip dd {
+    margin: 0;
+    font-size: clamp(2rem, 3.4vw, 2.75rem);
+    font-weight: 800;
+    letter-spacing: -0.05em;
+    line-height: 1;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .stats-strip dt {
+    color: var(--text-secondary);
+    font-size: var(--text-sm);
+  }
+
+  .section-heading {
+    margin-top: var(--space-4);
+    font-size: clamp(1.9rem, 3.4vw, 2.6rem);
+    font-weight: 780;
+    letter-spacing: -0.045em;
+    line-height: 1.05;
+  }
+
+  .newsletter-card {
+    padding: var(--space-10);
+    text-align: center;
+  }
+
   @media (max-width: 940px) {
     .hero {
       grid-template-columns: 1fr;
-      gap: var(--space-8);
+      gap: var(--space-10);
+    }
+
+    .stats-strip {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .stats-strip__item:nth-child(3) {
+      border-left: 0;
+    }
+
+    .stats-strip__item:nth-child(n + 3) {
+      border-top: 1px solid var(--border);
+    }
+  }
+
+  @media (max-width: 560px) {
+    .hero-section {
+      padding-top: var(--space-10);
+    }
+
+    .newsletter-card {
+      padding: var(--space-6);
     }
   }
 
@@ -213,7 +342,9 @@ const organization = {
     margin-top: var(--space-6);
     border: 1px solid var(--border);
     border-radius: var(--radius-lg);
-    background: var(--surface);
+    background: var(--glass);
+    -webkit-backdrop-filter: blur(16px);
+    backdrop-filter: blur(16px);
     overflow: hidden;
     box-shadow: var(--shadow-sm);
   }
@@ -223,7 +354,7 @@ const organization = {
     align-items: center;
     justify-content: space-between;
     gap: var(--space-6);
-    padding: var(--space-4) var(--space-5);
+    padding: var(--space-5) var(--space-6);
     border-bottom: 1px solid var(--border-subtle);
     text-decoration: none;
     color: inherit;
