@@ -187,7 +187,13 @@ const copy = ui.tool['mortgage-payment'];
 <script>
   import { buildAmortization } from '../../lib/calc/mortgage.ts';
   import { formatCurrency, formatMonthYear, formatNumber } from '../../lib/calc/money.ts';
-  import { currentMonthValue, monthValue, numberValue, setText } from '../../lib/client/dom.ts';
+  import {
+    currentMonthValue,
+    fillTableBody,
+    monthValue,
+    numberValue,
+    setText,
+  } from '../../lib/client/dom.ts';
   import { renderChart } from '../../lib/client/chartView.ts';
 
   const locale =
@@ -270,14 +276,15 @@ const copy = ui.tool['mortgage-payment'];
 
     const body = document.getElementById('amortization-body');
     if (body) {
-      body.innerHTML = result.yearly
-        .map(
-          (row) =>
-            `<tr><td>${row.year}</td><td>${formatCurrency(row.principalPaid)}</td>` +
-            `<td>${formatCurrency(row.interestPaid)}</td>` +
-            `<td>${formatNumber(row.yearEndBalance)}</td></tr>`,
-        )
-        .join('');
+      fillTableBody(
+        body,
+        result.yearly.map((row) => [
+          String(row.year),
+          formatCurrency(row.principalPaid),
+          formatCurrency(row.interestPaid),
+          formatNumber(row.yearEndBalance),
+        ]),
+      );
     }
   }
 
