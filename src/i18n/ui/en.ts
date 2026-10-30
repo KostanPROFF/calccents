@@ -252,7 +252,7 @@ export const en = {
     lede: '{name} publishes financial calculators and the explanations behind them. It is a small site with a narrow purpose: produce a number you can check, and show you the working that produced it.',
     isHeading: 'What this site is',
     isBody: [
-      'Three calculators, fifteen guides, and the primary sources behind both. The calculators take numbers you supply and apply a published formula: the amortization formula for a mortgage, a month-by-month cash comparison for renting against buying, and the compound interest formula for a savings balance.',
+      'Six calculators, eighteen guides, and the primary sources behind them. The calculators take numbers you supply and apply a published formula: the amortization formula for a mortgage, a month-by-month cash comparison for renting against buying, the compound interest formula for a savings balance, and the arithmetic of paying off debt, income tax and take-home pay.',
       'The site is funded by display advertising. That shapes how it is built. Pages load quickly and carry little JavaScript, because a page that loads fast keeps the reader long enough to see the advertising, and because a page that loads fast is the one people come back to. No calculator asks for an email address, and no result is gated.',
     ],
     isNotHeading: 'What this site is not',
@@ -281,15 +281,15 @@ export const en = {
     ],
     whoHeading: 'Who runs this',
     whoBody:
-      '{name}. {bio} {reviewerName} reads the financial content of the guides before they are published. The editorial page sets out what the review checks before a page goes live, and the code is public — the formulas, the unit tests and the checks that block a release with a broken page.',
+      '{name}. {bio} {reviewerName} reads the financial content of the guides before they are published. The {whoEditorialLink} sets out what the review checks before a page goes live, and {whoCodeLink}: the formulas, the unit tests and the checks that block a release with a broken page.',
     whoEditorialLink: 'editorial page',
-    whoCodeLink: 'code is public',
+    whoCodeLink: 'the code is public',
     howHeading: 'How the calculators work',
     howBody:
       'The arithmetic runs in your browser. There is no server that receives the numbers you type, and nothing about a calculation is sent to anyone. The formulas are implemented once, in one place, and covered by unit tests that check them against known published loan figures and against the invariants the mathematics requires — that a schedule sums to the amount borrowed, that a loan closes at exactly zero, that an interest-free balance grows by the deposits alone.',
     correctionsHeading: 'Corrections',
     correctionsBody:
-      'If a figure is wrong, a source link is dead or a page contradicts itself, that is a defect and it should be fixed. The contact page says how to report one, and every correction results in a changed review date rather than a silent edit.',
+      'If a figure is wrong, a source link is dead or a page contradicts itself, that is a defect and it should be fixed. The {contactLink} says how to report one, and every correction results in a changed review date rather than a silent edit.',
     contactLink: 'contact page',
   },
 

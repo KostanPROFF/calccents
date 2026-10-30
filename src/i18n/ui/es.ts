@@ -217,7 +217,7 @@ export const es = {
     lede: '{name} publica calculadoras financieras y las explicaciones que hay detrás de ellas. Es un sitio pequeño con un propósito concreto: producir una cifra que puedas comprobar y mostrarte la cuenta que la produjo.',
     isHeading: 'Qué es este sitio',
     isBody: [
-      'Tres calculadoras, quince guías y las fuentes primarias de ambas. Las calculadoras toman los números que introduces y aplican una fórmula publicada: la fórmula de amortización de una hipoteca, una comparación de efectivo mes a mes entre alquiler y compra y la fórmula del interés compuesto para un saldo de ahorro.',
+      'Seis calculadoras, dieciocho guías y las fuentes primarias en las que se basan. Las calculadoras toman los números que introduces y aplican una fórmula publicada: la fórmula de amortización de una hipoteca, una comparación de efectivo mes a mes entre alquiler y compra, la fórmula del interés compuesto para un saldo de ahorro y los cálculos de pago de deudas, impuesto sobre la renta y salario neto.',
       'El sitio se financia con publicidad gráfica. Eso condiciona cómo está construido. Las páginas cargan rápido y llevan poco JavaScript, porque una página que carga rápido retiene al lector el tiempo suficiente para ver la publicidad, y porque una página que carga rápido es a la que la gente vuelve. Ninguna calculadora pide una dirección de correo, y ningún resultado está bloqueado.',
     ],
     isNotHeading: 'Qué no es este sitio',
@@ -246,7 +246,7 @@ export const es = {
     ],
     whoHeading: 'Quién lo lleva',
     whoBody:
-      '{name}. {bio} {reviewerName} lee la parte financiera de las guías antes de publicarlas. La página editorial expone lo que comprueba la revisión antes de publicar una página, y el código es público: las fórmulas, las pruebas unitarias y las comprobaciones que bloquean una publicación con una página rota.',
+      '{name}. {bio} {reviewerName} lee la parte financiera de las guías antes de publicarlas. La {whoEditorialLink} expone lo que comprueba la revisión antes de publicar una página, y {whoCodeLink}: las fórmulas, las pruebas unitarias y las comprobaciones que bloquean una publicación con una página rota.',
     whoEditorialLink: 'página editorial',
     whoCodeLink: 'el código es público',
     howHeading: 'Cómo funcionan las calculadoras',
@@ -254,7 +254,7 @@ export const es = {
       'La aritmética se ejecuta en tu navegador. No hay ningún servidor que reciba los números que escribes, y nada de un cálculo se envía a nadie. Las fórmulas se implementan una sola vez, en un solo sitio, y están cubiertas por pruebas unitarias que las contrastan con cifras de préstamos publicadas y conocidas y con los invariantes que exige la matemática: que un cuadro de amortización sume la cantidad prestada, que un préstamo cierre exactamente en cero, que un saldo sin intereses crezca solo con los depósitos.',
     correctionsHeading: 'Correcciones',
     correctionsBody:
-      'Si una cifra está mal, un enlace de fuente está roto o una página se contradice, eso es un defecto y el sitio lo corrige. La página de contacto explica cómo comunicarlo, y cada corrección se traduce en una fecha de revisión nueva y no en una edición silenciosa.',
+      'Si una cifra está mal, un enlace de fuente está roto o una página se contradice, eso es un defecto y el sitio lo corrige. La {contactLink} explica cómo comunicarlo, y cada corrección se traduce en una fecha de revisión nueva y no en una edición silenciosa.',
     contactLink: 'página de contacto',
   },
 
