@@ -1,0 +1,144 @@
+---
+title: "Taxa e prazo do financiamento: as trocas"
+description: "Como a taxa e o prazo movem juntos a parcela, quanto um prazo mais curto custa na parcela mensal e economiza no total, e como ler essa troca."
+locale: "pt"
+date: 2026-10-12
+lastReviewed: 2026-10-23
+author: "Kostan Proff"
+reviewedBy: "Tetiana Goncharko"
+group: "home"
+illustration: "mortgage-rate-and-term-tradeoffs"
+readingMinutes: 7
+sources:
+  - label: "Freddie Mac — Primary Mortgage Market Survey"
+    url: "https://www.freddiemac.com/pmms"
+  - label: "CFPB — Cálculo da parcela do financiamento"
+    url: "https://www.consumerfinance.gov/ask-cfpb/"
+  - label: "Fannie Mae — Pesquisas e análises"
+    url: "https://www.fanniemae.com/research-and-insights"
+relatedTools:
+  - "mortgage-payment"
+faq:
+  - q: "Por que um prazo mais curto custa tanto a mais por mês?"
+    a: "Porque o saldo cai mais rápido, então há menos tempo para os juros se acumularem sobre ele. A parcela sobe e os juros totais caem, e o tamanho do movimento depende da taxa."
+  - q: "Quanto o prazo muda o total?"
+    a: "Muito, num empréstimo de 30 anos. Passar de 30 para 15 anos normalmente remove cerca de metade dos juros totais. Num empréstimo de 15 anos, o prazo restante é uma fração menor do saldo original e o efeito é proporcionalmente menor."
+  - q: "A taxa importa mais que o prazo?"
+    a: "Num empréstimo longo, uma mudança de um ponto percentual na taxa vale mais que uma mudança de cinco anos no prazo. Num empréstimo curto, o efeito do prazo cresce e o da taxa diminui, porque há menos tempo para qualquer um se acumular."
+  - q: "O que é um buydown de taxa?"
+    a: "Uma redução temporária da taxa no primeiro ou nos dois primeiros anos do empréstimo, com a diferença paga no fechamento ou embutida na taxa depois. Muda as primeiras parcelas, e não o formato do empréstimo."
+  - q: "Pagar um ponto para reduzir a taxa compensa?"
+    a: "É um cálculo de ponto de equilíbrio. O ponto precisa ser recuperado pela redução da taxa dentro do período em que você mantém o empréstimo, e a aritmética é simples de rodar na calculadora de parcela."
+  - q: "Faz sentido modelar uma taxa ajustável?"
+    a: "Uma taxa ajustável tem uma taxa inicial e um cronograma, e a parcela se move com o índice. As calculadoras deste site modelam taxas fixas, porque uma projeção com taxa fixa é uma projeção, e uma com taxa ajustável é um conjunto de cenários."
+---
+
+import GuideIllustration from '../../../components/visuals/GuideIllustration.astro';
+
+Um financiamento tem dois botões que movem a parcela, e eles puxam em sentidos
+opostos quando você olha para o custo total. A taxa e o prazo precisam ser
+lidos juntos, porque o efeito de um depende de onde o outro está.
+
+A <a href="/pt/tools/mortgage-payment/">calculadora de financiamento</a> tem
+os dois campos exatamente por isso: mude um, deixe o outro, e o resultado
+mostra o tamanho da troca.
+
+## Taxa e prazo movem a parcela juntos
+
+**Uma taxa menor baixa a parcela.** Diretamente e imediatamente, em todas as
+parcelas do empréstimo.
+
+**Um prazo maior baixa a parcela.** Também diretamente, e pelo mesmo motivo: o
+saldo é pago mais devagar, então menos juros são cobrados por ano.
+
+Os dois baixam a parcela, e os dois aumentam o custo total. Esse é o formato da
+troca: o número mensal e o número da vida inteira se movem em sentidos
+opostos.
+
+
+<div class="guide-inline-figure">
+  <GuideIllustration slug="monthly-payment-vs-total-cost-mortgage" locale={frontmatter.locale} />
+</div>
+## Os números de um empréstimo típico
+
+Pegue $360,000 a 6,5 por cento.
+
+| Prazo | Principal e juros mensais | Juros totais |
+|---|---|---|
+| 30 anos | $1,986 | cerca de $355,000 |
+| 20 anos | $2,528 | cerca de $246,000 |
+| 15 anos | $3,108 | cerca de $201,000 |
+
+Passar de 30 para 15 anos aumenta a parcela em 56 por cento e remove cerca de
+43 por cento dos juros. A assimetria é o ponto: encurtar o prazo custa muito
+em parcela mensal e economiza uma quantidade moderada de juros totais.
+
+## O efeito da taxa é maior num empréstimo longo
+
+Mude a taxa nos mesmos $360,000 e o efeito depende do prazo.
+
+Em 30 anos, passar de 6,5 para 7,5 por cento muda a parcela mensal em cerca de
+$90 e os juros totais em cerca de $60,000. Em 15 anos, a mesma mudança de taxa
+move a parcela em cerca de $110 e os juros totais em cerca de $30,000.
+
+A taxa atua sobre o saldo enquanto ele estiver em aberto. Um empréstimo longo
+mantém o saldo em aberto por duas vezes mais tempo, então a mesma diferença de
+taxa tem o dobro de espaço para agir.
+
+Ou seja, os dois botões não têm a mesma força em qualquer posição. Num
+empréstimo de trinta anos, a taxa domina. Num de quinze, o prazo é
+comparativamente mais importante. A regra prática — um ponto percentual de
+taxa vale mais que cinco anos de prazo — vale para os empréstimos longos que a
+maioria das pessoas faz.
+
+
+<div class="guide-inline-figure">
+  <GuideIllustration slug="understanding-apr" locale={frontmatter.locale} />
+</div>
+## Por que a primeira década decide o total
+
+Um empréstimo de 30 anos passa a primeira década com um saldo que mal se move,
+e essa década é onde quase todos os juros são cobrados. Por isso a mudança de
+prazo acima parece tão dramática: encurtar o prazo não só reduz o ritmo de
+cobrança dos juros, mas remove anos do início do empréstimo, onde o saldo é
+mais alto.
+
+É também por isso que um pagamento extra tem tanto efeito. Ele reduz o saldo
+sobre o qual incidem os juros do mês seguinte, e faz isso cedo, quando o saldo
+é maior.
+
+## Pontos, buydowns e o formato do início do empréstimo
+
+Dois recursos comuns mudam as primeiras parcelas sem mudar o empréstimo em si.
+
+Um **ponto de desconto** é um por cento do valor do empréstimo pago no
+fechamento por uma taxa menor. A troca tem um período de equilíbrio, e a
+aritmética consiste em comparar a tarifa com a diferença de juros totais no
+período em que o empréstimo é mantido.
+
+Um **buydown de taxa** reduz a taxa no primeiro ou nos dois primeiros anos e
+depois volta, normalmente ao índice mais uma margem. Ele muda as primeiras
+parcelas, não o formato do empréstimo, e vale ser modelado à parte, e não como
+uma taxa.
+
+## Lendo o contexto de mercado
+
+A Primary Mortgage Market Survey da Freddie Mac publica a série de taxas mais
+usada como referência, e as páginas de pesquisa da Fannie Mae trazem os
+comentários equivalentes sobre o mercado de financiamento. Nenhuma delas é uma
+cotação para um tomador específico.
+
+As taxas deste site não estão ligadas a nenhum dado de mercado. O número que
+você digita é o número usado, constante por todo o prazo, o que faz da
+comparação entre duas taxas uma comparação aritmética limpa, e não uma
+previsão.
+
+## A comparação que vale fazer
+
+Coloque as duas opções na calculadora com todo o resto idêntico e leia quatro
+números: a parcela mensal, os juros totais, o custo total de moradia e a data
+de quitação. Depois rode cada uma com um pagamento extra, porque o prazo e a
+taxa mudam quanto vale um pagamento extra.
+
+Essa é a decisão inteira expressa em aritmética. Quanto ela vale numa vida
+específica é outra pergunta, e nenhuma calculadora consegue respondê-la.

@@ -1,0 +1,215 @@
+---
+title: "Como o salário líquido é calculado"
+description: "A ordem em que o dinheiro sai do salário: descontos antes do imposto, faixas federais de 2026, Social Security, Medicare, imposto estadual, alíquota efetiva e marginal."
+locale: "pt"
+date: 2026-10-23
+lastReviewed: 2026-10-23
+author: "Kostan Proff"
+reviewedBy: "Tetiana Goncharko"
+group: "home"
+illustration: "net-pay-calculator-explained"
+readingMinutes: 8
+sources:
+  - label: "IRS — Rev. Proc. 2025-32, ajustes pela inflação para 2026"
+    url: "https://www.irs.gov/irb/2025-45_IRB"
+  - label: "Social Security Administration — teto salarial e COLA de 2026"
+    url: "https://www.ssa.gov/cola/"
+  - label: "Social Security Administration — Publication 15, guia tributário do empregador"
+    url: "https://www.ssa.gov/pubs/EN-05-10035.pdf"
+  - label: "IRS — Tax Topic 511, retenção na fonte"
+    url: "https://www.irs.gov/taxtopics/tc511"
+  - label: "IRS — Tax Topic 401, salários e ordenados"
+    url: "https://www.irs.gov/taxtopics/tc401"
+  - label: "Social Security Administration — POMS RS 01402.038, planos de saúde com benefício fiscal"
+    url: "https://secure.ssa.gov/poms.nsf/lnx/0301402038"
+relatedTools:
+  - "net-pay"
+faq:
+  - q: "Por que o líquido não é o bruto menos uma única alíquota?"
+    a: "Porque mais de uma alíquota se aplica, e cada uma sobre uma base diferente. O imposto de renda federal é progressivo, então a alíquota sobe com a renda tributável. Social Security e Medicare são alíquotas fixas sobre o salário, cada uma com o seu teto. O resultado é um número que nenhuma porcentagem única descreve, e a calculadora mostra os componentes separadamente."
+  - q: "Por que a alíquota efetiva é menor que a marginal?"
+    a: "A alíquota marginal é a que incide sobre o próximo dólar de renda tributável, então fica na faixa que a renda alcançou. A efetiva divide o imposto total pelo salário bruto inteiro, e a maior parte desse bruto é tributada a alíquotas menores ou nem é tributada, porque a dedução padrão e os descontos antes do imposto saem primeiro."
+  - q: "Uma contribuição para 401(k) reduz os impostos sobre o resto do salário?"
+    a: "Ela reduz o imposto de renda federal, e não os impostos sobre a folha. O IRS exclui a contribuição para 401(k) ou 403(b) da renda, mas ainda a conta como salário para Social Security e Medicare, então esses dois impostos incidem sobre ela. Uma contribuição para HSA ou FSA descontada do contracheque é diferente: ela sai também da base dos impostos sobre a folha. Por isso a calculadora recebe as duas separadamente."
+  - q: "Quando começa o imposto adicional do Medicare?"
+    a: "Em salários acima de $200,000 para solteiro, casado com declaração separada ou chefe de família, e acima de $250,000 para casados com declaração conjunta. A alíquota é 0,9% sobre o excedente, e esses limites não são corrigidos pela inflação, então estão iguais desde 2013."
+  - q: "Como um valor por hora vira um ano de salário?"
+    a: "A calculadora multiplica o valor por 2.080 horas, que são 40 horas semanais ao longo de 52 semanas. Faz o mesmo com os outros períodos: 12 meses, 52 semanas e 260 dias úteis. São convenções, e não direitos, e quem é pago por outro número pode trabalhar com o seu."
+  - q: "Por que o imposto estadual difere do que o estado arrecada?"
+    a: "A calculadora aplica uma única alíquota a toda a renda tributável. A maioria dos estados tem alíquotas progressivas, então uma porcentagem única superestima o que um estado progressivo levaria e coincide exatamente com um estado de alíquota única. A alíquota informada na página é o único dado específico do estado em todo o cálculo."
+  - q: "Isto mostra o que é retido em cada contracheque?"
+    a: "Não. Este é o imposto do ano, calculado com números anuais. A retenção é o que o empregador envia ao IRS durante o ano, e é definida pelo método do formulário W-4, então o valor de um único contracheque pode diferir de um doze avos do número anual."
+---
+
+import GuideIllustration from '../../../components/visuals/GuideIllustration.astro';
+
+Um contracheque traz um número. A carta de oferta traz outro, e a distância
+entre eles é feita de uma lista curta de regras que podem ser escritas com
+exatidão.
+
+A <a href="/pt/tools/net-pay/">calculadora de salário líquido</a> percorre
+essas regras na ordem em que se aplicam a um salário, com os números do ano
+fiscal de 2026.
+
+## A ordem em que o dinheiro sai
+
+Um salário chega como um único valor bruto. A partir daí o dinheiro sai numa
+sequência fixa.
+
+1. Os descontos antes do imposto saem primeiro. Uma contribuição para 401(k),
+   para HSA e para FSA são retiradas do salário antes de qualquer outra coisa.
+   O que cada uma faz com os impostos não é igual, e a seção abaixo explica
+   qual é qual.
+2. A dedução padrão sai do salário restante. Para 2026 ela é de $16,100 para
+   solteiro, $32,200 para casados com declaração conjunta e $24,150 para chefe
+   de família. O que sobra é a renda tributável, e é sobre esse valor que as
+   faixas federais se aplicam.
+3. O imposto de renda federal é calculado sobre a renda tributável.
+4. O Social Security é cobrado a 6,2% sobre o salário, até o teto tributável
+   de $184,500 em 2026.
+5. O Medicare é cobrado a 1,45% sobre todo o salário, sem teto.
+6. O imposto adicional do Medicare é cobrado a 0,9% sobre o salário acima do
+   limite da situação de declaração.
+7. O imposto de renda estadual é aplicado à alíquota informada na página.
+
+O que sobrevive a esses passos é o valor líquido, e a calculadora o divide
+pelo número de períodos no ano para obter o valor por período.
+
+O salário sobre o qual incidem os impostos da folha é o que sobra depois de
+uma contribuição para HSA ou FSA e antes da dedução padrão. Uma contribuição
+para 401(k) continua dentro dessa base. A distinção importa: a dedução padrão
+reduz o imposto de renda federal e o estadual, enquanto Social Security e
+Medicare incidem sobre a base maior.
+
+## Os dois descontos antes do imposto não são iguais
+
+O IRS exclui a contribuição para 401(k) da renda e conta a mesma contribuição
+como salário para Social Security e Medicare. O IRS Tax Topic 401 diz isso
+claramente: o valor não entra no salário sujeito ao imposto de renda, mas
+continua sujeito aos impostos de Social Security e Medicare no ano em que é
+retido. A Publication 525 diz o mesmo sobre as contribuições diferidas.
+
+A contribuição para HSA ou FSA é o outro caso. Quando sai do contracheque por
+um plano cafeteria da seção 125, ela é excluída da renda e também não é
+salário para o Social Security. O manual da SSA, RS 01402.038, afirma isso
+diretamente: a contribuição do empregado para uma FSA por meio de um acordo
+qualificado de redução salarial não é salário para fins de Social Security, e
+uma contribuição para HSA feita assim também não.
+
+Por isso a calculadora tem dois campos para os dois casos:
+
+- uma contribuição para 401(k) ou 403(b) reduz o imposto de renda federal e
+  deixa Social Security e Medicare como estão;
+- uma contribuição para HSA ou FSA reduz o imposto de renda federal e também
+  os impostos sobre a folha.
+
+O segundo caso tem uma exceção que vale conhecer: uma contribuição para HSA
+feita direto de uma conta bancária, e não do contracheque, é salário para o
+Social Security. A calculadora trata a contribuição como redução salarial,
+porque é esse arranjo que produz a isenção.
+
+
+<div class="guide-inline-figure">
+  <GuideIllustration slug="income-tax-calculator-explained" locale={frontmatter.locale} />
+</div>
+## As faixas federais
+
+O imposto de renda federal não é uma alíquota única. Para 2026, a renda
+tributável de um solteiro cai nestas faixas:
+
+- 10% sobre os primeiros $12,400
+- 12% de $12,400 a $50,400
+- 22% de $50,400 a $105,700
+- 24% de $105,700 a $201,775
+- 32% de $201,775 a $256,225
+- 35% de $256,225 a $640,600
+- 37% acima de $640,600
+
+O IRS publica cada faixa como um valor fixo de imposto mais uma porcentagem do
+excedente sobre o piso da faixa, e a calculadora faz o mesmo. Um solteiro com
+$50,400 de renda tributável deve $1,240, que é o imposto no piso da faixa de
+12%, e nada mais. Com $60,000, o mesmo contribuinte deve $1,240 mais 12% dos
+$9,600 acima de $50,400, o que dá $2,392.
+
+Essas faixas e a dedução padrão vêm do Rev. Proc. 2025-32, publicado no
+Internal Revenue Bulletin 2025-45 em 3 de novembro de 2025.
+
+## Social Security, Medicare e a alíquota estadual
+
+O Social Security é uma cobrança de 6,2% sobre o salário até um teto
+tributável, que é de $184,500 em 2026. O salário acima desse teto não é
+cobrado de novo, o que significa que a alíquota marginal do Social Security é
+6,2% até o teto e zero acima dele.
+
+O Medicare é uma cobrança de 1,45% sobre todo o salário, sem teto algum. Por
+cima dele vem o imposto adicional do Medicare: 0,9% sobre o salário acima de
+$200,000 para solteiro, casado com declaração separada ou chefe de família, e
+acima de $250,000 para casados com declaração conjunta. Esses limites não são
+corrigidos pela inflação, então continuam nos mesmos números desde 2013. A
+Publication 15 da Social Security Administration traz as alíquotas e os
+limites.
+
+O imposto de renda estadual da calculadora é a alíquota informada na página,
+aplicada à renda tributável. É uma simplificação, e proposital: a maioria dos
+estados tributa com alíquotas progressivas, então uma porcentagem única
+aplicada a toda a renda tributável fica acima do que um estado progressivo
+arrecadaria e coincide exatamente com um estado de alíquota única. A alíquota
+da página é o único dado específico do estado no cálculo.
+
+
+<div class="guide-inline-figure">
+  <GuideIllustration slug="debt-payoff-calculator-explained" locale={frontmatter.locale} />
+</div>
+## Por que a alíquota efetiva fica abaixo da marginal
+
+As duas alíquotas dos resultados respondem a perguntas diferentes. A marginal é
+a que incide sobre o próximo dólar de renda tributável, então pertence à faixa
+que a renda já alcançou. A efetiva divide o imposto total por todo o salário
+bruto, então mistura todas as faixas que a renda tocou, a parte do bruto que
+nunca foi tributada e os descontos que saíram antes do cálculo do imposto.
+
+Pegue um solteiro com $60,000 de salário bruto, sem descontos antes do imposto
+e com alíquota estadual de 5%. O imposto total é $11,805: $5,020 federal,
+$3,720 de Social Security, $870 de Medicare e $2,195 estadual. A alíquota
+efetiva é 19,68%. A marginal é 12%, porque a renda tributável de $43,900 fica
+na faixa de 12%. A maior parte desses $60,000 foi tributada a 10% ou a 12%, e
+$16,100 não foram tributados, então a média fica abaixo da alíquota que o
+próximo dólar encontraria.
+
+Somar uma contribuição de $5,000 para 401(k) ao mesmo caso mostra o efeito
+pelo outro lado, e mostra por que os dois descontos são informados
+separadamente. O salário tributável cai para $55,000 e o imposto federal para
+$4,420, mas o Social Security continua em $3,720 e o Medicare em $870, porque a
+contribuição ainda é salário para os impostos da folha. O imposto estadual cai
+para $1,945, o imposto total para $10,955 e a alíquota efetiva para 18,26%. O
+líquido também cai, porque os $5,000 saíram do salário antes do cálculo dos
+impostos.
+
+Uma contribuição de $5,000 para HSA ou FSA no mesmo caso vai mais longe. O
+imposto federal é o mesmo, $4,420, e desta vez os impostos da folha também se
+movem: o Social Security cai para $3,410 e o Medicare para $797.50. O imposto
+total é $10,572.50, a alíquota efetiva 17,62% e o líquido $44,427.50, contra
+$44,045.00 com o 401(k).
+
+## O que o cálculo deixa de fora
+
+O número da página é o imposto do ano, calculado com números anuais. Várias
+coisas ficam fora dele.
+
+- **Créditos.** Nenhum crédito tributário é aplicado, então o imposto mostrado
+  é a obrigação antes dos créditos.
+- **Deduções detalhadas.** É usada a dedução padrão, e a calculadora não
+  modela uma dedução que depende do que o leitor realmente pagou.
+- **Impostos locais.** Impostos de renda municipais, de condado e de distrito
+  escolar não fazem parte dele.
+- **Retenção por contracheque.** A retenção é definida no W-4 e é o que o
+  empregador repassa durante o ano, então um contracheque pode diferir de um
+  doze avos do total anual. O IRS Tax Topic 511 descreve como a retenção é
+  calculada.
+- **Benefícios fora do salário.** Uma contribuição do empregador para plano de
+  saúde ou de aposentadoria não aparece no salário bruto que o leitor digita,
+  então também não aparece no resultado.
+- **Limites de contribuição.** Os limites anuais das contribuições para 401(k)
+  e HSA não são verificados. Uma contribuição do tamanho de todo o salário
+  deixa o líquido abaixo de zero, porque os impostos da folha continuam
+  incidindo sobre ela.

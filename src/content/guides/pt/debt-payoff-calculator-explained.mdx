@@ -1,0 +1,146 @@
+---
+title: "Quitação de dívidas: avalanche e bola de neve"
+description: "Como a calculadora de quitação modela várias dívidas ao mesmo tempo, em que diferem as ordens avalanche e bola de neve e o que a comparação entre elas mede."
+locale: "pt"
+date: 2026-10-23
+lastReviewed: 2026-10-23
+author: "Kostan Proff"
+reviewedBy: "Tetiana Goncharko"
+group: "home"
+illustration: "debt-payoff-calculator-explained"
+readingMinutes: 8
+sources:
+  - label: "CFPB — Ask CFPB, perguntas e respostas para consumidores"
+    url: "https://www.consumerfinance.gov/ask-cfpb/"
+  - label: "CFPB — Ferramentas e orientações sobre cartões de crédito"
+    url: "https://www.consumerfinance.gov/consumer-tools/credit-cards/"
+relatedTools:
+  - "debt-payoff"
+faq:
+  - q: "O que a calculadora de quitação compara?"
+    a: "Três simulações com as mesmas dívidas: só os pagamentos mínimos, a ordem avalanche com o pagamento extra e a ordem bola de neve com o mesmo pagamento extra. Para cada uma, informa os meses até ficar sem dívidas, os juros totais pagos e os juros economizados em relação à simulação só com mínimos."
+  - q: "Qual ordem custa menos em juros?"
+    a: "A avalanche, que coloca o dinheiro extra primeiro na maior taxa de juros. A calculadora mostra a diferença entre as duas ordens como um valor em dólares, e não como um veredito, porque o tamanho dessa diferença depende dos saldos e das taxas informados."
+  - q: "Qual ordem quita a primeira dívida antes?"
+    a: "A bola de neve, que começa pelo menor saldo. O mês em que cada dívida é quitada aparece separadamente para cada ordem, então a primeira conta a chegar a zero fica visível nos resultados."
+  - q: "Os juros são cobrados por dia ou por mês?"
+    a: "Por mês, sobre o saldo no início do mês. Muitos cartões de crédito acumulam e capitalizam juros diariamente, e a calculadora não modela essa diferença."
+  - q: "O que acontece quando uma dívida é quitada?"
+    a: "Ela deixa de receber o seu pagamento mínimo, e esse valor se junta ao dinheiro disponível para as dívidas ainda abertas. É isso que faz uma ordem de quitação acelerar conforme os saldos menores desaparecem."
+  - q: "O que faz o campo de pagamento extra?"
+    a: "Ele soma um valor mensal à soma dos pagamentos mínimos, e a calculadora o aplica à dívida para a qual a ordem escolhida aponta. A comparação das três simulações mantém o pagamento extra constante para que só a ordem mude."
+  - q: "Multas por atraso e efeitos fiscais estão incluídos?"
+    a: "Não. Multas por atraso, tarifas de transferência de saldo e o tratamento fiscal de juros dedutíveis ficam fora do modelo."
+---
+
+import GuideIllustration from '../../../components/visuals/GuideIllustration.astro';
+
+Várias dívidas ao mesmo tempo não se somam como um saldo único. Um cartão a 18%
+e um empréstimo pessoal a 7% recebem um pagamento todo mês, e a ordem em que
+esses pagamentos são aplicados muda quanto o mesmo dinheiro custa em juros. A
+<a href="/pt/tools/debt-payoff/">calculadora de quitação de dívidas</a> faz
+essa comparação diretamente.
+
+## O modelo mês a mês
+
+A calculadora simula as dívidas um mês de cada vez, e os passos da simulação
+são os mesmos todo mês.
+
+Os juros do mês incidem sobre o saldo no início do mês e são somados a ele. Um
+saldo de $10,000 a 18% carrega $150 de juros no mês, e o saldo a enfrentar é
+$10,150.
+
+O dinheiro disponível no mês é a soma de todos os pagamentos mínimos mais o
+pagamento extra informado. Toda dívida que ainda tem saldo recebe o próprio
+pagamento mínimo, e esse pagamento cobre primeiro os próprios juros e depois o
+principal. O que sobra do dinheiro do mês — o pagamento extra e os mínimos das
+dívidas já quitadas — vai para a dívida que a ordem escolhida aponta.
+
+Quando uma dívida chega a zero, ela deixa de receber pagamento mínimo, e esse
+mínimo se junta ao dinheiro disponível para as dívidas ainda abertas. Um mínimo
+de $200 que vira $200 de principal extra é o que faz uma ordem de quitação
+acelerar, em vez de apenas reorganizar os pagamentos.
+
+Uma dívida só mostra a mesma aritmética na forma mais simples. Um saldo de
+$10,000 a 18% com pagamento mínimo de $200 é quitado em 94 meses, e cerca de
+$8,622 de juros são pagos no caminho. O saldo cai $50 no primeiro mês, porque
+$150 de juros entram e $200 saem, e um pouco mais a cada mês seguinte, porque
+os juros incidem sobre um saldo que está diminuindo.
+
+
+<div class="guide-inline-figure">
+  <GuideIllustration slug="net-pay-calculator-explained" locale={frontmatter.locale} />
+</div>
+## Avalanche e bola de neve
+
+A pergunta que a calculadora faz é para qual dívida o dinheiro extra vai
+primeiro.
+
+A ordem avalanche começa pela maior taxa de juros. A dívida mais cara de
+manter é paga primeiro, e é daí que vem o menor total de juros.
+
+A ordem bola de neve começa pelo menor saldo. A menor dívida é quitada
+primeiro e o mínimo dela entra antes no orçamento mensal, então a primeira
+conta chega a zero mais cedo, mesmo que mais juros sejam pagos no total.
+
+As duas ordens tornam visíveis coisas diferentes. Uma mostra o menor número de
+dólares no fim da simulação; a outra mostra o primeiro saldo zerado.
+
+## O que a comparação mostra
+
+A calculadora roda três simulações e as coloca lado a lado.
+
+A primeira é a simulação só com mínimos: todos os pagamentos mínimos e nenhum
+dinheiro extra. É a base contra a qual as outras duas são medidas.
+
+A segunda é a simulação avalanche com o pagamento extra. A terceira é a
+simulação bola de neve com o mesmo pagamento extra. Para cada uma, a
+calculadora informa os meses até quitar todas as dívidas, os juros totais
+pagos e os juros economizados em relação à base só com mínimos.
+
+Esses dois números de economia são a comparação que a ferramenta existe para
+produzir, e respondem a perguntas diferentes. O número da avalanche é o menor
+dos dois, e o da bola de neve é o maior. O que fica entre eles é o preço de
+quitar primeiro a menor conta, expresso em dólares de juros.
+
+A diferença depende dos números informados. Com uma só dívida, as duas ordens
+são idênticas. Com dívidas de taxas e saldos parecidos, as duas ordens dão
+resultados próximos. A diferença cresce quando um saldo grande tem taxa alta e
+um pequeno tem taxa baixa.
+
+Há um caso em que a base não existe. Quando os pagamentos mínimos são menores
+que os juros que as dívidas cobram num mês, o saldo não cai: os juros entram,
+o pagamento cobre parte deles e o resto aumenta o saldo de novo. Só com os
+mínimos, as dívidas nunca são quitadas, então não existe cronograma concluído
+para medir as outras duas simulações. A calculadora deixa os números de juros
+economizados em branco e diz isso na página, em vez de imprimir um número
+feito de cem anos de juros que nunca terminam. As simulações avalanche e bola
+de neve ainda terminam desde que o pagamento extra cubra os juros, e os meses
+e os juros totais delas são os números que descrevem as dívidas. Quando o
+pagamento extra também não cobre, essas simulações não informam meses nem
+juros, pelo mesmo motivo.
+
+
+<div class="guide-inline-figure">
+  <GuideIllustration slug="income-tax-calculator-explained" locale={frontmatter.locale} />
+</div>
+## O que o modelo deixa de fora
+
+O modelo é mensal e simples, e várias coisas ficam fora dele.
+
+Taxas de juros variáveis são mantidas no nível informado em todos os meses da
+simulação.
+
+Multas por atraso e tarifas de transferência de saldo não fazem parte da
+aritmética.
+
+Os juros de cartão de crédito costumam ser acumulados e capitalizados
+diariamente, enquanto a calculadora aplica acumulação mensal, então o custo de
+um saldo de cartão sai menor do que é cobrado.
+
+Os juros de algumas dívidas são dedutíveis do imposto, e esse efeito fiscal
+não está no cálculo.
+
+Um pagamento que não chega interrompe a simulação, em vez de ser tratado como
+inadimplência, então os números descrevem o cronograma como foi programado, e
+não como aconteceu.

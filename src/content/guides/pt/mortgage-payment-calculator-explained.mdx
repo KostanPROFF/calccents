@@ -1,0 +1,159 @@
+---
+title: "A calculadora de financiamento explicada"
+description: "Como a parcela mensal do financiamento é calculada, o que o PITI soma a ela e o que o cronograma de amortização mostra sobre os primeiros anos do empréstimo."
+locale: "pt"
+date: 2026-10-01
+lastReviewed: 2026-10-23
+author: "Kostan Proff"
+reviewedBy: "Tetiana Goncharko"
+group: "home"
+illustration: "mortgage-payment-calculator-explained"
+readingMinutes: 9
+sources:
+  - label: "CFPB — Como calcular a parcela do financiamento?"
+    url: "https://www.consumerfinance.gov/ask-cfpb/"
+  - label: "Freddie Mac — Primary Mortgage Market Survey"
+    url: "https://www.freddiemac.com/pmms"
+  - label: "HUD — Comprar um imóvel"
+    url: "https://www.hud.gov/helping_american_homeowners"
+  - label: "BLS — Índice de Preços ao Consumidor"
+    url: "https://www.bls.gov/cpi/"
+relatedTools:
+  - "mortgage-payment"
+faq:
+  - q: "Por que a minha parcela difere da do credor?"
+    a: "Os credores cotam a parcela ao centavo e depois ajustam a última. Alguns também incluem o escrow de impostos e seguro, o que muda o momento dos pagamentos, mas não o valor anual. A calculadora mostra o principal e os juros e depois soma imposto, seguro e HOA em linhas separadas, para que cada parte fique visível."
+  - q: "A calculadora inclui seguro hipotecário?"
+    a: "Não. O seguro hipotecário privado depende da relação entre empréstimo e valor do imóvel e do perfil de crédito, e é cancelado num cronograma que depende do empréstimo original. Ele está entre as coisas que este cálculo deixa de fora."
+  - q: "O que é escrow e ele muda o total?"
+    a: "Escrow é a conta em que o credor recolhe impostos e prêmios de seguro, normalmente em parcelas mensais. Ele muda quando o dinheiro é recolhido, não quanto é recolhido num ano, então o custo anual é o que a calculadora informa."
+  - q: "A taxa da página é em tempo real?"
+    a: "Não. A taxa que você digita é a taxa usada. Nada na página está ligado a dados de mercado, e nenhuma oferta de credor aparece aqui."
+  - q: "Por que a última parcela é um pouco diferente?"
+    a: "A parcela mensal é arredondada ao centavo, o que deixa um pequeno resto no fim do prazo. A última parcela é ajustada para que o empréstimo feche exatamente em zero, do mesmo jeito que um credor ajusta a parcela final."
+  - q: "Posso comparar dois empréstimos com esta calculadora?"
+    a: "Você pode rodar um empréstimo, anotar os números e rodar o segundo. As duas simulações acontecem separadamente, então nada é guardado entre elas e nada é enviado ao site."
+---
+
+import GuideIllustration from '../../../components/visuals/GuideIllustration.astro';
+
+Uma parcela de financiamento é um número com quatro partes, e o motivo de duas
+pessoas informarem parcelas diferentes para a mesma casa costuma ser que
+estão contando partes diferentes.
+
+A <a href="/pt/tools/mortgage-payment/">calculadora de financiamento</a> deste
+site separa essas partes. O principal e os juros vêm da aritmética. Imposto
+predial, seguro e qualquer taxa de HOA vêm de você, porque a calculadora não
+tem como saber quanto cobram o seu avaliador ou a sua seguradora. Mostrá-los
+separados é mais útil do que mostrar um total, porque o total só é tão bom
+quanto a sua parte menos visível.
+
+## A fórmula da parcela
+
+A parcela mensal programada é a fórmula padrão de amortização:
+
+**M = P · r(1 + r)ⁿ / ((1 + r)ⁿ − 1)**
+
+Em que:
+
+- **P** é o valor emprestado, não o preço da casa. Com uma casa de $450,000 e
+  20 por cento de entrada, P é $360,000.
+- **r** é a taxa anual de juros dividida por doze. Uma taxa de 6,5 por cento
+  vira 0,0054166… por mês.
+- **n** é o número de parcelas mensais. Um prazo de 30 anos são 360 parcelas.
+
+Vale ler a fórmula uma vez, porque ela explica algo que de outro modo parece
+arbitrário: a parcela é proporcional ao valor emprestado. Tome o dobro e você
+paga aproximadamente o dobro, não o quádruplo. O que cresce mais rápido com o
+tamanho do empréstimo é o total de juros, que cresce mais rápido que a
+parcela.
+
+O Consumer Financial Protection Bureau traz a mesma fórmula nas suas
+orientações sobre financiamento, e as tabelas de amortização mais usadas no
+setor são construídas a partir dela.
+
+
+<div class="guide-inline-figure">
+  <GuideIllustration slug="how-mortgage-amortization-works" locale={frontmatter.locale} />
+</div>
+## Por que a parcela é constante enquanto a divisão muda
+
+A fórmula produz uma parcela constante. O que não é constante é a composição
+dela. No primeiro mês, quase tudo é juros, porque o saldo ainda é o valor
+emprestado inteiro. No último mês, quase tudo é principal, porque o saldo foi
+reduzido a quase nada.
+
+A mecânica é simples. A cada mês:
+
+1. Os juros incidem sobre o saldo devedor no início do mês.
+2. A parcela cobre esses juros primeiro.
+3. O que sobra reduz o saldo.
+4. Os juros do mês seguinte incidem sobre o saldo menor.
+
+A consequência é que um empréstimo de 30 anos é pago bem mais rápido do que
+parece. Uma grande parte do saldo ainda está em aberto ao fim de cinco anos, e
+uma parte relevante dos juros totais já foi paga até lá. Esse é o fato menos
+intuitivo sobre financiamentos, e é o motivo de valer ler uma vez a tabela de
+amortização ano a ano.
+
+## O que o PITI soma
+
+A parcela que os credores recolhem costuma ser o PITI:
+
+- **Principal** — a parte que paga o empréstimo.
+- **Interest** — os juros, o custo de tomar o dinheiro.
+- **Taxes** — o imposto predial, normalmente recolhido mensalmente no escrow.
+- **Insurance** — o seguro residencial, também normalmente recolhido no escrow.
+
+Imposto e seguro são valores anuais divididos por doze para exibição. A divisão
+é uma conveniência de tempo, não um desconto: num ano você paga o mesmo total
+de qualquer forma. O que muda de mês para mês é em qual mês cai a conta do
+imposto, e o escrow existe para suavizar isso.
+
+As taxas de HOA ficam fora do PITI, mas dentro da saída mensal de um
+condomínio ou de uma casa num empreendimento planejado. Elas são informadas à
+parte pelo mesmo motivo: o número depende inteiramente do imóvel.
+
+
+<div class="guide-inline-figure">
+  <GuideIllustration slug="how-to-read-an-amortization-schedule" locale={frontmatter.locale} />
+</div>
+## Pagamentos extras
+
+Um pagamento extra aplicado ao principal reduz o saldo sobre o qual incidem os
+juros do mês seguinte. A parcela programada não muda; o empréstimo
+simplesmente termina antes, e menos juros são pagos no total.
+
+Vale entender isso de forma mecânica, e não abstrata. Um pagamento extra de
+$200 num empréstimo de $360,000 a 6,5 por cento não são $200 de juros
+economizados — são $200 de principal removidos, e então os juros de cada mês
+seguinte incidem sobre um saldo $200 menor, e de novo $200 menor. A economia
+se capitaliza do mesmo jeito que o empréstimo.
+
+## O que o cálculo deixa de fora
+
+Uma parcela é uma parte do custo de uma casa. A calculadora deixa de fora, de
+propósito:
+
+- **Seguro hipotecário**, que depende da relação entre empréstimo e valor e do
+  crédito por trás do empréstimo, e é cancelado no seu próprio cronograma.
+- **Pontos e tarifas de originação**, pagos no fechamento e que podem ser
+  embutidos na taxa para comparação, mas não fazem parte da parcela.
+- **Custos de fechamento**, tema de um guia à parte.
+- **O calendário do escrow**, que decide qual mês carrega uma parcela maior.
+- **A inflação**, que muda o que a parcela significa em relação à sua renda,
+  mas não o que ela é.
+
+Cada um desses é um número real. Mantê-los fora da parcela é o que permite
+conferir a parcela com uma tabela publicada.
+
+## Conferindo o resultado
+
+Para confirmar um número de forma independente, pegue o valor emprestado, a
+taxa e o número de parcelas e resolva a fórmula no papel ou numa planilha. Se
+a resposta da calculadora e a sua baterem, as duas provavelmente estão certas.
+Se não baterem, as causas mais prováveis são uma definição diferente do valor
+do empréstimo, uma taxa digitada como decimal em vez de porcentagem, ou um
+prazo em anos onde a fórmula quer meses.
+
+Essa conferência é o propósito de mostrar o cálculo.
