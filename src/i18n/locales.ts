@@ -4,13 +4,13 @@
  * English is the source language and lives at the root of the site. The
  * other locales live under their own prefix. Astro's i18n routing expects
  * the folder structure to match the URL structure, so `src/pages/` holds the
- * English pages and `src/pages/ru/` and `src/pages/es/` hold the others.
+ * English pages and `src/pages/<locale>/` holds each of the others.
  *
  * Everything that varies by language is either here or in `src/i18n/ui/`.
  * Nothing else in the codebase should hard-code a language code.
  */
 
-export const LOCALES = ['en', 'ru', 'es'] as const;
+export const LOCALES = ['en', 'ru', 'es', 'zh', 'ko', 'vi', 'pt', 'ar', 'tl', 'uk'] as const;
 
 export type Locale = (typeof LOCALES)[number];
 
@@ -19,8 +19,16 @@ export const DEFAULT_LOCALE: Locale = 'en';
 export interface LocaleMeta {
   /** The locale code used in URLs and in the `lang` attribute. */
   code: Locale;
-  /** The value for `<html lang>`. */
+  /** The value for `<html lang>` and for `hreflang`. */
   htmlLang: string;
+  /**
+   * The direction the language is written in.
+   *
+   * Arabic is written right to left, and the whole page turns with it: the
+   * `dir` attribute on `<html>` is what the logical properties in the
+   * stylesheet read.
+   */
+  dir: 'ltr' | 'rtl';
   /** The value for `og:locale`. */
   ogLocale: string;
   /** The locale passed to `Intl` and `toLocaleDateString`. */
@@ -39,6 +47,7 @@ export const LOCALE_META: Record<Locale, LocaleMeta> = {
     intl: 'en-US',
     nativeName: 'English',
     englishName: 'English',
+    dir: 'ltr',
   },
   ru: {
     code: 'ru',
@@ -47,6 +56,7 @@ export const LOCALE_META: Record<Locale, LocaleMeta> = {
     intl: 'ru-RU',
     nativeName: 'Русский',
     englishName: 'Russian',
+    dir: 'ltr',
   },
   es: {
     code: 'es',
@@ -55,6 +65,70 @@ export const LOCALE_META: Record<Locale, LocaleMeta> = {
     intl: 'es-ES',
     nativeName: 'Español',
     englishName: 'Spanish',
+    dir: 'ltr',
+  },
+  zh: {
+    code: 'zh',
+    htmlLang: 'zh-Hans',
+    ogLocale: 'zh_CN',
+    intl: 'zh-CN',
+    nativeName: '简体中文',
+    englishName: 'Chinese (Simplified)',
+    dir: 'ltr',
+  },
+  ko: {
+    code: 'ko',
+    htmlLang: 'ko',
+    ogLocale: 'ko_KR',
+    intl: 'ko-KR',
+    nativeName: '한국어',
+    englishName: 'Korean',
+    dir: 'ltr',
+  },
+  vi: {
+    code: 'vi',
+    htmlLang: 'vi',
+    ogLocale: 'vi_VN',
+    intl: 'vi-VN',
+    nativeName: 'Tiếng Việt',
+    englishName: 'Vietnamese',
+    dir: 'ltr',
+  },
+  pt: {
+    code: 'pt',
+    htmlLang: 'pt-BR',
+    ogLocale: 'pt_BR',
+    intl: 'pt-BR',
+    nativeName: 'Português',
+    englishName: 'Portuguese',
+    dir: 'ltr',
+  },
+  ar: {
+    code: 'ar',
+    htmlLang: 'ar',
+    ogLocale: 'ar_AR',
+    intl: 'ar-u-nu-latn',
+    nativeName: 'العربية',
+    englishName: 'Arabic',
+    dir: 'rtl',
+  },
+  tl: {
+    code: 'tl',
+    htmlLang: 'tl',
+    ogLocale: 'tl_PH',
+    intl: 'fil-PH',
+    nativeName: 'Tagalog',
+    englishName: 'Tagalog',
+    dir: 'ltr',
+  },
+  uk: {
+    code: 'uk',
+    htmlLang: 'uk',
+    ogLocale: 'uk_UA',
+    intl: 'uk-UA',
+    nativeName: 'Українська',
+    englishName: 'Ukrainian',
+    dir: 'ltr',
   },
 };
 
@@ -114,6 +188,16 @@ export function localeFromPath(pathname: string): Locale {
 export function alternates(path: string): { locale: Locale; href: string }[] {
   const clean = stripLocale(path);
   return LOCALES.map((locale) => ({ locale, href: localePath(locale, clean) }));
+}
+
+/**
+ * The arrow that means "go on".
+ *
+ * A link that leads further points the way the line reads: to the right in
+ * every language but Arabic, where it points to the left.
+ */
+export function forwardArrow(locale: Locale): string {
+  return LOCALE_META[locale].dir === 'rtl' ? '←' : '→';
 }
 
 /**

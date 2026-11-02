@@ -18,6 +18,14 @@ interface Props {
   jsonLd?: Record<string, unknown>[];
   ogType?: 'website' | 'article';
   noindex?: boolean;
+  /**
+   * The languages this page exists in, when it is not in all of them.
+   *
+   * A guide is translated one language at a time, so a guide page lists only
+   * the languages it has been published in and the alternates leave out the
+   * rest rather than point at a page that does not exist.
+   */
+  locales?: readonly Locale[];
 }
 
 const {
@@ -28,6 +36,7 @@ const {
   jsonLd = [],
   ogType = 'website',
   noindex = false,
+  locales,
 } = Astro.props;
 
 const site = getSite(locale);
@@ -45,7 +54,9 @@ const fullTitle =
  * page carries the alternates. `x-default` points at the English version,
  * which is the one written first and the one the other two were made from.
  */
-const alternateLinks = alternates(path);
+const alternateLinks = alternates(path).filter(
+  (alternate) => !locales || locales.includes(alternate.locale),
+);
 
 /**
  * The site and its author, described on every page.
@@ -99,7 +110,7 @@ const reviewer = {
 ---
 
 <!doctype html>
-<html lang={site.lang}>
+<html lang={site.lang} dir={LOCALE_META[locale].dir}>
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -112,7 +123,7 @@ const reviewer = {
       alternateLinks.map((alternate) => (
         <link
           rel="alternate"
-          hreflang={alternate.locale}
+          hreflang={LOCALE_META[alternate.locale].htmlLang}
           href={new URL(alternate.href, site.origin).toString()}
         />
       ))
@@ -202,7 +213,7 @@ const reviewer = {
   </head>
   <body>
     <a class="skip-link" href="#main">{ui.ui.skipToContent}</a>
-    <Nav currentPath={Astro.url.pathname} locale={locale} />
+    <Nav currentPath={Astro.url.pathname} locale={locale} locales={locales} />
     <main id="main">
       <slot />
     </main>

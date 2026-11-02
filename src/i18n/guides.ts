@@ -2,12 +2,16 @@
  * Reading the guides collection.
  *
  * The collection holds one file per guide per language. The English files
- * sit at the root of the collection and the translations sit in `ru/` and
- * `es/`, which mirrors the URL structure of the site.
+ * sit at the root of the collection and the translations sit in a folder
+ * named after the locale, which mirrors the URL structure of the site.
+ *
+ * Not every language has every guide yet. A page that lists guides lists
+ * the English guide where the translation is missing, and links to it at its
+ * English address, so a reader never meets an empty shelf or a dead link.
  */
 
 import { getCollection, type CollectionEntry } from 'astro:content';
-import { DEFAULT_LOCALE, isLocale, type Locale } from './locales.ts';
+import { DEFAULT_LOCALE, isLocale, localePath, type Locale } from './locales.ts';
 
 export type GuideEntry = CollectionEntry<'guides'>;
 
@@ -24,10 +28,39 @@ export function guideSlug(id: string): string {
   return id;
 }
 
-/** Every guide written in one language, newest first. */
-export async function getGuides(locale: Locale): Promise<GuideEntry[]> {
+const byDate = (a: GuideEntry, b: GuideEntry): number =>
+  b.data.date.getTime() - a.data.date.getTime();
+
+/**
+ * Every guide written in one language, newest first.
+ *
+ * Only the guides that actually exist in that language. This is what the
+ * guide pages of a language are built from.
+ */
+export async function getTranslatedGuides(locale: Locale): Promise<GuideEntry[]> {
   const guides = await getCollection('guides', (entry) => entry.data.locale === locale);
-  return guides.sort((a, b) => b.data.date.getTime() - a.data.date.getTime());
+  return guides.sort(byDate);
+}
+
+/**
+ * Every guide, in one language where it can be, newest first.
+ *
+ * A guide that has not been translated into the language yet comes back in
+ * English. Use `guideHref` to link to it, because its address is the English
+ * one.
+ */
+export async function getGuides(locale: Locale): Promise<GuideEntry[]> {
+  const translated = await getTranslatedGuides(locale);
+  if (locale === DEFAULT_LOCALE) return translated;
+  const have = new Set(translated.map((guide) => guideSlug(guide.id)));
+  const english = await getTranslatedGuides(DEFAULT_LOCALE);
+  const missing = english.filter((guide) => !have.has(guideSlug(guide.id)));
+  return [...translated, ...missing].sort(byDate);
+}
+
+/** The address of a guide, in the language it is actually written in. */
+export function guideHref(guide: GuideEntry): string {
+  return localePath(guide.data.locale, `/guides/${guideSlug(guide.id)}/`);
 }
 
 /** One guide by its URL segment, in one language. */
@@ -35,7 +68,7 @@ export async function getGuide(
   locale: Locale,
   slug: string,
 ): Promise<GuideEntry | undefined> {
-  const guides = await getGuides(locale);
+  const guides = await getTranslatedGuides(locale);
   return guides.find((guide) => guideSlug(guide.id) === slug);
 }
 

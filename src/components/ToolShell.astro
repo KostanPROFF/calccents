@@ -27,7 +27,7 @@ import { getSite } from '../config/site.ts';
 import { getTool, type ToolSlug } from '../config/tools.ts';
 import { getUi } from '../i18n/ui/index.ts';
 import { formatDate, localePath, type Locale } from '../i18n/locales.ts';
-import { getGuides, guideSlug } from '../i18n/guides.ts';
+import { getGuides, guideHref, guideSlug } from '../i18n/guides.ts';
 
 interface Props {
   slug: ToolSlug;
@@ -70,15 +70,19 @@ const Calculator = CALCULATORS[slug];
  * The related guides, named in the language the page is in.
  *
  * The title comes from the guide itself when the guide exists in this
- * language. Otherwise the dictionary's title is used, so a page in a
- * language that is not finished yet still links somewhere sensible.
+ * language. Otherwise the dictionary's title is used, and the link goes to
+ * the English guide, so a page in a language whose guides are not finished
+ * yet still links somewhere sensible.
  */
 const guides = await getGuides(locale);
 const bySlug = new Map(guides.map((guide) => [guideSlug(guide.id), guide]));
-const relatedGuides = copy.relatedGuides.map((entry) => ({
-  slug: entry.slug,
-  title: bySlug.get(entry.slug)?.data.title ?? entry.title,
-}));
+const relatedGuides = copy.relatedGuides.map((entry) => {
+  const guide = bySlug.get(entry.slug);
+  return {
+    href: guide ? guideHref(guide) : localePath(locale, `/guides/${entry.slug}/`),
+    title: guide?.data.locale === locale ? guide.data.title : entry.title,
+  };
+});
 
 const path = localePath(locale, `/tools/${slug}/`);
 
@@ -173,7 +177,7 @@ const faqPage = {
           <h2>{ui.ui.guidesThatGoDeeper}</h2>
           <div class="grid grid--2" style="margin-top: var(--space-5);">
             {relatedGuides.map((guide) => (
-              <a class="tile" href={localePath(locale, `/guides/${guide.slug}/`)}>
+              <a class="tile" href={guide.href}>
                 <span class="tile__title">{guide.title}</span>
                 <span class="tile__meta">{ui.ui.readTheGuide}</span>
               </a>

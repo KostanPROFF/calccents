@@ -1,8 +1,8 @@
 /**
  * Every user-visible string on the site, in English.
  *
- * This file is the source of truth for the site's copy. The Russian and
- * Spanish dictionaries in the same folder have the same shape, and the type
+ * This file is the source of truth for the site's copy. The other
+ * dictionaries in the same folder have the same shape, and the type
  * of this object is the type they are checked against, so a missing or
  * renamed key fails the build rather than shipping a half-translated page.
  *

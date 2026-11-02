@@ -143,7 +143,7 @@ export const ru = {
     calcNote: 'Только основной долг и проценты. Налог на недвижимость, страховка и HOA — в полном калькуляторе.',
     statCalculators: 'калькуляторов',
     statGuides: 'руководств с расчётами',
-    statLanguages: 'языка',
+    statLanguages: 'языков',
     statSignups: 'регистраций, чтобы пользоваться',
     guidesEyebrow: 'Руководства',
     guidesHeading: 'Арифметика, записанная целиком',

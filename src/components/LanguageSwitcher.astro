@@ -7,6 +7,10 @@
  * so a reader who changes the language halfway through a guide stays on the
  * guide.
  *
+ * A guide that has not been translated into a language yet has no page in
+ * it, so that entry leads to the guides index of the language instead of a
+ * page that does not exist.
+ *
  * The globe is an inline SVG because the site carries no icon library.
  */
 import { LOCALE_META, LOCALES, localePath, stripLocale, type Locale } from '../i18n/locales.ts';
@@ -16,11 +20,18 @@ interface Props {
   locale: Locale;
   /** The path of the current page, used to keep the reader on the same page. */
   currentPath: string;
+  /** The languages this page exists in, when it is not in all of them. */
+  locales?: readonly Locale[];
 }
 
-const { locale, currentPath } = Astro.props;
+const { locale, currentPath, locales } = Astro.props;
 const ui = getUi(locale);
 const path = stripLocale(currentPath);
+
+function hrefFor(code: Locale): string {
+  if (locales && !locales.includes(code)) return localePath(code, '/guides/');
+  return localePath(code, path);
+}
 ---
 
 <div class="language-switcher" data-language-switcher>
@@ -54,7 +65,7 @@ const path = stripLocale(currentPath);
       LOCALES.map((code) => (
         <a
           class="language-switcher__option"
-          href={localePath(code, path)}
+          href={hrefFor(code)}
           hreflang={LOCALE_META[code].htmlLang}
           lang={LOCALE_META[code].htmlLang}
           aria-current={code === locale ? 'true' : undefined}

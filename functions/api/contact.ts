@@ -30,7 +30,7 @@
 
 import { isTrapFilled, validate, type RawSubmission } from '../../worker/src/validate.ts';
 import { getUi } from '../../src/i18n/ui/index.ts';
-import { isLocale, localePath, type Locale } from '../../src/i18n/locales.ts';
+import { isLocale, LOCALE_META, localePath, type Locale } from '../../src/i18n/locales.ts';
 
 interface Env {
   /** The mailer worker. */
@@ -111,7 +111,7 @@ function page(locale: Locale, key: string, status: number): Response {
     ui.contactForm.statuses.find((entry) => entry.key === key) ??
     ui.contactForm.statuses.find((entry) => entry.key === 'failed');
   const html = `<!doctype html>
-<html lang="${locale}">
+<html lang="${LOCALE_META[locale].htmlLang}" dir="${LOCALE_META[locale].dir}">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">

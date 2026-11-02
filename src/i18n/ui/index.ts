@@ -9,11 +9,18 @@
 import { en, type UiDictionary } from './en.ts';
 import { ru } from './ru.ts';
 import { es } from './es.ts';
+import { zh } from './zh.ts';
+import { ko } from './ko.ts';
+import { vi } from './vi.ts';
+import { pt } from './pt.ts';
+import { ar } from './ar.ts';
+import { tl } from './tl.ts';
+import { uk } from './uk.ts';
 import { DEFAULT_LOCALE, type Locale } from '../locales.ts';
 
 export type { UiDictionary };
 
-export const UI: Record<Locale, UiDictionary> = { en, ru, es };
+export const UI: Record<Locale, UiDictionary> = { en, ru, es, zh, ko, vi, pt, ar, tl, uk };
 
 export function getUi(locale: Locale): UiDictionary {
   return UI[locale] ?? UI[DEFAULT_LOCALE];
