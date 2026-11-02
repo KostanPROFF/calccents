@@ -3,6 +3,7 @@ import { defineConfig } from 'astro/config';
 import mdx from '@astrojs/mdx';
 import sitemap from '@astrojs/sitemap';
 import { SITE } from './src/config/site.ts';
+import { LOCALES, LOCALE_META } from './src/i18n/locales.ts';
 import { formatLastModified, lastModifiedFor, sitemapLastModified } from './src/config/sitemapDates.ts';
 
 /**
@@ -21,19 +22,19 @@ export default defineConfig({
     format: 'directory',
   },
   /**
-   * The site is published in English, Russian and Spanish.
+   * The site is published in the languages listed in `src/i18n/locales.ts`.
    *
    * English is the source language and lives at the root of the site. The
-   * other two live under their own prefix. Astro's i18n routing expects the
+   * others live under their own prefix. Astro's i18n routing expects the
    * folder structure to match the URL structure, so `src/pages/` holds the
-   * English pages and `src/pages/ru/` and `src/pages/es/` hold the others.
+   * English pages and `src/pages/<locale>/` holds each of the others.
    *
    * `prefixDefaultLocale: false` is what keeps the English pages where they
    * have always been. It is the default, but it is set explicitly because
    * the whole site depends on it and a reader's old links depend on it too.
    */
   i18n: {
-    locales: ['en', 'ru', 'es'],
+    locales: [...LOCALES],
     defaultLocale: 'en',
     routing: {
       prefixDefaultLocale: false,
@@ -52,11 +53,9 @@ export default defineConfig({
        */
       i18n: {
         defaultLocale: 'en',
-        locales: {
-          en: 'en',
-          ru: 'ru',
-          es: 'es',
-        },
+        locales: Object.fromEntries(
+          LOCALES.map((locale) => [locale, LOCALE_META[locale].htmlLang]),
+        ),
       },
       /**
        * The date each page was last changed.

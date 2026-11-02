@@ -22,11 +22,11 @@
  * sentence stops being read, so the rule was narrowed and two option-verdict
  * rules added to keep the coverage on the cases that matter.
  *
- * The site is published in three languages, and the guardrail has to hold
+ * The site is published in ten languages, and the guardrail has to hold
  * in all of them. A rule set that only knows English would pass a Russian
  * guide full of "вы должны покупать" without a word, so each language has
  * its own rules and its own negation list. The structure is the same in
- * all three: a directive, a first-person recommendation, a verdict, an
+ * all of them: a directive, a first-person recommendation, a verdict, an
  * instruction to consider or avoid something, and a superlative claim.
  *
  * Run: node scripts/lint-advisory.ts
@@ -38,7 +38,9 @@ import { fileURLToPath } from 'node:url';
 
 const ROOT = fileURLToPath(new URL('..', import.meta.url)).replace(/\/$/, '');
 
-export type Locale = 'en' | 'ru' | 'es';
+export type Locale = 'en' | 'ru' | 'es' | 'zh' | 'ko' | 'vi' | 'pt' | 'ar' | 'tl' | 'uk';
+
+const LOCALES: readonly Locale[] = ['en', 'ru', 'es', 'zh', 'ko', 'vi', 'pt', 'ar', 'tl', 'uk'];
 
 interface Rule {
   name: string;
@@ -157,6 +159,119 @@ const ES_DENY: Rule[] = [
   { name: 'advisory verb', pattern: /\baconsejamos\b|\brecomendamos\b|\bse recomienda\b/gi },
 ];
 
+/**
+ * Ukrainian.
+ *
+ * The same shapes as the Russian rules, with the same Unicode-aware
+ * boundaries, because Cyrillic text has no ASCII word boundary either.
+ */
+const UK_DENY: Rule[] = [
+  {
+    name: 'second-person directive',
+    pattern: new RegExp(w('(?:ви|вам|тобі) (?:не )?(?:повинні|слід|треба|потрібно|необхідно|варто|краще)'), 'giu'),
+  },
+  {
+    name: 'second-person imperative',
+    pattern: new RegExp(w('(?:купуйте|інвестуйте|продавайте|орендуйте|вкладайте|оформлюйте|рефінансуйте)'), 'giu'),
+  },
+  {
+    name: 'first-person recommendation',
+    pattern: new RegExp(w('(?:ми|я) (?:не )?(?:рекомендуємо|радимо|рекомендую|раджу)'), 'giu'),
+  },
+  { name: 'impersonal recommendation', pattern: new RegExp(w('рекомендується'), 'giu') },
+  { name: 'worth-it verdict', pattern: new RegExp(w('варто (?:купувати|купити|інвестувати|продати|брати|оформити|орендувати)'), 'giu') },
+  { name: 'has-sense verdict', pattern: new RegExp(w('має сенс (?:купувати|купити|інвестувати|продати|брати|оформити)'), 'giu') },
+  { name: 'best-option verdict', pattern: new RegExp(w('(?:найкращий|ідеальний|оптимальний) (?:варіант|вибір|момент)'), 'giu') },
+  { name: 'superlative claim', pattern: new RegExp(w('(?:найдешевший|найвигідніший|найшвидший)'), 'giu') },
+];
+
+/**
+ * Portuguese.
+ *
+ * "venda" and "escolha" are left out of the imperatives on purpose: in
+ * Portuguese they are the ordinary nouns for a sale and a choice, and
+ * "custos de venda" is in every rent versus buy sentence.
+ */
+const PT_DENY: Rule[] = [
+  {
+    name: 'second-person directive',
+    pattern: /\b(?:você|vocês) (?:deve|deveria|precisa|tem que|devem)\s+(?:comprar|investir|vender|alugar|contratar|refinanciar|escolher)\b/giu,
+  },
+  { name: 'second-person imperative', pattern: /(?<![\p{L}])(?:compre|invista|alugue|refinancie)(?![\p{L}])/giu },
+  { name: 'first-person recommendation', pattern: /(?<![\p{L}])(?:recomendamos|aconselhamos|sugerimos|recomenda-se)(?![\p{L}])/giu },
+  { name: 'worth-it verdict', pattern: /(?<![\p{L}])vale a pena(?![\p{L}])/giu },
+  {
+    name: 'option verdict',
+    pattern: /(?<![\p{L}])(?:comprar|alugar|investir|vender) (?:é|seria) (?:a )?(?:melhor|pior|mais inteligente|mais seguro)(?![\p{L}])/giu,
+  },
+  { name: 'best-option verdict', pattern: /(?<![\p{L}])(?:a melhor opção|o ideal é|o melhor momento)(?![\p{L}])/giu },
+  { name: 'avoid directive', pattern: /(?<![\p{L}])(?:evite|evitar) (?:comprar|vender|investir|alugar)(?![\p{L}])/giu },
+  { name: 'superlative claim', pattern: /(?<![\p{L}])o (?:mais barato|mais rápido|mais seguro)(?![\p{L}])/giu },
+];
+
+/**
+ * Chinese.
+ *
+ * Chinese has no spaces and no word boundaries, so the rules match the
+ * phrase itself: a "you should" followed by the action, a first-person
+ * recommendation, a worth-it verdict and a best-option verdict.
+ */
+const ZH_DENY: Rule[] = [
+  { name: 'second-person directive', pattern: /(?:你|您)(?:应该|应当|必须|需要|最好)(?:买|购买|投资|卖|出售|租|再融资|选择)/gu },
+  { name: 'first-person recommendation', pattern: /我们(?:建议|推荐|劝)|建议(?:你|您)|推荐(?:你|您)/gu },
+  { name: 'worth-it verdict', pattern: /值得(?:买|购买|投资|租|再融资)/gu },
+  { name: 'best-option verdict', pattern: /最(?:好|佳)的?(?:选择|方案|时机)/gu },
+  { name: 'superlative claim', pattern: /最(?:便宜|划算|安全)的/gu },
+];
+
+/**
+ * Korean.
+ *
+ * The verb ending carries the directive, so the rules name the action and
+ * the ending together rather than the ending alone, which is in every
+ * other sentence of a description.
+ */
+const KO_DENY: Rule[] = [
+  {
+    name: 'second-person directive',
+    pattern: /(?:구매|매수|투자|매도|임차|임대|재융자|대출)(?:하세요|하십시오|해야 합니다|하셔야 합니다|하는 것이 좋습니다)/gu,
+  },
+  { name: 'first-person recommendation', pattern: /(?:추천합니다|권장합니다|권합니다|권해 드립니다|추천드립니다)/gu },
+  { name: 'worth-it verdict', pattern: /(?:구매|투자)할 (?:만한|가치가 있)/gu },
+  { name: 'best-option verdict', pattern: /(?:최선의|최고의|가장 좋은) (?:선택|방법|시기)/gu },
+  { name: 'superlative claim', pattern: /가장 (?:저렴한|유리한|안전한)/gu },
+];
+
+/** Vietnamese. */
+const VI_DENY: Rule[] = [
+  { name: 'second-person directive', pattern: /(?<![\p{L}])(?:bạn|quý vị) (?:nên|phải|cần) (?:mua|đầu tư|bán|thuê|tái cấp vốn|vay|chọn)(?![\p{L}])/giu },
+  { name: 'first-person recommendation', pattern: /(?<![\p{L}])chúng tôi (?:khuyên|khuyến nghị|khuyến cáo|đề xuất|gợi ý)(?![\p{L}])/giu },
+  { name: 'worth-it verdict', pattern: /(?<![\p{L}])(?:đáng|nên) (?:mua|đầu tư)(?![\p{L}])/giu },
+  { name: 'best-option verdict', pattern: /(?<![\p{L}])(?:lựa chọn|phương án|thời điểm) tốt nhất(?![\p{L}])/giu },
+  { name: 'superlative claim', pattern: /(?<![\p{L}])(?:rẻ nhất|có lợi nhất|an toàn nhất)(?![\p{L}])/giu },
+];
+
+/** Arabic. */
+const AR_DENY: Rule[] = [
+  { name: 'second-person directive', pattern: /(?:يجب عليك|ينبغي عليك|ينبغي لك|عليك أن|يجب أن) (?:تشتري|تستثمر|تبيع|تستأجر|تختار|تعيد التمويل)/gu },
+  { name: 'first-person recommendation', pattern: /(?<![\p{L}])(?:ننصح|نوصي|نقترح|أنصح|ننصحك|نوصيك)(?![\p{L}])/gu },
+  { name: 'worth-it verdict', pattern: /(?:يستحق|تستحق) (?:الشراء|الاستثمار|العناء)/gu },
+  { name: 'best-option verdict', pattern: /(?:أفضل خيار|الخيار الأفضل|أفضل وقت|الوقت الأفضل)/gu },
+  { name: 'superlative claim', pattern: /(?:الأرخص|الأكثر ربحا|الأكثر ربحًا)/gu },
+];
+
+/** Tagalog. */
+const TL_DENY: Rule[] = [
+  {
+    name: 'second-person directive',
+    pattern: /(?<![\p{L}])(?:dapat|kailangan) (?:kang|mong|ninyong) (?:bumili|bilhin|mamuhunan|magbenta|ibenta|umupa|mag-refinance|pumili)(?![\p{L}])/giu,
+  },
+  { name: 'first-person recommendation', pattern: /(?<![\p{L}])(?:inirerekomenda|ipinapayo|iminumungkahi) (?:namin|ko)(?![\p{L}])/giu },
+  { name: 'worth-it verdict', pattern: /(?<![\p{L}])sulit (?:bilhin|ang pagbili|ang pamumuhunan)(?![\p{L}])/giu },
+  { name: 'best-option verdict', pattern: /(?<![\p{L}])pinakamahusay na (?:pagpipilian|opsyon|panahon)(?![\p{L}])/giu },
+  { name: 'superlative claim', pattern: /(?<![\p{L}])(?:pinakamura|pinakamatipid|pinakaligtas)(?![\p{L}])/giu },
+];
+
 const RULES: Record<Locale, LocaleRules> = {
   en: {
     deny: EN_DENY,
@@ -196,6 +311,40 @@ const RULES: Record<Locale, LocaleRules> = {
       /\bni\b/,
       /\bnadie\b/,
     ],
+  },
+  uk: {
+    deny: UK_DENY,
+    negations: [
+      /(?<![\p{L}\p{N}_])не(?![\p{L}\p{N}_])/iu,
+      /(?<![\p{L}\p{N}_])ні(?![\p{L}\p{N}_])/iu,
+      /ніколи/iu,
+      /(?<![\p{L}\p{N}_])без(?![\p{L}\p{N}_])/iu,
+      /замість/iu,
+    ],
+  },
+  pt: {
+    deny: PT_DENY,
+    negations: [/(?<![\p{L}])não(?![\p{L}])/iu, /\bnunca\b/, /\bsem\b/, /\bem vez de\b/, /\bnem\b/, /\bninguém\b/u],
+  },
+  zh: {
+    deny: ZH_DENY,
+    negations: [/不/u, /没有/u, /并非/u, /而不是/u, /无须|无需/u],
+  },
+  ko: {
+    deny: KO_DENY,
+    negations: [/않/u, /아니/u, /없/u, /못/u, /대신/u],
+  },
+  vi: {
+    deny: VI_DENY,
+    negations: [/(?<![\p{L}])(?:không|chẳng|chưa|đừng)(?![\p{L}])/iu, /thay vì/iu],
+  },
+  ar: {
+    deny: AR_DENY,
+    negations: [/(?<![\p{L}])(?:لا|لن|لم|ليس|ليست|بدون|دون|بدلا|بدلًا)(?![\p{L}])/u],
+  },
+  tl: {
+    deny: TL_DENY,
+    negations: [/(?<![\p{L}])(?:hindi|wala|walang|huwag)(?![\p{L}])/iu, /sa halip/iu],
   },
 };
 
@@ -256,7 +405,7 @@ function extractStrings(source: string): string {
 function splitSentences(text: string): string[] {
   return text
     .replace(/\s+/g, ' ')
-    .split(/(?<=[.!?])\s+(?=[A-ZА-ЯЁ¿¡"'(\[])/u)
+    .split(/(?<=[.!?؟])\s+(?=[\p{Lu}\p{Lo}¿¡"'(\[])|(?<=[。！？])/u)
     .filter((sentence) => sentence.trim().length > 0);
 }
 
@@ -273,19 +422,23 @@ function isNegated(sentence: string, matchIndex: number, negations: RegExp[]): b
  * Everything else is English, because the components hold almost no prose
  * of their own.
  */
+function isLintLocale(value: string | undefined): value is Locale {
+  return value !== undefined && (LOCALES as readonly string[]).includes(value);
+}
+
 export function detectLocale(path: string): Locale {
   const parts = relative(ROOT, path).split(/[\\/]/);
 
   if (parts[0] === 'src' && parts[1] === 'content') {
     const guidesIndex = parts.indexOf('guides');
     const candidate = guidesIndex >= 0 ? parts[guidesIndex + 1] : undefined;
-    if (candidate === 'ru' || candidate === 'es') return candidate;
+    if (isLintLocale(candidate)) return candidate;
     return 'en';
   }
 
   if (parts[0] === 'src' && parts[1] === 'i18n' && parts[2] === 'ui') {
     const name = (parts[3] ?? '').replace(/\.ts$/, '');
-    if (name === 'ru' || name === 'es') return name;
+    if (isLintLocale(name)) return name;
   }
 
   return 'en';
@@ -361,10 +514,10 @@ function main(): void {
   ];
 
   const allHits: Hit[] = [];
-  const byLocale: Record<Locale, number> = { en: 0, ru: 0, es: 0 };
+  const filesByLocale = Object.fromEntries(LOCALES.map((locale) => [locale, 0])) as Record<Locale, number>;
   for (const file of targets) {
     const hits = lintFile(file);
-    for (const hit of hits) byLocale[hit.locale] += 1;
+    filesByLocale[detectLocale(file)] += 1;
     allHits.push(...hits);
   }
 
@@ -383,7 +536,7 @@ function main(): void {
 
   console.log(
     `Advisory-language lint passed: ${targets.length} files checked ` +
-      `(en ${byLocale.en}, ru ${byLocale.ru}, es ${byLocale.es}), 0 findings.`,
+      `(${LOCALES.map((locale) => `${locale} ${filesByLocale[locale]}`).join(', ')}), 0 findings.`,
   );
 }
 

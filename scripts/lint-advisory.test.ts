@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import { describe, it } from 'node:test';
-import { findAdvisoryHits } from './lint-advisory.ts';
+import { findAdvisoryHits, type Locale } from './lint-advisory.ts';
 
 /**
  * The YMYL guardrail is only worth having if it fires on real violations.
@@ -88,7 +88,7 @@ describe('advisory linter — scope of the rule set', () => {
  * English would pass a Russian guide full of "вы должны покупать" without a
  * word. These cases pin the other two rule sets.
  */
-function flaggedIn(sentence: string, locale: 'ru' | 'es'): boolean {
+function flaggedIn(sentence: string, locale: Locale): boolean {
   return findAdvisoryHits(sentence, '<text>', locale).length > 0;
 }
 
@@ -148,6 +148,47 @@ describe('advisory linter — Spanish', () => {
   for (const [label, sentence] of allowed) {
     it(`accepts a Spanish ${label}`, () => {
       assert.equal(flaggedIn(sentence, 'es'), false, `unexpected finding in: ${sentence}`);
+    });
+  }
+});
+
+describe('advisory linter — the other languages', () => {
+  const violations: [Locale, string][] = [
+    ['uk', 'Ви повинні купувати житло зараз.'],
+    ['uk', 'Ми рекомендуємо рефінансувати кредит.'],
+    ['pt', 'Você deve comprar um imóvel agora.'],
+    ['pt', 'Vale a pena comprar a casa.'],
+    ['zh', '你应该购买房子。'],
+    ['zh', '我们建议提前还款。'],
+    ['ko', '지금 주택을 구매하세요.'],
+    ['ko', '재융자를 추천합니다.'],
+    ['vi', 'Bạn nên mua nhà ngay bây giờ.'],
+    ['vi', 'Chúng tôi khuyên vay với lãi suất cố định.'],
+    ['ar', 'يجب عليك أن تشتري منزلًا الآن.'],
+    ['ar', 'ننصح بإعادة التمويل.'],
+    ['tl', 'Dapat kang bumili ng bahay ngayon.'],
+    ['tl', 'Inirerekomenda namin ang pag-refinance.'],
+  ];
+
+  for (const [locale, sentence] of violations) {
+    it(`rejects a directive in ${locale}`, () => {
+      assert.equal(flaggedIn(sentence, locale), true, `expected a finding in: ${sentence}`);
+    });
+  }
+
+  const allowed: [Locale, string][] = [
+    ['uk', 'Калькулятор не каже, що робити з результатом.'],
+    ['pt', 'Os custos de venda reduzem o patrimônio.'],
+    ['zh', '计算器不会告诉你应该购买什么。'],
+    ['ko', '이 계산기는 무엇을 구매해야 하는지 말하지 않습니다.'],
+    ['vi', 'Công cụ này không nói bạn nên mua gì.'],
+    ['ar', 'لا تخبرك الحاسبة بما يجب أن تشتري.'],
+    ['tl', 'Hindi sinasabi ng calculator kung ano ang dapat mong bilhin.'],
+  ];
+
+  for (const [locale, sentence] of allowed) {
+    it(`accepts a negated sentence in ${locale}`, () => {
+      assert.equal(flaggedIn(sentence, locale), false, `unexpected finding in: ${sentence}`);
     });
   }
 });

@@ -11,7 +11,7 @@
 
 import { getUi } from '../../i18n/ui/index.ts';
 import { fill } from '../../i18n/ui/index.ts';
-import { localePath, type Locale } from '../../i18n/locales.ts';
+import { forwardArrow, localePath, type Locale } from '../../i18n/locales.ts';
 import { computeMonthlyPayment } from '../../lib/calc/mortgage.ts';
 import { formatCurrency } from '../../lib/calc/money.ts';
 
@@ -87,7 +87,7 @@ const totalInterest = monthly * DEFAULTS.years * 12 - loan;
 
   <p class="hero-calc__note">{t.calcNote}</p>
   <a class="btn btn--block" href={localePath(locale, '/tools/mortgage-payment/')}>
-    {t.calcOpen} →
+    {t.calcOpen} {forwardArrow(locale)}
   </a>
 </form>
 
