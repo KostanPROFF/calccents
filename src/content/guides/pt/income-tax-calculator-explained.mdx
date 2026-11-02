@@ -1,0 +1,247 @@
+---
+title: "A calculadora de imposto de renda de 2026 explicada"
+description: "Como a renda tributável é montada a partir do salário, como funcionam as faixas federais de 2026 e o que significam a dedução padrão, as duas alíquotas e a estadual."
+locale: "pt"
+date: 2026-10-23
+lastReviewed: 2026-10-23
+author: "Kostan Proff"
+reviewedBy: "Tetiana Goncharko"
+group: "home"
+illustration: "income-tax-calculator-explained"
+readingMinutes: 9
+sources:
+  - label: "IRS — Rev. Proc. 2025-32, ajustes pela inflação para 2026"
+    url: "https://www.irs.gov/irb/2025-45_IRB"
+  - label: "IRS — Tax Topic 505, retenção na fonte e pagamentos estimados"
+    url: "https://www.irs.gov/taxtopics/tc505"
+  - label: "IRS — Tax Topic 611, imposto de renda"
+    url: "https://www.irs.gov/taxtopics/tc611"
+  - label: "Tax Foundation — State Individual Income Tax Rates and Brackets, 2026"
+    url: "https://taxfoundation.org/data/all/state/state-income-tax-rates-2026/"
+  - label: "Franchise Tax Board — Tax News, a tabela de indexação de 2026 e as tabelas de alíquotas"
+    url: "https://www.ftb.ca.gov/about-ftb/newsroom/tax-news/"
+  - label: "Departamento de Tributação do Havaí — perguntas sobre imposto de renda"
+    url: "https://tax.hawaii.gov/faq/"
+  - label: "Maine Revenue Services — alíquotas do imposto de renda de pessoa física de 2026"
+    url: "https://www.maine.gov/revenue/tax-return-forms"
+  - label: "Departamento de Impostos de Vermont — tabelas preliminares de alíquotas de 2026"
+    url: "https://tax.vermont.gov/sites/tax/files/documents/IN-114-Instr-2026.pdf"
+  - label: "Arizona Revised Statutes — 43-1041, a dedução padrão"
+    url: "https://www.azleg.gov/ars/43/01041.htm"
+relatedTools:
+  - "income-tax"
+faq:
+  - q: "Qual ano fiscal a calculadora usa?"
+    a: "O ano fiscal de 2026. As faixas e a dedução padrão vêm do Rev. Proc. 2025-32, publicado no Internal Revenue Bulletin 2025-45 em 3 de novembro de 2025, e os números do cálculo são lidos desse documento, e não da tabela do ano anterior."
+  - q: "Como a renda tributável difere da renda bruta?"
+    a: "A renda tributável é o que sobra depois dos descontos antes do imposto, como 401(k), HSA ou FSA, e depois da dedução padrão ou detalhada. As faixas se aplicam à renda tributável, e não ao valor bruto do contracheque."
+  - q: "Qual é a diferença entre a alíquota marginal e a efetiva?"
+    a: "A marginal é a alíquota que o próximo dólar de renda tributável encontra: 22 por cento com $83,900 de renda tributável para um solteiro. A efetiva é o imposto total dividido por toda a renda, que para o mesmo leitor dá cerca de 13 por cento do que ganhou."
+  - q: "Como a calculadora trata a dedução detalhada?"
+    a: "Ela usa o valor detalhado quando ele é maior que a dedução padrão da situação de declaração. Quando o valor detalhado é menor, vale a dedução padrão e a renda tributável fica maior."
+  - q: "A calculadora inclui créditos tributários?"
+    a: "Os federais, não. O crédito federal por filho, o crédito federal por renda do trabalho e os créditos de educação reduzem o imposto e não estão no cálculo, então o número federal é o imposto de renda comum sobre a renda tributável. Os créditos estaduais que o modelo contempla entram no número estadual."
+  - q: "O número do imposto estadual é exato?"
+    a: "É um cálculo, não uma declaração. As faixas, a dedução padrão, a isenção pessoal e os créditos são os números publicados do estado, aplicados na ordem em que o estado os aplica. Alíquotas de ganho de capital e impostos locais não estão nele, então o número de uma declaração pode ser menor."
+  - q: "Isto inclui Social Security e Medicare?"
+    a: "Não. São impostos sobre a folha retidos do salário, com alíquotas e tetos próprios, separados do imposto de renda sobre os rendimentos."
+---
+
+import GuideIllustration from '../../../components/visuals/GuideIllustration.astro';
+
+O imposto de renda federal sobre um ano de rendimentos é uma tabela publicada
+aplicada a um número montado em poucos passos. A
+<a href="/pt/tools/income-tax/">calculadora de imposto de renda</a> deste site
+percorre esses passos em ordem e mostra o cálculo. Os números de 2026 que ela
+usa vêm do Rev. Proc. 2025-32, publicado no Internal Revenue Bulletin 2025-45
+em 3 de novembro de 2025.
+
+Nada na página é previsão e nada é em tempo real. As faixas e a dedução padrão
+são as publicadas para o ano fiscal de 2026, e todo número do resultado decorre
+delas e dos valores informados.
+
+## Do salário bruto à renda tributável
+
+A renda tributável não é o número do contracheque. A calculadora parte da
+renda bruta do ano, subtrai os descontos antes do imposto informados — uma
+contribuição para 401(k), HSA ou FSA — e depois subtrai a dedução.
+
+A dedução é a dedução padrão da situação de declaração, a menos que se informe
+um valor detalhado maior que ela. Para 2026, a dedução padrão é de $16,100 para
+solteiro e para casado com declaração separada, $32,200 para casados com
+declaração conjunta e $24,150 para chefe de família.
+
+O que sobra é a renda tributável. As faixas se aplicam a esse número, e a
+estimativa estadual se aplica ao mesmo número.
+
+
+<div class="guide-inline-figure">
+  <GuideIllustration slug="net-pay-calculator-explained" locale={frontmatter.locale} />
+</div>
+## Como as faixas funcionam
+
+O IRS publica cada faixa como um valor fixo de imposto mais uma porcentagem do
+excedente sobre o piso da faixa, e não como uma alíquota fixa sobre cada fatia.
+Para um solteiro em 2026, as alíquotas são de 10 por cento sobre os primeiros
+$12,400, 12 por cento daí até $50,400, 22 por cento até $105,700, 24 por cento
+até $201,775, 32 por cento até $256,225, 35 por cento até $640,600 e 37 por
+cento sobre o que passar disso.
+
+Nessa forma, a tabela é lida como uma lista de pontos de controle: o imposto é
+$1,240 em $12,400, $5,800 em $50,400, $17,966 em $105,700, $41,024 em
+$201,775, $58,448 em $256,225 e $192,979.25 em $640,600. Uma renda tributável de
+$83,900 para um solteiro dá, portanto, $5,800 mais 22 por cento dos $33,500
+acima de $50,400, ou seja, $5,800 mais $7,370 — um imposto federal de $13,170.
+
+Daí saem duas alíquotas, que respondem a perguntas diferentes. A marginal é a
+que o próximo dólar encontra, então com $83,900 de renda tributável o próximo
+dólar é tributado a 22 por cento. A efetiva é o imposto total dividido pela
+renda total: o mesmo leitor, com renda bruta de $100,000 e dedução padrão de
+$16,100, paga $13,170 de imposto federal, cerca de 13 por cento do que ganhou.
+
+## A dedução padrão e a dedução detalhada
+
+Um dólar de dedução é um dólar de renda tributável a menos, e a renda
+tributável é tributada à alíquota marginal, então um dólar de dedução economiza
+a alíquota marginal em imposto. Por isso o tamanho da dedução importa mais para
+quem está numa faixa alta do que para quem está numa baixa: os primeiros
+dólares de renda são tributados a 10 por cento, então a dedução padrão
+economiza pouco imposto para um solteiro na base da tabela e bem mais para
+quem está mais acima.
+
+A calculadora pede a dedução detalhada e a usa quando ela é maior que a
+dedução padrão. Quando o valor detalhado é menor, vale a dedução padrão e a
+renda tributável fica maior. Os dois números do resultado mostram qual foi
+usada.
+
+
+<div class="guide-inline-figure">
+  <GuideIllustration slug="debt-payoff-calculator-explained" locale={frontmatter.locale} />
+</div>
+## O que o número não cobre
+
+O número federal é o imposto de renda comum sobre a renda tributável, e o
+cálculo para aí. Ele não modela:
+
+- **Créditos tributários.** Os créditos reduzem o imposto depois de
+  calculado, e nenhum crédito é aplicado aqui.
+- **O crédito por filho.** O mesmo vale para ele, e ele é uma das maiores
+  diferenças entre uma obrigação tributária e uma conta de imposto.
+- **Alíquotas de ganho de capital.** As alíquotas comuns são aplicadas a toda a
+  renda tributável, sem tratamento separado para ganhos.
+- **A dedução para idosos.** O valor adicional disponível para contribuintes
+  mais velhos não faz parte do cálculo.
+
+O imposto estadual é um cálculo separado e tem a sua própria seção abaixo.
+
+## Como o imposto estadual é calculado
+
+O imposto estadual não é uma alíquota aplicada a toda a renda. Ele é calculado
+como o estado o calcula, a partir de números publicados: as faixas, a dedução
+padrão e a isenção pessoal do estado. A maioria vem das tabelas da Tax
+Foundation para cada estado e para o Distrito de Colúmbia. Para cinco estados
+eles vêm do próprio estado, porque o que o estado publicou para 2026 era mais
+novo que as tabelas: Califórnia, Havaí, Maine, Vermont e Arizona.
+
+O cálculo segue esta ordem.
+
+1. O estado parte da renda bruta ajustada, que é a renda bruta menos os
+   descontos antes do imposto.
+2. Sai a dedução padrão do próprio estado, quando ele tem uma, e também a
+   isenção pessoal quando o estado a concede como exclusão.
+3. O que sobra é tributado pelas faixas do próprio estado, fatia por fatia:
+   cada parte da renda é tributada à alíquota da faixa em que cai, e é por isso
+   que um estado progressivo custa mais que um de alíquota única.
+4. Os créditos saem do imposto. Um estado que concede a isenção ou a dedução
+   padrão como crédito, e não como exclusão, a aplica aqui, assim como o
+   crédito estadual por renda do trabalho e o crédito estadual por filho, onde o
+   modelo os tem.
+
+Usa-se a tabela da situação de declaração. Os estados que publicam uma tabela
+própria de chefe de família a têm aqui, tirada dos próprios formulários: Nova
+York, Nova Jersey, Minnesota, Havaí, Connecticut, Maryland, Maine, Montana,
+Novo México, Oregon e Califórnia. Idaho trata a declaração de chefe de família
+como conjunta, então vale a tabela conjunta. Outros quatro estados não
+publicam tabela, mas dão ao chefe de família uma dedução ou isenção própria, e
+esses números também estão aqui: Kansas, Oklahoma, Wisconsin e Massachusetts.
+Os demais são calculados com os números de solteiro.
+
+Três estados permitem deduzir o imposto de renda federal pago da renda
+tributável estadual, e onde o modelo faz isso, a dedução sai da renda antes de
+aplicar as faixas estaduais.
+
+- O Alabama deduz o total, sem limite de valor.
+- O Missouri deduz uma parte que depende da renda no Missouri: 35% abaixo de
+  $25,000, 25% até $50,000, 15% até $100,000, 5% até $125,000 e nada acima
+  disso. O resultado não pode passar de $5,000, ou de $10,000 numa declaração
+  conjunta.
+- O Oregon deduz até $8,750, e o limite diminui conforme a renda sobe.
+
+O resultado é um número que se comporta como um imposto estadual: ele se move
+com a renda, se move com a situação de declaração e é zero nos nove estados
+que não tributam salários.
+
+### A idade dos filhos
+
+Os créditos estaduais por filho dependem da idade da criança, e a idade é
+perguntada por faixa, e não como um número único:
+
+| Faixa | Por que a faixa existe |
+| --- | --- |
+| 0–3 | Nova York paga $1,000 por filho com menos de quatro anos |
+| 4–5 | o restante da faixa de Nova York |
+| 6 | Vermont é o único estado que paga por um filho de seis anos |
+| 7–11 | Illinois corta aos doze |
+| 12 | Massachusetts corta aos treze |
+| 13–16 | o restante da faixa até dezessete |
+| 17 | Minnesota paga por filho com menos de dezoito |
+
+As faixas são as idades em que os estados fazem o corte, e é isso que torna os
+créditos exatos, e não aproximados. O número de filhos nelas é também o que o
+crédito por renda do trabalho conta.
+
+### O estado é um padrão, não um fato sobre o leitor
+
+A página pode preencher o estado antes que o leitor toque em qualquer coisa. A
+rede que serve o site sabe de onde veio a requisição, então a página pergunta
+a ela em qual estado o visitante está. O estado devolvido é aproximado: uma
+VPN, um proxy corporativo ou uma rede móvel podem apontar a resposta para o
+estado errado. O seletor está ali, então um leitor no estado errado o muda com
+um clique e todos os números se movem junto.
+
+Quem quiser o número da própria declaração pode digitar o imposto estadual no
+campo abaixo do estado, e esse número substitui o calculado.
+
+### O que o imposto estadual não inclui
+
+Quatro coisas ficam de fora, e vale conhecê-las.
+
+- Alíquotas de ganho de capital, as sobretaxas que alguns estados cobram de
+  rendas altas e os impostos de governos municipais e de condado.
+- A dedução dos impostos de renda estaduais e locais pagos, que muitos estados
+  permitem dentro das deduções detalhadas.
+- Vermont publica as alíquotas de 2026 como números preliminares e imprime a
+  dedução padrão e a isenção pessoal de 2026 junto com o formulário, que sai em
+  2027, então os valores usados aqui são os últimos que o estado publicou.
+- A redução gradual da dedução padrão e da isenção pessoal do Maine conforme a
+  renda no Maine sobe. A dedução começa a diminuir em $102,250 para um solteiro
+  e some em $177,250, e a isenção começa a diminuir em $341,000.
+
+Os créditos estaduais também são parciais. O crédito por renda do trabalho
+está presente para os estados que o definem como porcentagem do crédito
+federal e para os três que o calculam por conta própria: Califórnia,
+Minnesota e Wisconsin. Washington tem um crédito por renda do trabalho
+próprio, mas ele é pago por um pedido separado e não faz parte de uma
+declaração, então não está no modelo. O crédito por filho está presente para
+os estados em que ele depende da idade da criança. Os créditos dos outros
+estados não estão no modelo, e os que estão não cobrem todas as partes da
+regra: o número é o crédito que o estado paga, e uma declaração pode diferir
+dele.
+
+Os impostos sobre a folha também ficam fora deste cálculo. Social Security e
+Medicare são retidos do salário com alíquotas e tetos próprios, que pertencem
+ao cálculo do salário líquido, e não ao imposto de renda sobre os rendimentos.
+
+Todo número do resultado decorre das tabelas publicadas de 2026 e dos valores
+da página. Mude a renda, a situação de declaração, a dedução ou o estado, e o
+imposto, a alíquota efetiva e a renda que sobra mudam junto.

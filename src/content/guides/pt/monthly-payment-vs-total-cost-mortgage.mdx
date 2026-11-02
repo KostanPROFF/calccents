@@ -1,0 +1,135 @@
+---
+title: "Parcela mensal versus custo total do financiamento"
+description: "Uma parcela mensal menor pode custar mais ao longo do empréstimo. Veja como comparar a parcela com o que um financiamento realmente custa no total."
+locale: "pt"
+date: 2026-10-03
+lastReviewed: 2026-10-23
+author: "Kostan Proff"
+reviewedBy: "Tetiana Goncharko"
+group: "home"
+illustration: "monthly-payment-vs-total-cost-mortgage"
+readingMinutes: 7
+sources:
+  - label: "CFPB — Financiamento imobiliário e ferramentas para o consumidor"
+    url: "https://www.consumerfinance.gov/consumer-tools/mortgages/"
+  - label: "Freddie Mac — Primary Mortgage Market Survey"
+    url: "https://www.freddiemac.com/pmms"
+  - label: "Fannie Mae — Pesquisas e análises"
+    url: "https://www.fanniemae.com/research-and-insights"
+relatedTools:
+  - "mortgage-payment"
+  - "rent-vs-buy"
+faq:
+  - q: "Como comparar duas ofertas de financiamento?"
+    a: "Rode cada uma na calculadora e compare os juros totais e o custo total de moradia, não a parcela mensal. Uma parcela menor num prazo mais longo costuma vir com mais juros no total, porque o saldo fica alto por mais tempo."
+  - q: "Uma entrada maior sempre economiza dinheiro?"
+    a: "Ela reduz o valor emprestado, o que reduz os juros. Se essa troca compensa depende do que o dinheiro da entrada faria de outra forma, e da taxa e do prazo, por isso a comparação vale ser feita, e não suposta."
+  - q: "O imposto predial entra na comparação?"
+    a: "Ele pertence ao custo total de moradia, e não ao custo do empréstimo, porque continua depois que o empréstimo é quitado. A calculadora o mostra separado exatamente por isso."
+  - q: "E os pontos?"
+    a: "Pontos são uma tarifa paga no fechamento em troca de uma taxa menor. Eles entram numa comparação de custo total, porque a tarifa precisa ser recuperada com parcelas menores ao longo do empréstimo. A calculadora não os modela, e o guia sobre custos de fechamento trata deles."
+  - q: "Como a inflação muda esta comparação?"
+    a: "Ela muda o que a parcela significa em relação à sua renda, não o que o empréstimo custa. O total de juros é um número real nos dólares do dia em que o empréstimo é feito."
+  - q: "Os juros totais são o custo inteiro?"
+    a: "Não. Os juros totais são o custo do empréstimo. Imposto predial, seguro, HOA e manutenção vêm a mais, e a calculadora mostra o custo total de moradia para que os dois sejam vistos separadamente."
+---
+
+import GuideIllustration from '../../../components/visuals/GuideIllustration.astro';
+
+Uma oferta de financiamento costuma ser apresentada como um número mensal, e o
+número mensal é um jeito ruim de comparar duas ofertas. É um bom jeito de
+conferir se algo cabe no bolso e um jeito ruim de descobrir qual custa menos.
+
+O motivo é que a parcela mensal depende de três dados, e mudar qualquer um
+deles muda a parcela enquanto o custo total do empréstimo anda no sentido
+contrário.
+
+## Por que a parcela é um número enganoso
+
+Considere dois empréstimos para a mesma casa, com a mesma taxa:
+
+- **Empréstimo A**: $360,000 em 30 anos a 6,5 por cento — cerca de $1,986 por mês
+- **Empréstimo B**: $360,000 em 15 anos a 6,5 por cento — cerca de $3,108 por mês
+
+O Empréstimo B custa $1,122 a mais todo mês. Ao longo da vida do empréstimo, o
+Empréstimo A custa cerca de $355,000 a mais em juros. O empréstimo mais curto
+compra uma parcela 57 por cento maior e, em troca, os juros totais caem um pouco
+mais da metade.
+
+Nenhum é melhor em abstrato. Eles servem para circunstâncias diferentes, e as
+circunstâncias não são aritmética. Mas os dois fatos acima são aritmética, e
+são os fatos de que uma comparação precisa.
+
+
+<div class="guide-inline-figure">
+  <GuideIllustration slug="mortgage-payment-calculator-explained" locale={frontmatter.locale} />
+</div>
+## Os quatro números que valem a comparação
+
+Uma comparação de financiamentos fica mais clara com quatro números em vez de
+um:
+
+1. **Principal e juros mensais** — o que sai da sua conta todo mês.
+2. **Juros totais** — o custo do empréstimo ao longo de toda a vida dele.
+3. **Custo total de moradia** — tudo o que você paga para morar no imóvel ao
+   longo do empréstimo: principal, juros, imposto, seguro e HOA.
+4. **Data de quitação** — quando o empréstimo realmente termina.
+
+A <a href="/pt/tools/mortgage-payment/">calculadora de financiamento</a>
+mostra os quatro. A data de quitação é a mais esquecida, e é a que mostra com
+mais clareza o efeito de uma mudança de prazo.
+
+## A troca que uma mudança de prazo faz
+
+Um prazo mais longo baixa a parcela e aumenta o total. O mecanismo é simples:
+o saldo fica alto por mais tempo, e os juros incidem sobre o saldo.
+
+A troca não é linear. Passar de 15 para 30 anos reduz a parcela mais do que
+pela metade. Passar de 30 para 40 anos não reduz nada pela metade e aumenta
+bastante os juros totais, porque o saldo fica alto uma década a mais. A
+primeira década de um financiamento é quando quase todos os juros são
+cobrados, e um prazo que estende essa década sai caro de um jeito que a
+parcela sozinha não mostra.
+
+
+<div class="guide-inline-figure">
+  <GuideIllustration slug="mortgage-rate-and-term-tradeoffs" locale={frontmatter.locale} />
+</div>
+## O que a taxa faz com a mesma comparação
+
+A taxa tem um efeito parecido. Nos mesmos $360,000 em 30 anos, passar de 6,5
+para 7,5 por cento muda a parcela mensal em cerca de $90 e os juros totais em
+cerca de $60,000. Uma diferença de um ponto percentual parece pequena e não é,
+em trinta anos, porque se aplica a um saldo que continua alto.
+
+É por isso que comparações de taxas usam números totais. A Primary Mortgage
+Market Survey da Freddie Mac publica a série de taxas mais usada como
+referência, e as páginas de pesquisa da Fannie Mae trazem os comentários
+equivalentes.
+
+## O que entra na comparação e o que não entra
+
+Alguns custos entram numa comparação de financiamento e outros não.
+
+**Na comparação:** principal, juros, imposto predial, seguro, HOA e o custo do
+dinheiro usado na entrada, porque ele não fica disponível para mais nada
+enquanto está no imóvel.
+
+**Fora da comparação:** o valor do próprio imóvel e a tributação da venda. O
+primeiro é um ativo, não um custo, e o segundo depende de circunstâncias que a
+página não enxerga.
+
+Os pontos ficam num lugar desconfortável. São uma tarifa paga agora em troca
+de uma taxa menor depois, e entram numa comparação de custo total porque a
+tarifa precisa ser recuperada com parcelas menores. As ferramentas deste site
+não os modelam, então uma comparação com pontos precisa dessa parte feita à
+parte.
+
+## A comparação que você consegue fazer
+
+Rode as duas ofertas na calculadora com os mesmos dados de imposto predial,
+seguro e HOA, e leia três números: a parcela mensal, os juros totais e a data
+de quitação. Depois rode o mesmo empréstimo com uma entrada maior e veja se os
+juros totais mudam mais do que o dinheiro liberado renderia em outro lugar.
+Isso é uma comparação, não uma impressão, e é uma comparação que a aritmética
+consegue resolver.

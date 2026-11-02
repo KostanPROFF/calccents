@@ -1,0 +1,152 @@
+---
+title: "Erros comuns ao comparar alugar e comprar"
+description: "As suposições que mudam silenciosamente uma comparação entre alugar e comprar, de ignorar a manutenção e os custos de transação a tratar a valorização como promessa."
+locale: "pt"
+date: 2026-10-06
+lastReviewed: 2026-10-23
+author: "Kostan Proff"
+reviewedBy: "Tetiana Goncharko"
+group: "renting"
+illustration: "rent-vs-buy-common-mistakes"
+readingMinutes: 7
+sources:
+  - label: "CFPB — Financiamento imobiliário e ferramentas para o consumidor"
+    url: "https://www.consumerfinance.gov/consumer-tools/mortgages/"
+  - label: "HUD — Helping American Homeowners"
+    url: "https://www.hud.gov/helping_american_homeowners"
+  - label: "FRED — Índice de preços de imóveis dos Estados Unidos"
+    url: "https://fred.stlouisfed.org/series/HPINUS"
+relatedTools:
+  - "rent-vs-buy"
+faq:
+  - q: "Qual suposição mais mexe na resposta?"
+    a: "A do preço do imóvel ao longo do horizonte, seguida da reserva de manutenção. O aluguel e a taxa importam, mas a trajetória do valor e os custos recorrentes de ser dono são onde a comparação costuma virar."
+  - q: "A valorização deve entrar na conta?"
+    a: "Ela precisa entrar, porque o patrimônio faz parte da comparação, mas como suposição, e não como previsão. Rode o cálculo com zero, com um número negativo e com um positivo, e veja quanto a resposta se move."
+  - q: "Por que a reserva de manutenção é sempre discutida?"
+    a: "Porque é um custo real que não aparece em nenhum extrato e varia muito entre casas e entre anos. Pequena demais, a compra parece melhor do que é; grande demais, parece pior. Defini-la como um dado explícito, com um número que você consiga justificar, é mais útil que deixá-la de fora."
+  - q: "E o rendimento da entrada?"
+    a: "A entrada é um dinheiro que não fica disponível para mais nada enquanto está no imóvel, então uma comparação completa precisa considerar o que ele poderia ter rendido. A maioria das comparações simples deixa isso de fora, e essa é uma das maiores lacunas."
+  - q: "A comparação lida com uma venda depois de alguns anos?"
+    a: "Sim. Defina o horizonte como o número de anos que você espera ficar, e a ferramenta mostra o valor, o patrimônio e os custos de venda no fim dele. Os custos de venda são descontados do patrimônio, porque são o que uma venda custa."
+  - q: "Um horizonte curto é realista?"
+    a: "Para muita gente, sim: as pessoas se mudam por trabalho ou família bem antes de trinta anos. Um horizonte curto é o argumento mais forte da comparação a favor do aluguel, por isso o cálculo é útil tanto em cinco quanto em trinta anos."
+---
+
+import GuideIllustration from '../../../components/visuals/GuideIllustration.astro';
+
+A maioria das comparações entre alugar e comprar não erra por causa da
+aritmética. Erra por causa das suposições, e as suposições costumam ser feitas
+em silêncio.
+
+A <a href="/pt/tools/rent-vs-buy/">calculadora alugar ou comprar</a> deste
+site transforma cada suposição num dado explícito, para que o efeito de mudá-la
+fique visível em vez de enterrado. Este guia trata das que mais costumam virar
+a resposta.
+
+## Tratar a valorização como promessa
+
+O erro de maior consequência, porque funciona num só sentido. Uma comparação
+que supõe que o imóvel sobe 3 por cento ao ano e omite a possibilidade de
+queda produz uma resposta que não vale justamente no caso que mais importa.
+
+O número é uma suposição, e uma suposição razoável pode ser apoiada em dados:
+o Federal Reserve Bank of St. Louis publica índices longos de preços de imóveis
+que são um ponto de partida razoável para calibrar. Mas a distância entre
+décadas boas e ruins é enorme, e a aritmética de um horizonte de cinco anos é
+totalmente diferente da de trinta.
+
+A solução é rodar o cálculo mais de uma vez: com a valorização em zero, depois
+positiva, depois negativa. Se a resposta muda completamente, ela nunca foi de
+fato sobre alugar ou comprar. Era sobre uma previsão de preço de imóvel.
+
+
+<div class="guide-inline-figure">
+  <GuideIllustration slug="rent-vs-buy-calculator-explained" locale={frontmatter.locale} />
+</div>
+## Esquecer que ser dono tem custos recorrentes
+
+O aluguel é um número. Ser dono é uma parcela de financiamento, mais imposto
+predial, mais seguro, mais HOA, mais manutenção.
+
+A manutenção é a que fica de fora, porque é a que não chega com uma conta
+junto. Telhado, eletrodomésticos, aquecedor e pintura não aparecem em nenhum
+extrato, e não aparecem numa comparação que só lista financiamento e imposto.
+
+O tratamento certo é uma porcentagem do preço de compra por ano, informada
+como um número explícito que possa ser discutido. Uma porcentagem do preço não
+é uma afirmação sobre uma casa específica; é uma aproximação grosseira do fato
+de que um prédio envelhece.
+
+## Deixar a entrada fora da comparação
+
+A entrada é dinheiro que sai da poupança. Uma comparação completa pergunta o
+que esse dinheiro teria rendido de outra forma e compara isso com o que
+colocá-lo na casa produziu.
+
+A maioria das comparações simples não faz isso, e a omissão é grande. Uma
+entrada de vinte por cento numa casa de $450,000 são $90,000 — dinheiro que sai
+da poupança por todo o período, e cujo uso alternativo faz parte da decisão.
+
+A calculadora alugar ou comprar deste site também não modela o rendimento da
+entrada. Ela mostra o desembolso e o patrimônio formado, que é a parte da
+comparação que a aritmética consegue estabelecer. O resto é um julgamento
+sobre retornos.
+
+
+<div class="guide-inline-figure">
+  <GuideIllustration slug="monthly-payment-vs-total-cost-mortgage" locale={frontmatter.locale} />
+</div>
+## Usar o aluguel e o preço do anúncio
+
+Aluguéis e preços são anunciados de um jeito que favorece um lado da
+comparação. Um prédio com um apartamento bonito e um prédio ruim a cinco
+minutos dali podem ter o mesmo aluguel; uma casa com uma boa cozinha e uma com
+um telhado ruim podem ter o mesmo preço. A comparação os trata como
+intercambiáveis, e eles não são.
+
+## Comparar num horizonte que não bate com o plano
+
+Um horizonte de trinta anos é uma suposição ruim para quem espera se mudar em
+quatro anos, e um de quatro anos é ruim para quem compra para ficar. O
+horizonte é a alavanca mais forte da comparação depois da valorização, porque
+o custo inicial da compra é diluído pelos anos em que você fica.
+
+Rodar o cálculo em cinco e em trinta anos, com todo o resto igual, mostra isso
+com clareza.
+
+## Comparar o número mensal em vez do total
+
+A comparação mensal é o mesmo erro que aparece nas comparações de
+financiamento. Um aluguel de $2,400 contra um custo de ser dono de $2,150 faz
+o aluguel parecer mais caro, e pode ser, mês a mês. Ao longo do horizonte,
+com o patrimônio contado, a ordem pode ser outra. O mês do cruzamento existe
+justamente porque a resposta mensal e a total discordam por muito tempo.
+
+## Ignorar a saída
+
+Os dois caminhos têm uma, e elas são diferentes. O aluguel tem caução, aviso
+prévio e custo de mudança. A compra tem custos de venda, um mercado que pode
+estar mais fraco do que estava e um financiamento que precisa ser quitado ou
+assumido pelo próximo comprador.
+
+A calculadora desconta os custos de venda do patrimônio no fim do horizonte,
+porque são um número real e muitas vezes relevante: o que uma venda deixa é o
+valor da casa menos o saldo devido menos o custo da própria venda. Ela não
+modela o risco de vender num mercado mais fraco, que é um fato sobre o futuro,
+e não sobre a aritmética.
+
+## Uma ordem prática de passos
+
+Se você vai fazer a comparação de verdade, esta ordem costuma expor as
+suposições que importam:
+
+1. Obtenha o preço real, o aluguel real, a alíquota real do imposto e a
+   cotação real de seguro para os imóveis específicos.
+2. Rode o cálculo com o preço do imóvel estável e anote o cruzamento.
+3. Rode de novo com uma variação de preço negativa, e de novo com uma
+   positiva.
+4. Rode no seu horizonte provável e em trinta anos.
+5. Veja quanto o mês do cruzamento se move entre essas simulações. Se ele se
+   move muito, a decisão depende das suposições, e não da aritmética, e vale
+   saber disso antes de alguém tirar uma conclusão.

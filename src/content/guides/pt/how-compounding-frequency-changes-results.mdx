@@ -1,0 +1,141 @@
+---
+title: "Como a frequência de capitalização muda o resultado"
+description: "O que acontece com um saldo quando os juros são creditados por dia, mês, trimestre ou ano, e como ler a taxa anual efetiva que isso produz."
+locale: "pt"
+date: 2026-10-09
+lastReviewed: 2026-10-23
+author: "Kostan Proff"
+reviewedBy: "Tetiana Goncharko"
+group: "investing"
+illustration: "how-compounding-frequency-changes-results"
+readingMinutes: 6
+sources:
+  - label: "Investor.gov — Juros compostos"
+    url: "https://www.investor.gov/introduction-investing/investing-basics/glossary/compound-interest"
+  - label: "Federal Reserve — H.15, taxas de juros selecionadas"
+    url: "https://www.federalreserve.gov/releases/h15/"
+  - label: "IRS — IRAs tradicionais"
+    url: "https://www.irs.gov/retirement-plans/traditional-iras"
+relatedTools:
+  - "compound-interest"
+faq:
+  - q: "Por que a capitalização mais frequente produz mais dinheiro?"
+    a: "Porque a mesma taxa nominal é aplicada mais vezes. Com capitalização mais frequente os juros são creditados antes, e quanto antes são creditados, antes começam eles mesmos a render juros."
+  - q: "O que é a taxa anual efetiva?"
+    a: "A taxa que produz, em um ano, o mesmo resultado que a taxa nominal capitalizada na frequência informada. É (1 + r) elevado ao número de períodos por ano, menos um. Para 7 por cento capitalizados mensalmente, é 7,229 por cento."
+  - q: "Quanta diferença faz?"
+    a: "Em um ano, quase nenhuma: 7 por cento capitalizados mensalmente dão 7,229 por cento contra 7 por cento capitalizados anualmente, uma diferença de cerca de $22 num saldo de $10,000. Em trinta anos, a diferença chega aos milhares."
+  - q: "Posso capitalizar diariamente?"
+    a: "Não nesta ferramenta. Os aportes aqui são mensais, e o cálculo mantém o período de capitalização igual ao período de aporte, então a frequência precisa dividir doze."
+  - q: "A frequência da conta depende da instituição?"
+    a: "Muitas vezes, sim, e costuma constar nos termos da conta. Uma poupança que credita juros por mês e outra que credita por dia são produtos diferentes com a mesma taxa anunciada."
+  - q: "Frequência maior é o mesmo que taxa maior?"
+    a: "Não. A taxa nominal é o número informado e a frequência muda o que ele se torna. Duas contas com a mesma taxa nominal e frequências diferentes não são o mesmo produto, e a taxa anual efetiva é como compará-las."
+---
+
+import GuideIllustration from '../../../components/visuals/GuideIllustration.astro';
+
+Duas contas que anunciam "7 por cento" não são necessariamente a mesma conta.
+A taxa nominal é o número, e a frequência de capitalização decide em que esse
+número se transforma.
+
+A diferença em um ano é pequena. Em trinta anos não é, e a aritmética por trás
+disso vale ser entendida em vez de estimada.
+
+## Por que a frequência importa
+
+O mecanismo é um efeito de tempo. Juros creditados mensalmente chegam antes
+dos juros creditados anualmente, e juros creditados antes têm mais tempo para
+render juros.
+
+Concretamente: com capitalização anual, os juros do ano inteiro caem numa
+única data, no fim. Com capitalização mensal, um doze avos dos juros anuais
+cai no fim de cada mês e começa a render imediatamente. Os juros extras são
+pequenos, mas são ganhos por muito tempo.
+
+
+<div class="guide-inline-figure">
+  <GuideIllustration slug="compound-vs-simple-interest" locale={frontmatter.locale} />
+</div>
+## A taxa anual efetiva
+
+A forma de comparar duas frequências é a taxa anual efetiva: a taxa que
+produz, em um ano, o mesmo resultado que a taxa informada capitalizada na
+frequência informada.
+
+**TAE = (1 + r)ⁿ − 1**
+
+Em que **r** é a taxa nominal anual dividida pelo número de períodos por ano e
+**n** é o número de períodos por ano.
+
+A 7 por cento:
+
+| Frequência | Taxa anual efetiva |
+|---|---|
+| Anual | 7,000% |
+| Semestral | 7,122% |
+| Quadrimestral | 7,165% |
+| Trimestral | 7,186% |
+| Bimestral | 7,207% |
+| Mensal | 7,229% |
+
+A sequência é monótona, e os degraus diminuem conforme a frequência aumenta,
+que é o ponto prático: a primeira duplicação da frequência vale mais que a
+última.
+
+A <a href="/pt/tools/compound-interest/">calculadora de juros compostos</a>
+calcula a taxa efetiva diretamente e a mostra nos resultados ao lado da taxa
+nominal, para que as duas possam ser comparadas.
+
+## Quanta diferença faz
+
+O jeito útil de olhar para isso é comparar o total, não a taxa.
+
+Com $10,000 a 7 por cento por um ano, a capitalização mensal produz $10,722.90
+contra $10,700.00 com capitalização anual. A diferença é de $22.90, que sozinha
+não justifica uma decisão.
+
+Em trinta anos, sem novos aportes, os mesmos $10,000 viram $76,123 com
+capitalização mensal e $75,624 com capitalização anual — uma diferença de
+$499. Com um aporte mensal de $500 no mesmo período, tanto os saldos quanto a
+diferença ficam bem maiores, porque os aportes também rendem à taxa efetiva
+mais alta.
+
+O padrão é consistente: a distância entre duas frequências é pequena nos
+primeiros anos e aumenta continuamente, porque ela própria está sendo
+capitalizada.
+
+
+<div class="guide-inline-figure">
+  <GuideIllustration slug="compound-interest-calculator-explained" locale={frontmatter.locale} />
+</div>
+## Por que a ferramenta oferece seis frequências
+
+A ferramenta oferece anual, semestral, quadrimestral, trimestral, bimestral e
+mensal. O motivo é que os aportes aqui são mensais, e o cálculo mantém o
+período de capitalização igual ao período de aporte.
+
+Qualquer frequência que divida doze mantém essa aritmética exata, e não
+aproximada. Frequências que não dividem doze exigiriam repartir um aporte
+entre dois períodos de capitalização, o que introduz uma convenção de
+arredondamento que é um artefato do modelo, e não uma característica do
+produto.
+
+## O que isto não é
+
+Isto é uma comparação entre duas condições de crédito de juros, não entre dois
+produtos. Duas contas com a mesma taxa nominal e a mesma frequência ainda
+podem ser muito diferentes por causa de tarifas, saldos mínimos, limites de
+saque e tributação.
+
+As páginas do Investor.gov sobre tarifas e despesas e sobre tipos de conta
+descrevem essas diferenças. A série H.15 do Federal Reserve registra as taxas
+que os produtos de poupança realmente pagaram, o que ajuda a conferir se uma
+taxa cotada está numa faixa plausível.
+
+## Um teste prático
+
+Pegue uma taxa da série H.15, coloque-a na calculadora com capitalização anual
+e depois com capitalização mensal, e leia a diferença no saldo final. Essa
+diferença é o valor do crédito mais frequente, e é um número, não uma regra
+prática.

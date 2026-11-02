@@ -1,0 +1,179 @@
+---
+title: "A calculadora alugar ou comprar explicada"
+description: "Como a comparação entre alugar e comprar é montada, o que o mês do cruzamento realmente significa e quais custos ficam totalmente fora do cálculo na prática."
+locale: "pt"
+date: 2026-10-01
+lastReviewed: 2026-10-23
+author: "Kostan Proff"
+reviewedBy: "Tetiana Goncharko"
+group: "renting"
+illustration: "rent-vs-buy-calculator-explained"
+readingMinutes: 9
+sources:
+  - label: "CFPB — Financiamento imobiliário e ferramentas para o consumidor"
+    url: "https://www.consumerfinance.gov/consumer-tools/mortgages/"
+  - label: "HUD — Helping American Homeowners"
+    url: "https://www.hud.gov/helping_american_homeowners"
+  - label: "BLS — Índice de Preços ao Consumidor"
+    url: "https://www.bls.gov/cpi/"
+  - label: "FRED — Índice de preços de imóveis dos Estados Unidos"
+    url: "https://fred.stlouisfed.org/series/HPINUS"
+  - label: "Tax Foundation — Property Taxes by State and County, 2026"
+    url: "https://taxfoundation.org/data/all/state/property-taxes-by-state-county/"
+relatedTools:
+  - "rent-vs-buy"
+  - "mortgage-payment"
+faq:
+  - q: "Por que a ferramenta não diz qual opção é melhor?"
+    a: "Porque a resposta depende de coisas que a aritmética não vê: suas outras economias, sua renda, quanto tempo você planeja ficar e quanta incerteza você consegue absorver. A comparação produz um mês de cruzamento, que é um fato sobre os números, e o julgamento fica com você."
+  - q: "O que é o custo líquido de ser dono?"
+    a: "É o dinheiro que você pagou pela casa, incluindo a entrada e os custos de fechamento, menos o patrimônio formado, que é o valor atual da casa menos o saldo ainda devido. Um número negativo significa que você formou mais patrimônio do que desembolsou."
+  - q: "Por que a manutenção é uma porcentagem do preço?"
+    a: "Reparos não aparecem em nenhum extrato, mas chegam. Expressar a manutenção como porcentagem do preço de compra por ano a mantém visível ao lado dos outros custos recorrentes, em vez de deixá-la sumir da comparação."
+  - q: "O custo de venda aparece nos números mensais?"
+    a: "Não. Os custos de venda são pagos uma vez, no dia da venda, então não fazem parte da parcela mensal e não são distribuídos pelos meses anteriores. Eles incidem sobre o preço da casa naquele momento, e é por isso que reduzem o patrimônio que a comparação conta."
+  - q: "E se o preço da casa cair?"
+    a: "Informe uma variação anual negativa e o valor cai todo mês. O patrimônio encolhe, o mês do cruzamento se afasta ou desaparece, e o custo líquido de ser dono sobe. A ferramenta lida com um mercado em queda sem tratamento especial."
+  - q: "Um horizonte de 30 anos é realista?"
+    a: "O horizonte é um dado. Um horizonte mais curto favorece o aluguel, porque o custo inicial da compra é recuperado ao longo de mais anos, e um mais longo favorece a compra. A ferramenta permite 5, 10, 15 ou 30 anos para que o efeito dessa escolha fique visível."
+  - q: "De onde vem a alíquota do imposto predial?"
+    a: "É um dado de entrada. Quando a rede consegue descobrir de qual estado veio a requisição, a página preenche o campo com a alíquota efetiva média do imposto predial daquele estado: o imposto efetivamente pago como fração do valor do imóvel, publicado pela Tax Foundation para 2026 a partir da American Community Survey de 2024. O imposto predial é definido pelos governos locais, então a alíquota de um condado ou cidade específicos costuma ser diferente da média estadual, e o campo continua editável."
+---
+
+import GuideIllustration from '../../../components/visuals/GuideIllustration.astro';
+
+Alugar e comprar são dois arranjos diferentes para a mesma coisa: um teto e um
+lugar para viver. A
+<a href="/pt/tools/rent-vs-buy/">calculadora alugar ou comprar</a> os compara
+em dinheiro e em patrimônio, e para por aí.
+
+Ela não dá veredito, e o motivo vale ser dito antes da aritmética. Um
+veredito dependeria de fatos que a página não vê — o que mais você
+economizou, quão estável é sua renda, quanto tempo pretende ficar no lugar,
+quanto um mês ruim pesaria. Esses dados mudam a resposta sem mudar nada da
+aritmética.
+
+## Dois livros, um mês de cada vez
+
+A comparação mantém dois livros de fluxo de caixa lado a lado.
+
+O **livro do aluguel** soma o aluguel mensal e o seguro do inquilino. Só isso.
+Não há caução a recuperar, nem manutenção, nem custo de transação no fim.
+
+O **livro da compra** soma:
+
+- A parcela do financiamento, pela fórmula padrão de amortização
+- O imposto predial, como porcentagem do preço de compra por ano
+- O seguro residencial, como valor anual dividido por doze
+- Qualquer taxa de HOA ou de condomínio
+- Uma reserva de manutenção, como porcentagem do preço de compra por ano
+- A entrada e os custos de fechamento, no primeiro mês
+
+A parcela do financiamento pertence ao empréstimo e termina com ele. Imposto,
+seguro, taxa de HOA e reserva de manutenção pertencem à casa, e correm enquanto
+ela for sua. Quando a comparação vai além do fim do empréstimo, os meses
+seguintes carregam só os custos recorrentes.
+
+O número do **imposto predial** é um dado, e a página pode preenchê-lo. Quando
+a rede consegue descobrir de qual estado veio a requisição, o campo recebe a
+alíquota efetiva média do imposto predial daquele estado — o imposto
+efetivamente pago como fração do valor do imóvel, publicado pela Tax
+Foundation para 2026 a partir da American Community Survey de 2024. É um
+número estadual, e o imposto predial é definido pelos governos locais, então a
+alíquota de um condado ou cidade específicos costuma ser outra. O campo
+continua editável, e o que o leitor digita é o que a comparação usa.
+
+A reserva de manutenção é a que gera discussão. Reparos não aparecem em nenhum
+documento de fechamento, mas chegam, com ou sem financiamento. Deixá-los de
+fora favorece a compra; tratá-los como enormes favorece o contrário.
+Expressá-los como porcentagem do preço de compra por ano os mantém ao lado dos
+outros custos recorrentes, onde podem ser discutidos direito.
+
+
+<div class="guide-inline-figure">
+  <GuideIllustration slug="rent-vs-buy-common-mistakes" locale={frontmatter.locale} />
+</div>
+## O patrimônio é a parte fácil de perder de vista
+
+Rodar só os livros de caixa produz uma imagem incompleta, porque comprar põe
+um ativo no balanço e alugar não.
+
+Então a calculadora acompanha mais dois números por mês:
+
+- **Valor da casa**, que cresce ou encolhe todo mês à taxa anual informada
+- **Saldo restante do empréstimo**, tirado do cronograma de amortização
+
+A diferença entre eles é o seu patrimônio:
+
+**patrimônio = valor da casa − saldo restante do empréstimo**
+
+O **custo líquido de ser dono** é então o dinheiro que você pagou, menos esse
+patrimônio, mais os custos que uma venda naquele momento teria:
+
+**custo líquido = entrada + custos de fechamento + todos os custos mensais de ser dono − patrimônio + custos de venda**
+
+Os custos de venda são o último termo por causa de quando são pagos. Eles
+incidem sobre o preço da casa no dia da venda, então não pertencem aos números
+mensais; pertencem ao patrimônio, porque o que uma venda deixa é o valor da
+casa menos o saldo devido menos o custo da venda. Zere os custos de venda e o
+patrimônio que a comparação conta é o total.
+
+Este é o número que pode ser comparado com o aluguel que você teria pago no
+mesmo período. No início, o custo líquido de ser dono é alto, porque você pagou
+uma quantia inicial grande e formou muito pouco patrimônio. Com os anos e a
+queda do saldo, o custo líquido cai, e em algum momento fica abaixo do
+aluguel.
+
+## O mês do cruzamento
+
+Esse ponto é o mês do cruzamento, e é o número isolado mais útil que a
+ferramenta produz. É o primeiro mês em que:
+
+**custo líquido de ser dono < aluguel total pago nos mesmos meses**
+
+Leia com cuidado. Antes do cruzamento, alugar custou menos em dinheiro. Depois
+dele, ser dono custou menos quando o patrimônio é contado. Nenhum dos lados
+dessa linha é recomendação; é o ponto em que as duas linhas do gráfico se
+cruzam, e a posição desse cruzamento depende inteiramente dos dados.
+
+O cruzamento chega mais tarde quando o aluguel é baixo em relação ao preço de
+compra, quando a taxa é alta, quando o horizonte é curto e quando a valorização
+suposta é baixa ou negativa. Ele nunca chega quando o aluguel é pequeno em
+relação ao preço de compra, que é o motivo aritmético de uma compra à vista num
+mercado caro poder ser a opção mais cara em cinco anos.
+
+
+<div class="guide-inline-figure">
+  <GuideIllustration slug="down-payment-and-closing-costs-explained" locale={frontmatter.locale} />
+</div>
+## O que fica de fora de propósito
+
+A comparação cobre dinheiro e patrimônio. Ela não cobre:
+
+- **Imposto sobre a venda.** Qualquer ganho e a isenção que possa se aplicar a
+  ele ficam fora do escopo da ferramenta.
+- **A dedução dos juros do financiamento.** Se ela vale algo depende da sua
+  alíquota marginal e das suas circunstâncias.
+- **Custos de transação da compra.** Os custos de fechamento entram como
+  porcentagem do preço; o detalhe do que cobrem está no guia sobre custos de
+  fechamento.
+- **Qualidade diferente de moradia.** Um imóvel alugado não é o mesmo prédio
+  que uma compra em outro bairro, e nenhuma fórmula capta isso.
+- **A opção de se mudar.** Alugar mantém um contrato; comprar mantém um
+  financiamento. Os dois têm seus custos de saída, e nenhum aparece aqui.
+
+## Uma nota sobre o dado de valorização
+
+A variação anual de valor que você informa é aplicada todo mês por todo o
+horizonte, nos dois sentidos se o número for negativo. Nenhuma previsão está
+envolvida, e nenhuma média histórica substitui o seu dado.
+
+Isso importa, porque essa suposição é uma das alavancas mais fortes de toda a
+comparação. Um preço que sobe 3 por cento ao ano e outro que sobe 1 por cento
+produzem números de patrimônio bem diferentes em cinco anos, e os dois são
+suposições plausíveis, e não fatos sobre o futuro.
+
+O Federal Reserve Bank of St. Louis publica séries longas de preços de imóveis
+úteis para calibrar o dado, e o Bureau of Labor Statistics publica os dados de
+inflação por trás dos ajustes de valor real em outras partes do site. Nenhum
+deles é uma previsão.

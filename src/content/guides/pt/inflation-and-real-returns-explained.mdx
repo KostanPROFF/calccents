@@ -1,0 +1,129 @@
+---
+title: "Inflação e retorno real explicados"
+description: "Por que retorno nominal e retorno real são números diferentes, como converter um no outro e o que isso significa para um saldo de poupança ao longo do tempo."
+locale: "pt"
+date: 2026-10-10
+lastReviewed: 2026-10-23
+author: "Kostan Proff"
+reviewedBy: "Tetiana Goncharko"
+group: "investing"
+illustration: "inflation-and-real-returns-explained"
+readingMinutes: 7
+sources:
+  - label: "BLS — Índice de Preços ao Consumidor"
+    url: "https://www.bls.gov/cpi/"
+  - label: "BLS — Tabelas de dados do CPI"
+    url: "https://www.bls.gov/data/"
+  - label: "Investor.gov — Juros compostos e inflação"
+    url: "https://www.investor.gov/introduction-investing/investing-basics/glossary/compound-interest"
+relatedTools:
+  - "compound-interest"
+faq:
+  - q: "O que é a taxa real?"
+    a: "A taxa que descreve a mudança no poder de compra, e não a mudança no número da conta. É a taxa nominal ajustada pela inflação: (1 + nominal) / (1 + inflação) − 1."
+  - q: "O que é a equação de Fisher?"
+    a: "A relação entre a taxa nominal, a taxa real e a inflação: (1 + nominal) = (1 + real) × (1 + inflação). É o motivo de a taxa real não ser simplesmente a nominal menos a inflação."
+  - q: "Nominal menos inflação basta?"
+    a: "Como aproximação é próximo, e com inflação baixa a diferença é pequena. Com 7 por cento nominais e 2,5 por cento de inflação, a subtração dá 4,5 por cento e o número exato é 4,39 por cento."
+  - q: "Qual medida de inflação usar?"
+    a: "O Índice de Preços ao Consumidor é a medida geral padrão. A escolha importa num horizonte longo, porque o índice que corresponde aos seus próprios gastos é o que descreve o seu próprio poder de compra."
+  - q: "A inflação afeta uma parcela fixa de financiamento?"
+    a: "Ela não muda a parcela, que é fixada no contrato. Ela muda o que a parcela compra, então o custo real de uma dívida de taxa fixa diminui com os anos."
+  - q: "O retorno real é garantido?"
+    a: "Não. Um retorno real é um cálculo com números supostos, e a inflação usada é ela mesma histórica. O cálculo mostra o que a aritmética produz para os dados informados."
+---
+
+import GuideIllustration from '../../../components/visuals/GuideIllustration.astro';
+
+Um retorno de 7 por cento parece um bom ano até você perguntar o que ele
+comprou. Se os preços subiram 2,5 por cento no mesmo período, o dinheiro
+cresceu 7 por cento e cada um desses dólares compra um pouco menos do que um
+ano antes.
+
+A <a href="/pt/tools/compound-interest/">calculadora de juros compostos</a>
+informa os dois números, porque uma projeção que só mostra o nominal descreve
+um saldo, e não quanto esse saldo vale.
+
+## Dois números diferentes
+
+**Nominal** é a taxa da conta: 7 por cento. É o número do extrato, e é o que o
+saldo da conta faz.
+
+**Real** é a taxa depois da inflação: quanto o saldo realmente vale em poder de
+compra. É o número que diz se o dinheiro ganhou ou perdeu terreno.
+
+Os dois não são iguais, e a relação entre eles é a equação de Fisher:
+
+**(1 + nominal) = (1 + real) × (1 + inflação)**
+
+Isolando a taxa real:
+
+**real = (1 + nominal) / (1 + inflação) − 1**
+
+Com 7 por cento nominais e 2,5 por cento de inflação, a taxa real é 4,39 por
+cento, e não os 4,5 por cento da subtração simples. A diferença é pequena
+nessas taxas e cresce em taxas maiores, por isso vale usar a fórmula exata.
+
+
+<div class="guide-inline-figure">
+  <GuideIllustration slug="compound-vs-simple-interest" locale={frontmatter.locale} />
+</div>
+## Um exemplo resolvido
+
+A coluna de valor real da calculadora faz a mesma conversão no saldo, e não na
+taxa. Um saldo de $10,000 a 7 por cento com $500 por mês por 10 anos termina
+em cerca de $92,000 em termos nominais. Com 2,5 por cento de inflação, o mesmo
+saldo no poder de compra do ano inicial fica em torno de $72,000.
+
+O número nominal diz que a conta tem $92,000. O real diz que ela tem o que
+$72,000 compravam dez anos antes. As duas coisas são verdadeiras e respondem a
+perguntas diferentes. A primeira é sobre a conta. A segunda é sobre a sua vida.
+
+## Qual número de inflação usar
+
+O Bureau of Labor Statistics publica o Índice de Preços ao Consumidor, a medida
+geral padrão da variação de preços, com as tabelas de dados e uma calculadora
+para períodos específicos.
+
+Num horizonte longo, a escolha do índice importa mais do que se imagina,
+porque o índice que corresponde aos seus próprios gastos é o que descreve o
+seu poder de compra. O CPI geral acompanha uma cesta de bens e serviços
+comprados por domicílios típicos, e é o padrão na maioria dos cálculos,
+inclusive no deste site.
+
+
+<div class="guide-inline-figure">
+  <GuideIllustration slug="compound-interest-calculator-explained" locale={frontmatter.locale} />
+</div>
+## Inflação e dívidas fixas
+
+Num financiamento de taxa fixa, a relação funciona ao contrário. Uma parcela
+fixa por trinta anos fica menor em termos reais à medida que os preços sobem.
+O tomador paga o empréstimo com um dinheiro que vale menos a cada ano do que o
+dinheiro que tomou emprestado.
+
+Isso é aritmética, não opinião: um empréstimo de taxa fixa é uma obrigação
+fixa em termos nominais e decrescente em termos reais.
+
+## A inflação e os números das ferramentas
+
+A calculadora de juros compostos aplica a taxa de inflação ao saldo,
+produzindo a coluna de valor real. A calculadora alugar ou comprar não ajusta
+pela inflação, porque compara duas séries de fluxo de caixa ao longo de um
+horizonte e o ajuste valeria tanto para a série do aluguel quanto para a da
+propriedade; a ferramenta deixa a escolha de como tratar a inflação fora do
+cálculo e diz isso.
+
+A calculadora de financiamento também não ajusta pela inflação, pelo mesmo
+motivo. Uma parcela daqui a trinta anos é um número fixo de dólares, e quanto
+esse número vale é uma pergunta sobre o futuro, não sobre o empréstimo.
+
+## O que um retorno real não é
+
+Um retorno real é um cálculo com números supostos. A inflação usada é
+histórica, a taxa nominal é suposta constante e os aportes também. Cada uma
+dessas suposições é razoável para uma projeção e falsa para o futuro, e o
+resultado deve ser lido como "sob estas suposições", e não como previsão.
+
+O sentido de mostrar o número real não é a previsão. É que um número sem ele
+está incompleto.

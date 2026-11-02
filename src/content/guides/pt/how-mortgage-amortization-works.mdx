@@ -1,0 +1,133 @@
+---
+title: "Como funciona a amortização de um financiamento"
+description: "Por que as primeiras parcelas de um financiamento são quase só juros, como o saldo se move mês a mês e o que acontece com a divisão conforme o empréstimo envelhece."
+locale: "pt"
+date: 2026-10-02
+lastReviewed: 2026-10-23
+author: "Kostan Proff"
+reviewedBy: "Tetiana Goncharko"
+group: "home"
+illustration: "how-mortgage-amortization-works"
+readingMinutes: 8
+sources:
+  - label: "CFPB — Cálculo da parcela do financiamento"
+    url: "https://www.consumerfinance.gov/ask-cfpb/"
+  - label: "HUD — Helping American Homeowners"
+    url: "https://www.hud.gov/helping_american_homeowners"
+relatedTools:
+  - "mortgage-payment"
+faq:
+  - q: "Por que tão pouco da minha primeira parcela vai para o principal?"
+    a: "Porque os juros incidem sobre o saldo devedor, e nos primeiros meses esse saldo é quase o empréstimo inteiro. À medida que o saldo cai, os juros caem com ele e uma parte maior da mesma parcela vai para o principal."
+  - q: "Amortização significa que pago mais do que tomei emprestado?"
+    a: "Sim, num empréstimo de taxa fixa sem pagamentos extras. Você paga o valor emprestado mais os juros, que é o que o número de juros totais da calculadora representa."
+  - q: "Quanto de um empréstimo típico de 30 anos é quitado nos primeiros cinco anos?"
+    a: "Num empréstimo de 30 anos, a maioria dos tomadores quitou bem menos da metade do saldo ao fim de cinco anos, apesar de cinco anos de parcelas. O número exato depende da taxa e do prazo, e a tabela de amortização da calculadora o mostra para qualquer empréstimo."
+  - q: "Um empréstimo mais curto amortiza de outro jeito?"
+    a: "O mecanismo é idêntico, mas os juros incidem sobre um saldo menor por menos tempo, então um empréstimo de 15 anos tem muito menos juros no total. A divisão mês a mês também muda mais rápido."
+  - q: "O que é um empréstimo com amortização negativa?"
+    a: "Um empréstimo em que a parcela é menor do que os juros cobrados, então o saldo cresce. Acontece quando uma parcela é adiada ou recalculada para menos. Não é o que a calculadora modela: ela supõe que a parcela programada cobre os juros."
+  - q: "Posso ver o cronograma de amortização do meu empréstimo?"
+    a: "Sim. A calculadora produz o cronograma para qualquer empréstimo, e um guia explica como ler cada coluna."
+---
+
+import GuideIllustration from '../../../components/visuals/GuideIllustration.astro';
+
+Amortização é o processo pelo qual um financiamento é pago, e produz um dos
+resultados menos intuitivos das finanças pessoais: um empréstimo de trinta
+anos não é trinta anos pagando a dívida. É cerca de uma década pagando a
+dívida, seguida de duas décadas pagando pelo privilégio de tê-la pagado.
+
+O mecanismo é simples o bastante para caber na cabeça, e vale entendê-lo antes
+de olhar qualquer cronograma.
+
+## Juros primeiro, sempre
+
+Toda parcela de financiamento tem duas partes, e a ordem em que são aplicadas
+é fixada pelo contrato:
+
+1. Os juros incidem sobre o saldo devedor no início do mês.
+2. A parcela é aplicada a esses juros.
+3. O que sobra da parcela reduz o principal.
+
+O saldo do mês seguinte é o saldo deste mês menos o principal pago. Essa é a
+regra inteira.
+
+A consequência vem em seguida. No primeiro mês, o saldo é o valor emprestado
+inteiro, então os juros estão no máximo, e a parcela — calculada para cobrir
+esses juros mais uma pequena fatia de principal — é quase toda juros. À
+medida que o saldo cai, os juros caem com ele, e a mesma parcela passa a cobrir
+mais principal.
+
+
+<div class="guide-inline-figure">
+  <GuideIllustration slug="mortgage-payment-calculator-explained" locale={frontmatter.locale} />
+</div>
+## A aritmética de um único mês
+
+Os juros de um mês são:
+
+**juros = saldo × (taxa anual ÷ 12)**
+
+Pegue um empréstimo de $360,000 a 6,5 por cento. A taxa mensal é 0,54167 por
+cento. No primeiro mês, os juros são $360,000 × 0,0054167 = $1,950. A parcela
+programada num prazo de 30 anos é $1,986. A diferença, $36, é o que reduz o
+principal no primeiro mês. Diante do saldo, é um erro de arredondamento.
+
+Um ano depois, o saldo caiu para cerca de $357,500. Os juros agora são cerca
+de $1,936, e a parte de principal subiu para cerca de $50. Depois de três
+anos, a parte de principal está em torno de $80 por mês. Ainda é pequena. Mas
+está crescendo, e o crescimento acelera — essa é a história toda.
+
+## As duas curvas
+
+Um jeito útil de imaginar um financiamento é como duas curvas que se movem uma
+contra a outra. A curva do saldo começa alta e cai devagar no início, depois
+de forma acentuada, depois se achata ao se aproximar de zero. A curva dos
+juros acumulados começa em zero, sobe rápido e depois sobe mais devagar,
+porque os juros incidem sobre um saldo que diminui.
+
+A primeira curva é a que as pessoas têm em mente. A segunda é a que determina
+o custo total, e a distância entre elas é o total de juros.
+
+Ao fim de cinco anos num empréstimo típico de 30 anos, pouco menos de um quinto
+do saldo foi quitado e cerca de um quarto dos juros totais já foi pago. Aos
+quinze anos, a maior parte do saldo foi quitada. Por isso o ano exato importa:
+"quanto eu já quitei" e "quanto já paguei de juros" são perguntas muito
+diferentes, e a tabela de amortização responde às duas.
+
+
+<div class="guide-inline-figure">
+  <GuideIllustration slug="extra-mortgage-payments-math" locale={frontmatter.locale} />
+</div>
+## Por que a última parcela é diferente
+
+Uma parcela mensal precisa ser um número fixo de centavos, e um empréstimo com
+uma taxa de juros e um prazo em meses inteiros não divide de forma exata. O
+arredondamento deixa um pequeno saldo no fim.
+
+A última parcela é ajustada para quitá-lo. Isso não é particularidade de um
+credor; é aritmética. A <a href="/pt/tools/mortgage-payment/">calculadora de
+financiamento</a> deste site faz o mesmo, e o ajuste aparece na última linha do
+cronograma.
+
+## O caminho acelerado
+
+O cronograma de amortização também é o argumento dos pagamentos extras, e o
+argumento é mecânico, não motivacional. Um pagamento extra reduz o principal.
+Um principal menor significa juros menores no mês seguinte, o que deixa mais
+da próxima parcela disponível para o principal. O efeito se capitaliza
+exatamente como o empréstimo.
+
+A parcela programada não muda. O empréstimo simplesmente termina antes, e os
+juros que seriam cobrados sobre um saldo que não existe mais nunca são
+cobrados. O total de juros na calculadora cai conforme o pagamento extra
+sobe, e a data de quitação se antecipa.
+
+## O que a amortização não cobre
+
+O cronograma cobre o empréstimo. Ele não cobre imposto predial, seguro, taxa
+de condomínio (HOA), manutenção ou o efeito da inflação sobre uma parcela que
+dura três décadas. Esses são custos de moradia, e não do empréstimo, e são
+tratados à parte nos guias sobre imposto predial e sobre o custo total de um
+financiamento.

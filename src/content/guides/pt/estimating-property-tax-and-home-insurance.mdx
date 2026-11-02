@@ -1,0 +1,150 @@
+---
+title: "Como estimar o imposto predial e o seguro residencial"
+description: "De onde vêm as estimativas de imposto predial e seguro residencial, quais dados as determinam e por que os seus próprios números costumam ser melhores que médias."
+locale: "pt"
+date: 2026-10-05
+lastReviewed: 2026-10-23
+author: "Kostan Proff"
+reviewedBy: "Tetiana Goncharko"
+group: "home"
+illustration: "estimating-property-tax-and-home-insurance"
+readingMinutes: 6
+sources:
+  - label: "HUD — Custos de moradia e assistência ao comprador"
+    url: "https://www.hud.gov/helping_american_homeowners"
+  - label: "CFPB — Financiamento imobiliário e ferramentas para o consumidor"
+    url: "https://www.consumerfinance.gov/consumer-tools/mortgages/"
+  - label: "BLS — Índice de Preços ao Consumidor"
+    url: "https://www.bls.gov/cpi/"
+  - label: "Tax Foundation — Property Taxes by State and County, 2026"
+    url: "https://taxfoundation.org/data/all/state/property-taxes-by-state-county/"
+relatedTools:
+  - "mortgage-payment"
+  - "rent-vs-buy"
+faq:
+  - q: "Como o imposto predial é calculado?"
+    a: "Um governo local avalia o imóvel e aplica uma alíquota ao valor avaliado. O valor avaliado nem sempre é o preço de compra: muitas vezes é limitado a uma porcentagem do preço ou definido por uma fórmula de avaliação separada, por isso a primeira conta pode diferir do preço de compra vezes uma alíquota."
+  - q: "Por que minha conta de imposto difere do preço vezes a alíquota?"
+    a: "Três coisas podem movê-la. O valor avaliado pode ter um teto abaixo do preço, a alíquota pode mudar de um ano para outro, e o calendário das reavaliações faz com que a primeira conta possa refletir um ano parcial."
+  - q: "O que determina o seguro residencial?"
+    a: "O custo de reconstrução da estrutura, a localização, a franquia, os limites de cobertura e o histórico de sinistros naquele endereço. O custo de reconstrução é o maior componente, e ele acompanha os custos de construção."
+  - q: "O seguro muda se eu reformar?"
+    a: "Pode mudar. Uma reforma que aumenta o valor da estrutura pode aumentar o custo de reconstrução e, portanto, o prêmio. Limites de cobertura definidos pelo preço original de compra também podem ficar insuficientes depois de uma reforma."
+  - q: "Posso usar uma média nacional?"
+    a: "Uma média nacional é só um ponto de partida. O imposto predial varia enormemente entre jurisdições, e uma média nacional pode errar por um fator de várias vezes em qualquer direção. A calculadora alugar ou comprar pode preencher o campo com a alíquota efetiva média do estado de onde vem a requisição, que é mais próxima que uma média nacional e ainda assim um número estadual, e não a alíquota de um condado específico. A calculadora trata o número como um dado que você define."
+  - q: "Esses custos mudam a parcela?"
+    a: "Eles fazem parte do PITI, então costumam ser recolhidos mensalmente no escrow. O valor anual é o que a calculadora mostra; o número mensal é o anual dividido por doze."
+---
+
+import GuideIllustration from '../../../components/visuals/GuideIllustration.astro';
+
+Duas das quatro partes de uma parcela de financiamento não são definidas pelo
+empréstimo. O imposto predial vem de um governo local e o seguro residencial
+vem de uma seguradora, e os dois são estimativas até a primeira conta chegar.
+
+A <a href="/pt/tools/mortgage-payment/">calculadora de financiamento</a>
+recebe os dois como dados, porque uma média nacional é, no máximo, um ponto de
+partida. Veja de onde cada número realmente vem.
+
+## Imposto predial
+
+O imposto predial é um valor anual calculado como uma alíquota aplicada a um
+valor avaliado. A estrutura é simples; as complicações estão todas nas duas
+variáveis.
+
+**A alíquota** é definida localmente, expressa em milésimos ou como
+porcentagem do valor avaliado. Ela varia enormemente entre jurisdições. A
+alíquota de um estado pode ser várias vezes a de outro, e dentro de um mesmo
+condado pode variar por um fator de dois ou mais entre municípios vizinhos.
+
+**O valor avaliado** não é o preço de compra. É o detalhe que pega as pessoas
+na primeira conta. Muitas jurisdições limitam o valor avaliado a uma
+porcentagem do preço, outras usam uma fórmula separada de avaliação em massa,
+e algumas reavaliam em ciclos. O resultado é que a primeira conta de imposto
+muitas vezes é menor que o preço vezes a alíquota, e que o número sobe depois,
+quando as reavaliações alcançam.
+
+O imposto predial também é revisto periodicamente. As alíquotas podem mudar de
+um ano para outro, e uma reavaliação pode mudar o valor sobre o qual a
+alíquota incide sem que a casa mude em nada.
+
+Os recursos habitacionais do HUD e do CFPB descrevem essa estrutura, e são o
+lugar certo para ver como funciona uma jurisdição específica.
+
+## A média estadual que a calculadora pode usar
+
+A alíquota é definida localmente, então nenhum número publicado serve para
+todo endereço. A calculadora alugar ou comprar ainda assim pode partir de um
+número mais próximo que uma média nacional: quando a rede consegue descobrir de
+qual estado veio a requisição, ela preenche o campo de imposto predial com a
+alíquota efetiva média daquele estado — o imposto efetivamente pago como
+fração do valor do imóvel, publicado pela Tax Foundation para 2026 a partir da
+American Community Survey de 2024.
+
+É um número estadual, e é um ponto de partida, não uma conta. Dois estados
+vizinhos podem diferir em um ponto percentual, e um único estado pode abrigar
+uma faixa que cobre boa parte disso. O campo continua editável, e o número que
+o leitor digita é o que o cálculo usa.
+
+
+<div class="guide-inline-figure">
+  <GuideIllustration slug="down-payment-and-closing-costs-explained" locale={frontmatter.locale} />
+</div>
+## Seguro residencial
+
+O prêmio é construído a partir de vários dados, e o maior é um que as pessoas
+costumam esquecer: o **custo de reconstrução** da estrutura.
+
+O custo de reconstrução é quanto custaria reconstruir a casa, e não quanto ela
+vale ou quanto custou. Se os custos de construção sobem mais rápido que os
+preços dos imóveis, o custo de reconstrução sobe mais rápido que o preço de
+compra, e o prêmio também. Esse é um dos motivos de o seguro ser um custo que
+não acompanha o valor de mercado do imóvel.
+
+Os outros dados são a localização (clima, risco de incêndio, criminalidade e o
+custo dos sinistros na região), a franquia, os limites de cobertura e o
+histórico de sinistros do endereço.
+
+Duas consequências valem ser conhecidas antes de uma compra. Uma reforma pode
+aumentar o custo de reconstrução e, portanto, o prêmio. E limites de
+cobertura definidos pelo preço original de compra podem ficar insuficientes
+depois de uma reforma, o que vira uma diferença na hora do sinistro.
+
+## Como obter estimativas melhores
+
+A ordem que funciona melhor é curta:
+
+1. **O avaliador fiscal.** O escritório local de avaliação publica o valor
+   avaliado e a alíquota aplicável a um endereço específico. Isso dá uma
+   estimativa baseada na jurisdição real, e não numa média nacional.
+2. **Uma cotação de seguro para o endereço específico.** Cotações são
+   gratuitas, e o número é produzido pelo mesmo modelo que vai precificar a
+   apólice. Peça o valor do custo de reconstrução, e não só o prêmio.
+3. **A estimativa de escrow do credor.** Com o empréstimo em andamento, o
+   credor calcula um pagamento de escrow com base nos próprios números. Não é
+   uma promessa para o ano seguinte, e ele vai mudar quando chegarem a conta do
+   imposto e a renovação do seguro.
+
+
+<div class="guide-inline-figure">
+  <GuideIllustration slug="rent-vs-buy-calculator-explained" locale={frontmatter.locale} />
+</div>
+## Por que a calculadora pede esses números separadamente
+
+Imposto e seguro são valores anuais, e a parcela mensal os mostra divididos
+por doze. A divisão é uma conveniência de tempo, não um desconto: num ano, o
+mesmo total é pago de qualquer forma. O que muda de mês para mês é em qual mês
+cai a conta do imposto, e o escrow existe para suavizar isso.
+
+Separá-los na calculadora também torna visível o custo recorrente. Uma parcela
+que é 60 por cento principal e juros e 40 por cento imposto e seguro se
+comporta de forma muito diferente de uma que é 90 por cento principal e juros,
+e as duas não são comparáveis sem essa divisão.
+
+## O que muda com o tempo
+
+Os dois números são estimativas no momento em que você os faz, e os dois estão
+sujeitos a revisão. Os dados de inflação publicados pelo Bureau of Labor
+Statistics são a referência para os custos de construção por trás do custo de
+reconstrução, e a alíquota do imposto é uma questão de política local. Nenhum
+dos dois é fixo durante a vida de um empréstimo de trinta anos.

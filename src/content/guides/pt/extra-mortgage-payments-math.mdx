@@ -1,0 +1,125 @@
+---
+title: "A matemática dos pagamentos extras no financiamento"
+description: "Como um pagamento extra de principal encurta um empréstimo, por que a parcela programada não muda e como o efeito aparece em horizontes diferentes."
+locale: "pt"
+date: 2026-10-04
+lastReviewed: 2026-10-23
+author: "Kostan Proff"
+reviewedBy: "Tetiana Goncharko"
+group: "home"
+illustration: "extra-mortgage-payments-math"
+readingMinutes: 7
+sources:
+  - label: "CFPB — Cálculo da parcela do financiamento"
+    url: "https://www.consumerfinance.gov/ask-cfpb/"
+  - label: "HUD — Helping American Homeowners"
+    url: "https://www.hud.gov/helping_american_homeowners"
+relatedTools:
+  - "mortgage-payment"
+faq:
+  - q: "Pagamentos extras reduzem a parcela mensal?"
+    a: "Não. A parcela programada continua a mesma e o empréstimo termina antes. Alguns credores recalculam a parcela para baixo se você pedir, mas isso é um acordo à parte, e não uma consequência do pagamento extra em si."
+  - q: "Para onde vai o pagamento extra?"
+    a: "Para o principal. Os juros do mês são cobertos primeiro pela parcela programada, e o dinheiro extra reduz o saldo, o que diminui os juros cobrados no mês seguinte."
+  - q: "Quanto um pagamento extra realmente economiza?"
+    a: "Rode na calculadora e leia a diferença nos juros totais. O número depende da taxa, do prazo e do tamanho do pagamento extra, e o efeito cresce com o tamanho do pagamento extra."
+  - q: "Pagar a mais ou investir o dinheiro: qual rende mais?"
+    a: "Essa é uma pergunta sobre o retorno disponível para o dinheiro em outro lugar e sobre as suas próprias circunstâncias. A calculadora mostra o que o pagamento extra faz com o empréstimo; ela não modela o uso alternativo do dinheiro."
+  - q: "Pagamentos extras podem ir para algo além do principal?"
+    a: "Os credores normalmente aplicam o valor extra ao principal por padrão, e os números de quitação antecipada da calculadora supõem isso. Alguns contratos têm cláusulas sobre como os pagamentos extras são aplicados, e vale a leitura."
+  - q: "O que acontece se eu fizer um pagamento único grande?"
+    a: "Vale o mesmo mecanismo, com um degrau maior. O campo de pagamento extra da calculadora é um valor mensal, e a data de quitação que ela produz é o mês em que o saldo chega a zero."
+---
+
+import GuideIllustration from '../../../components/visuals/GuideIllustration.astro';
+
+Pagamentos extras no financiamento são descritos de duas formas. Uma diz que
+eles economizam milhares de dólares. A outra diz que são desperdício. As duas
+descrevem a mesma aritmética, e essa aritmética merece ser vista diretamente.
+
+A <a href="/pt/tools/mortgage-payment/">calculadora de financiamento</a> tem
+um campo de pagamento extra exatamente por isso: o efeito é fácil de ver quando
+é calculado em vez de afirmado.
+
+## O mecanismo
+
+Uma parcela de financiamento cobre primeiro os juros e depois o principal.
+Essa regra não muda quando você paga mais.
+
+Então, quando você soma $200 a uma parcela programada:
+
+1. A parte programada continua cobrindo os juros daquele mês e a mesma fatia
+   de principal de sempre.
+2. Os $200 extras vão inteiramente para o principal.
+3. O saldo agora é $200 menor.
+4. No mês seguinte, os juros incidem sobre um saldo $200 menor, então a
+   cobrança de juros é $200 × (taxa mensal) menor.
+5. Essa pequena economia fica disponível para o principal, porque a parcela
+   programada não mudou.
+
+O passo quatro é onde mora a capitalização. A economia é pequena por mês, mas
+é permanente e se repete. Num horizonte longo o bastante, pagamentos extras
+eliminam mais juros do que o dinheiro extra teria pagado diretamente, embora
+seja o dinheiro extra que causou a diferença.
+
+
+<div class="guide-inline-figure">
+  <GuideIllustration slug="mortgage-payment-calculator-explained" locale={frontmatter.locale} />
+</div>
+## Por que a parcela não muda
+
+Isso surpreende as pessoas. A parcela programada fica exatamente como era,
+porque o cronograma de amortização foi montado em torno desse número. O que
+muda é o número de parcelas. O empréstimo termina antes.
+
+O efeito no orçamento mensal é, portanto, temporário: o valor extra é pago
+enquanto o empréstimo durar, e depois para. A data de quitação nos resultados
+da calculadora é a medida direta de quanto tempo isso dura.
+
+## Lendo a data de quitação
+
+A data de quitação é o número a observar, e ela se move de um jeito fácil de
+avaliar mal.
+
+Um pagamento extra que parece grande em relação ao valor do empréstimo pode
+antecipar a quitação só alguns meses. O motivo é que um empréstimo já
+concentra os juros no início: a maior parte dos juros já foi paga quando o
+saldo finalmente é quitado, e encurtar o final remove menos do que a fração
+proporcional do empréstimo sugere.
+
+O mesmo pagamento extra num empréstimo de prazo mais curto faz mais, porque
+mais juros desse empréstimo ainda estão pela frente. O mesmo pagamento extra
+feito cedo faz mais do que feito tarde, porque o saldo que ele reduz é maior no
+começo.
+
+A calculadora permite mudar o pagamento extra e ver a data de quitação e os
+juros totais se moverem. Rodar com $0, $100, $200 e $500 é um jeito mais rápido
+de entender o formato do efeito do que qualquer regra prática.
+
+
+<div class="guide-inline-figure">
+  <GuideIllustration slug="how-mortgage-amortization-works" locale={frontmatter.locale} />
+</div>
+## O que isso não mostra
+
+O cálculo do pagamento extra trata do empréstimo e de nada mais. Ele não
+modela:
+
+- **O uso alternativo do dinheiro.** Se $200 por mês rendem mais reduzindo um
+  empréstimo ou parados numa conta é uma pergunta sobre retornos, e a
+  aritmética do empréstimo não responde a ela.
+- **Tributação.** Juros e principal são tratados de forma diferente para fins
+  fiscais em muitas situações, e essa diferença não está no cálculo.
+- **Multas por quitação antecipada.** A maioria dos financiamentos
+  convencionais não tem, e o cálculo não inclui nenhuma.
+- **Mudança de planos.** Um empréstimo quitado antes libera fluxo de caixa
+  mais cedo, e o destino desse fluxo fica fora do modelo.
+
+## Uma nota sobre como os credores aplicam o pagamento
+
+O cálculo supõe que o valor extra vai para o principal, que é o tratamento
+padrão. A mecânica de um pagamento de principal fora do cronograma é regida
+pelo contrato e pelas regras de administração do empréstimo, e vale lê-los
+antes de fazer um pagamento único grande. O comportamento da calculadora
+corresponde ao caso comum, e a data de quitação que ela informa é o mês em que
+o saldo chega a zero.
