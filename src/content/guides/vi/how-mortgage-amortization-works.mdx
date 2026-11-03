@@ -1,0 +1,178 @@
+---
+title: Cách phân bổ khoản vay tái tợn hoạt động
+description: Tại sao các khoản trả góp vay sớm chủ yếu là tiền lãi, số dư thay đổi ra sao từ tháng này sang tháng khác và tỷ lệ phân bổ thay đổi như thế nào khoản vay già đi theo thời gian.
+locale: vi
+date: 2026-10-02
+lastReviewed: 2026-10-23
+author: Kostan Proff
+reviewedBy: Tetiana Goncharko
+group: home
+illustration: how-mortgage-amortization-works
+readingMinutes: 8
+sources:
+- label: CFPB — Tính khoản trả góp tài chính
+  url: https://www.consumerfinance.gov/ask-cfpb/
+- label: HUD — Hỗ trợ chủ nhà người Mỹ
+  url: https://www.hud.gov/helping_american_homeowners
+relatedTools:
+- mortgage-payment
+faq:
+- q: Tại sao phần lớn khoản trả góp sớm của tôi lại dùng để trả gốc?
+  a: Vì tiền lãi được tính trên số dư còn lại, và trong những tháng đầu, số dư đó gần như bằng toàn bộ khoản vay. Khi số dư giảm, khoản tiền lãi cũng giảm theo và nhiều hơn trong cùng khoản trả góp được dùng để trả gốc.
+- q: Phân bổ khoản vay có nghĩa là tôi trả nhiều hơn số tiền đã vay không?
+  a: Có, với khoản vay lãi suất cố định và không có khoản trả thêm. Bạn trả số tiền đã vay cộng với tiền lãi, đó là tổng tiền lãi mà máy tính hiển thị.
+- q: Trong 5 năm đầu, bao nhiêu phần của khoản vay 30 năm điển hình đã được trả xong?
+  a: Với khoản vay 30 năm, đến mốc 5 năm, phần lớn người vay đã trả xong ít hơn một nửa số dư, mặc dù họ đã trả góp trong 5 năm. Con số chính xác phụ thuộc vào lãi suất và thời hạn, và bảng phân bổ khoản vay trên máy tính hiển thị con số này cho mọi khoản vay.
+- q: Khoản vay có thời hạn ngắn hơn được phân bổ khác nhau không?
+  a: Cơ chế là như nhau, nhưng tiền lãi được tính trên một số dư nhỏ hơn trong thời gian ngắn hơn, nên khoản vay 15 năm có tổng tiền lãi thấp hơn nhiều. Tỷ lệ phân bổ hằng tháng cũng thay đổi nhanh hơn.
+- q: Khoản vay phân bổ âm là gì?
+  a: Đó là khoản vay mà khoản trả góp nhỏ hơn số tiền lãi bị tính, khiến số dư tăng lên. Điều này xảy ra khi một khoản trả góp bị hoãn lại hoặc được điều chỉnh xuống mức thấp hơn. Máy tính không mô phỏng trường hợp này vì giả định rằng khoản trả góp theo lịch đã bao phủ được tiền lãi.
+- q: Tôi có thể xem lịch phân bổ khoản vay của mình không?
+  a: Có. Máy tính tạo lịch cho mọi khoản vay, và hướng dẫn giải thích cách đọc từng cột trong lịch đó.
+---
+
+import GuideIllustration from '../../../components/visuals/GuideIllustration.astro';
+
+Phân bổ vốn là quá trình một khoản vay thế chấp được trả nợ, và nó tạo ra một
+trong những kết quả đối nghịch nhất trong tài chính cá nhân: khoản vay kéo dài
+ba mươi năm không phải ba mươi năm để trả hết. Đó là khoảng một thập kỷ trả nợ,
+sau đó là hai thập kỷ trả tiền để có được đặc quyền đã trả nợ xong.
+
+
+
+Cơ chế đủ đơn giản để ghi nhớ, và điều đó đáng làm trước khi xem bất kỳ lịch trả
+nợ nào.
+
+
+
+## Lãi trước, luôn luôn
+
+
+
+Mỗi khoản trả nợ thế chấp có hai phần, và thứ tự áp dụng các phần đó được hợp
+đồng quy định cố định:
+
+
+
+1. Lãi được tính trên số dư còn lại vào đầu tháng. 2. Khoản trả nợ được áp dụng
+vào khoản lãi đó. 3. Phần còn lại của khoản trả nợ làm giảm số tiền gốc.
+
+
+
+Số dư của tháng sau là số dư của tháng này trừ đi số tiền gốc đã được trả. Đó là
+toàn bộ quy tắc.
+
+
+
+Hệ quả xuất hiện ngay lập tức. Trong tháng đầu tiên, số dư bằng toàn bộ số tiền
+đã vay, nên khoản lãi được tính ở mức lớn nhất, và khoản trả nợ — được xác định
+để đáp ứng khoản lãi đó cộng với một phần nhỏ tiền gốc — gần như hoàn toàn là
+lãi. Khi số dư giảm xuống, khoản lãi được tính cũng giảm theo, và cùng khoản trả
+nợ đó bắt đầu đáp ứng nhiều tiền gốc hơn.
+
+
+
+
+<div class="guide-inline-figure">
+  <GuideIllustration slug="mortgage-payment-calculator-explained" locale={frontmatter.locale} />
+</div>
+## Phép tính của một tháng
+
+
+
+Khoản lãi được tính cho một tháng là:
+
+
+
+**lãi = số dư × (lãi suất năm ÷ 12)**
+
+
+
+Xét một khoản vay $360,000 ở mức lãi suất 6.5%. Lãi suất hằng tháng là 0.54167%.
+Trong tháng đầu tiên, lãi là $360,000 × 0.0054167 = $1,950. Khoản trả theo lịch
+trong thời hạn 30 năm là $1,986. Chênh lệch $36 chính là số tiền làm giảm gốc
+vốn trong tháng đầu tiên. So với số dư, đây là sai số do làm tròn.
+
+
+
+Một năm sau, số dư đã giảm xuống khoảng $357,500. Khoản lãi hiện khoảng $1,936,
+và phần trả gốc vốn đã tăng lên khoảng $50. Sau ba năm, phần trả gốc vốn vào
+khoảng $80 mỗi tháng. Nó vẫn còn nhỏ. Nó cũng đang tăng, và tốc độ tăng ngày
+càng nhanh, đó chính là toàn bộ câu chuyện.
+
+
+
+## Hai đường cong
+
+
+
+Một cách hữu ích để hình dung khoản vay là coi nó như hai đường cong chuyển động
+ngược chiều nhau. Đường cong số dư bắt đầu ở mức cao và giảm chậm ban đầu, sau
+đó giảm dốc, rồi thoải dần khi tiến gần về 0. Đường cong lãi tích lũy bắt đầu từ
+0, tăng nhanh, sau đó tăng chậm hơn, vì khoản lãi được tính trên một số dư đang
+thu nhỏ dần.
+
+
+
+Đường cong thứ nhất là đường mà mọi người thường nghĩ đến. Đường cong thứ hai
+quyết định tổng chi phí, và khoảng cách giữa chúng chính là tổng lãi.
+
+
+
+Tại mốc năm năm của một khoản vay 30-year điển hình, gần một phần năm số dư đã
+được trả hết và khoảng một phần tư tổng lãi đã được thanh toán. Tại mốc 15 năm,
+phần lớn số dư đã được trả hết. Đây là lý do chính xác năm tháng rất quan trọng:
+"tôi đã trả được bao nhiêu gốc vốn" và "tôi đã trả bao nhiêu tiền lãi" là hai
+câu hỏi rất khác nhau, và bảng phân bổ nợ trả lời cả hai.
+
+
+
+
+<div class="guide-inline-figure">
+  <GuideIllustration slug="extra-mortgage-payments-math" locale={frontmatter.locale} />
+</div>
+## Tại sao khoản trả cuối cùng khác nhau
+
+
+
+Khoản trả hằng tháng phải là một số tiền cố định tính bằng cent, trong khi một
+khoản vay có lãi suất và thời hạn tính theo số tháng tròn không chia hết. Việc
+làm tròn để lại một số dư nhỏ vào cuối kỳ.
+
+
+
+Khoản thanh toán cuối cùng được điều chỉnh để khép lại số dư. Đây không phải
+tính năng đặc biệt của bên cho vay nào; đó là phép tính. Công cụ <a
+href="/vi/tools/mortgage-payment/">tính trả góp vay nhà</a> trên trang này thực
+hiện điều tương tự, và khoản điều chỉnh hiện rõ trong hàng cuối của lịch trả nợ.
+
+
+
+## Con đường tăng tốc
+
+
+
+Bảng phân bổ nợ cũng là lập luận cho các khoản trả bổ sung, và lập luận này dựa
+trên cơ chế thuần túy chứ không phải động lực. Một khoản trả bổ sung làm giảm
+gốc vốn. Gốc vốn nhỏ hơn nghĩa là khoản lãi tháng sau nhỏ hơn, nghĩa là có nhiều
+tiền hơn trong khoản trả tiếp theo dành cho gốc vốn. Tác động này tích lũy đúng
+theo cách mà khoản vay tích lũy.
+
+
+
+Khoản trả theo lịch không thay đổi. Khoản vay chỉ đơn giản là kết thúc sớm hơn,
+và khoản lãi lẽ ra được tính trên một số dư không còn tồn tại sẽ không bao giờ
+bị tính. Con số tổng lãi trong công cụ tính toán giảm xuống khi khoản trả bổ
+sung tăng lên, và ngày trả hết nợ được đưa đến sớm hơn.
+
+
+
+## Những gì phương pháp phân bổ nợ không bao gồm
+
+
+
+Lịch trả nợ bao phủ khoản vay. Nó không bao gồm thuế tài sản, bảo hiểm, phí HOA,
+bảo trì, hoặc tác động của lạm phát đối với một khoản trả kéo dài ba thập kỷ. Đó
+là các chi phí vận hành chứ không phải chi phí vay, và chúng được xử lý riêng
+trong các hướng dẫn về thuế tài sản và tổng chi phí của một khoản vay thế chấp
+nhà đất.

@@ -1,0 +1,196 @@
+---
+title: Compensações entre taxa e prazo do financiamento
+description: Como a taxa e o prazo alteram juntos a parcela de um financiamento, quanto custa em parcelas mensais um prazo menor, quanto economiza no total e como interpretar essa compensação.
+locale: pt
+date: 2026-10-12
+lastReviewed: 2026-10-23
+author: Kostan Proff
+reviewedBy: Tetiana Goncharko
+group: home
+illustration: mortgage-rate-and-term-tradeoffs
+readingMinutes: 7
+sources:
+- label: Freddie Mac — Pesquisa do Mercado Primário de Hipotecas
+  url: https://www.freddiemac.com/pmms
+- label: CFPB — Cálculo de pagamento de mortgage
+  url: https://www.consumerfinance.gov/ask-cfpb/
+- label: Fannie Mae — Pesquisas e análises
+  url: https://www.fanniemae.com/research-and-insights
+relatedTools:
+- mortgage-payment
+faq:
+- q: Por que um prazo menor custa tanto mais por mês?
+  a: Porque o saldo cai mais rapidamente, deixando menos tempo para que os juros se acumulem sobre ele. A parcela aumenta e o total de juros diminui, e a dimensão dessa variação depende da taxa.
+- q: Quanto o prazo altera o total?
+  a: Bastante em um financiamento de 30 anos. Passar de 30 anos para 15 anos normalmente elimina cerca de metade do total de juros. Em um financiamento de 15 anos, o prazo restante representa uma parcela menor do saldo original e, por isso, o efeito é proporcionalmente menor.
+- q: A taxa importa mais do que o prazo?
+  a: Em um empréstimo longo, uma variação de um ponto percentual na taxa vale mais do que uma variação de cinco anos no prazo. Em um empréstimo curto, o efeito do prazo cresce e o efeito da taxa diminui, porque há menos tempo para qualquer um dos dois se acumular.
+- q: O que é um buydown de taxa?
+  a: Uma redução temporária da taxa durante o primeiro ou o segundo ano do financiamento, com a diferença paga na contratação ou incorporada à taxa depois. Isso altera as parcelas iniciais, e não a estrutura do financiamento.
+- q: Devo pagar um ponto para reduzir a taxa?
+  a: Essa é uma análise de ponto de equilíbrio. O ponto precisa ser recuperado com a redução da taxa durante o período em que o empréstimo estiver vigente, e a aritmética pode ser feita diretamente com a calculadora de pagamentos.
+- q: Vale a pena simular uma taxa ajustável em alguma ocasião?
+  a: Uma taxa ajustável tem uma taxa inicial e um cronograma, e o pagamento muda à medida que o índice muda. As calculadoras deste site simulam taxas fixas, porque uma projeção de taxa fixa é uma projeção, enquanto uma projeção de taxa ajustável é um conjunto de cenários.
+---
+
+import GuideIllustration from '../../../components/visuals/GuideIllustration.astro';
+
+Um financiamento habitacional tem dois ajustes que alteram o pagamento, e eles
+atuam em direções opostas quando se observa o custo total. A taxa e o prazo
+precisam ser lidos em conjunto, porque o efeito de um depende de onde o outro
+está definido.
+
+
+
+A <a href="/pt/tools/mortgage-payment/">calculadora de pagamento do mortgage</a>
+tem ambas as entradas exatamente por esse motivo: altere uma e mantenha a outra
+sem mudança, e o resultado mostrará o tamanho da compensação.
+
+
+
+## A taxa e o prazo alteram o pagamento em conjunto
+
+
+
+**Uma taxa menor reduz o pagamento.** Diretamente e imediatamente, em todos os
+pagamentos do empréstimo.
+
+
+
+**Um prazo maior reduz o pagamento.** Também diretamente e pelo mesmo motivo: o
+saldo é quitado mais devagar, portanto menos juros são cobrados por ano.
+
+
+
+Ambos reduzem o pagamento, e ambos aumentam o custo total. Essa é a natureza da
+compensação: o número mensal e o número ao longo de toda a vida do empréstimo
+seguem em direções opostas.
+
+
+
+
+<div class="guide-inline-figure">
+  <GuideIllustration slug="monthly-payment-vs-total-cost-mortgage" locale={frontmatter.locale} />
+</div>
+## Números de um empréstimo típico
+
+
+
+Considere $360,000 a 6,5 percent.
+| Prazo | Parcela mensal de principal e juros | Total de juros |
+|---|---|---|
+| 30 anos | $1,986 | cerca de $355,000 |
+| 20 anos | $2,528 | cerca de $246,000 |
+| 15 anos | $3,108 | cerca de $201,000 |
+
+Mudar de 30 anos para 15 anos aumenta a parcela em 56 por cento e elimina cerca
+de 43 por cento dos juros. A assimetria é o ponto: o encurtamento do prazo custa
+muito em parcela mensal e economiza uma quantidade moderada de juros totais.
+
+
+
+## O efeito da taxa é maior em um empréstimo de longo prazo
+
+
+
+Altere a taxa nos mesmos $360,000 e o efeito dependerá do prazo.
+
+
+
+Em 30 anos, passar de 6.5 por cento para 7.5 por cento altera a parcela mensal
+em cerca de $90 e os juros totais em aproximadamente $60,000. Em 15 anos, a
+mesma alteração de taxa move a parcela em cerca de $110 e os juros totais em
+aproximadamente $30,000.
+
+
+
+A taxa incide sobre o saldo durante todo o período em que ele permanece devedor.
+Um empréstimo de longo prazo mantém o saldo devedor pelo dobro do tempo,
+portanto a mesma diferença de taxa tem o dobro de espaço para atuar.
+
+
+
+Isso significa que os dois controles não têm a mesma influência em todas as
+posições. Em um empréstimo de trinta anos, a taxa domina. Em um empréstimo de
+quinze anos, o prazo é relativamente mais importante. A regra prática — cada
+ponto percentual de taxa vale mais do que cinco anos de prazo — vale para os
+empréstimos longos que a maioria das pessoas contrai.
+
+
+
+
+<div class="guide-inline-figure">
+  <GuideIllustration slug="understanding-apr" locale={frontmatter.locale} />
+</div>
+## Por que a primeira década decide o total
+
+
+
+Um empréstimo de 30 anos passa sua primeira década com um saldo que mal se move,
+e essa década é onde quase todos os juros são cobrados. É por isso que a mudança
+de prazo acima parece tão dramática: encurtar o prazo não apenas reduz a taxa
+sobre a qual os juros são cobrados, mas retira anos do início do empréstimo,
+quando o saldo é o mais alto.
+
+
+
+É também por isso que um pagamento extra tem tanto efeito. Ele reduz o saldo
+sobre o qual os juros do mês seguinte são cobrados, e o fazcedo, quando o saldo
+é maior.
+
+
+
+## Pontos, reduções da taxa e a forma das parcelas iniciais
+
+
+
+Dois recursos comuns alteram as pagamentos iniciais sem alterar o empréstimo
+subjacente.
+
+
+
+Um **ponto de desconto** é um por cento do valor do empréstimo pago na
+contratação para obter uma taxa menor. A escolha tem um período de equilíbrio, e
+a aritmética consiste em comparar a tarifa com a diferença no total de juros ao
+longo do período em que o empréstimo é mantido.
+
+
+
+Uma **redução da taxa** diminui a taxa no primeiro ano ou nos dois primeiros e
+depois é reajustada, normalmente para o índice mais uma margem. Isso altera as
+primeiras parcelas, e não a forma do empréstimo, e vale modelar separadamente em
+vez de tratar como uma taxa.
+
+
+
+## Leitura do contexto de mercado
+
+
+
+A Primary Mortgage Market Survey do Freddie Mac publica a série de taxas mais
+frequentemente usada como ponto de referência, e as páginas de pesquisa da
+Fannie Mae trazem comentários equivalentes sobre o mercado de crédito
+imobiliário. Nenhuma delas é uma cotação para um tomador específico.
+
+
+
+As taxas deste site não estão conectadas a nenhum feed de mercado. O número que
+você informa é o número usado, mantido constante por todo o prazo, e é isso que
+torna a comparação entre duas taxas uma comparação aritmética limpa, e não uma
+previsão.
+
+
+
+## A comparação que vale fazer
+
+
+
+Coloque as duas opções na calculadora com todo o restante idêntico e leia quatro
+números: a parcela mensal, o total de juros, o custo total com moradia e a data
+de quitação. Em seguida, execute cada opção com um pagamento extra, porque o
+prazo e a taxa alteram quanto vale um pagamento extra.
+
+
+
+Essa é toda a decisão expressa como aritmética. Quanto isso vale em uma vida
+específica é uma pergunta separada, e que nenhuma calculadora pode responder.

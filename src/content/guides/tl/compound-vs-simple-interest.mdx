@@ -1,0 +1,188 @@
+---
+title: Simple Interest vs. Compound Interest
+description: Ang pagkakaiba ng simple at compound interest, na ipinapakita gamit ang parehong numero, at kung bakit lumalaki ang agab sa mas mahabang panahon na hindi ginagalaw ang pera.
+locale: tl
+date: 2026-10-08
+lastReviewed: 2026-10-23
+author: Kostan Proff
+reviewedBy: Tetiana Goncharko
+group: investing
+illustration: compound-vs-simple-interest
+readingMinutes: 6
+sources:
+- label: Investor.gov — Compounded interest
+  url: https://www.investor.gov/introduction-investing/investing-basics/glossary/compound-interest
+- label: Federal Reserve — H.15 napiling rate ng interes
+  url: https://www.federalreserve.gov/releases/h15/
+- label: IRS — Traditional IRAs at ang paglago ng retirement account
+  url: https://www.irs.gov/retirement-plans/traditional-iras
+relatedTools:
+- compound-interest
+faq:
+- q: Ano ang simple interest?
+  a: 'Interest na kinakalkula sa orihinal na principal lamang, gamit ang orihinal na rate, sa buong panahon. Hindi ito lumalaki: ang balanseng $10,000 sa 5 percent simple ay kumikita ng $500 taon hangga’t nananatili rito.'
+- q: Ano ang compound interest?
+  a: Interest na kinakalkula sa balanse, kasama ang interest na na-credit na. Ang interest ng bawat panahon ay sinisingil sa bahagyang mas malaking base kaysa dati, kaya hindi linear ang paglago.
+- q: Gaano kalaki ang pagkakaiba?
+  a: Sa maikling panahon, maliit ito. Sa $10,000 sa 7 percent sa loob ng 30 taon, nagbibigay ang simple interest ng $31,000 at nagbibigay ang compound interest ng $76,123. Ang buong pagkakaiba ang batayan ng pag-iwan ng pera nang hindi ginagalaw.
+- q: Saan ko talaga maaaring mahanap ang simple interest?
+  a: Madalas itong ginagamit sa mga maikling-term consumer loan, at ilang lumang savings arrangement noon. Ito rin ang mental model ng karamihan ng tao, bahagi ng dahilan kung bakit nakagugulat ang compound interest.
+- q: Gumagana ba ang compound interest laban sa akin saanman?
+  a: Sa mga credit card at iba pang umiikot na balanse, kung saan ang interes ay singil sa balanse kasama ang dating interes. Ang parehong mekanismo na gumagana para sa iyong benisyo ay gumagana nang pabaligtad.
+- q: Maaasahan ba ang tuntuning pagdoble?
+  a: 'Ang tuntunang 70 ay isang kapaki-pakinabang na approximation: bahagiin ang 70 ng taunang rate upang malaman ang mga taon upang magdoble. Sa 7 percent, mga sampung taon ang approximate na ito. Ang calculator ay nagpapakita ng totoong bilang sa halip na approximation.'
+---
+
+import GuideIllustration from '../../../components/visuals/GuideIllustration.astro';
+
+Ang simple interest at compound interest ay iisang ideya na kalkulado sa
+dalawang ibang paraan, at ang pagkakaiba sa kanila ay isa sa mga pinakamalaking
+gaps sa ordinary arithmetic.
+
+
+
+Nagcha-charge ng interest sa orihinal na halaga ang simple interest. Ang
+compound interest nagcha-charge ng interest sa orihinal na halaga kasama na ang
+interest na na-credit na. Iyon lang ang buong pagkakaiba.
+
+
+
+## Parehong numero, dalawang sagot
+
+
+
+Kumuha ng $10,000 sa 7 percent sa loob ng 30 taon.
+
+
+
+**Simple interest** ay nagbabayad ng 7 percent ng orihinal na $10,000 taon-taon:
+$700 taon, n hindi nagbabago, sa loob ng tatlumpung taon. Ang huling balanse ay
+$31,000.
+
+
+
+**Compound interest**, na kinakumpuwal taunan, ay nagsisimula sa $10,000 at
+lumalaki. Ang huling balanse ay $76,123.
+
+
+
+Ang pagkakaiba ay $45,123 sa $10,000 na panimulang balanse, at ito ay buong
+galing sa katotohanan na naniningil ang compound interest sa lumalaking base.
+
+
+
+Ang <a href="/tl/tools/compound-interest/">compound interest calculator</a> ay
+nagpapatakbo ng ikalawang sitwasyon. Para makita ang una, itakda ang rate sa
+zero at pansinin na ang balanse ay lumalago lamang dahil sa mga deposito — ang
+sitwasyon na simple-interest ay parehong projection nang may interest na
+naka-off.
+
+
+
+
+<div class="guide-inline-figure">
+  <GuideIllustration slug="compound-interest-calculator-explained" locale={frontmatter.locale} />
+</div>
+## Bakit lumalaki ang pagkakaiba sa halip na manatiling pareho
+
+
+
+Hindi linear ang paglago. Sa simple-interest account,pareho ang idinadagdag
+taon-taon. Sa compound-interest account, mas kaunti nang idinadagdag kaysa
+nakaraang taon ang bawat taon, dahil lumalaki na ang base.
+
+
+
+Wag ilapatin ang tatlong epekto dahil magkaiba ang kanilang gawi:
+
+
+
+**Ang interes sa interes.** Ito ang pinakamalaking epekto, at ang
+nangangailangan ng pinakamahabang panahon bago maging makabuluhan. Sa loob ng
+isang taon ay halos hindi makikita; sa loob ng tatlumpung taon ay ito ang
+karag_majority ng balanse.
+
+
+
+**Ang epekto ng kontribusyon.** Ang regular na buwanang kontribusyon ay sarili
+ding uri ng compounding, dahil kumikita ng interes ang bawat kontribusyon sa
+natitirang bahagi ng panahon. Ang kontribusyon sa unang buwan ay kumikita ng
+interes sa buong horizon; ang kontribusyon sa huling buwan ay halos walang
+interes. Ito ang dahilan kung bakit pinapayagan ng tool na palitan ang
+kontribusyon sa pagitan ng simula at dulo ng buwan.
+
+
+
+**Ang epekto ng dalas ng pag-compound.** Parehong nominal rate, mas madalas na
+compounding, mas pera. Ang effective annual rate ang nagpapakitang nakikita ito:
+ang 7 percent compounded monthly ay 7.229 percent, at ang 7.229 percent ang rate
+na talaga ikikita mo.
+
+
+
+## Ang pagtataya ng pagdoble
+
+
+
+Ang rule of 70 ay isang shortcut: hahatiin mo ang 70 sa taunang rate para
+malaman ang bilang ng taon bago magdouble ang pera. Sa 7 percent, ito ay sampung
+taon; sa 3 percent, 23 taon.
+
+
+
+Ito ay pagtataya lamang, at ang dahilan kung bakit kailangan nito ay nakasalalay
+ang eksaktong panahon ng pagdoble sa dalas ng compounding. Ang rule of 70 ay
+naglalakad ng taunang compounding. Sa monthly compounding, magdoble ang 7
+percent nang kaunti nang mas mabilis kaysa sampung taon.
+
+
+
+Ang calculator ang paraan para i-check ito. Patakbuhin ang tatlumpung taon sa 7
+percent nang walang kontribusyon, at ih compares ang huling balanse sa dalawang
+beses ng panimulang balanse. Malapit ang pagtataya; nasa screen ang eksaktong
+numero.
+
+
+
+
+<div class="guide-inline-figure">
+  <GuideIllustration slug="inflation-and-real-returns-explained" locale={frontmatter.locale} />
+</div>
+## Kung saan ang parehong mekanismo ay tumatakbo sa kabaligtaran
+
+
+
+Ang compound interest ay hindi pagkaloob na iginawad ng pananalapi. Ito ay isang
+katangian ng aritmetika, at nalalapat ito sa mga balanseng owing pati na rin sa
+mga balanseng kinikita.
+
+
+
+Sa balyans ng revolving credit card, ang interes ay singil sa balanse kasama ang
+dating interes. Ang pagbayad lamang ng minimum sa isang card ay ang compound
+interest calculation na tumatakbo sa kabaligtaran, na may rate na sapat na
+mataas para magmabilis ang epekto.
+
+
+
+Mahalaga rin ito sa bayad-hindi bayad na interes sa ilang ibang arrangement. Ang
+humit ang direksyon ay kung aling bahagi ng balanse ka nasa.
+
+
+
+## Paalala tungkol sa mga rate na kasangkot
+
+
+
+Nag-publish ang Federal Reserve ng H.15 selected interest rates, na siyang
+reference series para sa aktuwal na kinita ng mga savings product. Naglalathala
+ang Internal Revenue Service ng mga patakaran para sa mga account kung saan
+ipinapaling ang paglago, at tinutukoy ng Investor.gov glossary ang mga terminong
+ginagamit dito.
+
+
+
+Walang isa sa mga ito ang isang forecast ng magiging rate. Ang calculator ay
+gumagamit ng anumang rate na ilalagay mo, na nananatiling constant sa buong
+horizon, dahil ang projection na binabago ang rate ayon sa ilang assumed na
+landas sa hinaharap ay ibang uri ng pahayag mula sa aritmetika.

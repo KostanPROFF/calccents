@@ -1,0 +1,211 @@
+---
+title: Giải thích máy tính khoản trả góp mua nhà
+description: Cách tính khoản trả góp mua nhà hàng tháng, PITI bổ sung những gì và lịch trả góp cho biết điều gì về những năm đầu tiên của khoản vay.
+locale: vi
+date: 2026-10-01
+lastReviewed: 2026-10-23
+author: Kostan Proff
+reviewedBy: Tetiana Goncharko
+group: home
+illustration: mortgage-payment-calculator-explained
+readingMinutes: 9
+sources:
+- label: CFPB — Tôi có thể tính khoản trả góp khoản vay mua nhà của mình như thế nào?
+  url: https://www.consumerfinance.gov/ask-cfpb/
+- label: Freddie Mac — Khảo sát Thị trường Tài chính nhà ở sơ cấp
+  url: https://www.freddiemac.com/pmms
+- label: HUD — Mua một ngôi nhà
+  url: https://www.hud.gov/helping_american_homeowners
+- label: BLS — Chỉ số giá tiêu dùng
+  url: https://www.bls.gov/cpi/
+relatedTools:
+- mortgage-payment
+faq:
+- q: Tại sao khoản trả của tôi khác với bên cho vay?
+  a: Bên cho vay báo giá khoản trả làm tròn đến cent gần nhất rồi điều chỉnh khoản cuối cùng. Một số bên còn tính cả tiền quản lý thuế và bảo hiểm, điều này thay đổi thời điểm thu tiền chứ không thay đổi số tiền hằng năm. Máy tính hiển thị khoản tiền gốc và lãi, sau đó cộng thuế, bảo hiểm và HOA thành các dòng riêng để từng phần đều có thể thấy rõ.
+- q: Máy tính có tính bảo hiểm cho vay mua nhà không?
+  a: Không. Bảo hiểm cho vay mua nhà tư nhân phụ thuộc vào tỷ lệ khoản vay trên giá trị tài sản và hồ sơ tín dụng đằng sau khoản vay, đồng thời được hủy theo một lịch trình phụ thuộc vào khoản vay ban đầu. Nó nằm trong số những yếu tố mà phép tính này không đưa vào.
+- q: Tiền quản lý là gì và nó có làm thay đổi tổng số tiền không?
+  a: Tiền quản lý là tài khoản mà bên cho vay thu thuế và phí bảo hiểm vào, thường là theo các khoản trả hằng tháng. Nó thay đổi thời điểm thu tiền chứ không thay đổi số tiền thu được trong một năm, vì vậy chi phí hằng năm là số tiền mà máy tính báo cáo.
+- q: Lãi suất trên trang là lãi suất trực tiếp theo thời gian thực không?
+  a: Không. Lãi suất bạn nhập là lãi suất được sử dụng. Không nội dung nào trên trang kết nối với nguồn cấp dữ liệu thị trường, và không có đề nghị nào từ bên cho vay xuất hiện tại đây.
+- q: Tại sao khoản trả cuối cùng hơi khác?
+  a: Khoản trả hằng tháng được làm tròn đến cent gần nhất, để lại một khoản dư nhỏ vào cuối thời hạn. Khoản trả cuối cùng được điều chỉnh để khoản vay kết thúc ở mức chính xác bằng không, theo cùng cách bên cho vay điều chỉnh khoản trả cuối cùng.
+- q: Tôi có thể so sánh hai khoản vay bằng máy tính này không?
+  a: Bạn có thể chạy một khoản vay, ghi lại các con số rồi chạy khoản thứ hai. Hai lần chạy diễn ra riêng biệt, nên không có dữ liệu nào được lưu giữa chúng và không có gì được truyền lên trang web.
+---
+
+import GuideIllustration from '../../../components/visuals/GuideIllustration.astro';
+
+Khoản trả khoản vay mua nhà là một con số gồm bốn phần, và lý do hai người có
+thể báo các khoản trả khác nhau cho cùng một ngôi nhà thường là vì họ đang tính
+các phần khác nhau.
+
+
+
+Công cụ <a href="/vi/tools/mortgage-payment/">tính trả góp khoản vay</a> trên trang
+này tách riêng các thành phần đó. Con số gốc và lãi đến từ phép tính. Thuế tài
+sản, bảo hiểm và mọi khoản phí HOA do bạn cung cấp, vì công cụ không thể biết cơ
+quan định giá hoặc công ty bảo hiểm của bạn tính phí bao nhiêu. Hiển thị riêng
+biệt từng khoản hữu ích hơn là hiển thị một tổng duy nhất, bởi vì tổng chỉ chính
+xác bằng thành phần ít thấy nhất của nó.
+
+
+
+## Công thức tính khoản trả
+
+
+
+Khoản trả hằng tháng theo lịch là công thức trả góp tiêu chuẩn:
+
+
+
+**M = P · r(1 + r)ⁿ / ((1 + r)ⁿ − 1)**
+
+
+
+Trong đó:
+
+
+
+- **P** là số tiền vay, không phải giá của ngôi nhà. Với ngôi nhà $450,000 và
+trả trước 20 percent, P là $360,000. - **r** là lãi suất hằng năm chia cho mười
+hai. Lãi suất 6.5 percent trở thành 0.0054166… mỗi tháng. - **n** là số khoản
+trả hằng tháng. Kỳ hạn 30 năm gồm 360 khoản trả.
+
+
+
+Công thức này đáng đọc một lần, vì nó giải thích điều mà nếu không sẽ trông có
+vẻ tùy ý: khoản trả không tăng tỷ lệ thuận với số tiền bạn vay. Vay gấp đôi thì
+bạn trả khoảng gấp đôi, không phải gấp bốn. Điều thay đổi theo quy mô khoản vay
+là tổng lãi, và tổng lãi tăng nhanh hơn khoản trả.
+
+
+
+Cục Bảo vệ Người tiêu dùng Tài chính trình bày cùng công thức này trong hướng
+dẫn về khoản vay mua nhà, và các bảng trả góp được ngành sử dụng rộng rãi đều
+được xây dựng từ công thức đó.
+
+
+
+
+<div class="guide-inline-figure">
+  <GuideIllustration slug="how-mortgage-amortization-works" locale={frontmatter.locale} />
+</div>
+## Tại sao khoản thanh toán giữ nguyên trong khi tỷ lệ phân bổ thay đổi
+
+
+
+Công thức tạo ra một khoản thanh toán cố định. Điều không cố định là thành phần
+của khoản thanh toán. Trong tháng đầu tiên, gần như toàn bộ là lãi, vì số dư vẫn
+bằng toàn bộ số tiền đã vay. Trong tháng cuối cùng, gần như toàn bộ là tiền gốc,
+vì số dư đã được trả xuống gần như bằng không.
+
+
+
+Cơ chế rất đơn giản. Mỗi tháng:
+
+
+
+1. Lãi được tính trên số dư còn lại tại đầu tháng. 2. Khoản thanh toán trước
+tiên dùng để trả phần lãi đó. 3. Phần còn lại sẽ làm giảm số dư. 4. Lãi của
+tháng tiếp theo được tính trên số dư nhỏ hơn.
+
+
+
+Hệ quả là khoản vay 30 năm được trả xuống nhanh hơn nhiều so với cảm nhận. Tại
+thời điểm 5 năm, phần lớn số dư vẫn còn tồn đọng, và một tỷ lệ đáng kể trong
+tổng lãi đã được trả. Đây là sự thật đối lập trực giác nhất về thế chấp tài sản,
+và đó là lý do bảng phân bổ nợ theo từng năm đáng để đọc một lần.
+
+
+
+## PITI bao gồm những gì
+
+
+
+Khoản thanh toán mà các tổ chức cho vay thu thường là PITI:
+
+
+
+- **Tiền gốc** — phần dùng để trả lại khoản vay. - **Lãi** — chi phí vay tiền. -
+**Thuế** — thuế tài sản, thường được thu hằng tháng vào quỹ ký quỹ. - **Bảo
+hiểm** — bảo hiểm nhà ở, cũng thường được thu vào quỹ ký quỹ.
+
+
+
+Thuế và bảo hiểm là các khoản hằng năm được chia cho 12 để hiển thị. Việc chia
+này chỉ thuận tiện về thời điểm thanh toán, không phải mức giảm giá: trong một
+năm, tổng số tiền phải trả là như nhau dù theo cách nào. Điều thay đổi từ tháng
+này sang tháng khác là tháng mà hóa đơn thuế đến hạn, và quỹ ký quỹ được thiết
+kế để san bằng điều đó.
+
+
+
+Phí HOA nằm ngoài PITI nhưng nằm trong tổng chi phí chi ra hằng tháng đối với
+căn hộ chung cư hoặc nhà ở trong khu đô thị có quy hoạch. Chúng được nhập riêng
+vì cùng lý do đó: con số này hoàn toàn phụ thuộc vào bất động sản.
+
+
+
+
+<div class="guide-inline-figure">
+  <GuideIllustration slug="how-to-read-an-amortization-schedule" locale={frontmatter.locale} />
+</div>
+## Khoản thanh toán thêm
+
+
+
+Khoản thanh toán thêm được áp dụng cho tiền gốc sẽ làm giảm số dư mà lãi của
+tháng tiếp theo được tính trên đó. Khoản thanh toán theo lịch không thay đổi;
+khoản vay chỉ đơn giản là hoàn tất sớm hơn, và tổng lãi phải trả ít hơn.
+
+
+
+Điều này cần được hiểu theo cơ chế thay vì theo khái niệm trừu tượng. Một khoản
+trả thêm $200 cho khoản vay $360,000 ở mức 6.5 percent không phải là tiết kiệm
+$200 tiền lãi — đó là giảm $200 tiền gốc, và sau đó tiền lãi của mỗi tháng tiếp
+theo được tính trên số dư thấp hơn $200, rồi lại thấp hơn $200 nữa. Khoản tiết
+kiệm lãi kép theo cùng cách với khoản vay.
+
+
+
+## Những gì phép tính không đưa vào
+
+
+
+Khoản thanh toán chỉ là một phần trong chi phí sở hữu nhà. Máy tính cố tình loại
+trừ:
+
+
+
+- **Bảo hiểm khoản vay**, tùy thuộc vào tỷ lệ khoản vay trên giá trị tài sản và
+lịch sử tín dụng đứng sau khoản vay, đồng thời được hủy theo lịch riêng. -
+**Điểm và phí khởi tạo**, được trả khi chốt khoản vay và có thể được tính gộp
+vào lãi suất để so sánh, nhưng không thuộc khoản trả hằng tháng. - **Chi phí
+đóng khoản vay**, là nội dung của một hướng dẫn riêng. - **Thời điểm ký quỹ**,
+quyết định tháng nào phải chịu khoản trả lớn hơn. - **Lạm phát**, thay đổi ý
+nghĩa của khoản trả trong quan hệ với thu nhập của bạn, nhưng không thay đổi số
+tiền thực trả.
+
+
+
+Mỗi mục trong số đó đều là một con số thực. Giữ chúng ngoài khoản trả là điều
+cho phép kiểm tra khoản trả đối chiếu với một bảng được công bố.
+
+
+
+## Kiểm tra kết quả
+
+
+
+Nếu muốn tự xác nhận một con số, hãy lấy số tiền vay, lãi suất và số lần trả,
+rồi tính công thức trên giấy hoặc bằng bảng tính. Nếu kết quả của máy tính và
+của bạn khớp nhau, cả hai nhiều khả năng đều đúng. Nếu không khớp, các nguyên
+nhân có khả năng cao nhất là định nghĩa khác nhau về số tiền vay, lãi suất được
+nhập dưới dạng số thập phân thay vì phần trăm, hoặc thời hạn tính bằng năm trong
+khi công thức cần tính bằng tháng.
+
+
+
+Kiểm tra đó chính là mục đích của việc trình bày các bước tính toán.

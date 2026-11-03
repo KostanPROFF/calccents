@@ -1,0 +1,197 @@
+---
+title: 'Máy tính trả nợ: Avalanche và Snowball'
+description: Cách máy tính trả nợ mô hình hóa nhiều khoản nợ cùng lúc, điểm khác biệt giữa thứ tự avalanche và snowball, và điều mà so sánh giữa chúng đo lường.
+locale: vi
+date: 2026-10-23
+lastReviewed: 2026-10-23
+author: Kostan Proff
+reviewedBy: Tetiana Goncharko
+group: home
+illustration: debt-payoff-calculator-explained
+readingMinutes: 8
+sources:
+- label: CFPB — Hỏi CFPB, câu hỏi và câu trả lời dành cho người tiêu dùng
+  url: https://www.consumerfinance.gov/ask-cfpb/
+- label: CFPB — Công cụ thẻ tín dụng và hướng dẫn dành cho người tiêu dùng
+  url: https://www.consumerfinance.gov/consumer-tools/credit-cards/
+relatedTools:
+- debt-payoff
+faq:
+- q: Máy tính trả nợ so sánh điều gì?
+  a: 'Ba lần chạy trên cùng các khoản nợ: chỉ trả khoản tối thiểu, thứ tự avalanche với khoản trả thêm, và thứ tự snowball với cùng khoản trả thêm. Với mỗi lần chạy, nó báo cáo số tháng để xóa hết nợ, tổng lãi đã trả và lãi tiết kiệm được so với lần chạy chỉ trả khoản tối thiểu.'
+- q: Thứ tự nào tốn ít lãi hơn?
+  a: Thứ tự avalanche, vì đưa khoản tiền dư vào khoản nợ có lãi suất cao nhất trước. Máy tính báo cáo khoảng cách giữa hai thứ tự dưới dạng số đô la thay vì kết luận, vì độ lớn của khoảng cách đó phụ thuộc vào các số dư và lãi suất được nhập.
+- q: Thứ tự nào xóa khoản nợ đầu tiên sớm hơn?
+  a: Thứ tự snowball, vì bắt đầu với khoản nợ có số dư nhỏ nhất. Tháng mà mỗi khoản nợ được xóa hết được báo cáo riêng cho từng thứ tự, nên tài khoản đầu tiên đạt về 0 có thể thấy trong kết quả.
+- q: Lãi được tính hằng ngày hay hằng tháng?
+  a: Hằng tháng, trên số dư đầu tháng. Nhiều thẻ tín dụng tính lãi hằng ngày và gộp lãi hằng ngày, và máy tính không mô hình hóa sự khác biệt đó.
+- q: Điều gì xảy ra khi một khoản nợ được trả hết?
+  a: Khoản nợ đó ngừng yêu cầu khoản trả tối thiểu, và số tiền ấy được cộng vào số tiền có thể dùng cho các khoản nợ còn mở. Đây là lý do thứ tự trả nợ tăng tốc khi các số dư nhỏ hơn dần được trả hết.
+- q: Trường khoản trả thêm có tác dụng gì?
+  a: Trường này cộng một số tiền hằng tháng vào tổng các khoản trả tối thiểu, và máy tính áp dụng số tiền đó cho khoản nợ mà thứ tự đã chọn chỉ tới. So sánh ba lần chạy giữ nguyên khoản trả thêm để chỉ thứ tự thay đổi.
+- q: Có tính phí trả chậm và tác động thuế không?
+  a: Không. Phí trả chậm, phí chuyển số dư và cách xử lý thuế đối với lãi tiền vay được khấu trừ đều nằm ngoài mô hình.
+---
+
+import GuideIllustration from '../../../components/visuals/GuideIllustration.astro';
+
+Nhiều khoản nợ cùng lúc không cộng lại theo cách một số dư duy nhất. Thẻ tín
+dụng ở 18% và khoản vay cá nhân ở 7% đều đòi hỏi một khoản thanh toán mỗi tháng,
+và thứ tự các khoản thanh toán đó được áp dụng sẽ thay đổi chi phí lãi của cùng
+số tiền đó. Công cụ <a href="/vi/tools/debt-payoff/">tính trả nợ</a> thực hiện trực
+tiếp so sánh đó.
+
+
+
+## Mô hình theo từng tháng
+
+
+
+Máy tính mô phỏng các khoản nợ từng tháng một, và các bước của quá trình mô
+phỏng giống nhau mỗi tháng.
+
+
+
+Lãi trong tháng được tính trên số dư đầu tháng và được cộng vào số dư đó. Số dư
+$10,000 ở mức 18% phát sinh $150 lãi trong tháng, và số dư cần được xử lý là
+$10,150.
+
+
+
+Số tiền khả dụng trong tháng đó là tổng của tất cả các khoản trả tối thiểu cộng
+với khoản trả bổ sung đã nhập. Mỗi khoản nợ vẫn còn số dư sẽ nhận khoản trả tối
+thiểu của riêng nó, và khoản trả đó trước tiên khấu trừ lãi của khoản nợ đó, sau
+đó mới khấu trừ gốc. Phần tiền còn lại trong tháng — khoản trả bổ sung và các
+khoản tối thiểu của những khoản nợ đã được tất toán — sẽ dùng để trả khoản nợ mà
+thứ tự đã chọn chỉ vào.
+
+
+
+Khi một khoản nợ giảm về 0, nó không còn nhận khoản trả tối thiểu, và khoản tối
+thiểu đó được chuyển vào số tiền khả dụng cho các khoản nợ vẫn còn tồn đọng. Một
+khoản trả tối thiểu $200 trở thành $200 gốc trả bổ sung, đây chính là điều khiến
+thứ tự tất toán tăng tốc thay vì chỉ sắp xếp lại các khoản trả.
+
+
+
+Một khoản nợ đơn lẻ cho thấy cùng phép tính ở dạng đơn giản nhất. Số dư $10,000
+với lãi suất 18% và khoản trả tối thiểu $200 được xóa hết trong 94 tháng, đồng
+thời khoảng $8,622 tiền lãi được trả trong suốt quá trình. Số dư giảm $50 trong
+tháng đầu tiên, vì $150 tiền lãi được cộng vào và $200 được trả ra, rồi giảm
+thêm một chút trong mỗi tháng sau đó, vì tiền lãi được tính trên số dư đang giảm
+dần.
+
+
+
+
+<div class="guide-inline-figure">
+  <GuideIllustration slug="net-pay-calculator-explained" locale={frontmatter.locale} />
+</div>
+## Lũy tiến và tuyết cầu
+
+
+
+Câu hỏi mà máy tính đưa ra là khoản nợ nào sẽ nhận khoản tiền dư trước tiên.
+
+
+
+Thứ tự lũy tiến bắt đầu với khoản nợ có lãi suất cao nhất. Khoản nợ tốn kém nhất
+để duy trì được trả trước, và đó là nơi tổng tiền lãi nhỏ hơn đến từ.
+
+
+
+Thứ tự tuyết cầu bắt đầu với khoản nợ có số dư nhỏ nhất. Khoản nợ nhỏ nhất được
+xóa hết trước và khoản trả tối thiểu của nó sớm hơn được cộng vào ngân sách hằng
+tháng, nên tài khoản đầu tiên về 0 sớm hơn, dù tổng tiền lãi trả ra nhiều hơn.
+
+
+
+Hai thứ tự này làm hiện rõ những khía cạnh khác nhau. Một thứ tự cho thấy số
+tiền cuối cùng nhỏ nhất, thứ tự kia cho thấy số dư đầu tiên đã được xóa hết.
+
+
+
+## Điều mà phép so sánh thể hiện
+
+
+
+Máy tính chạy ba mô phỏng và đặt chúng cạnh nhau.
+
+
+
+Mô phỏng đầu tiên là tình huống chỉ trả khoản tối thiểu: mọi khoản trả tối thiểu
+và không có tiền dư. Đây là mốc để hai mô phỏng còn lại được so sánh.
+
+
+
+Mô phỏng thứ hai là tình huống lũy tiến có thêm khoản trả dư. Mô phỏng thứ ba là
+tình huống tuyết cầu với cùng khoản trả dư được thêm vào. Với mỗi tình huống,
+máy tính báo số tháng cho đến khi mọi khoản nợ được xóa hết, tổng tiền lãi đã
+trả và số tiền lãi được tiết kiệm so với mốc chỉ trả khoản tối thiểu.
+
+
+
+Hai con số tiết kiệm đó là phép so sánh mà công cụ này tồn tại để tạo ra, và
+chúng trả lời những câu hỏi khác nhau. Con số của phương pháp lũy tiến nhỏ hơn
+trong hai con số, còn con số của phương pháp tuyết cầu lớn hơn. Khoảng cách giữa
+chúng là chi phí của việc xóa hết tài khoản nhỏ nhất trước, được tính bằng số
+tiền lãi.
+
+
+
+Khoảng cách phụ thuộc vào các số liệu được nhập. Với một khoản nợ, hai thứ tự
+hoàn toàn giống nhau. Với các khoản nợ có lãi suất và số dư tương tự nhau, kết
+quả của hai thứ tự gần giống nhau. Khoảng cách lớn hơn khi một số dư lớn có lãi
+suất cao và một số dư nhỏ có lãi suất thấp.
+
+
+
+Có một trường hợp mốc đó không tồn tại. Khi các khoản trả tối thiểu nhỏ hơn tiền
+lãi mà khoản nợ phát sinh trong một tháng, số dư không giảm: tiền lãi được cộng
+vào, khoản trả chỉ bù một phần, và phần còn lại lại làm số dư tăng. Với chỉ các
+khoản trả tối thiểu, các khoản nợ không bao giờ được xóa hết, nên không có lịch
+trả nợ hoàn tất để so sánh với hai mô phỏng còn lại. Máy tính để trống các con
+số tiền lãi được tiết kiệm và ghi rõ điều đó trên trang thay vì in ra một con số
+được tạo thành từ 100 năm tiền lãi không bao giờ kết thúc. Hai mô phỏng lũy tiến
+và tuyết cầu vẫn hoàn tất miễn là khoản trả dư đủ bù tiền lãi, và số tháng cùng
+tổng tiền lãi của chúng là các con số mô tả các khoản nợ. Khi khoản trả dư không
+đủ bù tiền lãi trong cả hai trường hợp, hai mô phỏng đó không báo số tháng và
+không báo tiền lãi vì lý do tương tự.
+
+
+
+
+<div class="guide-inline-figure">
+  <GuideIllustration slug="income-tax-calculator-explained" locale={frontmatter.locale} />
+</div>
+## Những điều mô hình không đưa vào
+
+
+
+Mô hình hoạt động theo tháng và được trình bày đơn giản, với một số yếu tố nằm
+ngoài phạm vi của nó.
+
+
+
+Lãi suất biến động được giữ ở mức đã nhập trong mỗi tháng của kỳ tính toán.
+
+
+
+Phí trễ hạn và phí chuyển số dư không phải là một phần trong phép tính.
+
+
+
+Lãi suất thẻ tín dụng thường được tính hằng ngày và gộp lãi hằng ngày, trong khi
+máy tính áp dụng cách tính lãi hằng tháng, nên chi phí của số dư thẻ tính ra
+thấp hơn mức được tính phí.
+
+
+
+Lãi suất của một số khoản nợ có thể được khấu trừ thuế, và tác động thuế đó
+không được tính trong phép tính.
+
+
+
+Một khoản thanh toán không đến sẽ dừng mô phỏng thay vì được ghi nhận là trễ
+hạn, nên các con số mô tả lịch trình theo kế hoạch chứ không phải theo diễn biến
+thực tế.

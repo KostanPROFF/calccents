@@ -1,0 +1,158 @@
+---
+title: Toán học đằng sau các khoản trả góp khoản vay tài chính thêm
+description: Cách một khoản trả góp tiền vốn bổ sung rút ngắn thời hạn khoản vay, lý do khoản trả theo lịch không thay đổi và tác động của việc đó trong các khung thời gian khác nhau.
+locale: vi
+date: 2026-10-04
+lastReviewed: 2026-10-23
+author: Kostan Proff
+reviewedBy: Tetiana Goncharko
+group: home
+illustration: extra-mortgage-payments-math
+readingMinutes: 7
+sources:
+- label: CFPB — Tính khoản trả góp tài chính
+  url: https://www.consumerfinance.gov/ask-cfpb/
+- label: HUD — Hỗ trợ chủ nhà người Mỹ
+  url: https://www.hud.gov/helping_american_homeowners
+relatedTools:
+- mortgage-payment
+faq:
+- q: Các khoản trả thêm có làm giảm khoản trả hằng tháng không?
+  a: Không. Khoản trả theo lịch vẫn giữ nguyên và khoản vay sẽ được tất toán sớm hơn. Một số bên cho vay sẽ điều chỉnh lại khoản trả theo hướng giảm nếu bạn yêu cầu, nhưng đó là một thỏa thuận riêng biệt chứ không phải hệ quả trực tiếp của khoản trả thêm.
+- q: Khoản trả thêm được dùng để làm gì?
+  a: Để trả gốc. Lãi suất của tháng được khoản trả theo lịch đảm bảo trước, sau đó số tiền trả thêm sẽ làm giảm số dư, từ đó làm giảm lãi suất được tính vào tháng tiếp theo.
+- q: Khoản trả thêm thực sự tiết kiệm được bao nhiêu?
+  a: Hãy chạy trong máy tính và xem chênh lệch về tổng lãi suất. Con số này phụ thuộc vào lãi suất, thời hạn và số tiền trả thêm; hiệu quả càng tăng khi số tiền trả thêm càng lớn.
+- q: Tốt hơn là trả thêm hay đầu tư số tiền đó?
+  a: Đó là câu hỏi về mức lợi nhuận có thể đạt được từ khoản tiền đó nơi khác và về hoàn cảnh của chính bạn. Máy tính cho biết tác động của khoản trả thêm đối với khoản vay; nó không mô hình hóa việc sử dụng tiền mặt theo cách khác.
+- q: Các khoản trả thêm có thể vượt quá phần gốc không?
+  a: Thông thường, bên cho vay mặc định sẽ áp dụng số tiền trả thêm vào gốc, và các con số tất toán sớm trong máy tính giả định điều đó. Một số hợp đồng có điều khoản về cách áp dụng các khoản trả thêm, và việc đọc kỹ là đáng giá.
+- q: Điều gì xảy ra nếu tôi thực hiện một khoản trả lớn một lần?
+  a: Cơ chế tương tự vẫn áp dụng, với một bước điều chỉnh lớn hơn. Ông khoản trả thêm trong máy tính là số tiền theo tháng, và ngày tất toán mà nó đưa ra là tháng mà số dư về 0.
+---
+
+import GuideIllustration from '../../../components/visuals/GuideIllustration.astro';
+
+Các khoản trả góp thêm cho khoản vay thường được mô tả theo hai cách. Một cách
+nói rằng chúng tiết kiệm hàng nghìn đô la. Cách còn lại nói rằng chúng là sự
+lãng phí. Cả hai đều mô tả cùng một phép tính, và phép tính đó đáng để xem xét
+trực tiếp.
+
+
+
+Công cụ <a href="/vi/tools/mortgage-payment/">tính trả góp vay nhà</a> có trường
+nhập khoản trả thêm chính vì lý do này: tác động của khoản trả thêm rất dễ thấy
+sau khi được tính toán thay vì chỉ được khẳng định.
+
+
+
+## Cơ chế
+
+
+
+Khoản trả góp thế chấp trả lãi trước và gốc sau. Quy tắc này không thay đổi khi
+bạn trả nhiều hơn.
+
+
+
+Vì vậy, khi bạn cộng thêm $200 vào một khoản trả theo lịch:
+
+
+
+1. Phần theo lịch vẫn chi trả lãi của tháng đó và phần gốc tương tự như mọi lúc.
+2. $200 bổ sung đi hoàn toàn vào gốc. 3. Số dư hiện thấp hơn $200. 4. Tháng sau,
+lãi được tính trên số dư thấp hơn $200, nên khoản lãi phải trả thấp hơn $200 ×
+(lãi suất hàng tháng). 5. Khoản tiết kiệm nhỏ đó hiện có thể dùng để trả gốc, vì
+khoản trả theo lịch không thay đổi.
+
+
+
+Bước thứ tư là nơi hiệu ứng lãi kép tồn tại. Khoản tiết kiệm mỗi tháng nhỏ và
+vĩnh viễn, và nó lặp lại. Trong thời gian đủ dài, các khoản trả bổ sung giúp
+loại bỏ nhiều lãi hơn so với việc số tiền mặt bổ sung trả trực tiếp, mặc dù
+chính số tiền mặt bổ sung đã gây ra sự khác biệt đó.
+
+
+
+
+<div class="guide-inline-figure">
+  <GuideIllustration slug="mortgage-payment-calculator-explained" locale={frontmatter.locale} />
+</div>
+## Tại sao khoản trả không thay đổi
+
+
+
+Điều này làm mọi người ngạc nhiên. Khoản trả theo lịch vẫn y như trước, vì lịch
+trả góp được xây dựng dựa trên con số đó. Điều thay đổi là số lượng khoản trả.
+Khoản vay kết thúc sớm hơn.
+
+
+
+Do đó, tác động đến ngân sách hàng tháng chỉ là tạm thời: số tiền bổ sung được
+trả chừng nào khoản vay còn tồn tại, rồi ngừng. Ngày tất toán trong kết quả của
+công cụ tính toán là phép đo trực tiếp về thời gian khoản vay còn tồn tại.
+
+
+
+## Cách đọc ngày tất toán
+
+
+
+Ngày tất toán là con số cần theo dõi, và nó thay đổi theo cách dễ bị đánh giá
+sai.
+
+
+
+Một khoản trả bổ sung trông lớn so với số tiền vay có thể chỉ kéo ngày tất toán
+đến sớm vài tháng. Lý do là khoản vay vốn đã chịu lãi nặng ở phần đầu: phần lớn
+lãi đã được trả khi số dư cuối cùng được tất toán, và việc rút ngắn phần đuôi
+loại bỏ ít hơn so với tỷ lệ của khoản vay gợi ý.
+
+
+
+Cùng một khoản trả bổ sung áp dụng cho một khoản vay có kỳ hạn ngắn hơn sẽ tạo
+ra tác động lớn hơn, vì phần lãi của khoản vay đó còn nhiều phía trước hơn. Cùng
+một khoản trả bổ sung được thực hiện sớm sẽ tạo ra tác động lớn hơn so với thực
+hiện muộn, vì số dư mà nó làm giảm lớn hơn ở thời điểm bắt đầu.
+
+
+
+Công cụ tính toán cho phép bạn thay đổi khoản trả bổ sung và xem ngày tất toán
+cùng tổng lãi thay đổi như thế nào. Chạy với các mức $0, $100, $200 và $500 là
+cách nhanh hơn để hiểu hình dạng của tác động so với bất kỳ quy tắc xem xét nào.
+
+
+
+
+<div class="guide-inline-figure">
+  <GuideIllustration slug="how-mortgage-amortization-works" locale={frontmatter.locale} />
+</div>
+## Những điều nó không cho bạn biết
+
+
+
+Phép tính khoản trả bổ sung chỉ nói về khoản vay và không nói gì khác. Nó không
+mô hình hóa:
+
+
+
+- **Việc sử dụng số tiền theo cách khác.** Việc $200 mỗi tháng nên dùng để giảm
+khoản vay hay để nằm trong một tài khoản là câu hỏi về mức lợi nhuận, và phép
+tính của khoản vay không trả lời được câu hỏi đó. - **Cách xử lý thuế.** Lãi và
+gốc được xử lý khác nhau về thuế trong nhiều trường hợp, và khác biệt đó không
+có trong phép tính. - **Phạt trả trước hạn.** Hầu hết các khoản thế chấp thông
+thường không có khoản phạt này, và phép tính không bao gồm khoản nào. - **Thay
+đổi kế hoạch.** Một khoản vay được tất toán sớm sẽ giải phóng dòng tiền sớm hơn,
+và việc dòng tiền đó sau đó được dùng cho mục đích gì nằm ngoài mô hình.
+
+
+
+## Ghi chú về cách các bên cho vay áp dụng khoản thanh toán
+
+
+
+Phép tính giả định khoản tiền dư được áp dụng vào gốc vay, đây là cách xử lý
+tiêu chuẩn. Cơ chế của khoản trả gốc vay ngoài lịch được quy định trong hợp đồng
+vay và các quy tắc quản lý đi kèm, và nên đọc kỹ những tài liệu này trước khi
+thực hiện một khoản trả lớn một lần. Hành vi trong máy tính toán tương ứng với
+trường hợp phổ biến, và ngày tất toán mà nó hiển thị là tháng mà số dư về không.

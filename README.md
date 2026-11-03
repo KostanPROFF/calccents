@@ -53,14 +53,15 @@ src/
 ├─ config/site.ts          site identity — the single source of truth
 ├─ config/tools.ts         registry of the six calculators
 ├─ content.config.ts       Zod schema for the guides collection
-├─ content/guides/         18 guides × 3 languages
+├─ content/guides/         18 guides × 10 languages
 │  ├─ *.mdx                English, at the root
 │  ├─ ru/*.mdx             Russian
-│  └─ es/*.mdx             Spanish
+│  ├─ es/*.mdx             Spanish
+│  └─ {zh,ko,vi,pt,ar,tl,uk}/*.mdx   the seven added later
 ├─ i18n/
 │  ├─ locales.ts           the locale list, path helpers, date formatting
 │  ├─ guides.ts            reading the guides collection by language
-│  └─ ui/{en,ru,es}.ts     every user-visible string, one file per language
+│  └─ ui/<locale>.ts      every user-visible string, one file per language
 ├─ lib/calc/               calculation engine + unit tests
 ├─ lib/data/states.ts      the 2026 state income tax and property tax table
 ├─ lib/data/stateCredits.ts the state earned income and child tax credits
@@ -97,9 +98,12 @@ scripts/
 
 ## Languages
 
-The site is published in English, Russian and Spanish. English is the source
+The site is published in English, Russian, Spanish, Chinese, Korean,
+Vietnamese, Portuguese, Arabic, Tagalog and Ukrainian. English is the source
 language and lives at the root of the site, so every existing link keeps
-working; the other two live under `/ru/` and `/es/`.
+working; the other nine live under `/ru/`, `/es/`, `/zh/`, `/ko/`, `/vi/`,
+`/pt/`, `/ar/`, `/tl/` and `/uk/`. Arabic is written right to left, so its
+pages carry `dir="rtl"` and its own font stack.
 
 Astro's i18n routing expects the folder structure to match the URL structure,
 so the pages are not dynamic: `src/pages/about.astro` and
@@ -110,7 +114,7 @@ Russian guides and nothing else.
 Two rules keep this honest:
 
 - **Every reader-visible string lives in a dictionary.** `src/i18n/ui/en.ts`
-  is the reference, and `ru.ts` and `es.ts` have to match it key for key.
+  is the reference, and the other nine files have to match it key for key.
   A renamed or missing key is a type error, not a blank space on the page.
 - **The guides are files.** A guide is an article, so it has its own file per
   language, in `src/content/guides/<locale>/`. The URL segment is the same
@@ -124,8 +128,10 @@ can check.
 
 The YMYL guardrail has a rule set per language. A linter that only knew
 English would pass a Russian guide full of "вы должны покупать" without a
-word, so `scripts/lint-advisory.ts` carries English, Russian and Spanish
-rules, each with its own negation list, and each pinned by tests.
+word, so `scripts/lint-advisory.ts` carries a rule set for each of the ten
+languages, each with its own negation list, and each pinned by tests. The
+Chinese and Korean rule sets are written without ASCII word boundaries,
+because those scripts do not put a space between the parts of a phrase.
 
 ## Content model
 
@@ -223,7 +229,7 @@ The beacon sets no cookie, writes nothing to local storage and creates no
 identifier, and the IP address it carries is used at the edge to work out
 the country and is discarded there. It is still a third party that receives
 a request from every visitor who accepts, so the privacy policy names it in
-all three languages.
+all ten languages.
 
 Two gates watch this:
 
@@ -331,7 +337,7 @@ What the message goes through, in order:
 The form works without JavaScript as well: it is a real form, and the
 endpoint answers with a page saying the message was sent. With JavaScript the
 answer arrives on the page, in the language of the page. The privacy page
-says what the form does with what is typed into it, in all three languages.
+says what the form does with what is typed into it, in all ten languages.
 
 ## ads.txt
 
@@ -418,7 +424,7 @@ analytics. It is not a reader: no choice is recorded for it and nothing is
 stored about it. `check-consent.ts` checks that this branch is still there,
 because a site that passes every other gate and shows the reviewer an empty
 page is exactly the failure this guards against. The privacy page says so in
-all three languages.
+all ten languages.
 
 The automatic gate is the part that matters. It reads the three slot
 variables and works out what the build should contain: all three set means
@@ -652,7 +658,7 @@ one.
 The state is read on two pages, without the cookie banner and without any
 third party: no cookie is set for it, nothing about it is stored, and nothing
 about it reaches the advertising or the analytics providers. The privacy page
-says so in all three languages.
+says so in all ten languages.
 
 ## The ladder after AdSense
 
@@ -779,10 +785,10 @@ live domain as well as locally: the three calculators compute, the results
 update as the inputs change, the amortization table fills, and the console is
 free of errors. The mortgage and compound interest figures were checked
 against independently calculated values and agree to the cent. The same
-figures were checked in the Russian and Spanish pages and are identical, with
-the dates written the way the language writes them.
+figures were checked on every translated page and are identical, with the
+dates written the way the language writes them.
 
 The language switcher sits in the header next to the theme toggle and keeps a
 reader on the same page when they change language. Every page carries
-`hreflang` links for all three languages and an `x-default` pointing at the
+`hreflang` links for all ten languages and an `x-default` pointing at the
 English one, and the sitemap lists the alternates.

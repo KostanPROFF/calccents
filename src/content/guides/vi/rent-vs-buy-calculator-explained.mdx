@@ -1,0 +1,242 @@
+---
+title: Giải thích về Máy tính Thuê so với Mua
+description: Cách xây dựng phép so sánh thuê với mua, tháng giao điểm thực sự có ý nghĩa gì, và những chi phí nào hoàn toàn nằm ngoài phép tính trong thực tế.
+locale: vi
+date: 2026-10-01
+lastReviewed: 2026-10-23
+author: Kostan Proff
+reviewedBy: Tetiana Goncharko
+group: renting
+illustration: rent-vs-buy-calculator-explained
+readingMinutes: 9
+sources:
+- label: CFPB — Các công cụ về tài chính nhà ở và người tiêu dùng
+  url: https://www.consumerfinance.gov/consumer-tools/mortgages/
+- label: HUD — Hỗ trợ chủ nhà người Mỹ
+  url: https://www.hud.gov/helping_american_homeowners
+- label: BLS — Chỉ số giá tiêu dùng
+  url: https://www.bls.gov/cpi/
+- label: FRED — Chỉ số giá nhà tại Hoa Kỳ
+  url: https://fred.stlouisfed.org/series/HPINUS
+- label: Tax Foundation — Thuế tài sản theo tiểu bang và quận, 2026
+  url: https://taxfoundation.org/data/all/state/property-taxes-by-state-county/
+relatedTools:
+- rent-vs-buy
+- mortgage-payment
+faq:
+- q: Tại sao công cụ không nói lựa chọn nào tốt hơn?
+  a: 'Vì câu trả lời phụ thuộc vào những điều mà phép tính không thể nhìn thấy: khoản tiết kiệm khác của bạn, thu nhập của bạn, thời gian bạn dự định ở lại và mức độ bất định mà bạn có thể chịu đựng. Phép so sánh đưa ra một tháng giao điểm, đây là một sự thật dựa trên các con số, còn phán đoán vẫn thuộc về bạn.'
+- q: Chi phí thực net của việc sở hữu là bao nhiêu?
+  a: Đó là số tiền mặn bạn đã trả cho ngôi nhà, bao gồm khoản trả trước và chi phí đóng hồ sơ, trừ đi vốn chủ sở hữu bạn đã tích lũy, tức là giá trị hiện tại của ngôi nhà trừ số dư vẫn còn phải trả. Một con số âm có nghĩa là bạn đã tích lũy được nhiều vốn chủ sở hữu hơn số tiền mình đã chi ra.
+- q: Tại sao chi phí bảo trì là một tỷ lệ phần trăm của giá nhà?
+  a: Các khoản sửa chữa không xuất hiện trên bất kỳ bảng sao kê nào, nhưng chúng vẫn đến. Thể hiện chi phí bảo trì hằng năm dưới dạng tỷ lệ phần trăm của giá mua giúp duy trì sự nổi bật của khoản chi này bên cạnh các chi phí định kỳ khác, thay vì để nó biến mất trong phép so sánh.
+- q: Chi phí bán nhà có xuất hiện trong các con số hằng tháng không?
+  a: Không. Chi phí bán nhà được trả một lần, vào ngày bạn bán, nên không thuộc về khoản thanh toán hằng tháng và không được phân bổ qua các tháng trước đó. Khoản này được tính trên giá của ngôi nhà tại thời điểm đó, và đó là lý do chúng làm giảm vốn chủ sở hữu mà phép so sánh tính đến.
+- q: Điều gì xảy ra nếu giá nhà giảm?
+  a: Hãy nhập một mức thay đổi hằng năm âm và giá trị sẽ giảm mỗi tháng. Vốn chủ sở hữu co lại, tháng giao điểm lùi xa hơn hoặc biến mất hoàn toàn, và chi phí thực net của việc sở hữu tăng lên. Công cụ xử lý thị trường giảm mà không cần đến cách xử lý đặc biệt nào.
+- q: Chân trời 30 năm có thực tế không?
+  a: Chân trời là một đầu vào. Chân trời ngắn hơn thuận lợi cho việc thuê, vì chi phí ban đầu của việc mua được thu hồi trong nhiều năm hơn, còn chân trời dài hơn thuận lợi cho việc sở hữu. Công cụ cho phép bạn đặt 5, 10, 15 hoặc 30 năm để tác động của lựa chọn đó trở nên rõ ràng.
+- q: Thuế tài sản lấy từ đâu?
+  a: 'Đây là một đầu vào. Khi mạng có thể xác định yêu cầu đến từ tiểu bang nào, trang sẽ điền vào trường mức thuế tài sản hiệu dụng bình quân của tiểu bang đó: khoản thuế thực tế trên tổng số phần trăm giá trị ngôi nhà, do Tax Foundation công bố cho năm 2026 dựa trên American Community Survey năm 2024. Thuế tài sản do chính quyền địa phương ấn định, nên mức thuế ở một quận hoặc thành phố cụ thể thường khác mức bình quân của tiểu bang, và trường này vẫn có thể chỉnh sửa.'
+---
+
+import GuideIllustration from '../../../components/visuals/GuideIllustration.astro';
+
+Thuê nhà và mua nhà là hai hình thức khác nhau cho cùng một nhu cầu cơ bản: một
+mái nhà che đầu và một nơi để làm việc. Công cụ <a href="/vi/tools/rent-vs-buy/">so
+sánh thuê nhà và mua nhà</a> so sánh chúng về tiền mặt và về vốn chủ sở hữu, rồi
+dừng lại ở đó.
+
+
+
+Trang không đưa ra kết luận, và lý do đáng được nêu trước khi tính toán. Một kết
+luận sẽ phụ thuộc vào những dữ kiện mà trang không thể nhìn thấy — bạn còn tiết
+kiệm bao nhiêu, thu nhập của bạn ổn định ra sao, bạn dự định ở nơi đó trong bao
+lâu và bạn sẽ khó chịu đến mức nào nếu gặp một tháng tệ. Những dữ kiện đó làm
+thay đổi câu trả lời mà không làm thay đổi bất kỳ phép tính nào.
+
+
+
+## Hai sổ cái, từng tháng một
+
+
+
+Bảng so sánh đặt hai sổ quỹ tiền mặt cạnh nhau.
+
+
+
+Sổ cái **thuê** cộng tiền thuê hằng tháng và bảo hiểm người thuê. Tất cả chỉ có
+vậy. Không có khoản tiền đặt cọc để thu hồi, không có bảo trì, không có chi phí
+giao dịch vào cuối.
+
+
+
+Sổ cái **sở hữu** cộng:
+
+
+
+- Khoản trả góp thế chấp, tính theo công thức trả góp tiêu chuẩn - Thuế tài sản,
+tính theo tỷ lệ phần trăm giá mua mỗi năm - Bảo hiểm nhà ở, tính theo mức phí
+hằng năm chia cho mười hai - Bất kỳ khoản phí HOA hoặc phí quản lý căn hộ nào -
+Khoản dự phòng bảo trì, tính theo tỷ lệ phần trăm giá mua mỗi năm - Tiền đặt cọc
+và chi phí đóng hợp đồng, vào tháng đầu tiên
+
+
+
+Khoản trả góp thế chấp thuộc về khoản vay và kết thúc cùng khoản vay. Thuế, bảo
+hiểm, phí HOA và khoản dự phòng bảo trì thuộc về căn nhà, và chúng tiếp diễn
+chừng nào căn nhà còn được sở hữu. Khi bảng so sánh đi qua thời điểm kết thúc
+khoản vay, các tháng sau đó chỉ chịu chi phí vận hành.
+
+
+
+Con số **thuế tài sản** là một đầu vào và trang có thể điền vào ô này. Khi mạng
+có thể xác định yêu cầu đến từ tiểu bang nào, trường này được đặt thành tỷ lệ
+thuế tài sản hiệu dụng bình quân của tiểu bang đó — tỷ lệ thuế thực sự phải trả
+so với giá trị căn nhà, do Tax Foundation công bố cho năm 2026 dựa trên American
+Community Survey cho năm 2024. Đây là con số của tiểu bang, và thuế tài sản do
+chính quyền địa phương ấn định, nên tỷ lệ tại một quận hoặc thành phố cụ thể
+thường là con số khác. Trường này vẫn có thể chỉnh sửa, và bảng so sánh sử dụng
+đúng những gì người đọc nhập.
+
+
+
+Khoản dự phòng bảo trì là khoản mọi người tranh luận. Các khoản sửa chữa không
+xuất hiện trên bảng kết quả đóng hợp đồng, nhưng chúng vẫn đến, và chúng đến dù
+có khoản thế chấp hay không. Loại trừ chúng sẽ làm đẹp lợi thế của việc sở hữu;
+coi chúng là khoản rất lớn lại làm đẹp lợi thế theo hướng ngược lại. Thể hiện
+chúng dưới dạng tỷ lệ phần trăm giá mua mỗi năm giúp chúng nằm cạnh các chi phí
+vận hành khác, nơi chúng có thể được tranh luận đúng cách.
+
+
+
+
+<div class="guide-inline-figure">
+  <GuideIllustration slug="rent-vs-buy-common-mistakes" locale={frontmatter.locale} />
+</div>
+## Vốn chủ sở hữu là phần dễ bị bỏ lỡ
+
+
+
+Chạy riêng các sổ quỹ tiền mặt tạo ra một bức tranh không đầy đủ, bởi vì việc sở
+hữu đưa một tài sản vào bảng cân đối, còn việc thuê thì không.
+
+
+
+Vì vậy, máy tính theo dõi thêm hai con số mỗi tháng:
+
+
+
+- **Giá trị căn nhà**, tăng hoặc giảm hằng tháng theo tỷ lệ năm bạn nhập - **Số
+dư khoản vay còn lại**, lấy từ lịch trả góp
+
+
+
+Hiệu số giữa hai con số là vốn chủ sở hữu của bạn:
+
+
+
+**vốn cổ phần = giá trị ngôi nhà − số dư khoản vay còn lại**
+
+
+
+Sau đó, **chi phí ròng của việc sở hữu** là số tiền mặt bạn đã trả, trừ vốn chủ
+sở hữu đó, cộng với chi phí bán mà một giao dịch bán tại thời điểm đó sẽ tốn:
+
+
+
+**chi phí ròng = tiền đặt cọc + chi phí đóng hợp đồng + tất cả chi phí sở hữu
+hằng tháng − vốn chủ sở hữu + chi phí bán**
+
+
+
+Chi phí bán là số hạng cuối cùng do thời điểm thanh toán. Chúng được trên giá
+của ngôi nhà vào ngày bán, nên không thuộc các con số hằng tháng; chúng thuộc về
+vốn chủ sở hữu, vì sau khi bán, số tiền còn lại là giá trị của ngôi nhà trừ số
+dư nợ chưa trả trừ chi phí bán. Đặt chi phí bán bằng không, toàn bộ vốn chủ sở
+hữu là số tiền mà phép so sánh tính.
+
+
+
+Đây là con số có thể so với khoản tiền thuê bạn sẽ phải trả trong cùng khoảng
+thời gian. Ban đầu, chi phí ròng khi sở hữu còn cao, vì bạn đã trả một khoản
+tiền lớn trả trước và tích lũy được rất ít vốn chủ sở hữu. Khi các năm trôi qua
+và số dư giảm, chi phí ròng giảm xuống, và đến một thời điểm nó thấp hơn khoản
+tiền thuê.
+
+
+
+## Tháng giao cắt
+
+
+
+Thời điểm đó là tháng giao cắt, và đây là con số đơn lẻ hữu ích nhất mà công cụ
+tạo ra. Đây là tháng đầu tiên mà:
+
+
+
+**chi phí ròng khi sở hữu < tổng tiền thuê đã trả trong cùng số tháng**
+
+
+
+Hãy đọc kỹ. Trước tháng giao cắt, thuê nhà có chi phí tiền mặt thấp hơn. Sau
+tháng đó, sở hữu có chi phí thấp hơn khi tính cả vốn chủ sở hữu. Không bên nào
+của ranh giới đó là khuyến nghị; đó là điểm hai đường thẳng trên biểu đồ cắt
+nhau, và vị trí của điểm giao cắt phụ thuộc hoàn toàn vào các dữ liệu đầu vào.
+
+
+
+Tháng giao cắt đến muộn hơn khi mức thuê thấp so với giá mua, khi lãi suất cao,
+khi thời hạn ngắn và khi giả định tăng giá thấp hoặc âm. Tháng giao cắt không
+bao giờ đến khi mức thuê nhỏ so với giá mua, và đây là lý do về mặt số học việc
+mua bằng tiền mặt tại một thị trường đắt đắn có thể là lựa chọn tốn kém hơn
+trong vòng năm năm.
+
+
+
+
+<div class="guide-inline-figure">
+  <GuideIllustration slug="down-payment-and-closing-costs-explained" locale={frontmatter.locale} />
+</div>
+## Những gì được cố ý để ngoài
+
+
+
+Phép so sánh bao gồm tiền mặt và vốn chủ sở hữu. Nó không bao gồm:
+
+
+
+- **Thuế khi bán.** Mọi khoản lãi và khoản miễn trừ có thể áp dụng cho khoản lãi
+đó đều nằm ngoài phạm vi của công cụ. - **Khoản khấu trừ lãi vay thế chấp.**
+Khoản khấu trừ này có đáng giá hay không phụ thuộc vào thuế suất biên của bạn và
+hoàn cảnh cá nhân của bạn. - **Chi phí giao dịch khi mua.** Chi phí đóng cửa
+được tính dưới dạng tỷ lệ phần trăm của giá mua; hướng dẫn về chi phí đóng cửa
+có chi tiết về những khoản này. - **Chất lượng nhà ở khác nhau.** Một căn nhà
+thuê không phải là cùng một tòa nhà với một căn nhà mua ở một khu vực khác, và
+không công thức nào nắm bắt được điều đó. - **Quyền lựa chọn chuyển nhà.** Thuê
+nhà đi kèm hợp đồng thuê; mua nhà đi kèm khoản vay thế chấp. Cả hai đều có chi
+phí thoát riêng, và không khoản nào trong số đó xuất hiện ở đây.
+
+
+
+## Lưu ý về dữ liệu đầu vào tăng giá
+
+
+
+Mức thay đổi giá trị hằng năm mà bạn nhập được áp dụng hằng tháng trong toàn bộ
+thời hạn, theo cả hai chiều nếu con số là số âm. Không có dự báo nào được đưa
+vào, và mức trung bình lịch sử không được dùng thay cho dữ liệu đầu vào của bạn.
+
+
+
+Điều đó quan trọng vì giả định là một trong những đòn đẩy mạnh nhất trong toàn
+bộ phép so sánh. Giá nhà tăng 3 percent mỗi năm và giá nhà tăng 1 percent cho ra
+các con số vốn chủ khác nhau đáng kể trong chu kỳ năm năm, và cả hai đều là giả
+định hợp lý chứ không phải sự thật về tương lai.
+
+
+
+Federal Reserve Bank of St. Louis công bố các chuỗi dữ liệu giá nhà dài hạn hữu
+ích cho việc xác lập dữ liệu đầu vào, còn Bureau of Labor Statistics công bố dữ
+liệu lạm phát dùng để điều chỉnh giá trị thực ở những phần khác trên trang web
+này. Không nguồn nào là dự báo.

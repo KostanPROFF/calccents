@@ -1,0 +1,178 @@
+---
+title: Lãi kép so với lãi đơn
+description: Sự khác biệt giữa lãi đơn và lãi kép, được phân tích bằng cùng các con số, và lý do chênh lệch càng lớn khi tiền được giữ lâu hơn.
+locale: vi
+date: 2026-10-08
+lastReviewed: 2026-10-23
+author: Kostan Proff
+reviewedBy: Tetiana Goncharko
+group: investing
+illustration: compound-vs-simple-interest
+readingMinutes: 6
+sources:
+- label: Investor.gov — Lãi kép
+  url: https://www.investor.gov/introduction-investing/investing-basics/glossary/compound-interest
+- label: Federal Reserve — H.15 các mức lãi suất được chọn
+  url: https://www.federalreserve.gov/releases/h15/
+- label: IRS — IRA truyền thống và sự tăng trưởng của tài khoản hưu trí
+  url: https://www.irs.gov/retirement-plans/traditional-iras
+relatedTools:
+- compound-interest
+faq:
+- q: Lãi đơn là gì?
+  a: 'Lãi được tính chỉ trên tiền gốc ban đầu, theo lãi suất ban đầu, trong toàn bộ thời hạn. Lãi không tăng: một số dư $10,000 với lãi suất đơn giản 5 percent kiếm $500 mỗi năm miễn là số dư vẫn được giữ nguyên.'
+- q: Lãi kép là gì?
+  a: Lãi được tính trên số dư, bao gồm cả lãi đã được ghi nhận. Lãi của mỗi kỳ được tính trên một cơ sở lớn hơn một chút so với kỳ trước, nên mức tăng không diễn ra theo tuyến tính.
+- q: Chênh lệch lớn đến mức nào?
+  a: Trong thời gian ngắn, khoản chênh lệch nhỏ. Với $10,000 ở mức 7 percent trong 30 năm, lãi suất đơn giản cho $31,000, còn lãi kép cho $76,123. Khoảng cách này chính là lập luận toàn bộ cho việc để tiền không thay đổi.
+- q: Tôi thực sự gặp lãi đơn ở đâu?
+  a: Các khoản vay tiêu dùng ngắn hạn thường dùng lãi đơn, và một số hình thức tiết kiệm cũ từng áp dụng. Đây cũng là mô hình tư duy mà hầu hết mọi người có, và đó là một phần lý do lãi kép gây bất ngờ.
+- q: Lãi kép có đi ngược lại lợi ích của tôi ở đâu không?
+  a: Trên thẻ tín dụng và các số dư xoay vòng khác, nơi lãi được tính trên số dư bao gồm cả lãi trước đó. Cơ chế giúp lãi kép có lợi cho bạn cũng hoạt động theo chiều ngược lại.
+- q: Quy tắc nhân đôi có đáng tin cậy không?
+  a: 'Quy tắc 70 là một phép ước lượng hữu ích: chia 70 cho lãi suất hằng năm để có số năm cần thiết để khoản tiền nhân đôi. Ở mức 7 percent, đó là khoảng mười năm. Máy tính hiển thị con số thực tế thay vì phép ước lượng.'
+---
+
+import GuideIllustration from '../../../components/visuals/GuideIllustration.astro';
+
+Lãi đơn và lãi kép là cùng một ý tưởng được tính theo hai cách khác nhau, và sự
+khác biệt giữa chúng là một trong những khoảng cách lớn nhất trong số học thông
+thường.
+
+
+
+Lãi đơn tính lãi trên số tiền gốc. Lãi kép tính lãi trên số tiền gốc cộng với
+khoản lãi đã được ghi nhận. Đó chính là toàn bộ khác biệt.
+
+
+
+## Cùng những con số, hai kết quả
+
+
+
+Vay $10,000 ở mức 7 percent trong 30 năm.
+
+
+
+**Lãi đơn** trả 7 percent trên khoản vốn ban đầu $10,000 mỗi năm: $700 mỗi năm,
+không thay đổi, trong ba mươi năm. Số dư cuối cùng là $31,000.
+
+
+
+**Lãi kép**, tính lãi hằng năm, bắt đầu ở $10,000 và tăng lên. Số dư cuối cùng
+là $76,123.
+
+
+
+Chênh lệch là $45,123 trên số dư ban đầu $10,000, và điều này hoàn toàn đến từ
+việc lãi kép được tính trên một số dư không ngừng tăng.
+
+
+
+Công cụ <a href="/vi/tools/compound-interest/">tính lãi kép</a> chạy trường hợp thứ
+hai. Để xem trường hợp thứ nhất, hãy đặt lãi suất bằng 0 và lưu ý rằng số dư lúc
+đó chỉ tăng lên do các khoản tiền gửi — trường hợp lãi đơn có cùng phép chiếu
+với lãi suất được tắt.
+
+
+
+
+<div class="guide-inline-figure">
+  <GuideIllustration slug="compound-interest-calculator-explained" locale={frontmatter.locale} />
+</div>
+## Vì sao chênh lệch mở rộng thay vì giữ nguyên
+
+
+
+Mức tăng không diễn ra theo tuyến tính. Trong tài khoản lãi đơn, mỗi năm tăng
+cùng một số tiền. Trong tài khoản lãi kép, mỗi năm tăng hơi nhiều hơn năm trước,
+vì số dư gốc đã tăng.
+
+
+
+Có ba yếu tố đáng tách riêng, vì chúng có cách thể hiện khác nhau:
+
+
+
+**Lãi trên lãi.** Đây là yếu tố lớn nhất, và cần nhiều thời gian nhất để trở nên
+đáng kể. Trong một năm, nó gần như không thể nhận thấy; sau ba mươi năm, nó
+chiếm phần lớn số dư.
+
+
+
+**Yếu tố đóng góp.** Một khoản đóng góp đều đặn hằng tháng tự nó cũng là một
+hình thức lãi kép, vì mỗi khoản đóng góp tạo ra lãi trong suốt phần thời gian
+còn lại. Khoản đóng góp trong tháng đầu tiên tạo ra lãi trong toàn bộ thời hạn;
+khoản đóng góp trong tháng cuối cùng gần như không tạo ra lãi. Đó là lý do công
+cụ cho phép chuyển khoản đóng góp giữa đầu và cuối tháng.
+
+
+
+**Tác động của tần suất gộp lãi.** Cùng lãi suất danh nghĩa, gộp lãi thường
+xuyên hơn thì tiền nhiều hơn. Lãi suất năm hiệu dụng làm điều này hiện rõ: 7
+percent khi gộp lãi hằng tháng là 7.229 percent, và 7.229 percent là mức lãi
+suất bạn thực sự kiếm được.
+
+
+
+## Ước tính thời gian nhân đôi
+
+
+
+Quy tắc 70 là một cách tính nhanh: chia 70 cho lãi suất năm để có số năm cần
+thiết để số tiền nhân đôi. Ở mức 7 percent là mười năm; ở mức 3 percent, 23 năm.
+
+
+
+Đây là một phép xấp xỉ, và lý do cần dùng đến nó là thời gian nhân đôi chính xác
+phụ thuộc vào tần suất gộp lãi. Quy tắc 70 giả định gộp lãi hằng năm. Khi gộp
+lãi hằng tháng, 7 percent sẽ nhân đôi sớm hơn mười năm một chút.
+
+
+
+Máy tính là cách để kiểm tra điều đó. Chạy ba mươi năm ở mức 7 percent mà không
+góp thêm, rồi so sánh số dư cuối cùng với hai lần số dư ban đầu. Phép xấp xỉ khá
+sát; con số chính xác hiện trên màn hình.
+
+
+
+
+<div class="guide-inline-figure">
+  <GuideIllustration slug="inflation-and-real-returns-explained" locale={frontmatter.locale} />
+</div>
+## Khi cơ chế tương tự vận hành theo chiều ngược lại
+
+
+
+Lãi kép không phải là một đặc quyền được tài chính ban tặng. Đó là một tính chất
+của phép tính, và nó áp dụng cho cả số dư nợ lẫn số dư được tích lũy.
+
+
+
+Với số dư thẻ tín dụng xoay vòng, lãi được tính trên số dư bao gồm cả lãi trước
+đó. Chỉ trả khoản tối thiểu cho một thẻ đồng nghĩa với phép tính lãi kép chạy
+ngược lại, với mức lãi đủ cao để hiệu ứng xuất hiện nhanh.
+
+
+
+Điều tương tự cũng đúng với lãi chưa trả trong một số cách sắp xếp khác. Yếu tố
+quyết định chiều vận hành chỉ là bạn đang ở phía nào của số dư.
+
+
+
+## Ghi chú về các mức lãi liên quan
+
+
+
+Federal Reserve công bố các mức lãi chọn lọc theo H.15, đây là chuỗi tham chiếu
+về mức lãi mà các sản phẩm tiết kiệm thực sự đã trả. Internal Revenue Service
+công bố các quy định cho những tài khoản trong đó thu nhập tăng trưởng được hoãn
+lại, và bảng thuật ngữ của Investor.gov định nghĩa các thuật ngữ được dùng ở
+đây.
+
+
+
+Không mức nào trong số đó dự báo lãi suất sẽ là bao nhiêu. Máy tính sử dụng mức
+lãi suất bạn nhập và giữ nguyên trong toàn bộ chân trời, vì một dự báo thay đổi
+lãi suất theo một đường tăng trưởng tương lai giả định là một loại tuyên bố
+khác, không phải phép tính.

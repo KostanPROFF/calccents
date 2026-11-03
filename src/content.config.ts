@@ -21,14 +21,61 @@ import { PEOPLE_NAMES } from './config/people.ts';
  * written for English, and holding a Russian or Spanish description to the
  * same number of characters would push the translators into writing worse
  * sentences. The English window is enforced; the translations get a range
- * wide enough to say the same thing naturally.
+ * wide enough to say the same thing naturally, measured in the same units
+ * for every script: a square glyph counts as two, because a Chinese
+ * description of forty characters says what an English one of a hundred and
+ * twenty says.
  */
+/**
+ * The length of a string in the units a search result is measured in.
+ *
+ * A Chinese or Korean glyph is square and carries about as much as two Latin
+ * letters: a Chinese description of forty characters says what an English one
+ * of a hundred and twenty says. Counting every glyph as one would hold the
+ * CJK guides to a number their language cannot reach without padding, so a
+ * wide glyph counts double.
+ */
+function displayLength(text: string): number {
+  let length = 0;
+  for (const character of text) {
+    const code = character.codePointAt(0) ?? 0;
+    const wide =
+      (code >= 0x1100 && code <= 0x115f) || // Hangul Jamo
+      (code >= 0x2e80 && code <= 0xa4cf) || // CJK radicals through Yi
+      (code >= 0xac00 && code <= 0xd7a3) || // Hangul syllables
+      (code >= 0xf900 && code <= 0xfaff) || // CJK compatibility ideographs
+      (code >= 0xfe30 && code <= 0xfe4f) || // CJK compatibility forms
+      (code >= 0xff00 && code <= 0xff60) || // full-width forms
+      (code >= 0xffe0 && code <= 0xffe6);
+    length += wide ? 2 : 1;
+  }
+  return length;
+}
+
+/**
+ * A field with a length window, measured in the units above.
+ *
+ * The English window is enforced separately and more tightly; this one is
+ * the range that lets every language say the same thing naturally.
+ */
+function sized(minimum: number, maximum: number, label: string) {
+  return z.string().superRefine((value, ctx) => {
+    const length = displayLength(value);
+    if (length < minimum || length > maximum) {
+      ctx.addIssue({
+        code: 'custom',
+        message: `A guide ${label} is ${minimum} to ${maximum} characters wide, this one is ${length}`,
+      });
+    }
+  });
+}
+
 const guides = defineCollection({
   loader: glob({ pattern: '**/*.mdx', base: './src/content/guides' }),
   schema: z
     .object({
-      title: z.string().min(10).max(60),
-      description: z.string().min(60).max(200),
+      title: sized(10, 60, 'title'),
+      description: sized(60, 200, 'description'),
       locale: z.enum(LOCALES),
       date: z.coerce.date(),
       lastReviewed: z.coerce.date().refine(

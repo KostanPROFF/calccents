@@ -1,0 +1,208 @@
+---
+title: Erros comuns nas comparações entre alugar e comprar
+description: As premissas que alteram discretamente uma comparação entre alugar e comprar, desde ignorar custos de manutenção e transação até tratar a valorização como uma promessa.
+locale: pt
+date: 2026-10-06
+lastReviewed: 2026-10-23
+author: Kostan Proff
+reviewedBy: Tetiana Goncharko
+group: renting
+illustration: rent-vs-buy-common-mistakes
+readingMinutes: 7
+sources:
+- label: CFPB — Hipotecas e ferramentas para consumidores
+  url: https://www.consumerfinance.gov/consumer-tools/mortgages/
+- label: HUD — Ajudando proprietários americanos
+  url: https://www.hud.gov/helping_american_homeowners
+- label: FRED — Índice de Preços Imobiliários dos Estados Unidos
+  url: https://fred.stlouisfed.org/series/HPINUS
+relatedTools:
+- rent-vs-buy
+faq:
+- q: Qual premissa altera mais a resposta?
+  a: A premissa do preço do imóvel no horizonte, seguida pela reserva para manutenção. O aluguel e a taxa importam, mas o caminho do valor e os custos contínuos de ser proprietário são, em geral, onde a comparação muda.
+- q: A valorização deve ser incluída?
+  a: Ela precisa ser incluída, porque o patrimônio líquido faz parte da comparação, mas deve ser tratada como uma premissa, não como uma previsão. Faça o cálculo com zero, com um valor negativo e com um valor positivo, e veja o quanto a resposta muda.
+- q: Por que a reserva para manutenção é sempre debatida?
+  a: Porque é um custo real que não aparece em nenhum extrato e varia enormemente entre casas e entre anos. Se for pequena demais, ser proprietário parece melhor do que realmente é; se for grande demais, parece pior. Definir esse valor como uma entrada explícita, com um número que você consiga defender, é melhor do que omiti-lo.
+- q: E o retorno sobre o pagamento inicial?
+  a: O pagamento inicial é um dinheiro que não fica disponível para outro uso enquanto permanece no imóvel, portanto uma comparação completa precisa considerar o que ele poderia ter rendido. A maioria das comparações simples o deixa de fora, o que representa uma das maiores lacunas.
+- q: A comparação considera a venda após alguns anos?
+  a: Sim. Defina o horizonte como o número de anos que você pretende ficar, e a ferramenta informa o valor, o patrimônio líquido e os custos de venda ao final desse período. Os custos de venda são descontados do patrimônio líquido, porque são os custos de uma venda.
+- q: Um horizonte curto é realista?
+  a: É realista para muitas pessoas, que mudam por motivos de trabalho ou família muito antes de trinta anos. Um horizonte curto é o argumento mais forte a favor de alugar na comparação, e vale fazer o cálculo tanto para cinco quanto para trinta anos.
+---
+
+import GuideIllustration from '../../../components/visuals/GuideIllustration.astro';
+
+A maioria das comparações entre alugar e comprar não está errada por causa da
+aritmética. Elas estão erradas por causa das premissas, e as premissas costumam
+ser definidas em silêncio.
+
+
+
+A <a href="/pt/tools/rent-vs-buy/">calculadora de alugar versus comprar</a> deste
+site torna cada premissa uma entrada explícita, de modo que o efeito de
+alterá-la fica visível em vez de ficar oculto. Este guia aborda as premissas que
+mais frequentemente alteram a resposta.
+
+
+
+## Tratar a valorização como uma promessa
+
+
+
+O erro mais consequente, porque funciona em uma única direção. Uma comparação
+que pressupõe que o imóvel suba 3 percent ao ano e omite a possibilidade de
+queda produz uma resposta que não é verdadeira no caso mais importante.
+
+
+
+O número é uma premissa, e uma premissa razoável pode ser sustentada por dados:
+o Federal Reserve Bank of St. Louis publica índices de preços de imóveis de
+longo prazo que constituem um ponto de partida razoável para calibração. Mas a
+diferença entre décadas boas e ruins é enorme, e a aritmética de um horizonte de
+cinco anos é completamente diferente da aritmética de trinta anos.
+
+
+
+A solução é fazer o cálculo mais de uma vez: com a valorização em zero, depois
+com ela positiva e, em seguida, com ela negativa. Se a resposta mudar
+completamente, ela nunca esteve realmente sobre alugar ou comprar. Estava sobre
+uma previsão do preço de imóveis.
+
+
+
+
+<div class="guide-inline-figure">
+  <GuideIllustration slug="rent-vs-buy-calculator-explained" locale={frontmatter.locale} />
+</div>
+## Esquecer que a propriedade tem custos recorrentes
+
+
+
+O aluguel é um número. A propriedade envolve uma parcela de financiamento, mais
+IPTU, mais seguro, mais HOA, mais manutenção.
+
+
+
+A manutenção é o item que fica de fora, porque não vem acompanhado de uma conta.
+Telhados, eletrodomésticos, aquecedores de água e pintura não aparecem em nenhum
+extrato e também não aparecem em uma comparação que lista apenas financiamento e
+impostos.
+
+
+
+O tratamento adequado é uma porcentagem do preço de compra por ano, lançada como
+um número explícito que pode ser discutido. Uma porcentagem do preço não é uma
+afirmação sobre um imóvel específico; é um indicador aproximado do fato de que
+uma construção envelhece.
+
+
+
+## Deixar a entrada fora da comparação
+
+
+
+A entrada é dinheiro que sai da conta de poupança. Uma comparação completa
+pergunta quanto esse dinheiro teria rendido de outra forma e compara esse
+rendimento ao que o investimento no imóvel produziu.
+
+
+
+A maioria das comparações simples não faz isso, e a omissão é significativa. Uma
+entrada de vinte por cento em um imóvel de $450,000 corresponde a $90,000 —
+dinheiro que fica fora da poupança durante todo o período, e dinheiro cujo uso
+alternativo faz parte da decisão.
+
+
+
+A calculadora de alugar ou comprar deste site também não estima o retorno da
+entrada. Ela informa o desembolso de dinheiro e a participação patrimonial
+acumulada, que é a parte da comparação que a aritmética pode estabelecer. O
+restante depende de um julgamento sobre os retornos.
+
+
+
+
+<div class="guide-inline-figure">
+  <GuideIllustration slug="monthly-payment-vs-total-cost-mortgage" locale={frontmatter.locale} />
+</div>
+## Usar um aluguel Atomic e um preço Atomic
+
+
+
+Os aluguéis e os preços são apresentados de uma forma que favorece um lado da
+comparação. Um prédio com um bom apartamento e um prédio ruim a cinco minutos de
+distância podem ter o mesmo aluguel mensal; uma casa com uma cozinha boa e uma
+casa com um telhado ruim podem ter o mesmo preço. A comparação os trata como
+intercambiáveis, mas não são.
+
+
+
+## Comparar em um horizonte que não corresponde ao plano
+
+
+
+Um horizonte de trinta anos é uma premissa ruim para quem pretende se mudar em
+quatro anos, e um horizonte de quatro anos é uma premissa ruim para quem compra
+para ficar. Depois da variável de valorização, o horizonte é a alavanca mais
+poderosa de toda a comparação, porque o custo inicial da compra é amortizado ao
+longo dos anos em que você mora.
+
+
+
+Executar o cálculo em cinco anos e em trinta anos, mantendo tudo o mais igual,
+deixa isso claro.
+
+
+
+## Comparar o valor mensal em vez do total
+
+
+
+A comparação mensal é o mesmo erro que aparece nas comparações de financiamentos
+imobiliários. Um aluguel de $2,400 contra um custo de propriedade de $2,150 faz
+o aluguel parecer mais caro, e ele pode ser, mês a mês. No horizonte,
+considerando o patrimônio líquido, a ordem pode ser diferente. O mês de
+equivalência existe precisamente porque a resposta mensal e a resposta total
+discordam por um longo período.
+
+
+
+## Ignorar a saída
+
+
+
+Os dois caminhos têm uma, e ela é diferente. Alugar envolve um depósito, um
+prazo de aviso e o custo da mudança. Possuir envolve custos de venda, um mercado
+que pode estar mais fraco do que estava e um financiamento que precisa ser
+quitado ou transferido ao próximo comprador.
+
+
+
+A calculadora desconta os custos de venda do patrimônio líquido no fim do
+horizonte, porque eles são um valor real e frequentemente significativo: o que
+sobra de uma venda é o valor do imóvel menos o saldo devedor menos o próprio
+custo da venda. Ela não modela o risco de vender em um mercado mais fraco, que é
+um fato sobre o futuro, não sobre a aritmética.
+
+
+
+## Uma ordem prática de operações
+
+
+
+Se você estiver fazendo essa comparação de verdade, essa ordem tende a revelar
+as premissas que importam:
+
+
+
+1. Obtenha o preço real, o aluguel real, a alíquota real e a cotação real do
+seguro para as propriedades específicas. 2. Execute o cálculo com o preço do
+imóvel constante e registre o mês de equivalência. 3. Execute novamente com uma
+variação de preço negativa e, depois, com uma positiva. 4. Execute no horizonte
+provável e em trinta anos. 5. Observe quanto o mês de equivalência se desloca
+entre essas execuções. Se ele se deslocar muito, a decisão se baseia nas
+premissas, não na aritmética, e vale a pena saber disso antes que alguém tire
+uma conclusão.

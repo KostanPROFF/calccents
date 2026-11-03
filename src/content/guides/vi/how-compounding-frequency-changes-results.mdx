@@ -1,0 +1,182 @@
+---
+title: Cách tần suất gộp lãi thay đổi kết quả
+description: Điều gì xảy ra với số dư khi lãi được ghi nhận hằng ngày, hằng tháng, hằng quý hoặc hằng năm, và cách đọc lãi suất thực tế hằng năm mà công cụ tạo ra.
+locale: vi
+date: 2026-10-09
+lastReviewed: 2026-10-23
+author: Kostan Proff
+reviewedBy: Tetiana Goncharko
+group: investing
+illustration: how-compounding-frequency-changes-results
+readingMinutes: 6
+sources:
+- label: Investor.gov — Lãi kép
+  url: https://www.investor.gov/introduction-investing/investing-basics/glossary/compound-interest
+- label: Federal Reserve — H.15 các mức lãi suất được chọn
+  url: https://www.federalreserve.gov/releases/h15/
+- label: IRS — IRA truyền thống
+  url: https://www.irs.gov/retirement-plans/traditional-iras
+relatedTools:
+- compound-interest
+faq:
+- q: Tại sao việc gộp lãi thường xuyên hơn lại tạo ra nhiều tiền hơn?
+  a: Vì cùng một lãi suất danh nghĩa được áp dụng thường xuyên hơn cho một số dư chưa có nhiều thời gian để tăng trưởng. Việc gộp lãi thường xuyên hơn có nghĩa lãi được ghi nhận sớm hơn, và càng sớm được ghi nhận thì lãi đó càng sớm bắt đầu tự tạo ra lãi.
+- q: Lãi suất thực tế hằng năm là gì?
+  a: Lãi suất tạo ra cùng kết quả trong một năm như lãi suất danh nghĩa được cộng lãi theo tần suất niêm yết. Đó là (1 + r) lũy thừa số kỳ hạn mỗi năm, trừ đi một. Với lãi suất 7 percent cộng lãi hằng tháng, mức này là 7.229 percent.
+- q: Mức chênh lệch là bao nhiêu?
+  a: 'Trong một năm, gần như không có: 7 percent cộng lãi hằng tháng là 7.229 percent so với 7 percent cộng lãi hằng năm, chênh lệch khoảng $22 trên một số dư $10,000. Trong ba mươi năm, khoảng chênh lệch lên đến hàng nghìn.'
+- q: Tôi có thể gộp lãi hằng ngày không?
+  a: Không thể trong công cụ này. Các khoản đóng góp ở đây là hằng tháng, và phép tính giữ kỳ gộp lãi đồng nhất với kỳ đóng góp, vì vậy tần suất phải chia hết mười hai.
+- q: Tần suất của tài khoản có phụ thuộc vào nhà cung cấp không?
+  a: Thường là có, và thường được ghi trong điều khoản của tài khoản. Một tài khoản tiết kiệm ghi nhận lãi hằng tháng và một tài khoản ghi nhận lãi hằng ngày là những sản phẩm khác nhau với cùng mức lãi suất niêm yết.
+- q: Tần suất cao hơn có đồng nghĩa với lãi suất cao hơn không?
+  a: Không. Lãi suất danh nghĩa là mức lãi suất được niêm yết, còn tần suất quyết định mức lãi suất đó chuyển thành bao nhiêu trong thực tế. Hai tài khoản có cùng lãi suất danh nghĩa nhưng khác tần suất không phải là cùng một sản phẩm, và lãi suất thực tế hằng năm là cách để so sánh chúng.
+---
+
+import GuideIllustration from '../../../components/visuals/GuideIllustration.astro';
+
+Hai tài khoản đều quảng cáo "7 percent" không nhất thiết là cùng một tài khoản.
+Lãi suất danh nghĩa là con số, còn tần suất gộp lãi quyết định con số đó trở
+thành bao nhiêu.
+
+
+
+Chênh lệch trong một năm là nhỏ. Chênh lệch trong ba mươi năm thì không nhỏ, và
+phép tính đằng sau nó đáng để hiểu thay vì ước lượng.
+
+
+
+## Tại sao tần suất lại quan trọng
+
+
+
+Cơ chế này là do ảnh hưởng của thời điểm ghi nhận lãi. Lãi được ghi nhận hằng
+tháng sớm hơn lãi được ghi nhận hằng năm, và lãi đã được ghi nhận sớm có nhiều
+thời gian hơn để tự sinh lãi.
+
+
+
+Cụ thể: với lãi suất tính lãi hằng năm, lãi cho cả năm được ghi nhận vào một
+ngày tại cuối năm. Với lãi suất tính lãi hằng tháng, một phần mười hai lãi suất
+hằng năm được ghi nhận vào cuối mỗi tháng và bắt đầu sinh lãi ngay. Phần lãi bổ
+sung nhỏ, nhưng được sinh trong thời gian dài.
+
+
+
+
+<div class="guide-inline-figure">
+  <GuideIllustration slug="compound-vs-simple-interest" locale={frontmatter.locale} />
+</div>
+## Lãi suất hiệu dụng hằng năm
+
+
+
+Cách so sánh hai tần suất là dùng lãi suất hiệu dụng hằng năm: mức lãi suất tạo
+ra cùng kết quả trong một năm như lãi suất được nêu khi tính lãi theo tần suất
+được nêu.
+
+
+
+**EAR = (1 + r)ⁿ − 1**
+
+
+
+Trong đó **r** là lãi suất danh nghĩa hằng năm chia cho số kỳ tính lãi trong một
+năm, và **n** là số kỳ tính lãi trong một năm.
+
+
+
+Ở mức 7 percent:
+| Tần suất | Lãi suất hiệu dụng hằng năm |
+|---|---|
+| Hằng năm | 7.000% |
+| Hai lần mỗi năm | 7.122% |
+| Bốn tháng một lần | 7.165% |
+| Hàng quý | 7.186% |
+| Hai tháng một lần | 7.207% |
+| Hàng tháng | 7.229% |
+
+Chuỗi này đơn điệu, và các bước nhỏ dần khi tần suất tăng lên, đây chính là điểm
+thực tế: lần tăng gấp đôi tần suất đầu tiên có giá trị hơn lần cuối cùng.
+
+
+
+Công cụ <a href="/vi/tools/compound-interest/">tính lãi kép</a> tính trực tiếp lãi
+suất hiệu dụng, đồng thời hiển thị mức này trong kết quả bên cạnh lãi suất danh
+nghĩa để có thể so sánh hai mức.
+
+
+
+## Sự khác biệt là bao nhiêu
+
+
+
+Cách hữu ích để xem xét vấn đề này là so sánh tổng số tiền, không phải lãi suất.
+
+
+
+Với $10,000 ở mức 7 percent trong một năm, gộp lãi hằng tháng tạo ra $10,722.90
+so với $10,700.00 khi gộp lãi hằng năm. Chênh lệch là $22.90, vốn không đáng để
+chỉ dựa vào đó mà ra quyết định.
+
+
+
+Trong ba mươi năm mà không có đóng góp thêm, cùng số tiền $10,000 trở thành
+$76,123 khi giao kế hợp theo tháng và $75,624 khi giao kế hợp theo năm — chênh
+lệch là $499. Với khoản đóng góp $500 mỗi tháng trong cùng khoảng thời gian đó,
+cả số dư lẫn mức chênh lệch đều tăng lên rất nhiều, bởi các khoản đóng góp cũng
+đang tạo lãi ở mức lãi suất hiệu dụng cao hơn.
+
+
+
+Xu hướng này nhất quán: khoảng cách giữa hai tần suất nhỏ trong những năm đầu và
+liên tục mở rộng, bởi chính khoảng cách đó cũng được giao kế hợp.
+
+
+
+
+<div class="guide-inline-figure">
+  <GuideIllustration slug="compound-interest-calculator-explained" locale={frontmatter.locale} />
+</div>
+## Tại sao công cụ này cung cấp sáu tần suất
+
+
+
+Công cụ cung cấp tần suất hàng năm, hai lần mỗi năm, bốn tháng một lần, hàng
+quý, hai tháng một lần và hàng tháng. Lý do là các khoản đóng góp tại đây được
+thực hiện hàng tháng, và phép tính giữ kỳ giao kế hợp và kỳ đóng góp giống nhau.
+
+
+
+Bất kỳ tần suất nào chia hết cho mười hai đều giữ cho phép tính chính xác thay
+vì xấp xỉ. Các tần suất không chia hết cho mười hai sẽ yêu cầu chia một khoản
+đóng góp qua hai kỳ tính lãi kép, điều này tạo ra một quy ước làm tròn là một
+đặc điểm của mô hình chứ không phải của sản phẩm.
+
+
+
+## Đây không phải là
+
+
+
+Đây là so sánh hai điều khoản tín dụng, không phải so sánh hai sản phẩm. Hai tài
+khoản có cùng lãi suất danh nghĩa và cùng tần suất vẫn có thể rất khác nhau, vì
+phí, số dư tối thiểu, giới hạn rút tiền và cách tài khoản được xử lý về thuế.
+
+
+
+Các trang phí và chi phí, cũng như các loại tài khoản của Investor.gov mô tả
+những khác biệt đó. Bộ số liệu H.15 của Federal Reserve ghi nhận các mức lãi
+suất mà sản phẩm tiết kiệm thực tế đã trả, điều này hữu ích để kiểm tra xem một
+mức lãi suất được báo có nằm trong phạm vi hợp lý hay không.
+
+
+
+## Một cách kiểm tra thực tế
+
+
+
+Lấy một mức lãi suất từ bộ số liệu H.15, đưa vào công cụ tính toán với lãi kép
+hằng năm rồi lại với lãi kép hằng tháng và xem chênh lệch trong số dư cuối kỳ.
+Chênh lệch đó là giá trị của khoản tín dụng có tần suất cao hơn, và đó là một
+con số chứ không phải một quy tắc kinh nghiệm.

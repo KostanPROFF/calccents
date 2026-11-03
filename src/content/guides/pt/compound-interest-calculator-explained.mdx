@@ -1,0 +1,208 @@
+---
+title: Explicação da calculadora de juros compostos
+description: Como a projeção de juros compostos é montada, o que significam as taxas efetiva e real e onde a aritmética deixa de ser simples de acompanhar.
+locale: pt
+date: 2026-10-01
+lastReviewed: 2026-10-23
+author: Kostan Proff
+reviewedBy: Tetiana Goncharko
+group: investing
+illustration: compound-interest-calculator-explained
+readingMinutes: 8
+sources:
+- label: Investor.gov — Juros compostos
+  url: https://www.investor.gov/introduction-investing/investing-basics/glossary/compound-interest
+- label: Investor.gov — Taxas e despesas
+  url: https://www.investor.gov/
+- label: Federal Reserve — Taxas de juros selecionadas do H.15
+  url: https://www.federalreserve.gov/releases/h15/
+- label: BLS — Índice de Preços ao Consumidor
+  url: https://www.bls.gov/cpi/
+relatedTools:
+- compound-interest
+faq:
+- q: Por que a frequência de capitalização precisa ser divisora de doze?
+  a: Porque as contribuições nesta ferramenta são feitas mensalmente, e o cálculo mantém o período de capitalização idêntico ao período de contribuição. Qualquer frequência que divida doze mantém essa aritmética exata, em vez de aproximada. As seis opções cobrem de anual a cada dois meses.
+- q: Qual é a diferença entre a taxa nominal e a efetiva?
+  a: 'A taxa nominal é o número informado: 7%. A taxa efetiva anual é o que o saldo realmente rende quando se aplica um ano de capitalização composta, que, no caso de capitalização mensal, é 7,229%. Em períodos longos, a diferença não é um detalhe de arredondamento.'
+- q: O que significa o valor real informado?
+  a: É o saldo final expresso no poder de compra do ano inicial. O saldo nominal é dividido pela inflação capitalizada no mesmo período, o que separa o crescimento real dos mesmos dólares alcançando um poder de compra maior.
+- q: A ferramenta considera taxas ou impostos?
+  a: Não. O saldo de uma conta real será diferente conforme as cobranças do provedor, e essas cobranças muitas vezes são um percentual do saldo, o que faz com que a diferença também seja composta.
+- q: É necessária uma contribuição regular?
+  a: Não. Definir a contribuição mensal como zero gera uma projeção simples de juros compostos sobre o saldo inicial, que é o modelo adequado para um valor único já investido.
+- q: Por que a tabela ano a ano corresponde ao valor final?
+  a: Porque a projeção avança um período de cada vez, em vez de ir diretamente para um resultado em forma fechada. O saldo final é a última linha da tabela, o que também torna a tabela confiável.
+---
+
+import GuideIllustration from '../../../components/visuals/GuideIllustration.astro';
+
+Juros compostos são uma das poucas ideias em finanças que são realmente simples
+de explicar e realmente difíceis de sentir. A <a
+href="/pt/tools/compound-interest/">calculadora de juros compostos</a> deste site
+existe para tornar a aritmética visível, porque é a aritmética que distingue
+isso de uma regra prática.
+
+
+
+A regra prática diz: juros são juros sobre os juros. A aritmética diz: aqui está
+o que isso faz com seu saldo, mês a mês, à taxa que você informou.
+
+
+
+## O que a ferramenta faz
+
+
+
+Você informa um saldo inicial, uma contribuição mensal, uma taxa anual, um
+número de anos, uma frequência de capitalização e uma taxa de inflação. Ela
+avança um período de capitalização por vez.
+
+
+
+Em cada período, ela acrescenta os juros obtidos sobre o saldo atual e depois
+acrescenta a contribuição do período — no início ou no fim dele, dependendo da
+configuração. Repete isso até alcançar o horizonte.
+
+
+
+A ordem importa. Uma contribuição feita no início de um período rende juros
+durante todo esse período, de modo que termina com um valor maior do que a mesma
+contribuição feita no fim. A diferença por pagamento é pequena. A diferença ao
+longo de trinta anos não é.
+
+
+
+
+<div class="guide-inline-figure">
+  <GuideIllustration slug="compound-vs-simple-interest" locale={frontmatter.locale} />
+</div>
+## A forma fechada
+
+
+
+O mesmo resultado pode ser escrito como uma única expressão:
+
+
+
+**FV = P(1 + r)ⁿ + PMT · ((1 + r)ⁿ − 1) / r*
+
+
+
+Onde **P** é o saldo inicial, **r** é a taxa anual dividida pelo número de
+períodos de capitalização por ano, **n** é o número de períodos e **PMT** é a
+contribuição feita em cada período.
+
+
+
+Quando as contribuições são feitas no início de cada período, o termo da
+contribuição é multiplicado por (1 + r), porque essas contribuições rendem um
+período adicional de juros.
+
+
+
+A calculadora executa os períodos em sequência, em vez de avaliar esta expressão
+uma única vez, e o motivo é a tabela anual: para produzir uma tabela, você
+precisa de cada saldo intermediário, e a sequência os produz sem custo
+adicional. Os dois métodos coincidem até o centavo, o que por si só é uma
+verificação útil — o mecanismo de cálculo é testado exatamente com essa
+coincidência.
+
+
+
+A uma taxa zero, a fórmula degenera, pois a divisão por r fica indefinida. O
+cálculo trata esse caso explicitamente, em vez de deixar que ele resulte em uma
+divisão por zero: sem juros, o saldo cresce apenas com os depósitos, que é
+exatamente o que acontece.
+
+
+
+## Nominal, efetiva e real
+
+
+
+Três taxas aparecem nos resultados, e é fácil confundi-las.
+
+
+
+A **taxa nominal** é o número que consta na conta: 7 por cento. É o número que é
+cotado e que você digita.
+
+
+
+A **taxa efetiva anual** é o que o saldo realmente rende em um ano após a
+aplicação dos juros compostos: (1 + r) elevado ao número de períodos por ano,
+menos um. Para 7 por cento com capitalização mensal, isso equivale a 7,229 por
+cento. O regulador do investidor explica a distinção em seu glossário, e a
+diferença entre as duas é um efeito de capitalização que vale dinheiro em
+horizontes longos.
+
+
+
+A **taxa real** remove a inflação da taxa que o dinheiro realmente rende:
+
+
+
+**taxa real = (1 + taxa anual efetiva) / (1 + inflação) − 1**
+
+
+
+Esta é a taxa que descreve quanto poder de compra o saldo mantém. A taxa nominal
+não é o número a ser usado aqui: 7 por cento é o que a conta cota, e o que entra
+no saldo ao longo de um ano é 7,229 por cento após a aplicação da capitalização.
+Com capitalização mensal a 7 por cento e inflação de 2,5 por cento, a taxa real
+é de aproximadamente 4,61 por cento. O saldo na coluna de valor real da
+calculadora é o saldo nominal dividido pela inflação capitalizada no mesmo
+período.
+
+
+
+
+<div class="guide-inline-figure">
+  <GuideIllustration slug="how-compounding-frequency-changes-results" locale={frontmatter.locale} />
+</div>
+## A questão da frequência
+
+
+
+Capitalizar com mais frequência, à mesma taxa nominal, produz um saldo maior. A
+taxa nominal não muda; a taxa efetiva muda, e a taxa efetiva é o resultado da
+capitalização.
+
+
+
+A ferramenta oferece seis frequências, e são exatamente as que dividem doze. A
+restrição não é arbitrária: as contribuições são mensais, e manter o período de
+capitalização igual ao período de contribuição mantém a aritmética exata. A
+capitalização mensal com depósitos mensais é o caso comum, e as demais atendem a
+contas que creditam juros trimestralmente, semestralmente ou anualmente.
+
+
+
+## O que esta projeção deixa de fora
+
+
+
+- **Taxas.** Uma cobrança de conta geralmente é uma porcentagem do saldo,
+portanto também incide sobre os juros compostos. As páginas da Investor.gov
+sobre taxas e despesas explicam as estruturas em detalhes. - **Impostos.** O
+tratamento de uma conta de aposentadoria e dos ganhos de investimento depende do
+tipo de conta e da pessoa. O Internal Revenue Service publica as regras das
+contas que administra. - **Volatilidade.** O saldo real de um investimento cai
+em anos nos quais os mercados caem. Uma taxa fixa não representa isso, e a
+ferramenta não tenta. - **Mudanças nas contribuições.** Aumentar uma
+contribuição ao longo do tempo ou interromper parte dela está fora do modelo. A
+contribuição é constante em todo o horizonte.
+
+
+
+## Uma regra prática, verificada
+
+
+
+A regra prática é que o dinheiro dobra aproximadamente a cada tantos anos, dada
+uma determinada taxa. Você pode verificá-la com a ferramenta. Simule 30 anos a 7
+por cento sem contribuições e compare o resultado com o saldo inicial; faça a
+mesma simulação com uma contribuição e observe o tempo de duplicação mudar. A
+ferramenta existe para que a regra prática possa ser testada, e não apenas
+acreditada.

@@ -1,0 +1,180 @@
+---
+title: Giải thích lạm phát và lợi nhuận thực
+description: Tại sao lợi nhuận danh nghĩa và lợi nhuận thực là hai con số khác nhau, cách chuyển đổi từ số này sang số kia và điều đó có ý nghĩa gì đối với số dư tiết kiệm theo thời gian.
+locale: vi
+date: 2026-10-10
+lastReviewed: 2026-10-23
+author: Kostan Proff
+reviewedBy: Tetiana Goncharko
+group: investing
+illustration: inflation-and-real-returns-explained
+readingMinutes: 7
+sources:
+- label: BLS — Chỉ số giá tiêu dùng
+  url: https://www.bls.gov/cpi/
+- label: BLS — Bảng dữ liệu CPI
+  url: https://www.bls.gov/data/
+- label: Investor.gov — Lãi kép và lạm phát
+  url: https://www.investor.gov/introduction-investing/investing-basics/glossary/compound-interest
+relatedTools:
+- compound-interest
+faq:
+- q: Lãi suất thực là gì?
+  a: 'Lãi suất mô tả sự thay đổi của sức mua thay vì sự thay đổi của số tiền trong tài khoản. Đó là lãi suất danh nghĩa được điều chỉnh theo lạm phát: (1 + nominal) / (1 + inflation) − 1.'
+- q: Phương trình Fisher là gì?
+  a: 'Mối quan hệ giữa lãi suất danh nghĩa, lãi suất thực và lạm phát: (1 + nominal) = (1 + real) × (1 + inflation). Đây là lý do lãi suất thực không đơn giản bằng lãi suất danh nghĩa trừ lạm phát.'
+- q: Lãi suất danh nghĩa trừ lạm phát có đủ chính xác không?
+  a: Xét theo phép ước lượng, mức này gần đúng và khi lạm phát thấp thì chênh lệch nhỏ. Với lãi suất danh nghĩa 7 percent và lạm phát 2.5 percent, phép trừ cho 4.5 percent, còn con số chính xác là 4.39 percent.
+- q: Tôi nên dùng chỉ số lạm phát nào?
+  a: Chỉ số giá tiêu dùng chung là chỉ số tiêu chuẩn cho mục đích chung. Lựa chọn này quan trọng trong thời gian dài vì chỉ số phù hợp với chi tiêu của chính bạn là chỉ số mô tả sức mua của chính bạn.
+- q: Lạm phát có ảnh hưởng đến khoản trả góp khoản vay cố định không?
+  a: Không thay đổi khoản trả góp, vì khoản này được cố định theo hợp đồng tín dụng. Lạm phát thay đổi số hàng hóa và dịch vụ mà khoản trả góp có thể mua, và đây là lập luận để trả nợ khoản vay lãi suất cố định sớm khi chi phí thực tế của khoản nợ cao.
+- q: Lợi nhuận thực có được bảo đảm không?
+  a: Không. Lợi nhuận thực là kết quả tính toán dựa trên các giả định, và chỉ số lạm phát được sử dụng cũng là dữ liệu lịch sử. Phép tính cho biết kết quả sẽ là gì với những đầu vào đã cho.
+---
+
+import GuideIllustration from '../../../components/visuals/GuideIllustration.astro';
+
+Mức lợi nhuận 7 phần trăm có vẻ là một năm tốt cho đến khi bạn hỏi nó đã mua
+được những gì. Nếu giá tăng 2.5 phần trăm trong cùng khoảng thời gian đó, tiền
+tăng 7 phần trăm và mỗi đồng tiền đó mua được hơi ít hơn so với một năm trước.
+
+
+
+Công cụ <a href="/vi/tools/compound-interest/">tính lãi kép</a> báo cáo cả hai con
+số, bởi một phép chiếu chỉ hiển thị con số danh nghĩa chỉ đang mô tả số dư chứ
+không mô tả giá trị thực sự của số dư đó.
+
+
+
+## Hai con số khác nhau
+
+
+
+**Danh nghĩa** là mức suất trên tài khoản: 7 phần trăm. Đây là con số trên bảng
+sao kê và cho biết số dư trong tài khoản tăng hay giảm thế nào.
+
+
+
+**Thực** là mức suất sau khi điều chỉnh lạm phát: giá trị thực của số dư tính
+theo sức mua. Đây là con số cho biết tiền đã tiến thêm hay lùi lại.
+
+
+
+Hai mức này không giống nhau và mối quan hệ giữa chúng là phương trình Fisher:
+
+
+
+**(1 + danh nghĩa) = (1 + thực) × (1 + lạm phát)**
+
+
+
+Giải phương trình để tính mức suất thực:
+
+
+
+**thực = (1 + danh nghĩa) / (1 + lạm phát) − 1**
+
+
+
+Với mức danh nghĩa 7 phần trăm và lạm phát 2.5 phần trăm, mức suất thực là 4.39
+phần trăm, không phải 4.5 phần trăm như phép trừ đơn giản cho ra. Chênh lệch nhỏ
+ở các mức suất này và lớn hơn ở các mức suất cao hơn, vì vậy công thức chính xác
+đáng được sử dụng.
+
+
+
+
+<div class="guide-inline-figure">
+  <GuideIllustration slug="compound-vs-simple-interest" locale={frontmatter.locale} />
+</div>
+## Một ví dụ minh họa
+
+
+
+Cột giá trị thực của máy tính thực hiện cùng phép chuyển đổi đó trên số dư thay
+vì trên mức suất. Số dư $10,000 với mức suất 7 phần trăm và $500 mỗi tháng trong
+10 năm kết thúc ở khoảng hơn $92,000 theo danh nghĩa. Với lạm phát 2.5 phần
+trăm, số dư đó tính theo sức mua của năm bắt đầu là khoảng hơn $72,000.
+
+
+
+Con số danh nghĩa nói rằng tài khoản chứa $92,000. Con số thực nói rằng tài
+khoản chứa số tiền mà $72,000 có thể mua được mười năm trước. Cả hai đều đúng và
+chúng trả lời những câu hỏi khác nhau. Câu đầu nói về tài khoản. Câu sau nói về
+cuộc sống của bạn.
+
+
+
+## Chỉ số lạm phát nên dùng
+
+
+
+Cục Thống kê Lao động công bố Chỉ số Giá Tiêu dùng, là tiêu chuẩn đo lường phổ
+biến về mức thay đổi giá cả, cùng với các bảng dữ liệu gốc và công cụ tính toán
+cho các khoảng thời gian cụ thể.
+
+
+
+Với khoảng thời gian dài, việc chọn chỉ số quan trọng hơn nhiều so với người ta
+thường nghĩ, bởi chỉ số phù hợp với chi tiêu của chính bạn mới là chỉ số mô tả
+sức mua của chính bạn. CPI chính theo dõi một rổ hàng hóa và dịch vụ được các hộ
+gia đình điển hình mua, và đây là lựa chọn mặc định cho hầu hết các phép tính,
+bao gồm cả phép tính trên trang này.
+
+
+
+
+<div class="guide-inline-figure">
+  <GuideIllustration slug="compound-interest-calculator-explained" locale={frontmatter.locale} />
+</div>
+## Lạm phát và nợ cố định
+
+
+
+Với khoản vay thế chấp lãi suất cố định, mối quan hệ diễn ra theo chiều ngược
+lại. Khoản trả cố định trong ba mươi năm có giá trị thực giảm khi giá cả tăng.
+Người vay trả lại khoản vay bằng số tiền mỗi năm có giá trị thấp hơn số tiền họ
+đã vay.
+
+
+
+Đây chính là lập luận ủng hộ việc trả nhanh một khoản vay lãi suất cố định khi
+lãi suất thực cao, và đó là tính toán chứ không phải ý kiến. Đây cũng là lý do
+một khoản vay lãi suất cố định là nghĩa vụ cố định theo danh nghĩa nhưng lại thu
+hẹp theo giá trị thực.
+
+
+
+## Lạm phát và các con số trong công cụ
+
+
+
+Công cụ tính lãi kép áp dụng tỷ lệ lạm phát vào số dư, tạo ra cột giá trị thực.
+Công cụ so sánh thuê và mua không điều chỉnh theo lạm phát, bởi vì nó so sánh
+hai chuỗi dòng tiền trong cùng một khoảng thời gian và việc điều chỉnh lạm phát
+sẽ áp dụng cho cả chuỗi tiền thuê lẫn chuỗi chi phí sở hữu; công cụ để việc lựa
+chọn cách xử lý lạm phát ngoài phép tính và có ghi rõ điều đó.
+
+
+
+Công cụ tính khoản vay thế chấp cũng không điều chỉnh theo lạm phát, vì lý do
+tương tự. Một khoản trả sau ba mươi năm là một con số đô la cố định, còn giá trị
+thực của con số đó là câu hỏi về tương lai chứ không phải về khoản vay.
+
+
+
+## Lợi nhuận thực không phải là gì
+
+
+
+Lợi nhuận thực là kết quả tính toán dựa trên các giả định. Tỷ lệ lạm phát được
+sử dụng là tỷ lệ lịch sử, lãi suất danh nghĩa được giả định là không đổi, và các
+khoản đóng được giả định là không đổi. Mỗi giả định đó đều hợp lý đối với một dự
+báo nhưng không đúng với tương lai, và kết quả nên được hiểu là "theo các giả
+định này" chứ không phải là một dự báo.
+
+
+
+Mục đích của việc hiển thị con số thực không phải để dự báo. Đó là vì một con số
+không có nó là chưa đầy đủ.

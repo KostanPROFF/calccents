@@ -1,0 +1,183 @@
+---
+title: Juros compostos vs. juros simples
+description: A diferença entre juros simples e compostos, demonstrada com os mesmos números, e por que a distância aumenta quanto mais tempo o dinheiro permanece investido.
+locale: pt
+date: 2026-10-08
+lastReviewed: 2026-10-23
+author: Kostan Proff
+reviewedBy: Tetiana Goncharko
+group: investing
+illustration: compound-vs-simple-interest
+readingMinutes: 6
+sources:
+- label: Investor.gov — Juros compostos
+  url: https://www.investor.gov/introduction-investing/investing-basics/glossary/compound-interest
+- label: Federal Reserve — Taxas de juros selecionadas do H.15
+  url: https://www.federalreserve.gov/releases/h15/
+- label: IRS — IRAs tradicionais e o crescimento de uma conta de aposentadoria
+  url: https://www.irs.gov/retirement-plans/traditional-iras
+relatedTools:
+- compound-interest
+faq:
+- q: O que são juros simples?
+  a: 'Juros calculados apenas sobre o capital original, à taxa original, durante todo o período. Não crescem: um saldo de $10.000 a 5 por cento de juros simples rende $500 por ano enquanto permanecer ali.'
+- q: O que são juros compostos?
+  a: Juros calculados sobre o saldo, que inclui os juros já creditados. Os juros de cada período são cobrados sobre uma base um pouco maior que a anterior, portanto o crescimento não é linear.
+- q: Qual é o tamanho da diferença?
+  a: Em um horizonte curto, ela é pequena. Sobre $10.000 a 7 por cento ao longo de 30 anos, os juros simples rendem $31.000 e os juros compostos rendem $76.123. A distância é o argumento inteiro para deixar o dinheiro parado.
+- q: Onde eu realmente encontro juros simples?
+  a: Empenhamentos de consumo de curto prazo frequentemente os utilizam, e alguns arrangements de poupança mais antigos também. É também o modelo mental que a maioria das pessoas tem, o que faz parte de por que os juros compostos surpreendem.
+- q: Os juros compostos trabalham contra mim em algum caso?
+  a: Em cartões de crédito e outros saldos rotativos, onde os juros são cobrados sobre o saldo, incluindo os juros anteriores. O mesmo mecanismo que funciona a seu favor funciona ao contrário.
+- q: A regra dobração é confiável?
+  a: 'A regra dos 70 é uma aproximação útil: divida 70 pela taxa anual para obter o número de anos até o valor dobrar. A 7 por cento, isso dá cerca de dez anos. A calculadora mostra o valor real, e não a aproximação.'
+---
+
+import GuideIllustration from '../../../components/visuals/GuideIllustration.astro';
+
+Juros simples e juros compostos são a mesma ideia calculada de duas maneiras
+diferentes, e a diferença entre eles é uma das maiores distâncias na aritmética
+comum.
+
+
+
+Os juros simples cobram juros sobre o valor original. Os juros compostos cobram
+juros sobre o valor original mais os juros já creditados. Essa é toda a
+diferença.
+
+
+
+## Os mesmos números, duas respostas
+
+
+
+Considere $10,000 a 7 percent por 30 anos.
+
+
+
+**Juros simples** pagam 7 percent dos $10,000 originais todos os anos: $700 por
+ano, sem alteração, por trinta anos. O saldo final é $31,000.
+
+
+
+**Juros compostos**, capitalizados anualmente, começam em $10,000 e crescem. O
+saldo final é $76,123.
+
+
+
+A diferença é de $45,123 sobre um saldo inicial de $10,000 e vem inteiramente do
+fato de que os juros compostos incidem sobre uma base que cresce.
+
+
+
+A <a href="/pt/tools/compound-interest/">calculadora de juros compostos</a> executa
+o segundo caso. Para ver o primeiro, defina a taxa como zero e observe que o
+saldo cresce apenas com os depósitos — o caso dos juros simples é a mesma
+projeção com os juros desligados.
+
+
+
+
+<div class="guide-inline-figure">
+  <GuideIllustration slug="compound-interest-calculator-explained" locale={frontmatter.locale} />
+</div>
+## Por que a diferença aumenta em vez de permanecer constante
+
+
+
+O crescimento não é linear. Em uma conta de juros simples, cada ano adiciona o
+mesmo valor. Em uma conta de juros compostos, cada ano adiciona um pouco mais do
+que o anterior, porque a base cresceu.
+
+
+
+Vale separar três efeitos, pois eles se comportam de maneiras diferentes:
+
+
+
+**Os juros sobre os juros.** O maior efeito e o que precisa do maior tempo para
+se tornar significativo. Em um ano, ele mal aparece; em trinta anos, representa
+a maior parte do saldo.
+
+
+
+**O efeito das contribuições.** Uma contribuição mensal regular também é uma
+forma de capitalização, porque cada contribuição gera juros durante o restante
+do período. A contribuição feita no primeiro mês gera juros durante todo o
+horizonte; a feita no último mês mal gera algum. É por isso que a ferramenta
+permite alternar a contribuição entre o início e o fim do mês.
+
+
+
+**O efeito da frequência.** Mesma taxa nominal, capitalização mais frequente,
+mais dinheiro. A taxa anual efetiva é o que torna isso visível: 7 percent
+capitalizado mensalmente é 7.229 percent, e 7.229 percent é a taxa que você está
+realmente ganhando.
+
+
+
+## A aproximação para odobramento
+
+
+
+A regra dos 70 é um atalho: divida 70 pela taxa anual para obter o número de
+anos necessários para o dinheiro dobrar. A 7 percent, são dez anos; a 3 percent,
+23 anos.
+
+
+
+É uma aproximação, e a razão pela qual ela é necessária é que o tempo exato de
+duplicação depende da frequência de capitalização. A regra dos 70 pressupõe
+capitalização anual. Com capitalização mensal, 7 por cento dobra um pouco antes
+de dez anos.
+
+
+
+A calculadora é a maneira de verificar. Simule trinta anos a 7 por cento sem
+contribuições e compare o saldo final com o dobro do saldo inicial. A
+aproximação é próxima; o valor exato aparece na tela.
+
+
+
+
+<div class="guide-inline-figure">
+  <GuideIllustration slug="inflation-and-real-returns-explained" locale={frontmatter.locale} />
+</div>
+## Onde o mesmo mecanismo funciona na direção contrária
+
+
+
+Os juros compostos não são um favor concedido pelo sistema financeiro. São uma
+propriedade da aritmética e se aplicam tanto a saldos devidos quanto a saldos
+auferidos.
+
+
+
+Em um saldo de cartão de crédito rotativo, os juros são cobrados sobre o saldo
+que inclui os juros anteriores. Pagar apenas o mínimo de um cartão é o cálculo
+dos juros compostos funcionando ao contrário, com uma taxa alta o suficiente
+para que o efeito seja rápido.
+
+
+
+O mesmo vale para os juros não pagos em outros tipos de arranjos. O que
+determina a direção é apenas de que lado do saldo você está.
+
+
+
+## Uma observação sobre as taxas envolvidas
+
+
+
+O Federal Reserve publica as taxas de juros selecionadas do H.15, que é a série
+de referência para verificar quanto os produtos de poupança efetivamente
+pagaram. A Internal Revenue Service publica as regras das contas em que o
+crescimento é diferido, e o glossário do Investor.gov define os termos usados
+aqui.
+
+
+
+Nenhuma dessas informações é uma previsão do valor que uma taxa terá. A
+calculadora usa a taxa que você informar, mantida constante durante todo o
+horizonte, porque uma projeção que altera a taxa conforme algum caminho futuro
+pressuposto é um tipo diferente de afirmação em relação à aritmética.

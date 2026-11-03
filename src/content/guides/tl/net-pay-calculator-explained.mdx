@@ -1,0 +1,270 @@
+---
+title: Paano Kinakalkula ang Take-Home Pay
+description: 'Ang pagkakasunod ng paglabas ng pera mula sa sahod: deductions bago ang tax, 2026 federal brackets, Social Security, Medicare, state tax, effective laban sa marginal rate.'
+locale: tl
+date: 2026-10-23
+lastReviewed: 2026-10-23
+author: Kostan Proff
+reviewedBy: Tetiana Goncharko
+group: home
+illustration: net-pay-calculator-explained
+readingMinutes: 8
+sources:
+- label: IRS — Rev. Proc. 2025-32, mga inflation adjustment para sa 2026
+  url: https://www.irs.gov/irb/2025-45_IRB
+- label: Social Security Administration — 2026 wage base at COLA
+  url: https://www.ssa.gov/cola/
+- label: Social Security Administration — Publication 15, Employer’s Tax Guide
+  url: https://www.ssa.gov/pubs/EN-05-10035.pdf
+- label: IRS — Topic 511 sa Buwis, Withholding
+  url: https://www.irs.gov/taxtopics/tc511
+- label: IRS — Tax Topic 401, Mga sahod atKita
+  url: https://www.irs.gov/taxtopics/tc401
+- label: Social Security Administration — POMS RS 01402.038, Mga planong pangkalusugang may tax incentive
+  url: https://secure.ssa.gov/poms.nsf/lnx/0301402038
+relatedTools:
+- net-pay
+faq:
+- q: Bakit hindi ang take-home amount ang gross pay minus ang isang tax rate?
+  a: Sapagkat may higit sa isang rate na nalalapat, at ang bawat isa ay nalalapat sa ibang base. Progressive ang federal income tax, kaya tumataas ang rate habang tumataas ang taxable income. Flat rates sa wages ang Social Security at Medicare, at may sariling ceiling ang bawat isa. Ang resulta ay isang bilang na hindi mailalarawan ng anumang iisang percentage, at hiwalay na ipinapakita ng calculator ang mga bahagi nito.
+- q: Bakit mas mababa ang effective rate kaysa sa marginal rate?
+  a: Ang marginal rate ay ang rate kung saan taxation ay ipinatutupad sa susunod na dolyar ng taxable income, kaya nasa bracket na natapos ng kita ang rate na ito. Hinahati ng effective rate ang kabuuang tax sa buong gross pay, at karamihan sa gross na iyon ay may mas mababang rate o walang tax, dahil unang kinuha ang standard deduction at anumang deductions bago ang tax.
+- q: Bawasan ba ng kontribusyon sa 401(k) ang tax sa iba pang bahagi ng sahod?
+  a: 'Binabawasan nito ang federal income tax, ngunit hindi ang payroll taxes. Itinat Treat ng IRS ang kontribusyon sa 401(k) o 403(b) bilang hindi kasama sa kita ngunit nabilang pa rin sa wages para sa Social Security at Medicare, kaya ipinatutupad ang dalawang tax na iyon dito. iba ang kontribusyon sa HSA o FSA na kinuha mula sa paycheque: biniyaan nito rin ang base para sa payroll taxes. Iyan ang dahilan na hiwalay na kinukuha ng calculator ang dalawa.'
+- q: Kailan nagsisimula ang Karagdagang Medicare Tax?
+  a: Sa sahod na higit sa $200,000 para sa isang filer, isang mag-asawa na naghahain nang magkita, o pinuno ng sambahayan, at higit sa $250,000 para sa mag-asawang naghahain nang magkasama. Ang rate ay 0.9% sa labis, at hindi na-i-index ang mga threshold na iyon para sa inflation, kaya pareho na ang mga ito mula pa noong 2013.
+- q: Papaano nagiging taon ng sahod ang isang rate kada oras?
+  a: 'Ipinap.multiply ng calculator ang rate ng 2,080 na oras, na 40 oras bawat linggo sa loob ng 52 linggo. Ginagawa rin nito para sa iba pang panahon: 12 buwan, 52 linggo at 260 araw ng trabaho. Mga kombensyon ang mga ito, hindi entitlement, at maaaring gamitin ng mambabasa na ibang bilang ng oras ang sariling kalkulasyon.'
+- q: Bakit differs ang tax figure ng estado sa kung ano ang kinokolekta ng estado?
+  a: Ipinapailapat ng calculator ang iisang rate sa buong taxable income. Karamihan sa mga estado ay may progressive rates, kaya nagpapah overestimate ang iisang percentage ng makukuhang buwis ng progressive na estado at eksaktong tumutugma sa flat-rate na estado. Ang rate na ipinasok sa pahina ay ang tanging input na partikular sa estado sa buong kalkulasyon.
+- q: Ipinapakita ba nito kung ano ang kinakaltas sa bawat payslip?
+  a: Hindi. Ito ang tax para sa taon, na kalkulado mula sa mga taunang figure. Ang withholding ay ang ipinapadala ng employer sa IRS sa loob ng taon, at itinatakda ng withholding method sa W-4, kaya maaaring magkaiba ang halaga sa isang payslip sa isang-klabing ng taunang figure.
+---
+
+import GuideIllustration from '../../../components/visuals/GuideIllustration.astro';
+
+Ang isang bayad ay may isang numero lamang. Ang numero sa offer letter ay iba,
+at ang agwat sa pagitan nila ay binubuo mula sa maikling listahan ng mga
+patakaran na kayang isulat nang eksakto.
+
+
+
+Ang <a href="/tl/tools/net-pay/">net pay calculator</a> ay dumadaan sa mga
+patakaranang iyon sa pagkakasunod-sunod na nalalapat sa isang sahod, gamit ang
+mga bilang para sa tax year 2026.
+
+
+
+## Ang pagkakasunod ng paglabas ng pera
+
+
+
+Isang gross na halaga ang dumating bilang sahod. Mula doon, umaalis ang pera sa
+isang nakapirming pagkakasunod.
+
+
+
+1. Una ang mga bawas bago ang tax. Ang ambag sa 401(k), ambag sa HSA, at ambag
+sa FSA ay lahat kinuha mula sa sahod bago ang anumang iba pa. Hindi magkapantay
+ang epekto ng bawat isa sa mga buwis, at nakasaad sa bahagi sa ibaba kung alin
+ang alin. 2. Ang standard deduction ay kinuha mula sa natitirang sahod. Para sa
+2026, ito ay $16,100 para sa isang mag-isyang single filer, $32,200 para sa
+mag-asawang married filing jointly, at $24,150 para sa head of household. Ang
+natitira ay taxable income, at ito ang halagang pinapatakbo ng mga bracket ng
+federal income tax. 3. Ang federal income tax ay kinakalkula batay sa taxable
+income. 4.charged Ang Social Security ay 6.2% ng sahod, hanggang sa taxable
+maximum na $184,500 para sa 2026. 5. Ang Medicare ay 1.45% ng lahat ng sahod,
+walang ceiling. 6. Ang Additional Medicare Tax ay 0.9% ng sahod na higit sa
+threshold para sa filing status. 7. Ang state income tax ay ipinatutupad ayon sa
+rate na inilagay sa pahina.
+
+
+
+Ang natitira pagkatapos ng mga hakbang na iyon ay take-home amount, at sinusuri
+ng calculator ito sa pamamagitan ng paghahati sa bilang ng panahon sa isang taon
+upang makuha ang bawat panahon.
+
+
+
+Ang sahod na pinapatakbo ng payroll taxes ay ang sahod na natitira pagkatapos ng
+ambag sa HSA o FSA at bago ang standard deduction. Ang ambag sa 401(k) ay
+nananatili sa loob ng base na iyon. Mahalaga ang pagkakaiba na ito: binabawasan
+ng standard deduction ang federal income tax at state tax, habang pinapatakbo
+ang Social Security at Medicare sa mas malaking base.
+
+
+
+## Hindi magkapantay ang dalawang bawas bago ang tax
+
+
+
+Inaalis ng IRS ang ambag sa 401(k) sa kita, ngunit itinuturing nitong sahod para
+sa Social Security at Medicare. Malinaw ang sinasabi ng IRS Tax Topic 401: hindi
+kasama ang halaga sa mga sahod na napapatakbo ng income tax, "ngunit
+nananatiling napapatakbo ng Social Security at Medicare taxes ang mga halagang
+iyon sa taong kinuhaan sila." Sabi rin ng Publication 525 tungkol sa elective
+deferrals.
+
+
+
+Ang kontribusyon sa HSA o FSA ang kasong pangalawa. Kapag mula ito sa sahod sa
+pamamagitan ng section 125 cafeteria plan, hindi ito kasama sa kita at hindi
+itong sahod para sa Social Security gayundin. Direktang sinasabi ito ng
+patakaran ng SSA na RS 01402.038: ang kontribusyon ngempleyado sa FSA "via a
+qualified salary reduction agreement" ay hindi sahod para sa saklaw ng Social
+Security, at hindi rin ang kontribusyon sa HSA na ginawa sa ganitong paraan.
+
+
+
+Kaya't may dalawang field ang calculator para sa dalawang kaso:
+
+
+
+- - ang kontribusyon sa 401(k) o 403(b) ay nagpapababa ng pederal na buwis sa
+kita at hindi binabago ang Social Security at Medicare; - ang kontribusyon sa
+HSA o FSA ay nagpapababa ng pederal na buwis sa kita at ng payroll tax.
+
+
+
+May isang pag exception sa pangalawang kaso, at ito ang uriyang dapat malaman:
+ang kontribusyon sa HSA na direktang galing sa bank account, sa halip na mula sa
+sahod, ay sahod para sa Social Security. Itinat Treating ng calculator ang
+kontribusyon bilang salary reduction, dahil ito ang arrangement na bumubuo ng
+exemption.
+
+
+
+
+<div class="guide-inline-figure">
+  <GuideIllustration slug="income-tax-calculator-explained" locale={frontmatter.locale} />
+</div>
+## Mga pederal na bracket
+
+
+
+Ang pederal na buwis sa kita ay hindi iisang rate. Para sa 2026, nabibilang ang
+kita ng solong nagbabayad ng buwis sa mga sumusunod na bracket:
+
+
+
+- 10% sa unang $12,400 - 12% mula $12,400 hanggang $50,400 - 22% mula $50,400
+hanggang $105,700 - 24% mula $105,700 hanggang $201,775 - 32% mula $201,775
+hanggang $256,225 - 35% mula $256,225 hanggang $640,600 - 37% sa higit sa
+$640,600
+
+
+
+Ipinapublish ng IRS ang bawat bracket bilang fixed na halaga ng buwis dagdag pa
+ng porsiyento ng labis sa ibaba ng bracket, at kinakalkula ito ng calculator sa
+parehong paraan. Ang solong nagbabayad ng buwis na may $50,400 na taxable income
+ay may bayad na $1,240, na ang buwis sa ibaba ng 12% bracket, at wala nang iba.
+Sa $60,000, ang parehong nagbabayad ng buwis ay may bayad na $1,240 dagdag pa ng
+12% ng $9,600 na labis sa $50,400, na umabot sa $2,392.
+
+
+
+Mula sa Rev. Proc. 2025-32 ang mga bracket at standard deduction na ito, na
+inilathala sa Internal Revenue Bulletin 2025-45 noong 3 Nobyembre 2025.
+
+
+
+## Social Security, Medicare at rate ng estado
+
+
+
+Ang Social Security ay 6.2% na singil sa sahod hanggang sa taxable maximum na
+$184,500 para sa 2026. Hindi na naniningil sa sahod na higit sa limit na ito, na
+nangangahulugang ang marginal rate ng Social Security ay 6.2% hanggang sa limit
+at zero sa higit pa dito.
+
+
+
+Ang Medicare ay 1.45% na singil sa lahat ng sahod, nang walang limit. Sa ibaba
+nito ay nakatayo ang Additional Medicare Tax: 0.9% sa sahod na higit sa $200,000
+para sa solong nagbabayad ng buwis, nang hiwalay na nagbabayad ng buwis na
+nakapag-asawa, o pinakababa ng sambahayan, at higit sa $250,000 para sa
+mag-asawang nagsusumang magkasama. Hindi ini-index ang mga threshold na ito para
+sa inflation, kaya't nanatiling pareho ang mga bilang mula pa noong 2013.
+Itinatakda ng Social Security Administration's Publication 15 ang mga rate at
+threshold.
+
+
+
+Ang state income tax sa calculator ay ang rate na ipinapasok sa pahina, na
+nalalapat sa taxable income. Ito ay pagpapadali, at sinadya: progressive ang
+karamihan sa mga estado, kaya't ang iisang porsiyento na nalalapat sa buong
+taxable income ay mas mataas kaysa sa ibang makikolekta ng progressive na estado
+at eksaktong tumutugma sa flat-rate na estado. Ang rate sa pahina lang ang
+tanging state-specific na input sa kalkulasyon.
+
+
+
+
+<div class="guide-inline-figure">
+  <GuideIllustration slug="debt-payoff-calculator-explained" locale={frontmatter.locale} />
+</div>
+## Bakit mas mababa ang effective rate kaysa sa marginal rate
+
+
+
+Sinasagot ng dalawang rate sa resulta ang iba't ibang tanong. Ang marginal rate
+ay ang rate kung saan binubuwis ang susunod na dolyar ng taxable income, kaya
+nabibilang ito sa bracket na naabot na ng kita. Ang effective rate ay naghahati
+ng kabuuang buwis sa buong gross pay, kaya pinagsasama nito ang bawat bracket na
+hin touches ng kita, ang bahagi ng gross na hindi kailanman binuwis, at ang mga
+deduction na binaraw bago kalkulahin ang buwis.
+
+
+
+Kumuha ng isang filer na may $60,000 gross pay, walang pre-tax deductions, at 5%
+state rate. Ang kabuuang tax ay $11,805: $5,020 federal, $3,720 Social Security,
+$870 Medicare, at $2,195 state. Ang effective rate ay 19.68%. Ang marginal rate
+ay 12%, dahil ang taxable income na $43,900 ay nasa 12% bracket. Karamihan sa
+$60,00 na iyon ay taxed sa 10% o sa 12%, at $16,100 dito ang hindi taxed sa
+lahat, kaya ang average ay mas mababa sa rate na haharapin ng susunod na dollar.
+
+
+
+Ang pagdagdag ng $5,000 na 401(k) contribution sa parehong kaso ay nagpapakita
+ng epekto mula sa kabilang direksyon, at nagpapakita kung bakit ilagay nang
+hiwalay ang dalawang deductions. Ang taxable wages ay bumaba sa $55,000 at ang
+federal tax ay bumaba sa $4,420, ngunit nananatiling $3,720 ang Social Security
+at $870 ang Medicare, dahil ang contribution ay para pa ring wages para sa
+payroll taxes. Ang state tax ay bumaba sa $1,945, ang kabuuang tax ay $10,955,
+at ang effective rate ay 18.26%. Ang take-home amount ay bumaba rin, dahil
+umalis ang $5,000 mula sa bago kalkulahin ang mga taxes.
+
+
+
+Ang $5,000 na HSA o FSA contribution sa parehong kaso ay higit pang naaabot.
+Pareho pa rin ang federal tax na $4,420, at sa pagkakataong ito, gumagalaw din
+ang payroll taxes: ang Social Security ay bumaba sa $3,410 at ang Medicare sa
+$797.50. Ang kabuuang tax ay $10,572.50, ang effective rate ay 17.62%, at ang
+take-home amount ay $44,427.50 laban sa $44,045.00 para sa 401(k).
+
+
+
+## Ang hindi kasama sa kalkulasyon
+
+
+
+Ang numero sa pahina ay tax para sa buong taon, na kalkulado mula sa mga taunang
+numero. Ilang bagay ang nasa labas nito.
+
+
+
+- **Mga credit.** Walang tax credit na nalalapat, kaya ang ipinapakita na buwis
+ay ang pananagutan bago ang mga credit. - **Mga itemised deduction.** Ginagamit
+ang standard deduction, at hindi sinusimulation ng calculator ang deduction na
+nakadepende sa aktuwal na bayarin ng mambabasa. - **Mga lokal na buwis.** Hindi
+bahagi nito ang income tax ng lungsod, county at paaralan. - **Withholding kada
+paycheque.** Ang withholding ay nakasulat sa W-4 at ito ang ipinapaabot ng
+employer sa buong taon, kaya maaaring magkaiba ang isang paycheque sa isang
+ikaslab ng taunang kabuuan. Inilalarawan ng IRS Tax Topic 511 kung paano
+kinakalkula ang withholding. - **Mga benepisyong wala sa sahod.** Ang employer
+contribution sa health insurance o retirement plan ay hindi lumalabas sa gross
+pay na itinutukoy ng mambabasa, kaya hindi lumalabas din sa resulta. - **Mga
+limitasyon sa contribution.** Hindi sinusuri ang taunang limitasyon sa 401(k) at
+HSA contribution. Ang contribution na malaking tulad ng buong sahod ay mag-iwan
+ng negatibong take-home figure, dahil nananatiling naniningil ang payroll tax
+rito.

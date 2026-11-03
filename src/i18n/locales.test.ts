@@ -1,7 +1,56 @@
 import { strict as assert } from 'node:assert';
 import { describe, it } from 'node:test';
 
-import { formatDate, localePath, type Locale } from './locales.ts';
+import {
+  DEFAULT_LOCALE,
+  LOCALE_META,
+  LOCALES,
+  formatDate,
+  localePath,
+  type Locale,
+} from './locales.ts';
+
+describe('the locales the site publishes in', () => {
+  /*
+   * The site is published in ten languages. A language that is declared but has
+   * no metadata fails the build here rather than shipping a page that says
+   * the wrong thing about itself.
+   */
+  it('has metadata for every declared locale', () => {
+    for (const locale of LOCALES) {
+      const meta = LOCALE_META[locale];
+      assert.ok(meta, `${locale} has no metadata`);
+      assert.equal(meta.code, locale);
+      assert.ok(meta.htmlLang, `${locale} has no htmlLang`);
+      assert.ok(meta.ogLocale, `${locale} has no ogLocale`);
+      assert.ok(meta.intl, `${locale} has no intl locale`);
+      assert.ok(meta.nativeName, `${locale} has no native name`);
+      assert.ok(meta.englishName, `${locale} has no English name`);
+    }
+  });
+
+  it('names every locale in its own language', () => {
+    const names = LOCALES.map((locale) => LOCALE_META[locale].nativeName);
+    assert.equal(new Set(names).size, names.length, 'two locales share a name');
+  });
+
+  /*
+   * Arabic is written right to left. A page that does not say so lays the
+   * whole layout out backwards, so the direction is part of the metadata
+   * rather than a detail left to the browser.
+   */
+  it('marks Arabic as right to left and the rest as left to right', () => {
+    for (const locale of LOCALES) {
+      const expected = locale === 'ar' ? 'rtl' : 'ltr';
+      assert.equal(LOCALE_META[locale].dir, expected, `${locale} has the wrong direction`);
+    }
+  });
+
+  it('keeps English at the root of the site', () => {
+    assert.equal(DEFAULT_LOCALE, 'en');
+    assert.equal(localePath('en', '/guides/'), '/guides/');
+  });
+});
 
 describe('formatDate', () => {
   /*

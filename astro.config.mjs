@@ -21,19 +21,21 @@ export default defineConfig({
     format: 'directory',
   },
   /**
-   * The site is published in English, Russian and Spanish.
+   * The site is published in English, Russian, Spanish, Chinese, Korean,
+   * Vietnamese, Portuguese, Arabic, Tagalog and Ukrainian.
    *
    * English is the source language and lives at the root of the site. The
-   * other two live under their own prefix. Astro's i18n routing expects the
+   * other nine live under their own prefix. Astro's i18n routing expects the
    * folder structure to match the URL structure, so `src/pages/` holds the
-   * English pages and `src/pages/ru/` and `src/pages/es/` hold the others.
+   * English pages and `src/pages/ru/`, `src/pages/es/` and the rest hold the
+   * others.
    *
    * `prefixDefaultLocale: false` is what keeps the English pages where they
    * have always been. It is the default, but it is set explicitly because
    * the whole site depends on it and a reader's old links depend on it too.
    */
   i18n: {
-    locales: ['en', 'ru', 'es'],
+    locales: ['en', 'ru', 'es', 'zh', 'ko', 'vi', 'pt', 'ar', 'tl', 'uk'],
     defaultLocale: 'en',
     routing: {
       prefixDefaultLocale: false,
@@ -56,6 +58,13 @@ export default defineConfig({
           en: 'en',
           ru: 'ru',
           es: 'es',
+          zh: 'zh',
+          ko: 'ko',
+          vi: 'vi',
+          pt: 'pt',
+          ar: 'ar',
+          tl: 'tl',
+          uk: 'uk',
         },
       },
       /**

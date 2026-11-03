@@ -30,3 +30,4 @@ coverage/
 # Superdesign scratch output (design-system.md and init/ are kept on purpose)
 .superdesign/tmp/
 .superdesign/*.json
+__pycache__/

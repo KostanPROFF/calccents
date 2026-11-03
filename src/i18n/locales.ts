@@ -4,13 +4,25 @@
  * English is the source language and lives at the root of the site. The
  * other locales live under their own prefix. Astro's i18n routing expects
  * the folder structure to match the URL structure, so `src/pages/` holds the
- * English pages and `src/pages/ru/` and `src/pages/es/` hold the others.
+ * English pages and `src/pages/ru/`, `src/pages/es/` and the rest hold the
+ * others.
  *
  * Everything that varies by language is either here or in `src/i18n/ui/`.
  * Nothing else in the codebase should hard-code a language code.
  */
 
-export const LOCALES = ['en', 'ru', 'es'] as const;
+export const LOCALES = [
+  'en',
+  'ru',
+  'es',
+  'zh',
+  'ko',
+  'vi',
+  'pt',
+  'ar',
+  'tl',
+  'uk',
+] as const;
 
 export type Locale = (typeof LOCALES)[number];
 
@@ -29,6 +41,14 @@ export interface LocaleMeta {
   nativeName: string;
   /** The name of the language, in English. */
   englishName: string;
+  /**
+   * The writing direction.
+   *
+   * Arabic is written right to left, and a page that does not say so lays
+   * the whole layout out backwards. The value goes into the `dir` attribute
+   * of the document.
+   */
+  dir: 'ltr' | 'rtl';
 }
 
 export const LOCALE_META: Record<Locale, LocaleMeta> = {
@@ -39,6 +59,7 @@ export const LOCALE_META: Record<Locale, LocaleMeta> = {
     intl: 'en-US',
     nativeName: 'English',
     englishName: 'English',
+    dir: 'ltr',
   },
   ru: {
     code: 'ru',
@@ -47,6 +68,7 @@ export const LOCALE_META: Record<Locale, LocaleMeta> = {
     intl: 'ru-RU',
     nativeName: 'Русский',
     englishName: 'Russian',
+    dir: 'ltr',
   },
   es: {
     code: 'es',
@@ -55,6 +77,70 @@ export const LOCALE_META: Record<Locale, LocaleMeta> = {
     intl: 'es-ES',
     nativeName: 'Español',
     englishName: 'Spanish',
+    dir: 'ltr',
+  },
+  zh: {
+    code: 'zh',
+    htmlLang: 'zh',
+    ogLocale: 'zh_CN',
+    intl: 'zh-CN',
+    nativeName: '中文',
+    englishName: 'Chinese',
+    dir: 'ltr',
+  },
+  ko: {
+    code: 'ko',
+    htmlLang: 'ko',
+    ogLocale: 'ko_KR',
+    intl: 'ko-KR',
+    nativeName: '한국어',
+    englishName: 'Korean',
+    dir: 'ltr',
+  },
+  vi: {
+    code: 'vi',
+    htmlLang: 'vi',
+    ogLocale: 'vi_VN',
+    intl: 'vi-VN',
+    nativeName: 'Tiếng Việt',
+    englishName: 'Vietnamese',
+    dir: 'ltr',
+  },
+  pt: {
+    code: 'pt',
+    htmlLang: 'pt',
+    ogLocale: 'pt_BR',
+    intl: 'pt-BR',
+    nativeName: 'Português',
+    englishName: 'Portuguese',
+    dir: 'ltr',
+  },
+  ar: {
+    code: 'ar',
+    htmlLang: 'ar',
+    ogLocale: 'ar_AE',
+    intl: 'ar-AE',
+    nativeName: 'العربية',
+    englishName: 'Arabic',
+    dir: 'rtl',
+  },
+  tl: {
+    code: 'tl',
+    htmlLang: 'tl',
+    ogLocale: 'tl_PH',
+    intl: 'tl-PH',
+    nativeName: 'Tagalog',
+    englishName: 'Tagalog',
+    dir: 'ltr',
+  },
+  uk: {
+    code: 'uk',
+    htmlLang: 'uk',
+    ogLocale: 'uk_UA',
+    intl: 'uk-UA',
+    nativeName: 'Українська',
+    englishName: 'Ukrainian',
+    dir: 'ltr',
   },
 };
 
