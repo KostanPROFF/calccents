@@ -1,34 +1,34 @@
 ---
-title: Como funciona a amortização de um financiamento imobiliário
-description: Por que os primeiros pagamentos do financiamento imobiliário são principalmente juros, como o saldo muda mês a mês e o que acontece com essa divisão à medida que o empréstimo envelhece.
-locale: pt
+title: "Como funciona a amortização de um financiamento imobiliário"
+description: "Por que os primeiros pagamentos do financiamento imobiliário são principalmente juros, como o saldo muda mês a mês e o que acontece com essa divisão à medida que o empréstimo envelhece."
+locale: "pt"
 date: 2026-10-02
 lastReviewed: 2026-10-23
-author: Kostan Proff
-reviewedBy: Tetiana Goncharko
-group: home
-illustration: how-mortgage-amortization-works
+author: "Kostan Proff"
+reviewedBy: "Tetiana Goncharko"
+group: "home"
+illustration: "how-mortgage-amortization-works"
 readingMinutes: 8
 sources:
-- label: CFPB — Cálculo de pagamento de mortgage
-  url: https://www.consumerfinance.gov/ask-cfpb/
-- label: HUD — Ajudando proprietários americanos
-  url: https://www.hud.gov/helping_american_homeowners
+  - label: "CFPB — Cálculo de pagamento de mortgage"
+    url: "https://www.consumerfinance.gov/ask-cfpb/"
+  - label: "HUD — Ajudando proprietários americanos"
+    url: "https://www.hud.gov/helping_american_homeowners"
 relatedTools:
-- mortgage-payment
+  - "mortgage-payment"
 faq:
-- q: Por que tão pouco do meu primeiro pagamento vai para o principal?
-  a: Porque os juros são cobrados sobre o saldo ainda devedor e, nos primeiros meses, esse saldo corresponde a quase todo o empréstimo. À medida que o saldo cai, a cobrança de juros também diminui e uma parcela maior do mesmo pagamento vai para o principal.
-- q: Amortização significa que vou pagar mais do que peguei emprestado?
-  a: Sim, em um empréstimo com taxa fixa e sem pagamentos adicionais. Você paga o valor taken emprestado mais os juros, que é o que representa o total de juros na calculadora.
-- q: Quanto de umTypical empréstimo de 30 anos é quitado nos primeiros cinco anos?
-  a: Em um empréstimo de 30 anos, a maioria dos mutuários quitou bem menos da metade do saldo ao chegar ao quinto ano, apesar de ter realizado cinco anos de pagamentos. O valor exato depende da taxa e do prazo, e a tabela de amortização da calculadora mostra esse resultado para qualquer empréstimo.
-- q: Um empréstimo com prazo menor tem uma amortização diferente?
-  a: O mecanismo é idêntico, mas os juros são cobrados sobre um saldo menor por menos tempo, de modo que um empréstimo de 15 anos tem muito menos juros no total. A divisão mensal também muda mais rapidamente.
-- q: O que é um empréstimo com amortização negativa?
-  a: É um empréstimo em que o pagamento é menor do que os juros cobrados, fazendo com que o saldo aumente. Isso acontece quando um pagamento é adiado ou recalculado para um valor menor. Não é o que a calculadora simula, pois ela pressupõe que o pagamento programado cobre os juros.
-- q: Posso ver a tabela de amortização do meu próprio empréstimo?
-  a: Sim. A calculadora gera a tabela para qualquer empréstimo, e um guia explica como ler cada coluna dela.
+  - q: "Por que tão pouco do meu primeiro pagamento vai para o principal?"
+    a: "Porque os juros são cobrados sobre o saldo ainda devedor e, nos primeiros meses, esse saldo corresponde a quase todo o empréstimo. À medida que o saldo cai, a cobrança de juros também diminui e uma parcela maior do mesmo pagamento vai para o principal."
+  - q: "Amortização significa que vou pagar mais do que peguei emprestado?"
+    a: "Sim, em um empréstimo com taxa fixa e sem pagamentos adicionais. Você paga o valor taken emprestado mais os juros, que é o que representa o total de juros na calculadora."
+  - q: "Quanto de umTypical empréstimo de 30 anos é quitado nos primeiros cinco anos?"
+    a: "Em um empréstimo de 30 anos, a maioria dos mutuários quitou bem menos da metade do saldo ao chegar ao quinto ano, apesar de ter realizado cinco anos de pagamentos. O valor exato depende da taxa e do prazo, e a tabela de amortização da calculadora mostra esse resultado para qualquer empréstimo."
+  - q: "Um empréstimo com prazo menor tem uma amortização diferente?"
+    a: "O mecanismo é idêntico, mas os juros são cobrados sobre um saldo menor por menos tempo, de modo que um empréstimo de 15 anos tem muito menos juros no total. A divisão mensal também muda mais rapidamente."
+  - q: "O que é um empréstimo com amortização negativa?"
+    a: "É um empréstimo em que o pagamento é menor do que os juros cobrados, fazendo com que o saldo aumente. Isso acontece quando um pagamento é adiado ou recalculado para um valor menor. Não é o que a calculadora simula, pois ela pressupõe que o pagamento programado cobre os juros."
+  - q: "Posso ver a tabela de amortização do meu próprio empréstimo?"
+    a: "Sim. A calculadora gera a tabela para qualquer empréstimo, e um guia explica como ler cada coluna dela."
 ---
 
 import GuideIllustration from '../../../components/visuals/GuideIllustration.astro';
@@ -38,31 +38,20 @@ resultados mais contraintuitivos das finanças pessoais: um empréstimo de trint
 anos não são trinta anos pagando-o. São cerca de uma década pagando o mortgage,
 seguida de duas décadas pagando pelo privilégio de já ter pago o mortgage.
 
-
-
 O mecanismo é simples o suficiente para ser compreendido, o que vale a pena
 fazer antes de examinar qualquer cronograma.
 
-
-
 ## Primeiro os juros, sempre
-
-
 
 Cada pagamento de mortgage tem duas partes, e a ordem em que elas são aplicadas
 é fixada pelo contrato:
 
-
-
-1. Os juros são cobrados sobre o saldo devedor no início do mês. 2. O pagamento
-é aplicado aos juros. 3. O que restar do pagamento reduz o principal.
-
-
+1. Os juros são cobrados sobre o saldo devedor no início do mês.
+2. O pagamento é aplicado aos juros.
+3. O que restar do pagamento reduz o principal.
 
 O saldo do mês seguinte é o saldo deste mês, menos o principal que foi pago.
 Essa é toda a regra.
-
-
 
 A consequência vem imediatamente. No primeiro mês, o saldo é o valor total
 emprestado, portanto a cobrança de juros é a maior, e o pagamento — que foi
@@ -71,30 +60,19 @@ totalmente juros. À medida que o saldo diminui, a cobrança de juros diminui
 junto, e o mesmo pagamento passa a cobrir mais principal.
 
 
-
-
 <div class="guide-inline-figure">
   <GuideIllustration slug="mortgage-payment-calculator-explained" locale={frontmatter.locale} />
 </div>
 ## A aritmética de um único mês
 
-
-
 A cobrança de juros de um mês é:
-
-
 
 **juros = saldo × (taxa anual ÷ 12)**
 
-
-
-Considere um empréstimo de $360,000 a 6.5 percent. A taxa mensal é 0.54167
-percent. No primeiro mês, os juros são $360,000 × 0.0054167 = $1,950. O
-pagamento programado para um prazo de 30 anos é $1,986. A diferença, $36, é o
-que reduz o principal no primeiro mês. Isso é um erro de arredondamento em
-relação ao saldo.
-
-
+Considere um empréstimo de $360,000 a 6.5%. A taxa mensal é 0.54167%. No
+primeiro mês, os juros são $360,000 × 0.0054167 = $1,950. O pagamento programado
+para um prazo de 30 anos é $1,986. A diferença, $36, é o que reduz o principal
+no primeiro mês. Isso é um erro de arredondamento em relação ao saldo.
 
 Um ano depois, o saldo caiu para aproximadamente $357,500. A cobrança de juros
 agora é de cerca de $1,936, e a parcela do principal cresceu para cerca de $50.
@@ -102,11 +80,7 @@ Após três anos, a parcela do principal fica em torno de $80 por mês. Ainda é
 pequena. Também está crescendo, e o crescimento acelera, o que é toda a
 história.
 
-
-
 ## As duas curvas
-
-
 
 Uma forma útil de visualizar um financiamento imobiliário é como duas curvas se
 movendo em direções opostas. A curva do saldo começa alta e cai lentamente no
@@ -115,12 +89,8 @@ zero. A curva dos juros acumulados começa em zero, sobe rapidamente e depois
 sobe mais lentamente, porque a cobrança de juros incide sobre um saldo
 decrescente.
 
-
-
 A primeira curva é aquela em que as pessoas pensam. A segunda é a que determina
 o custo total, e a diferença entre elas é o total dos juros.
-
-
 
 Na marca de cinco anos de um empréstimo típico de 30 anos, pouco menos de um
 quinto do saldo já foi quitado e cerca de um quarto do total dos juros já foi
@@ -129,31 +99,20 @@ que o ano exato importa: "quanto eu jáquitei" e "quanto eu já paguei de juros"
 são perguntas muito diferentes, e a tabela de amortização responde às duas.
 
 
-
-
 <div class="guide-inline-figure">
   <GuideIllustration slug="extra-mortgage-payments-math" locale={frontmatter.locale} />
 </div>
 ## Por que o último pagamento é diferente
 
-
-
 O pagamento mensal precisa ser um valor fixo em centavos, e um empréstimo com
 uma taxa de juros e um prazo em meses inteiros não se divide de forma exata. O
 arredondamento deixa um pequeno saldo devedor no final.
 
-
-
 O pagamento final é ajustado para zerar o saldo. Isso não é um recurso especial
-de nenhum credor; é aritmética. A <a href="/pt/tools/mortgage-payment/">calculadora
-de pagamento do mortgage</a> deste site faz a mesma coisa, e o ajuste aparece na
-última linha do cronograma.
-
-
+de nenhum credor; é aritmética. A <a href="/pt/tools/mortgage-payment/">calculadora de pagamento do mortgage</a>
+deste site faz a mesma coisa, e o ajuste aparece na última linha do cronograma.
 
 ## O caminho acelerado
-
-
 
 O cronograma de amortização também é o argumento a favor de pagamentos
 adicionais, e esse argumento é mecânico, não motivacional. Um pagamento
@@ -162,18 +121,12 @@ menor no mês seguinte, o que significa que uma parcela maior do próximo
 pagamento está disponível para abater o principal. O efeito composta exatamente
 da mesma forma que o empréstimo.
 
-
-
 O pagamento programado não muda. O simplesmente termina antes, e os juros que
 teriam sido cobrados sobre um saldo que não existe mais nunca são cobrados. O
 total de juros na calculadora diminui à medida que o pagamento adicional
 aumenta, e a data de quitação avança.
 
-
-
 ## O que a amortização não cobre
-
-
 
 O cronograma cobre o empréstimo. Não cobre o IPTU, o seguro, as taxas do
 condomínio, a manutenção nem o efeito da inflação sobre um pagamento que se

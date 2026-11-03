@@ -1,73 +1,62 @@
 ---
-title: Ang Matematika sa Likod ng Karagdagang Bayad sa Mortgage
-description: Paano pinapaikli ng isang karagdagang bayad sa pangunahin ang isang loan, bakit hindi nagbabago ang nakatakdang bayad, at paano itsura ang epekto sa iba't ibang panahon.
-locale: tl
+title: "Ang Matematika sa Likod ng Karagdagang Bayad sa Mortgage"
+description: "Paano pinapaikli ng isang karagdagang bayad sa pangunahin ang isang loan, bakit hindi nagbabago ang nakatakdang bayad, at paano itsura ang epekto sa iba't ibang panahon."
+locale: "tl"
 date: 2026-10-04
 lastReviewed: 2026-10-23
-author: Kostan Proff
-reviewedBy: Tetiana Goncharko
-group: home
-illustration: extra-mortgage-payments-math
+author: "Kostan Proff"
+reviewedBy: "Tetiana Goncharko"
+group: "home"
+illustration: "extra-mortgage-payments-math"
 readingMinutes: 7
 sources:
-- label: CFPB — kalkulasyon ng bayad sa mortgage
-  url: https://www.consumerfinance.gov/ask-cfpb/
-- label: HUD — Pagtulong sa mga Amerikano Homeowner
-  url: https://www.hud.gov/helping_american_homeowners
+  - label: "CFPB — kalkulasyon ng bayad sa mortgage"
+    url: "https://www.consumerfinance.gov/ask-cfpb/"
+  - label: "HUD — Pagtulong sa mga Amerikano Homeowner"
+    url: "https://www.hud.gov/helping_american_homeowners"
 relatedTools:
-- mortgage-payment
+  - "mortgage-payment"
 faq:
-- q: Bawasan ba ng karagdagang bayad ang buwanang bayad?
-  a: Hindi. Nananatiling pareho ang nakatakdang bayad at masuplicang natapos ang loan. May mga nagpapahintulot na magbababa muli sa bayad kung hihingiin mo ito, ngunit ito ay hiwalay na kasunduan at hindi bunga ng mismong karagdagang bayad.
-- q: Saan napupunta ang karagdagang bayad?
-  a: Sa pangunahing balanse. Unang nakasagot ang-interest para sa buwan sa nakatakdang bayad, at ang karagdagang pera ay bawasan ang balanse, na nagpapababa ng-interest na sisingilin sa susunod na buwan.
-- q: Magkano ang aktuwal na naipagsSaving ng karagdagang bayad?
-  a: Patakbuhin sa calculator at basahin ang pagkakaiba sa kabuuang-interest. Depende sa rate, panahon at laki ng karagdagang bayad ang bilang, at lumalaki ang epekto habang mas malaki ang karagdagang bayad.
-- q: Mas mahusay ba bayaran nang extra o mamuhunan ang pera?
-  a: Ito ay tanong tungkol sa kita na maaaring makuha sa pera sa ibang lugar at tungkol sa iyong mga kalagayan. Ipinapakita ng calculator ang epekto ng karagdagang bayad sa loan; hindi nito modelado ang alternatibong paggamit ng cash.
-- q: Maaari ba lampas sa pangunahin ang karagdagang bayad?
-  a: Karaniwang inilalagay ng mga nagpapahintulot ang karagadang pera sa pangunahing balanse bilang default, at ipinagpapalagay ng calculator ang mga bilang para sa maagang pagbabayad. May ilang kasunduan na naglalaman ng panuntunan kung paano ilalapat ang karagdagang bayad, at sulit itong basahin.
-- q: Ano ang mangyayari kung gagawa ako ng malaking one-time na bayad?
-  a: Ikinakapat ang parehong mekanismo, ngunit mas malaki ang hakbang. Ang field para sa karagagadong bayad sa calculator ay buwanang halaga, at ang petsa ng pagbabayad na ibinibigay nito ay ang buwan kung kailan zero ang balanse.
+  - q: "Bawasan ba ng karagdagang bayad ang buwanang bayad?"
+    a: "Hindi. Nananatiling pareho ang nakatakdang bayad at masuplicang natapos ang loan. May mga nagpapahintulot na magbababa muli sa bayad kung hihingiin mo ito, ngunit ito ay hiwalay na kasunduan at hindi bunga ng mismong karagdagang bayad."
+  - q: "Saan napupunta ang karagdagang bayad?"
+    a: "Sa pangunahing balanse. Unang nakasagot ang-interest para sa buwan sa nakatakdang bayad, at ang karagdagang pera ay bawasan ang balanse, na nagpapababa ng-interest na sisingilin sa susunod na buwan."
+  - q: "Magkano ang aktuwal na naipagsSaving ng karagdagang bayad?"
+    a: "Patakbuhin sa calculator at basahin ang pagkakaiba sa kabuuang-interest. Depende sa rate, panahon at laki ng karagdagang bayad ang bilang, at lumalaki ang epekto habang mas malaki ang karagdagang bayad."
+  - q: "Mas mahusay ba bayaran nang extra o mamuhunan ang pera?"
+    a: "Ito ay tanong tungkol sa kita na maaaring makuha sa pera sa ibang lugar at tungkol sa iyong mga kalagayan. Ipinapakita ng calculator ang epekto ng karagdagang bayad sa loan; hindi nito modelado ang alternatibong paggamit ng cash."
+  - q: "Maaari ba lampas sa pangunahin ang karagdagang bayad?"
+    a: "Karaniwang inilalagay ng mga nagpapahintulot ang karagadang pera sa pangunahing balanse bilang default, at ipinagpapalagay ng calculator ang mga bilang para sa maagang pagbabayad. May ilang kasunduan na naglalaman ng panuntunan kung paano ilalapat ang karagdagang bayad, at sulit itong basahin."
+  - q: "Ano ang mangyayari kung gagawa ako ng malaking one-time na bayad?"
+    a: "Ikinakapat ang parehong mekanismo, ngunit mas malaki ang hakbang. Ang field para sa karagagadong bayad sa calculator ay buwanang halaga, at ang petsa ng pagbabayad na ibinibigay nito ay ang buwan kung kailan zero ang balanse."
 ---
 
 import GuideIllustration from '../../../components/visuals/GuideIllustration.astro';
 
-Ang mga karagdagang mortgage payment ay may dalawang paraan ng paglalarawan. Ang
-isa ay nagsasabing nagse-save ng ilang libong dolyar. Ang iba ay nagsasabing ito
-ay pagkalugi. Parehong pinaglalarawan ang parehong aritmetika, at sulit tingnan
-nang direkta ang aritmetikang iyon.
+Ang mga karagdagang mortgage payment ay may dalawang paraan ng paglalarawan.
+Ang isa ay nagsasabing nagse-save ng ilang libong dolyar. Ang iba ay nagsasabing
+ito ay pagkalugi. Parehong pinaglalarawan ang parehong aritmetika, at sulit
+tingnan nang direkta ang aritmetikang iyon.
 
-
-
-Maydagdag na field para sa bayad ang <a href="/tl/tools/mortgage-payment/">mortgage
-payment calculator</a> dahil lamang sa dahilang ito: madaling makita ang epekto
-kapag kinakalkula ito sa halip na ipinapassert.
-
-
+Maydagdag na field para sa bayad ang <a href="/tl/tools/mortgage-payment/">mortgage payment calculator</a> dahil
+lamang sa dahilang ito: madaling makita ang epekto kapag kinakalkula ito sa
+halip na ipinapassert.
 
 ## Ang mekanismo
-
-
 
 Saklaw ng mortgage payment ang interest muna at principal pagkatapos. Hindi
 nagbabago ang patakaran na iyon kapag nagbayad ka nang higit.
 
-
-
 Kaya kapag nagdagdag ka ng $200 sa isang nakatakdang bayad:
 
-
-
 1. Ang nakatakdang bahagi ay nananatiling sakop ang interes ng buong buwan na
-iyon at ang parehong bahagi ng pangunahing balde na dati nang ginagawa. 2. Ang
-dagdag na $200 ay lubos na napupunta sa pangunahing balde. 3. Ang balanse ay
-$200 na mas mababa ngayon. 4. Sa susunod na buwan, ang interes ay singil sa
-balanseng $200 na mas mababa, kaya ang singil na interes ay $200 × (buwanang
-rate) na mas mababa. 5. Ang maliit na ipinadala ay magagamit na ngayon para sa
-pangunahing balde, dahil hindi nagbabago ang nakatakdang bayad.
-
-
+   iyon at ang parehong bahagi ng pangunahing balde na dati nang ginagawa.
+2. Ang dagdag na $200 ay lubos na napupunta sa pangunahing balde.
+3. Ang balanse ay $200 na mas mababa ngayon.
+4. Sa susunod na buwan, ang interes ay singil sa balanseng $200 na mas mababa,
+   kaya ang singil na interes ay $200 × (buwanang rate) na mas mababa.
+5. Ang maliit na ipinadala ay magagamit na ngayon para sa pangunahing balde,
+   dahil hindi nagbabago ang nakatakdang bayad.
 
 Ikaapat na hakbang ang lugar kung saan nakatira ang compound interest. Maliit
 ang ipinadala kada buwan at permanente, at ito ay uulit. Sa sapat na mahabang
@@ -76,36 +65,24 @@ direktang binayaran ng dagdag na pera, kahit ang dagdag na pera ang naging sanhi
 ng pagkakaiba.
 
 
-
-
 <div class="guide-inline-figure">
   <GuideIllustration slug="mortgage-payment-calculator-explained" locale={frontmatter.locale} />
 </div>
 ## Bakit hindi nagbabago ang bayad
 
-
-
 Ito ay nakagugulat sa mga tao. Nananatiling eksaktong gaya ng dati ang
 nakatakdang bayad, dahil binuo ang iskedyul ng amortisasyon batay sa numerong
 iyon. Ang nagbabago ay ang bilang ng bayad. Mas maaga ang natatapos ang Utang.
-
-
 
 Kaya't pansamantala ang epekto nito sa buwanang badyet: binabayaran ang dagdag
 halaga habang umiiral ang utang, at pagkatapos ay humihinto. Ang petsa ng
 pagbabayad sa mga resulta ng kalkulyador ang direktang sukat kung gaano katagal
 iyon.
 
-
-
 ## Pagbasa ng petsa ng pagbabayad
-
-
 
 Ang petsa ng pagbabayad ang numerong dapat bantayan, at gumagalaw ito sa
 paraading madaling maling tantiyahin.
-
-
 
 Isang dagdag na bayad na mukhang malaki kumpara sa halaga ng utang ay maaaring
 ilipat ang petsa ng pagbabayad ng ilang buwan lamang. Ang dahil ay itinutok na
@@ -113,15 +90,11 @@ ng malaki ang interes ng utang mula sa simula: karamihan sa interes ay nabayaran
 na kapag tuluyang bayaran ang balanse, at pagpapaliit ng huling bahagi ay mas
 kaunting inaalis kaysa sa iminumungkahing bahagi ng utang.
 
-
-
 Hindi gaya ng mas malaking epekto ang parehong dagdag na bayad kapag inilapat
 ito sa mas ikli ang panahon ng utang, dahil mas marami pa ring-interest ng utang
 ang naghihintay. Mas malaki rin ang epekto ng parehong dagdag na bayad kapag
 ginawa ito nang maaga kaysa kapag ginawa ito sa huli, dahil mas malaki ang
 balanseng binabawasan nito sa simula.
-
-
 
 Hindi ka pinipilit ng kalkulyador na baguhin ang bayad at tingnan kung paano
 gumagalaw ang petsa ng pagbabayad at kabuuang interes. Ang pagpapatakbo nito sa
@@ -129,35 +102,27 @@ $0, $100, $200 at $500 ay mas mabilis na paraan upang unawain ang hugis ng
 epekto kaysa sa kahit anong panuntunan na batay sa karanasan.
 
 
-
-
 <div class="guide-inline-figure">
   <GuideIllustration slug="how-mortgage-amortization-works" locale={frontmatter.locale} />
 </div>
 ## Ang hindi nito sa iyo
 
-
-
 Ang kalkulasyon ng karagdagang bayad ay tungkol lamang sa loan at walang iba.
 Hindi nito sinusuri ang:
 
-
-
-- **Ang alternatibong gamit ng pera.** Kung ang $200 kada buwan ay mas mabuting
-ipambayad para sa pagbaba ng loan o ilagay sa account ay isang tanong tungkol sa
-returns, at hindi ito sasagutin ng aritmetika ng loan. - **Paghawak sa buwis.**
-Magkaiba ang paghawak sa interes at principal para sa mga layunin ng buwis sa
-maraming sitwasyon, at hindi kasama ang pagkakaiba na iyon sa kalkulasyon. -
-**Mga parusa sa maagang pagbabayad.** Karamihan sa mga karaniwang mortgage ay
-walang mga ito, at wala sa kalkulasyon ang anumang ganito. - **Pagbabago ng
-plano.** Kapag maagang bayad ang loan, mas maaga na napupunta ang cash flow, at
-hindi kasama sa modelo ang paggamit ng cash flow na iyon pagkatapos.
-
-
+- **Ang alternatibong gamit ng pera.** Kung ang $200 kada buwan ay mas
+  mabuting ipambayad para sa pagbaba ng loan o ilagay sa account ay isang tanong
+  tungkol sa returns, at hindi ito sasagutin ng aritmetika ng loan.
+- **Paghawak sa buwis.** Magkaiba ang paghawak sa interes at principal para sa
+  mga layunin ng buwis sa maraming sitwasyon, at hindi kasama ang pagkakaiba na
+  iyon sa kalkulasyon.
+- **Mga parusa sa maagang pagbabayad.** Karamihan sa mga karaniwang mortgage
+  ay walang mga ito, at wala sa kalkulasyon ang anumang ganito.
+- **Pagbabago ng plano.** Kapag maagang bayad ang loan, mas maaga na napupunta
+  ang cash flow, at hindi kasama sa modelo ang paggamit ng cash flow na iyon
+  pagkatapos.
 
 ## Paalala kung paano ginagamit ng mga lender ang bayad
-
-
 
 Ipagpapalagay ng kalkulasyon na ang dagdag na halaga ay napupunta sa pangunahing
 balde, na siyang karaniwang pagtingin. Ang mekanismo ng hindi nakatakdang

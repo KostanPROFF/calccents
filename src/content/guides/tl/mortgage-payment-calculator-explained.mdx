@@ -1,38 +1,38 @@
 ---
-title: Paliwanag sa Mortgage Payment Calculator
-description: Paano kinakalkula ang buwanang bayad sa mortgage, ano ang idinadagdag ng PITI rito, at ano ang ipinapakita ng amortization schedule tungkol sa unang ilang taon ng loan.
-locale: tl
+title: "Paliwanag sa Mortgage Payment Calculator"
+description: "Paano kinakalkula ang buwanang bayad sa mortgage, ano ang idinadagdag ng PITI rito, at ano ang ipinapakita ng amortization schedule tungkol sa unang ilang taon ng loan."
+locale: "tl"
 date: 2026-10-01
 lastReviewed: 2026-10-23
-author: Kostan Proff
-reviewedBy: Tetiana Goncharko
-group: home
-illustration: mortgage-payment-calculator-explained
+author: "Kostan Proff"
+reviewedBy: "Tetiana Goncharko"
+group: "home"
+illustration: "mortgage-payment-calculator-explained"
 readingMinutes: 9
 sources:
-- label: CFPB — Paano ko kalkulahin ang aking bayad sa mortgage?
-  url: https://www.consumerfinance.gov/ask-cfpb/
-- label: Freddie Mac — Pangunahing Surbangseng Hipotika
-  url: https://www.freddiemac.com/pmms
-- label: HUD — Pagbili ng bahay
-  url: https://www.hud.gov/helping_american_homeowners
-- label: BLS — Indeks ng Presyo ng Konsumer
-  url: https://www.bls.gov/cpi/
+  - label: "CFPB — Paano ko kalkulahin ang aking bayad sa mortgage?"
+    url: "https://www.consumerfinance.gov/ask-cfpb/"
+  - label: "Freddie Mac — Pangunahing Surbangseng Hipotika"
+    url: "https://www.freddiemac.com/pmms"
+  - label: "HUD — Pagbili ng bahay"
+    url: "https://www.hud.gov/helping_american_homeowners"
+  - label: "BLS — Indeks ng Presyo ng Konsumer"
+    url: "https://www.bls.gov/cpi/"
 relatedTools:
-- mortgage-payment
+  - "mortgage-payment"
 faq:
-- q: Bakit iba ang bayad ko sa quote ng lender?
-  a: Iniu-quote ng mga lender ang bayad sa pinakamalapit na sentimo at saka inia-adjust ang huli. May mga lender ding nagsasama ng escrow para sa buwis at seguro, na nagbabago ng timing ngunit hindi ng taunang halaga. Ipinapakita ng calculator ang principals at interes, pagkatapos ay idinadagdag nang magk-separate na linya ang buwis, seguro, at HOA upang makita ang bawat bahagi.
-- q: Kasama ba sa calculator ang mortgage insurance?
-  a: Hindi. Nakadepende ang private mortgage insurance sa loan-to-value ratio at sa credit profile ng loan, at kinakansela ito ayon sa iskedyul na nakadepende sa orihinal na loan. Nakalista ito sa mga bagay na hindi kasama sa kalkulasyong ito.
-- q: Ano ang escrow at nagbabago ba ito ng kabuuan?
-  a: Ang escrow ay ang account na kinakolekta ng lender para sa buwis at premium ng seguro, karaniwang sa buwanang installment. Nagbabago ito kung kailan kinokolekta ang pera, hindi kung magkano ang kinokolekta sa loob ng isang taon, kaya ang taunang gastos ang iniuulat ng calculator.
-- q: Live ba ang rate sa pahina?
-  a: Hindi. Ang rate na ilalagay mo ay ang rate na gagamitin. Walang nakaugnayan sa market feed ang anuman sa pahina, at walang lumalabas na offer ng lender dito.
-- q: Bakit bahagyang iba ang huling bayad?
-  a: Iginugupit ang buwanang bayad sa pinakamalapit na sentimo, na leaves na maliit naremainder sa dulo ng term. Inia-adjust ang huling bayad upang eksaktong zero ang magtatapos ng loan, gaya ng pag-a-adjust ng huling bayad ng lender.
-- q: Puwede bang magkumpara ng dalawang loan gamit ang calculator na ito?
-  a: Maaari kang magpatakbo ng isang loan, itala ang mga numero, at patakbuhin ang pangalawa. Dalawang hiwalay na run ang nangyayari, kaya walang itinatago sa pagitan nila at walang ipinapadala sa site.
+  - q: "Bakit iba ang bayad ko sa quote ng lender?"
+    a: "Iniu-quote ng mga lender ang bayad sa pinakamalapit na sentimo at saka inia-adjust ang huli. May mga lender ding nagsasama ng escrow para sa buwis at seguro, na nagbabago ng timing ngunit hindi ng taunang halaga. Ipinapakita ng calculator ang principals at interes, pagkatapos ay idinadagdag nang magk-separate na linya ang buwis, seguro, at HOA upang makita ang bawat bahagi."
+  - q: "Kasama ba sa calculator ang mortgage insurance?"
+    a: "Hindi. Nakadepende ang private mortgage insurance sa loan-to-value ratio at sa credit profile ng loan, at kinakansela ito ayon sa iskedyul na nakadepende sa orihinal na loan. Nakalista ito sa mga bagay na hindi kasama sa kalkulasyong ito."
+  - q: "Ano ang escrow at nagbabago ba ito ng kabuuan?"
+    a: "Ang escrow ay ang account na kinakolekta ng lender para sa buwis at premium ng seguro, karaniwang sa buwanang installment. Nagbabago ito kung kailan kinokolekta ang pera, hindi kung magkano ang kinokolekta sa loob ng isang taon, kaya ang taunang gastos ang iniuulat ng calculator."
+  - q: "Live ba ang rate sa pahina?"
+    a: "Hindi. Ang rate na ilalagay mo ay ang rate na gagamitin. Walang nakaugnayan sa market feed ang anuman sa pahina, at walang lumalabas na offer ng lender dito."
+  - q: "Bakit bahagyang iba ang huling bayad?"
+    a: "Iginugupit ang buwanang bayad sa pinakamalapit na sentimo, na leaves na maliit naremainder sa dulo ng term. Inia-adjust ang huling bayad upang eksaktong zero ang magtatapos ng loan, gaya ng pag-a-adjust ng huling bayad ng lender."
+  - q: "Puwede bang magkumpara ng dalawang loan gamit ang calculator na ito?"
+    a: "Maaari kang magpatakbo ng isang loan, itala ang mga numero, at patakbuhin ang pangalawa. Dalawang hiwalay na run ang nangyayari, kaya walang itinatago sa pagitan nila at walang ipinapadala sa site."
 ---
 
 import GuideIllustration from '../../../components/visuals/GuideIllustration.astro';
@@ -41,40 +41,27 @@ Ang mortgage payment ay isang numero na may apat na bahagi, at ang dahilan
 karaniwang magkaiba ang binanggit na payment ng dalawang tao para sa parehong
 bahay ay dahil binibilang nila ang iba't ibang bahagi.
 
-
-
-Ang <a href="/tl/tools/mortgage-payment/">mortgage payment calculator</a> sa site
-na ito ay hiwalayin ang mga bahaging iyon. Ang pangunahing halaga at-interest ay
-mula sa arithmetika. Ang property tax, insurance at anumang HOA fee ay mula sa
-iyo, dahil walang paraan ang calculator na malaman kung ano ang singil ng iyong
-assessor o insurer. Mas kapaki-pakinabang na ipakita ang mga ito nang
-magkakahiwalay kaysa ipakita ang iisang kabuuan, dahil ang kabuuan ay
-kasingkatataman lamang ng pinak hindi makikitang bahagi nito.
-
-
+Ang <a href="/tl/tools/mortgage-payment/">mortgage payment calculator</a> sa site na ito ay hiwalayin ang mga
+bahaging iyon. Ang pangunahing halaga at-interest ay mula sa arithmetika. Ang
+property tax, insurance at anumang HOA fee ay mula sa iyo, dahil walang paraan
+ang calculator na malaman kung ano ang singil ng iyong assessor o insurer. Mas
+kapaki-pakinabang na ipakita ang mga ito nang magkakahiwalay kaysa ipakita ang
+iisang kabuuan, dahil ang kabuuan ay kasingkatataman lamang ng pinak hindi
+makikitang bahagi nito.
 
 ## Ang formula ng payment
 
-
-
 Ang nakatakdang monthly payment ay ang karaniwang amortization formula:
-
-
 
 **M = P · r(1 + r)ⁿ / ((1 + r)ⁿ − 1)**
 
-
-
 Kung saan:
 
-
-
 - **P** ang halagang hiniram, hindi ang presyo ng bahay. Sa bahay na $450,000 at
-20 percent na down payment, ang P ay $360,000. - **r** ang taunang interest rate
-na hati sa labing-two. Ang rate na 6.5 percent ay naging 0.0054166… kada buwan.
+  20% na down payment, ang P ay $360,000.
+- **r** ang taunang interest rate na hati sa labing-two. Ang rate na 6.5% ay
+  naging 0.0054166… kada buwan.
 - **n** ang bilang ng buwanang bayarin. Ang 30-year term ay may 360 bayarin.
-
-
 
 Ang formula ay makabuluhan basahin minsan, dahil ipinapaliwanag nito ang isang
 bagay na mukhang arbitrary kung hindi: hindi nakadepende ang payment sa kung
@@ -83,13 +70,9 @@ magkak_double ka ng hiniram, magbabayad ka ng humigit-kumulang na double, hindi
 quadruple. Ang nagbabago ay ang kabuuang interest, na mas mabilis tumubo kaysa
 sa payment.
 
-
-
 Ang Consumer Financial Protection Bureau ay nagtatala ng parehong formula sa
 mortgage guidance nito, at ang malawakang ginagamit na amortization table sa
 industriya ay ginawa mula rito.
-
-
 
 
 <div class="guide-inline-figure">
@@ -97,24 +80,17 @@ industriya ay ginawa mula rito.
 </div>
 ## Bakit nananatiling pareho ang payment habang nagbabago ang pagkakahati
 
-
-
 Ang formula ay lumilikha ng parehong payment. Ang hindi pareho ay ang mga
 bahaging bumubuo nito. Sa unang buwan, halos lahat ay interest, dahil ang
 balance ay buong halagang hiniram pa. Sa huling buwan, halos lahat ay principal,
 dahil bumaba na halos wala ang balance.
 
-
-
 Ang mekanismo ay simple. Bawat buwan:
 
-
-
-1. Interest is charged on the balance outstanding at the start of the month. 2.
-Ang payment ay unang sumasagot sa interest na iyon. 3. Ang natitira ay bawasan
-ang balance. 4. Interest ng susunod na buwan ay singil sa mas maliit na balance.
-
-
+1. Interest is charged on the balance outstanding at the start of the month.
+2. Ang payment ay unang sumasagot sa interest na iyon.
+3. Ang natitira ay bawasan ang balance.
+4. Interest ng susunod na buwan ay singil sa mas maliit na balance.
 
 Ang bunga nito ay mas mabilis mabayaran ang 30-year loan kaysa sa nararamaman.
 Malaking bahagi pa ng balance ang hindi pa bayad sa limang taon, at mahalagang
@@ -122,22 +98,14 @@ bahagi na ng kabuuang interest ang bayad na sa oras na iyon. Ito ang
 pinakamagkasalungat na katotohanan tungkol sa mortgage, at ito ang dahilan kung
 bakit makabuluhan basahin minsan ang taon-taon amortization table.
 
-
-
 ## Ano ang idinagdag ng PITI
-
-
 
 Ang bayarin na kinokolekta ng mga lender ay karaniwang PITI:
 
-
-
-- **Principal** — ang bahagi na nagbabayad sa loan. - **Interest** — ang gastos
-sa paghiram nito. - **Mga buwis** — property tax, karaniwang kinokolekta buwanan
-sa escrow. - **Insurance** — insurance sa bahay, karaniwang kinokolekta rin sa
-escrow.
-
-
+- **Principal** — ang bahagi na nagbabayad sa loan.
+- **Interest** — ang gastos sa paghiram nito.
+- **Mga buwis** — property tax, karaniwang kinokolekta buwanan sa escrow.
+- **Insurance** — insurance sa bahay, karaniwang kinokolekta rin sa escrow.
 
 Ang buwis at segurans ay taunang halaga na hahatiin sa dose para sa display. Ang
 hatiin ay isang kaginhawaan sa timing, hindi diskwento: sa loob ng isang taon,
@@ -145,13 +113,9 @@ pareho ang kabuuang bayarin sa alinmang paraan. Ang nagbabago buwan sa buwan ay
 kung saanong buwan BABATAYIN ang tax bill, at ang escrow ay idinisen para
 pantay-pantay iyon.
 
-
-
 Nasa labas ng PITI ang mga HOA fee, nasa loob naman ng buwan na cash outflow
 para sa condo o bahay sa planned development. Itinatago nang hiwalay sa parehong
 dahilan: g wholly dependent sa property ang bilang.
-
-
 
 
 <div class="guide-inline-figure">
@@ -159,52 +123,37 @@ dahilan: g wholly dependent sa property ang bilang.
 </div>
 ## Karagdagang bayarin
 
-
-
 Ang karagdagang bayarin na ilalapat sa prinsipal ay babaa ang balanse kung saan
 sini-interest ng susunod na buwan. Hindi nagbabago ang nakatakdang bayarin;
 magtatapos lang mas maaga ang loan, at mas mababa ang kabuuang interes na bayad.
 
-
-
 Mekanikal na pagpapahalaga nito ay mas mainam na unawain kaysa sa abstrakto. Ang
-$200 na karagdagang bayarin sa isang $360,000 na loan sa 6.5 percent ay hindi
-$200 na naipong interes — ito ay $200 na prinsipal na tinanggal, at ang interes
-ng bawat susunod na buwan ay nalalagyan sa balanseng $200 na mas mababa, at
-pagkatapos ay $200 na mas mababa pa rin. Ang ipinupundit ay nag-iipon sa
-parehong paraan ng loan.
-
-
+$200 na karagdagang bayarin sa isang $360,000 na loan sa 6.5% ay hindi $200 na
+naipong interes — ito ay $200 na prinsipal na tinanggal, at ang interes ng bawat
+susunod na buwan ay nalalagyan sa balanseng $200 na mas mababa, at pagkatapos ay
+$200 na mas mababa pa rin. Ang ipinupundit ay nag-iipon sa parehong paraan ng
+loan.
 
 ## Ang hindi kasama sa kalkulasyon
-
-
 
 Ang bayarin ay isa sa mga bahagi ng gastos ng bahay. Sinadya ng calculator na
 hindi isama ang:
 
-
-
-- **Mortgage insurance**, na nakadepende sa loan-to-value ratio at sa credit na
-nasa likod ng loan, at kinakansela ayon sa sarili nitong iskedyul. - **Mga point
-at origination fee**, na binabayaran sa closing at maaaring isama sa rate para
-sa paghahambing, ngunit hindi bahagi ng bayarin. - **Mga closing cost**, na
-pangunahing tatalakayan sa hiwalay na gabay. - **Timing ng escrow**, na
-nagpapasiya kung aling buwan ang may mas malaking instalment. - **Inflation**,
-na binabago ang kahulugan ng bayarin kaugnay ng iyong kita, ngunit hindi ang
-bayarin mismo.
-
-
+- **Mortgage insurance**, na nakadepende sa loan-to-value ratio at sa credit
+  na nasa likod ng loan, at kinakansela ayon sa sarili nitong iskedyul.
+- **Mga point at origination fee**, na binabayaran sa closing at maaaring
+  isama sa rate para sa paghahambing, ngunit hindi bahagi ng bayarin.
+- **Mga closing cost**, na pangunahing tatalakayan sa hiwalay na gabay.
+- **Timing ng escrow**, na nagpapasiya kung aling buwan ang may mas malaking
+  instalment.
+- **Inflation**, na binabago ang kahulugan ng bayarin kaugnay ng iyong kita,
+  ngunit hindi ang bayarin mismo.
 
 Isa lang ang totoong bilang ng bawat isa sa mga ito. Ang pagpapaliban sa mga ito
 sa mga bilang ng bayarin ang dahilan kaya magagamit ang bilang ng bayarin para
 itulat sa isang inilathalang talahanayan.
 
-
-
 ## Pagsusuri sa resulta
-
-
 
 Kung nais mong independiyenteng kumpirmahin ang isang bilang, kunin ang amount
 na hiniram, ang rate at ang bilang ng bayarin, at kalkulahin ang formula sa
@@ -212,7 +161,5 @@ papel o sa spreadsheet. Kung magkatugma ang sagot ng calculator at mo, malamang
 pareho ang tama. Kung hindi magkatugma, ang mga pinakamalaming sanhi ay iba-pa
 na kahulugan ng loan amount, rate na ipinasok bilang decimal sa halip na
 percentage, o term na taon kung kailangan ng formula ang buwan.
-
-
 
 Iyan ang buong layunin ng pagpapakita ng kalkulasyon.

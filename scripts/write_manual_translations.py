@@ -27,6 +27,8 @@ from gemini_translate import Translator, is_formula, protect  # noqa: E402
 # English piece and the translation of it.
 TRANSLATIONS: dict[str, dict[str, str]] = {
     "ko": {
+        "⟦0⟧The tax assessor.⟦1⟧ The local assessor's office publishes the assessed\n   value and the applicable rate for a specific address. That gives an\n   estimate grounded in the actual jurisdiction rather than in a national\n   average.\n2. ⟦2⟧An insurance quote for the specific address.⟦3⟧ Quotes are free, and the\n   number is produced by the model that will actually price the policy. Ask\n   for the replacement cost figure, not only the premium.\n3. ⟦4⟧The lender's escrow estimate.⟦5⟧ Once a loan is in place, the lender\n   computes an escrow payment based on its own figures. It is not a promise\n   for the following year, and it will move when the tax bill and the\n   insurance renewal arrive.":
+            "⟦0⟧세무 평가 기관.⟦1⟧ 지방 세무서에서는 특정 주소의 평가 가치와 적용 세율을 공개합니다. 이를 통해 전국 평균이 아니라 실제 관할 지역에 근거한 추정치를 얻습니다.\n2. ⟦2⟧해당 주소의 보험료 견적.⟦3⟧ 견적은 무료이며, 숫자는 실제로 보험율을 정할 모델이 계산해 냅니다. 보험료만이 아니라 재건축 비용 금액이 제시됩니다.\n3. ⟦4⟧대출기관의 에스크로 추정액.⟦5⟧ 대출이 체결되면 대출기관이 자체 자료로 에스크로 납부액을 계산합니다. 이는 다음 해를 약속하는 것이 아니며, 세금 고지서와 보험 갱신서가 도착하면 바뀝니다.",
         "At a zero rate the formula degenerates, because dividing by r is undefined.\n"
         "The calculation handles that case explicitly rather than letting it produce\n"
         "a division by zero: with no interest, the balance grows by the deposits\n"
@@ -227,6 +229,74 @@ TRANSLATIONS: dict[str, dict[str, str]] = {
             "판단하게 하는 시장 상황입니다.",
     },
     "ar": {
+        "The rule of thumb is that money doubles roughly every so many years at a\ngiven rate. You can check that against the tool. Run 30 years at 7 percent\nwith no contributions and compare the result with the starting balance; run\nthe same calculation with a contribution and watch the doubling time change.\nThe tool exists so that the rule of thumb can be tested rather than\nbelieved.\n":
+            "القاعدة التقريبية هي أن المال يتضاعف تقريبًا كل عدد معين من السنوات عند سعر فائدة معين. يمكنك التحقق من ذلك مقابل الأداة. شغّل 30 عامًا عند 7% من دون مساهمات وقارن النتيجة برصيد البداية؛ شغّل الحساب نفسه مع مساهمة وشاهد كيف يتغير وقت المضاعفة. الأداة موجودة لاختبار القاعدة التقريبية لاتصديقها. ",
+        "The gap is $45,123 on a $10,000 starting balance, and it comes entirely from\nthe fact that compound interest is charged on a growing base.":
+            "الفجوة تبلغ $45,123 على رصيد بداية قدره $10,000، وهي ناجمة بالكامل عن كون الفائدة المركبة تُحتسب على قاعدة متزايدة.",
+        "The table that is used is the one of the filing status. The states that\npublish a head of household table of their own have it here, taken from their\nown forms: New York, New Jersey, Minnesota, Hawaii, Connecticut, Maryland,\nMaine, Montana, New Mexico, Oregon and California. Idaho treats a head of\nhousehold return as a joint return, so the joint schedule is the one that\napplies. Four more states publish no table but give a head of household its own\ndeduction or exemption, and those figures are here as well: Kansas, Oklahoma,\nWisconsin and Massachusetts. The rest are calculated with the single filer\nfigures.":
+            "الجدول المستخدم هو جدول حالة الإقرار. الولايات التي تنشر جدولًا خاصًا برأس household موجود هنا، مأخوذًا من نماذجها الخاصة: نيويورك ونيوجيرسي ومينيسوتا وهايي وكونيتيكت وماريلاند ومين ومونتانا ونيومكسيو وأوريغون وكاليفورنيا. تعامل أيداهو إقرار رأس household كإقرار مشترك، لذلك ينطبق الجدول المشترك. لا تنشر أربع ولايات أخرى أي جدول لكنها تمنح رأس household خصمًا أو إعفاءً خاصًا به، وتظهر تلك الأرقام هنا أيضًا: كانساس وأوكلاهوما وwisconsin وماساتشوستس. يتم احتساب الباقي باستخدام أرقام المقدم الفردي.",
+        "The gap is $45,123 on a $10,000 starting balance, and it comes entirely from\nthe fact that compound interest is charged on a growing base.":
+            "الفجوة تبلغ $45,123 على رصيد بداية قدره $10,000، وهي ناجمة بالكامل عن كون الفائدة المركبة تُحتسب على قاعدة متزايدة.",
+        "The table that is used is the one of the filing status. The states that\npublish a head of household table of their own have it here, taken from their\nown forms: New York, New Jersey, Minnesota, Hawaii, Connecticut, Maryland,\nMaine, Montana, New Mexico, Oregon and California. Idaho treats a head of\nhousehold return as a joint return, so the joint schedule is the one that\napplies. Four more states publish no table but give a head of household its own\ndeduction or exemption, and those figures are here as well: Kansas, Oklahoma,\nWisconsin and Massachusetts. The rest are calculated with the single filer\nfigures.":
+            "الجدول المستخدم هو جدول حالة الإقرار. الولايات التي تنشر جدولًا خاصًا برأس household موجود هنا، مأخوذًا من نماذجها الخاصة: نيويورك ونيوجيرسي ومينيسوتا وهايي وكونيتيكت وماريلاند ومين ومونتانا ونيومكسيو وأوريغون وكاليفورنيا. تعامل أيداهو إقرار رأس household كإقرار مشترك، لذلك ينطبق الجدول المشترك. لا تنشر أربع ولايات أخرى أي جدول لكنها تمنح رأس household خصمًا أو إعفاءً خاصًا به، وتظهر تلك الأرقام هنا أيضًا: كانساس وأوكلاهوما وwisconsin وماساتشوستس. يتم احتساب الباقي باستخدام أرقام المقدم الفردي.",
+        "⟦0⟧The tax assessor.⟦1⟧ The local assessor's office publishes the assessed\n   value and the applicable rate for a specific address. That gives an\n   estimate grounded in the actual jurisdiction rather than in a national\n   average.\n2. ⟦2⟧An insurance quote for the specific address.⟦3⟧ Quotes are free, and the\n   number is produced by the model that will actually price the policy. Ask\n   for the replacement cost figure, not only the premium.\n3. ⟦4⟧The lender's escrow estimate.⟦5⟧ Once a loan is in place, the lender\n   computes an escrow payment based on its own figures. It is not a promise\n   for the following year, and it will move when the tax bill and the\n   insurance renewal arrive.":
+            "⟦0⟧مسؤول التقييم العقاري.⟦1⟧ ينشر مكتب التقييم المحلي القيمة المقدَّرة والمعدل المنطبق على عنوان محدد. ويقدّم ذلك تقديرًا يستند إلى الولاية القضائية الفعلية بدلاً من المتوسط الوطني.\n2. ⟦2⟧عرض تأمين للعنوان المحدد.⟦3⟧ عروض الأسعار مجانية، ويتولى النموذج الذي سيُسعّر وثيقة التأمين فعليًا إنتاج الرقم. الرقم المذكور هو تكلفة الاستبدال، لا القسط وحده.\n3. ⟦4⟧تقدير حساب Escrow لدى المُقرض.⟦5⟧ بعد إتمام القرض، يحسب المُقرض دفعة Escrow استنادًا إلى أرقامه الخاصة. وهي ليست وعدًا للسنة التالية، وستتغير عند وصول فاتورة الضرائب وتجديد التأمين.",
+        "Capital gains rates, the surtaxes a few states charge high earners, and the\n"
+        "  taxes of city and county governments.\n"
+        "- The deduction for state and local income taxes paid, which many states allow\n"
+        "  inside their itemised deductions.\n"
+        "- Vermont publishes its rates for 2026 as preliminary figures, and it prints\n"
+        "  the standard deduction and the personal exemption for 2026 with the form,\n"
+        "  which comes out in 2027, so the amounts the state published last are the\n"
+        "  ones used here.\n"
+        "- The fall-away of the Maine standard deduction and the Maine personal\n"
+        "  exemption as the Maine income rises. The deduction starts to shrink at\n"
+        "  $102,250 for a single filer and is gone at $177,250, and the exemption\n"
+        "  starts to shrink at $341,000.":
+            "معدلات مكاسب رأس المال، والضرائب الإضافية التي تفرضها بضع ولايات على أصحاب "
+            "الدخل المرتفع، وضرائب حاكميتي المدن والمقاطعات.\n"
+            "- الخصم على ضرائب الدخل المحلية والولائية المدفوعة، وهو ما تسمح به ولايات كثيرة "
+            "ضمن خصوماتها التفصيلية.\n"
+            "- تنشر فيرمونت معدلاتها لعام 2026 كأرقام أولية، وتطبع مع النموذج الخصم القياسي "
+            "والإعفاء الشخصي لعام 2026، وهو ما يصدر في 2027، لذا فالمبالغ التي نشرتها "
+            "الولاية آخر مرة هي المستخدمة هنا.\n"
+            "- انقضاء خصم مين القياسي وإعفاء مين الشخصي تدريجيًا مع ارتفاع دخل مين. يبدأ "
+            "الخصم في الانكماش عند $102,250 لمقدّم الإقرار الضريبي المنفرد، ويختفي عند "
+            "$177,250، ويبدأ الإعفاء في الانكماش عند $341,000.",
+
+        "Amortization is the process by which a mortgage is repaid, and it produces\n"
+        "one of the most counter-intuitive results in personal finance: a thirty-year\n"
+        "loan is not thirty years of paying it off. It is about a decade of paying it\n"
+        "off, followed by two decades of paying for the privilege of having paid it\n"
+        "off.":
+            "الإطفاء هو العملية التي يُسدد بها قرض عقاري، وهو ينتج إحدى أكثر النتائج "
+            "المفارقة في التمويل الشخصي: فقرض مدته ثلاثون عامًا ليس ثلاثين عامًا من "
+            "سداده. إنه نحو عشر سنوات من السداد، تتبعها عشرتان تُقضيان ثمنًا مقابل "
+            "امتياز إتمامه.",
+
+        "A 30-year loan spends its first decade with a balance that barely moves, and\n"
+        "that decade is where nearly all of the interest is charged. This is why the\n"
+        "term change above looks so dramatic: shortening the term does not merely\n"
+        "reduce the rate at which interest is charged, it removes years from the\n"
+        "front of the loan where the balance is highest.":
+            "يقضي قرض مدته ثلاثون عامًا عقده الأول برصيد يكاد لا يتحرك، وهذا العقد هو "
+            "نفسه الذي تُحمَّل فيه الفوائد كلها تقريبًا. ولهذا يبدو تغيير المدة أعلاه "
+            "شديد الإبهار: فإن تقصير المدة لا يخفض معدل احتساب الفوائد فحسب، بل يحذف "
+            "سنوات من مقدمة القرض حيث يكون الرصيد في أعلى مستوياته.",
+
+        "The IRS excludes a 401(k) contribution from income, and it counts the same\n"
+        "contribution as wages for Social Security and Medicare. IRS Tax Topic 401 puts\n"
+        "it plainly: the amount is not included in wages subject to income tax, \"but\n"
+        "those amounts remain subject to Social Security and Medicare taxes in the year\n"
+        "they're withheld.\" Publication 525 says the same thing about elective\n"
+        "deferrals.":
+            "تستثني خدمة الإيرادات الداخلية مساهمة 401(k) من الدخل، لكنها تحسب المساهمة "
+            "نفسها أجورًا لأغراض الضمان الاجتماعي والتأمين الصحي (Medicare). وتوضح "
+            "IRS Tax Topic 401 الأمر بوضوح: لا يُدرَج المبلغ ضمن الأجور الخاضعة لضريبة "
+            "الدخل، \"لكن تبقى هذه المبالغ خاضعة لضرائب الضمان الاجتماعي وMedicare في "
+            "السنة التي تُخصم فيها.\" ويقول Publication 525 الشيء نفسه عن الاشتراكات "
+            "الاختيارية.",
+
         "A great deal on a 30-year loan. Moving from 30 years to 15 years typically "
         "removes around half of the total interest. On a 15-year loan the remaining "
         "term is a smaller share of the original balance and the effect is "
@@ -304,8 +374,14 @@ TRANSLATIONS: dict[str, dict[str, str]] = {
 
         "Should I compare lenders on APR?":
             "هل ينبغي أن أقارن بين المُقرضين على أساس نسبة APR؟",
+        "The ⟦0⟧property tax⟦1⟧ figure is an input, and the page can fill it in. When the\nnetwork can work out which state the request came from, the field is set to\nthe average effective property tax rate for that state — the tax actually paid\nas a share of the value of the home, published by the Tax Foundation for 2026\nfrom the American Community Survey for 2024. It is a state figure, and\nproperty tax is set by local governments, so the rate in a particular county\nor city is usually a different number. The field stays editable, and what the\nreader types is what the comparison uses.":
+            "⟦0⟧الضريبة على العقار⟦1⟧ هو مُدخَل، ويمكن للصفحة تعبئته. عندما تتمكن الشبكة من تحديد الولاية التي جاء منها الطلب، يُضبط الحقل على متوسط معدل ضريبة العقار الفعلي في تلك الولاية — أي الضريبة المدفوعة فعليًا كنسبة من قيمة المنزل، كما نشرتها مؤسسة Tax Foundation لعام 2026 استنادًا إلى American Community Survey لعام 2024. وهو رقم يخص الولاية، وتُحدَّد ضريبة العقار من قِبل الحكومات المحلية، لذا يكون المعدل في مقاطعة أو مدينة محددة عادةً رقمًا مختلفًا. يبقى الحقل قابلًا للتعديل، ويستخدم المقارنة ما يكتبه القارئ.",
+        "The crossover gets later when the rent is low relative to the purchase\nprice, when the rate is high, when the horizon is short, and when the\nappreciation assumption is low or negative. It never arrives at all when\nrent is small relative to the purchase price, which is the arithmetic reason\na cash purchase in an expensive market can be the more expensive option\nover five years.":
+            "يتأخر تقاطع الخيارين عندما يكون الإيجار منخفضًا بالنسبة إلى سعر الشراء، عندما يكون السعر مرتفعًا، عندما تكون الأفق الزمنية قصيرة، وعندما يكون افتراض نمو رأس المال منخفضًا أو سالبًا. لا يأتي التقاطع إطلاقًا عندما يكون الإيجار صغيرًا بالنسبة إلى سعر الشراء، وهذا هو السبب الحسابي الذي يجعل الشراء نقدًا في سوق مكلف قد يكون الخيارالأعلى تكلفة خلال خمس سنوات.",
     },
     "uk": {
+        "⟦0⟧The tax assessor.⟦1⟧ The local assessor's office publishes the assessed\n   value and the applicable rate for a specific address. That gives an\n   estimate grounded in the actual jurisdiction rather than in a national\n   average.\n2. ⟦2⟧An insurance quote for the specific address.⟦3⟧ Quotes are free, and the\n   number is produced by the model that will actually price the policy. Ask\n   for the replacement cost figure, not only the premium.\n3. ⟦4⟧The lender's escrow estimate.⟦5⟧ Once a loan is in place, the lender\n   computes an escrow payment based on its own figures. It is not a promise\n   for the following year, and it will move when the tax bill and the\n   insurance renewal arrive.":
+            "⟦0⟧Оцінювач податків.⟦1⟧ Місцева податкова інспекція публікує оціночну вартість і застосовну ставку для конкретної адреси. Це дає оцінку, засновану на фактичній юрисдикції, а не на національному середньому значенні.\n2. ⟦2⟧Кошторис страхування для конкретної адреси.⟦3⟧ Кошториси безкоштовні, а число розраховує модель, яка фактично встановить ціну поліса. Зазначений показник — це вартість заміни, а не лише страхова премія.\n3. ⟦4⟧Розрахунок ескроу від кредитора.⟦5⟧ Після оформлення кредиту кредитор розраховує платіж на ескроу на основі власних показників. Це не зобов’язання на наступний рік, і сума зміниться, коли надійдуть податковий рахунок і продовження страхування.",
         "Compound interest is one of the few ideas in finance that is genuinely\n"
         "simple to state and genuinely hard to feel. The\n"
         "⟦0⟧compound interest calculator⟦1⟧ on this\n"
@@ -336,12 +412,86 @@ TRANSLATIONS: dict[str, dict[str, str]] = {
             "3 листопада 2025 року.",
     },
     "tl": {
+        "⟦0⟧The tax assessor.⟦1⟧ The local assessor's office publishes the assessed\n   value and the applicable rate for a specific address. That gives an\n   estimate grounded in the actual jurisdiction rather than in a national\n   average.\n2. ⟦2⟧An insurance quote for the specific address.⟦3⟧ Quotes are free, and the\n   number is produced by the model that will actually price the policy. Ask\n   for the replacement cost figure, not only the premium.\n3. ⟦4⟧The lender's escrow estimate.⟦5⟧ Once a loan is in place, the lender\n   computes an escrow payment based on its own figures. It is not a promise\n   for the following year, and it will move when the tax bill and the\n   insurance renewal arrive.":
+            "⟦0⟧Ang tax assessor.⟦1⟧ Inilathala ng lokal na tanggapan ng tax assessor ang assessed\n   value at ang naaangkop na rate para sa isang partikular na address. Nagbibigay\n   ito ng estimate batay sa aktuwal na hurisdiksyon sa halip na pambansang\n   average.\n2. ⟦2⟧Ang insurance quote para sa partikular na address.⟦3⟧ Libreng ang mga quote, at ang\n   numero ay galing sa modelo na talagang gagawa ng presyo ng policy. Ang\n   numerong ibinigay ay ang replacement cost, hindi lamang ang premium.\n3. ⟦4⟧Ang escrow estimate ng lender.⟦5⟧ Kapag naitakda na ang loan, nagkakalkula ang lender\n   ng escrow payment batay sa sariling mga bilang. Ito ay hindi pangako para sa\n   susunod na taon, at magbabago ito kapag dumating ang tax bill at ang\n   pag-renew ng insurance.",
+        "Pre-tax deductions come out first. A 401(k) contribution, an HSA\n"
+        "   contribution and an FSA contribution are all taken out of the wage before\n"
+        "   anything else. What each one does to the taxes is not the same, and the\n"
+        "   section below sets out which is which.\n"
+        "2. The standard deduction comes out of the remaining wages. For 2026 it is\n"
+        "   $16,100 for a single filer, $32,200 for married filing jointly and $24,150\n"
+        "   for head of household. What is left is taxable income, and that is the\n"
+        "   amount the federal brackets are applied to.\n"
+        "3. Federal income tax is computed on taxable income.\n"
+        "4. Social Security is charged at 6.2% on the wages, up to the taxable maximum\n"
+        "   of $184,500 for 2026.\n"
+        "5. Medicare is charged at 1.45% on all wages, with no ceiling.\n"
+        "6. The Additional Medicare Tax is charged at 0.9% on the wages above the\n"
+        "   threshold for the filing status.\n"
+        "7. State income tax is applied at the rate entered on the page.":
+            "Una ang mga bawas bago ang tax. Ang ambag sa 401(k), ambag sa HSA, at ambag "
+            "sa FSA ay lahat kinuha mula sa sahod bago ang anumang iba pa. Hindi "
+            "magkapantay ang epekto ng bawat isa sa mga buwis, at nakasaad sa bahagi sa "
+            "ibaba kung alin ang alin.\n"
+            "2. Ang standard deduction ay kinuha mula sa natitirang sahod. Para sa 2026, "
+            "ito ay $16,100 para sa isang mag-isyang single filer, $32,200 para sa "
+            "mag-asawang married filing jointly, at $24,150 para sa head of household. "
+            "Ang natitira ay taxable income, at ito ang halagang pinapatakbo ng mga "
+            "bracket ng federal income tax.\n"
+            "3. Ang federal income tax ay kinakalkula batay sa taxable income.\n"
+            "4. Ang Social Security ay 6.2% ng sahod, hanggang sa taxable maximum na "
+            "$184,500 para sa 2026.\n"
+            "5. Ang Medicare ay 1.45% ng lahat ng sahod, walang ceiling.\n"
+            "6. Ang Additional Medicare Tax ay 0.9% ng sahod na higit sa threshold para "
+            "sa filing status.\n"
+            "7. Ang state income tax ay ipinatutupad ayon sa rate na inilagay sa pahina.",
+
+        "The state starts from the adjusted gross income, which is the gross income\n"
+        "   less the pre-tax deductions.\n"
+        "2. The state's own standard deduction comes off, where the state has one, and\n"
+        "   so does the personal exemption where the state gives it as an exclusion.\n"
+        "3. What is left is taxed with the state's own brackets, slice by slice: each\n"
+        "   part of the income is taxed at the rate of the bracket it falls into, which\n"
+        "   is why a progressive state costs more than a flat one.\n"
+        "4. The credits come off the tax. A state that gives its exemption or its\n"
+        "   standard deduction as a credit instead of an exclusion gets it here, and so\n"
+        "   do the state earned income tax credit and the state child tax credit where\n"
+        "   the model carries them.":
+            "Nagsisimula ang estado mula sa adjusted gross income, na siya gross income\n"
+            "   minus mga pre-tax deductions.\n"
+            "2. Deduktahin ang sariling standard deduction ng estado kung mayroon ito, "
+            "gayundin ang personal exemption kung ibinibigay ito ng estado bilang "
+            "exclusion.\n"
+            "3. Taxable sa sariling brackets ng estado ang natitira, bahagi kada bahagi: "
+            "ang bawat bahagi ng kita ay taxa sa rate ng bracket kung saan ito "
+            "nabibilang, kaya mas mahal ang isang progressive state kaysa sa isang flat "
+            "state.\n"
+            "4. Deduktahin ang mga credit sa tax. Kung ibinibigay ng isang estado ang "
+            "exemption o standard deduction nito bilang credit sa halip na exclusion, "
+            "makukuha ito rito, gayundin ang state earned income tax credit at state "
+            "child tax credit kung kasama ang mga ito sa model.",
+
         "⟦1⟧(1 + nominal) = (1 + real) × (1 + inflation)⟦0⟧":
             "⟦1⟧(1 + nominal) = (1 + real) × (1 + inflation)⟦0⟧",
 
         "⟦1⟧real = (1 + nominal) / (1 + inflation) − 1⟦0⟧":
             "⟦1⟧real = (1 + nominal) / (1 + inflation) − 1⟦0⟧",
     },
+    "zh": {
+        "⟦0⟧The tax assessor.⟦1⟧ The local assessor's office publishes the assessed\n   value and the applicable rate for a specific address. That gives an\n   estimate grounded in the actual jurisdiction rather than in a national\n   average.\n2. ⟦2⟧An insurance quote for the specific address.⟦3⟧ Quotes are free, and the\n   number is produced by the model that will actually price the policy. Ask\n   for the replacement cost figure, not only the premium.\n3. ⟦4⟧The lender's escrow estimate.⟦5⟧ Once a loan is in place, the lender\n   computes an escrow payment based on its own figures. It is not a promise\n   for the following year, and it will move when the tax bill and the\n   insurance renewal arrive.":
+            "⟦0⟧税务评估机构。⟦1⟧当地评估机构会公布特定地址的评估价值和适用税率。这项估算以实际管辖地区为依据，而不是使用全国平均值。\n2. ⟦2⟧针对特定地址的保险报价。⟦3⟧报价免费，而且该数字由实际为保单定价的模型生成。所报的数字是重建成本，而不只是保费。\n3. ⟦4⟧贷款机构的托管款估算。⟦5⟧贷款发放后，贷款机构会根据自己的数据计算托管款。这不是对下一年的保证，税收账单和保险续保后，托管款也会随之变动。",
+    },
+
+    "vi": {
+        "⟦0⟧The tax assessor.⟦1⟧ The local assessor's office publishes the assessed\n   value and the applicable rate for a specific address. That gives an\n   estimate grounded in the actual jurisdiction rather than in a national\n   average.\n2. ⟦2⟧An insurance quote for the specific address.⟦3⟧ Quotes are free, and the\n   number is produced by the model that will actually price the policy. Ask\n   for the replacement cost figure, not only the premium.\n3. ⟦4⟧The lender's escrow estimate.⟦5⟧ Once a loan is in place, the lender\n   computes an escrow payment based on its own figures. It is not a promise\n   for the following year, and it will move when the tax bill and the\n   insurance renewal arrive.":
+            "⟦0⟧Cơ quan định giá thuế.⟦1⟧ Văn phòng định giá địa phương công bố giá trị xác định và thuế suất áp dụng cho một địa chỉ cụ thể. Điều này cung cấp một ước tính dựa trên khu vực pháp lý thực tế thay vì mức trung bình toàn quốc.\n2. ⟦2⟧Báo giá bảo hiểm cho địa chỉ cụ thể.⟦3⟧ Báo giá miễn phí, và con số được tạo ra bởi mô hình sẽ thực sự định giá hợp đồng bảo hiểm. Con số được nêu là chi phí thay thế, không chỉ khoản bảo hiểm.\n3. ⟦4⟧Ước tính escrow của bên cho vay.⟦5⟧ Sau khi có khoản vay, bên cho vay tính khoản thanh toán escrow dựa trên số liệu của chính họ. Đây không phải là cam kết cho năm tiếp theo, và khoản này sẽ thay đổi khi hóa đơn thuế và gia hạn bảo hiểm đến.",
+    },
+
+    "pt": {
+        "⟦0⟧The tax assessor.⟦1⟧ The local assessor's office publishes the assessed\n   value and the applicable rate for a specific address. That gives an\n   estimate grounded in the actual jurisdiction rather than in a national\n   average.\n2. ⟦2⟧An insurance quote for the specific address.⟦3⟧ Quotes are free, and the\n   number is produced by the model that will actually price the policy. Ask\n   for the replacement cost figure, not only the premium.\n3. ⟦4⟧The lender's escrow estimate.⟦5⟧ Once a loan is in place, the lender\n   computes an escrow payment based on its own figures. It is not a promise\n   for the following year, and it will move when the tax bill and the\n   insurance renewal arrive.":
+            "⟦0⟧O assessor de imóveis.⟦1⟧ O escritório local do assessor de imóveis publica o valor\n   avaliado e a alíquota aplicável a um endereço específico. Isso fornece uma\n   estimativa baseada na jurisdição real, e não em uma média nacional.\n2. ⟦2⟧Uma cotação de seguro para o endereço específico.⟦3⟧ As cotações são gratuitas, e o\n   número é produzido pelo modelo que realmente precificará a apólice. O valor\n   informado é o custo de reposição, não apenas o prêmio.\n3. ⟦4⟧A estimativa de custódia do credor.⟦5⟧ Depois que o empréstimo é contratado, o credor\n   calcula um pagamento de custódia com base em seus próprios números. Isso\n   não é uma promessa para o ano seguinte, e o valor muda quando chegam a\n   conta de impostos e a renovação do seguro.",
+    },
+
 }
 
 

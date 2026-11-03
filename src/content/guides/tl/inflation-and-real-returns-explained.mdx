@@ -1,92 +1,70 @@
 ---
-title: Paliwanag sa Influsyon at Tiyak na Return
-description: Bakit iba ang mga bilang ng nominal return at real return, paano i-convert ang isa sa isa, at kung ano ang ibig sabihin nito para sa balanse ng ipon sa paglipas ng panahon.
-locale: tl
+title: "Paliwanag sa Influsyon at Tiyak na Return"
+description: "Bakit iba ang mga bilang ng nominal return at real return, paano i-convert ang isa sa isa, at kung ano ang ibig sabihin nito para sa balanse ng ipon sa paglipas ng panahon."
+locale: "tl"
 date: 2026-10-10
 lastReviewed: 2026-10-23
-author: Kostan Proff
-reviewedBy: Tetiana Goncharko
-group: investing
-illustration: inflation-and-real-returns-explained
+author: "Kostan Proff"
+reviewedBy: "Tetiana Goncharko"
+group: "investing"
+illustration: "inflation-and-real-returns-explained"
 readingMinutes: 7
 sources:
-- label: BLS — Indeks ng Presyo ng Konsumer
-  url: https://www.bls.gov/cpi/
-- label: BLS — mga talahanayan ng datos ng CPI
-  url: https://www.bls.gov/data/
-- label: Investor.gov — Compound interest at inflasyon
-  url: https://www.investor.gov/introduction-investing/investing-basics/glossary/compound-interest
+  - label: "BLS — Indeks ng Presyo ng Konsumer"
+    url: "https://www.bls.gov/cpi/"
+  - label: "BLS — mga talahanayan ng datos ng CPI"
+    url: "https://www.bls.gov/data/"
+  - label: "Investor.gov — Compound interest at inflasyon"
+    url: "https://www.investor.gov/introduction-investing/investing-basics/glossary/compound-interest"
 relatedTools:
-- compound-interest
+  - "compound-interest"
 faq:
-- q: Ano ang totoong rate?
-  a: 'Ang rate na naglalarawan sa pagbabago sa kakayahang bumili, hindi sa pagbabago sa numero sa account. Ito ay ang nominal na rate na inadjust para sa inflasyon: (1 + nominal) / (1 + inflation) − 1.'
-- q: Ano ang Fisher equation?
-  a: 'Ang relasyon ng nominal na rate, real na rate at inflation: (1 + nominal) = (1 + real) × (1 + inflation). Ito ang dahilan kung bakit ang real na rate ay hindi lamang ang nominal na rate minus inflation.'
-- q: Sapat na ba ang nominal minus inflation?
-  a: Bilang p approximation, malapit ito, at mababa ang differensya kapag mababa ang inflasyon. Sa nominal na 7 percent at inflasyong 2.5 percent, ang pagkakalkula sa subtraction ay nagbibigay ng 4.5 percent, habang ang eksaktong numero ay 4.39 percent.
-- q: Aling sukat ng inflasyon ang dapat kong gamitin?
-  a: Ang Consumer Price Index ay ang karaniwang pangkalahatang sukat. Mahalaga ang pagpili para sa mahabang panahon dahil ang index na tumutugma sa sarili mong paggastos ang naglalarawan sa sarili mong kakayahang bumili.
-- q: May epekto ba ang inflasyon sa bayarin sa mortgage na fixed?
-  a: Hindi nito binabago ang bayarin, na nakapirmi sa note. Binabago nito ang kayang bilhin ng bayarin, at ito ang batayan ng pagbabayad ng maaga sa loan na may fixed rate kapag mataas ang totoong gastos ng utang.
-- q: Garantiado ba ang totoong balik?
-  a: Hindi. Ang totoong balik ay kalkulasyon batay sa mga ipinapalagay na numero, at ang numerong inflasyon na ginamit ay mismong datos mula sa nakaraan. Ipinapakita ng kalkulasyon ang resulta ng arithmetic para sa mga ibinigay na input.
+  - q: "Ano ang totoong rate?"
+    a: "Ang rate na naglalarawan sa pagbabago sa kakayahang bumili, hindi sa pagbabago sa numero sa account. Ito ay ang nominal na rate na inadjust para sa inflasyon: (1 + nominal) / (1 + inflation) − 1."
+  - q: "Ano ang Fisher equation?"
+    a: "Ang relasyon ng nominal na rate, real na rate at inflation: (1 + nominal) = (1 + real) × (1 + inflation). Ito ang dahilan kung bakit ang real na rate ay hindi lamang ang nominal na rate minus inflation."
+  - q: "Sapat na ba ang nominal minus inflation?"
+    a: "Bilang p approximation, malapit ito, at mababa ang differensya kapag mababa ang inflasyon. Sa nominal na 7% at inflasyong 2.5%, ang pagkakalkula sa subtraction ay nagbibigay ng 4.5%, habang ang eksaktong numero ay 4.39%."
+  - q: "Aling sukat ng inflasyon ang dapat kong gamitin?"
+    a: "Ang Consumer Price Index ay ang karaniwang pangkalahatang sukat. Mahalaga ang pagpili para sa mahabang panahon dahil ang index na tumutugma sa sarili mong paggastos ang naglalarawan sa sarili mong kakayahang bumili."
+  - q: "May epekto ba ang inflasyon sa bayarin sa mortgage na fixed?"
+    a: "Hindi nito binabago ang bayarin, na nakapirmi sa note. Binabago nito ang kayang bilhin ng bayarin, at ito ang batayan ng pagbabayad ng maaga sa loan na may fixed rate kapag mataas ang totoong gastos ng utang."
+  - q: "Garantiado ba ang totoong balik?"
+    a: "Hindi. Ang totoong balik ay kalkulasyon batay sa mga ipinapalagay na numero, at ang numerong inflasyon na ginamit ay mismong datos mula sa nakaraan. Ipinapakita ng kalkulasyon ang resulta ng arithmetic para sa mga ibinigay na input."
 ---
 
 import GuideIllustration from '../../../components/visuals/GuideIllustration.astro';
 
-Mukhang magandang taon ang return na 7 percent hangga’t hindi mo tinatanong kung
-ano ang binili nito. Kung tumaas ang mga presyo ng 2.5 percent sa parehong
-panahon, grow ang pera ng 7 percent at bahagyang mas mura ang bawat isa sa mga
-dolyar na iyon kumpara sa isang taon na nakalipas.
+Mukhang magandang taon ang return na 7% hangga’t hindi mo tinatanong kung ano
+ang binili nito. Kung tumaas ang mga presyo ng 2.5% sa parehong panahon, grow
+ang pera ng 7% at bahagyang mas mura ang bawat isa sa mga dolyar na iyon kumpara
+sa isang taon na nakalipas.
 
-
-
-Ipinapakita ng <a href="/tl/tools/compound-interest/">compound interest
-calculator</a> ang parehong numero, dahil ang projection na nagpapakita lamang
-ng nominal numero ay naglalarawan ng isang balanse sa halip na naglalarawan kung
-ano ang halaga ng balanse.
-
-
+Ipinapakita ng <a href="/tl/tools/compound-interest/">compound interest calculator</a> ang parehong numero, dahil ang
+projection na nagpapakita lamang ng nominal numero ay naglalarawan ng isang
+balanse sa halip na naglalarawan kung ano ang halaga ng balanse.
 
 ## Dalawang magkaibang bilang
 
+**Nominal** ang rate ng account: 7%. Ito ang nakalagay sa statement, at ito
+ang nangyayari sa balanse ng account.
 
-
-**Nominal** ang rate ng account: 7 percent. Ito ang nakalagay sa statement, at
-ito ang nangyayari sa balanse ng account.
-
-
-
-**Real** ang rate pagkatapos ng inflation: ang aktuwal na halaga ng balanse sa
-kapangyarihan ng pagbili. Ito ang numerong naglalarawan kung ang pera ay
+**Real** ang rate pagkatapos ng inflation: ang aktuwal na halaga ng balanse
+sa kapangyarihan ng pagbili. Ito ang numerong naglalarawan kung ang pera ay
 nakamana o nawalan ng halaga.
-
-
 
 Hindi magkapareho ang dalawa, at ang relasyon sa pagitan nila ay ang Fisher
 equation:
 
-
-
 **(1 + nominal) = (1 + real) × (1 + inflation)**
-
-
 
 Pagkatapos itong lutasin para sa real rate:
 
-
-
 **real = (1 + nominal) / (1 + inflation) − 1**
 
-
-
-Sa 7 percent nominal at 2.5 percent inflation, ang real rate ay 4.39 percent,
-hindi ang 4.5 percent na ibibigay ng simpleng pagbabawas. Maliit ang pagkakaiba
-sa mga rate na ito at lumalaki sa mas mataas na rate, kaya sulit gamitin ang
-exact formula.
-
-
+Sa 7% nominal at 2.5% inflation, ang real rate ay 4.39%, hindi ang 4.5% na
+ibibigay ng simpleng pagbabawas. Maliit ang pagkakaiba sa mga rate na ito at
+lumalaki sa mas mataas na rate, kaya sulit gamitin ang exact formula.
 
 
 <div class="guide-inline-figure">
@@ -94,15 +72,11 @@ exact formula.
 </div>
 ## Isang halimbawang may kalkulasyon
 
-
-
 Ginagawa ng real-value column ng calculator ang parehong conversion sa balanse
-sa halip na sa rate. Ang balanseng $10,000 sa 7 percent na may $500 kada buwan
-sa loob ng 10 years aytatapos sa $92,000-something sa nominal terms. Sa 2.5
-percent inflation, ang parehong balanse sa kapangyarihan ng pagbili ng simulang
-taon ay mga $72,000-something.
-
-
+sa halip na sa rate. Ang balanseng $10,000 sa 7% na may $500 kada buwan sa loob
+ng 10 years aytatapos sa $92,000-something sa nominal terms. Sa 2.5% inflation,
+ang parehong balanse sa kapangyarihan ng pagbili ng simulang taon ay mga
+$72,000-something.
 
 Ang nominal na halaga ay nagsasabi na mayroon ang account na $92,000. Ang
 totoong halaga ay nagsasabi na ito ay may halagang katumbas ng $72,000 na mabili
@@ -110,17 +84,11 @@ ngayong ilang taon na ang nakaraan. Parehong totoo ang mga ito, at sumasagot sa
 iba’t ibang tanong. Ang una ay tungkol sa account. Ang ikalawa ay tungkol sa
 iyong buhay.
 
-
-
 ## Aling inflation number ang gagamitin
-
-
 
 Naglabas ang Bureau of Labor Statistics ng Consumer Price Index, na siyang
 karaniwang pangkalahatang panukala ng pagbabago ng presyo, kasama ang mga
 underlying data table at calculator para sa mga partikular na yugto.
-
-
 
 Para sa mahabang horizon, mas mahalaga ang piniling index kaysa sa inaasahan ng
 tao, dahil ang index na tumutugma sa sariling paggastos mo ang naglalarawan sa
@@ -129,32 +97,22 @@ mga goods at services na binibili ng karaniwang sambahayan, at ito ang default
 para sa karamihan ng kalkulasyon, kabilang ang nasa site na ito.
 
 
-
-
 <div class="guide-inline-figure">
   <GuideIllustration slug="compound-interest-calculator-explained" locale={frontmatter.locale} />
 </div>
 ## Inflation at fixed debts
-
-
 
 Ang relasyon ay baligtad para sa fixed-rate mortgage. Isang bayarin na nakatakda
 sa loob ng thirty years ay lumiliit sa real terms habang lumitaw ang mga presyo.
 Ibinabayaran ng borrower ang loan gamit ang perang mas mababa ang halaga
 taon-taon kaysa sa pera ng hinutang niya.
 
-
-
 Ito ang argumento para sa pagbabayad ng loan na may fixed-rate nang maaga kapag
 mataas ang real rates, at ito ay aritmetika lamang, hindi opinyon. Ito rin ang
 dahilan kung bakit ang loan na may fixed-rate ay fixed na pananagutan sa nominal
 terms at lumiliit sa real terms.
 
-
-
 ## Inflation at ang mga numero sa mga kasangkapan
-
-
 
 Inilalapat ng compound interest calculator ang inflation rate sa balanse, na
 nagbubunga ng real-value column. Hindi inii-adjust ng rent versus buy calculator
@@ -163,17 +121,11 @@ isang horizon at ang inflation adjustment ay mauunaw din sa rent series at sa
 ownership series; iniiwan ng kasangkapan sa labas ng kalkulasyon ang pagpili ng
 paraan ng paghawak ng inflation, at sinasabi nito iyon.
 
-
-
 Hindi rin inii-adjust ng mortgage calculator ang inflation, sa parehong dahilan.
 Ang bayad sa tatlumpung taon ay isang fixed na bilang ng dolyar, at ang halaga
 ng bilang na iyon ay tanong tungkol sa kinabukuan, hindi tungkol sa loan.
 
-
-
 ## Ang hindi isang real return
-
-
 
 Ang real return ay kalkulasyon batay sa mga ipinapalagay na numero. Ang
 inflation rate na ginamit ay historical, ipinapalagay na constant ang nominal
@@ -181,8 +133,6 @@ rate, at ipinapalagay na constant ang mga kontribusyon. Ang bawat isa sa mga
 assumption na iyon ay makatuwiran para sa isang projection at maliwanag para sa
 kinabukuan, at dapat basahin ang resulta bilang "sa ilalim ng mga assumption na
 ito" imbig sa isang prediksyon.
-
-
 
 Ang layunin ng pagpapakita ng real figure ay hindi ang prediksyon. Ang layunin
 nito ay na ang isang numero nang walang diya ay hindi kumpletong .

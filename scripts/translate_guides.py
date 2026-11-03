@@ -86,6 +86,51 @@ INLINE_ANCHOR_LINE = re.compile(r"^\s*<a[\s>]")
 INTERNAL_LINK = re.compile(r'href="(/(?!/)[^"]*)"')
 DEFAULT_LOCALE = "en"
 
+# The languages that write no space between the words of a sentence. A line
+# break in the answer is the line break of the English source, and in these
+# languages it belongs nowhere: it would stand in the middle of a phrase.
+NO_SPACE_LANGUAGES = {"zh"}
+
+
+class _Quoted(str):
+    """A string that is written with quotes in the frontmatter."""
+
+
+class _FrontmatterDumper(yaml.SafeDumper):
+    """Writes the frontmatter the way the English guides write it.
+
+    The English frontmatter quotes its strings and indents the lists under
+    the key they belong to. The default writer does neither, and a guide in
+    another language then looks like it was written by a different tool.
+    """
+
+    def increase_indent(self, flow: bool = False, indentless: bool = False):
+        # The lists are indented under their key, not under the list itself.
+        return super().increase_indent(flow, False)
+
+
+_FrontmatterDumper.add_representer(
+    _Quoted,
+    lambda dumper, data: dumper.represent_scalar(
+        "tag:yaml.org,2002:str", data, style='"'
+    ),
+)
+
+
+def quote_values(value):
+    """Wraps the strings of the frontmatter and leaves the rest alone.
+
+    The keys keep their plain form: only the values of the frontmatter are
+    written in quotes, and the English guides are written that way.
+    """
+    if isinstance(value, dict):
+        return {key: quote_values(item) for key, item in value.items()}
+    if isinstance(value, list):
+        return [quote_values(item) for item in value]
+    if isinstance(value, str):
+        return _Quoted(value)
+    return value
+
 
 def add_locale_to_links(text: str, locale: str) -> str:
     """Puts the prefix of the locale into the links that point at the site."""
@@ -198,13 +243,74 @@ def translatable_cell(cell: str) -> bool:
     return len(re.findall(r"[A-Za-z\u00C0-\u024F\u0400-\u04FF\u4E00-\u9FFF\u0600-\u06FF]", cell)) >= 2
 
 
-def wrap(text: str, width: int = 80) -> str:
+# A line that starts a list item. The marker of a list item is the one thing
+# in a piece of prose that has to stay at the start of a line: a list item
+# that shares a line with the text before it is not a list item any more.
+LIST_ITEM = re.compile(r"^([-*+]|\d+\.|>)\s+")
+
+
+def _flow(text: str, width: int, first: int, rest: int) -> list[str]:
+    """Lays a piece of text out in lines of at most `width` columns.
+
+    The first line carries the marker of a list item and the lines under it
+    carry the indent that keeps the rest of the item inside it, so the two
+    take their room from the width.
+    """
+    words = text.split()
+    if not words:
+        return []
+    lines: list[str] = []
+    current = ""
+    budget = width - first
+    for word in words:
+        if current and len(current) + 1 + len(word) > budget:
+            lines.append(current)
+            current = word
+            budget = width - rest
+        else:
+            current = word if not current else current + " " + word
+    lines.append(current)
+    return lines
+
+
+def _join_expressions(lines: list[str]) -> list[str]:
+    """Puts a line that continues an expression back with the line above it.
+
+    A line that begins with a marker while the line above it left a bracket
+    open is not a list item: it is the rest of a formula, and markdown would
+    read it as a bullet. "(1\n+ r) ng kontribusyon" is one expression, and it
+    has to stay on one line.
+    """
+    out: list[str] = []
+    balance = 0
+    for line in lines:
+        if out and balance > 0 and LIST_ITEM.match(line):
+            out[-1] = out[-1] + " " + line
+            balance = max(0, balance + line.count("(") - line.count(")"))
+            continue
+        out.append(line)
+        balance = max(0, balance + line.count("(") - line.count(")"))
+    return out
+
+
+def wrap(text: str, width: int = 80, locale: str = "en") -> str:
     """Wraps a paragraph the way the English files are wrapped.
 
     The leading whitespace is kept. It is not decoration: the blank line
     under an import is what tells MDX that the import is a statement of its
     own, and without it the page does not parse. The list marker at the
     start of a line is kept for the same reason.
+
+    The lines of the answer are the lines of the English source, because the
+    model keeps them. They are gathered here into the blocks they belong to:
+    a list keeps its items, and a paragraph keeps its text. A piece that was
+    flattened into a single line lost the items of every list on the page.
+
+    A line is broken at a space and nowhere else. Chinese writes no space
+    between the words of a sentence, so the line break that came from the
+    English source would stand in the middle of a Chinese phrase, and a line
+    break inside a paragraph is a space once the page is rendered. The lines
+    of such a paragraph are joined instead.
     """
     stripped = text.strip()
     if not stripped:
@@ -212,17 +318,47 @@ def wrap(text: str, width: int = 80) -> str:
     leading = text[: len(text) - len(text.lstrip())]
     # The newline that stands between two blocks is not part of the line.
     indent = len(leading.rstrip("\n"))
-    words = stripped.split()
-    lines: list[str] = []
-    current = words[0]
-    for word in words[1:]:
-        if indent + len(current) + 1 + len(word) > width:
-            lines.append(current)
-            current = word
+    separator = "" if locale in NO_SPACE_LANGUAGES else " "
+
+    blocks: list[list[str]] = []
+    current: list[str] = []
+    # A line that starts with a marker is a continuation of the formula when
+    # the line above it left a bracket open: "(1\n+ r) ng kontribusyon" is
+    # one expression, and a list item would break it in two.
+    open_brackets = 0
+    for line in stripped.split("\n"):
+        if LIST_ITEM.match(line) and open_brackets <= 0:
+            if current:
+                blocks.append(current)
+            current = [line]
         else:
-            current += " " + word
-    lines.append(current)
-    return leading + "\n".join(lines)
+            current.append(line)
+        open_brackets = max(0, open_brackets + line.count("(") - line.count(")"))
+    if current:
+        blocks.append(current)
+
+    out: list[str] = []
+    for block in blocks:
+        first_line = block[0]
+        marker = LIST_ITEM.match(first_line)
+        if marker:
+            head = marker.group(0)
+            body = [first_line[len(head) :]] + block[1:]
+            rest = " " * (indent + len(head))
+        else:
+            body = block
+            head = ""
+            rest = " " * indent
+        prefix = (leading if not out else "") + head
+        text_block = separator.join(line.strip() for line in body)
+        lines = _join_expressions(_flow(text_block, width, len(prefix), len(rest)))
+        if not lines:
+            out.append(prefix.rstrip())
+            continue
+        rendered = [prefix + lines[0]]
+        rendered.extend(rest + line for line in lines[1:])
+        out.append("\n".join(rendered))
+    return "\n".join(out)
 
 
 class GuideTranslator:
@@ -295,12 +431,16 @@ class GuideTranslator:
             "prose_pieces": prose_pieces,
         }
 
-    def _translate_pieces(self, texts: list[str]) -> list[str]:
+    def _translate_pieces(self, texts: list[str]) -> list[tuple[str, list[str]]]:
         """Translates a list of pieces, with the markdown held out of harm's way.
 
         The markdown is hidden behind markers before the text goes out and put
         back after it comes in. Doing this for the whole list at once is what
         makes the batch possible: the protection is per piece, not per call.
+
+        The answer comes back with the markers still in it. The text is
+        wrapped into lines afterwards, and a line break inside a tag breaks
+        the tag in two, so the markup is put back at the very end.
         """
         guarded: list[str] = []
         saved: list[list[str]] = []
@@ -319,10 +459,7 @@ class GuideTranslator:
             guarded.append(hidden)
             saved.append(parts)
         results = self.translator.translate_list(guarded, self.locale, context=CONTEXT)
-        return [
-            restore(result, parts) if parts else result
-            for result, parts in zip(results, saved)
-        ]
+        return list(zip(results, saved))
 
     def translate_batch(self, guides: list[dict]) -> None:
         """Translates every piece of every guide in one batch."""
@@ -357,9 +494,9 @@ class GuideTranslator:
 
         def take() -> str:
             nonlocal cursor
-            value = results[cursor]
+            text, parts = results[cursor]
             cursor += 1
-            return value
+            return restore(text, parts)
 
         front["title"] = take()
         front["description"] = take()
@@ -373,22 +510,22 @@ class GuideTranslator:
         results = guide["prose_results"]
         cursor = 0
 
-        def next_prose() -> str:
+        def next_prose() -> tuple[str, list[str]]:
             nonlocal cursor
             value = results[cursor]
             cursor += 1
             return value
 
-        rendered_blocks: list[list[str]] = []
+        rendered_blocks: list[str] = []
         for block in guide["blocks"]:
             if len(block) == 1 and (is_jsx_line(block[0]) or IMPORT_LINE.match(block[0])):
                 if IMPORT_LINE.match(block[0]):
                     # The guide in a language folder sits one folder deeper
                     # than the English one, so the import has to climb one
                     # folder higher to find the same file.
-                    rendered_blocks.append([fix_import_path(block[0])])
+                    rendered_blocks.append(fix_import_path(block[0]))
                 else:
-                    rendered_blocks.append(block)
+                    rendered_blocks.append(block[0])
                 continue
             if is_table(block):
                 rows: list[str] = []
@@ -411,9 +548,10 @@ class GuideTranslator:
                         lead = re.match(r"\s*", cell).group(0)
                         trail = re.search(r"\s*$", cell).group(0)
                         core = cell[len(lead) : len(cell) - len(trail)] if trail else cell[len(lead) :]
-                        translated.append(lead + next_prose() + trail)
+                        text, parts = next_prose()
+                        translated.append(lead + restore(text, parts) + trail)
                     rows.append(indent + "|".join(translated) + "|")
-                rendered_blocks.append(rows)
+                rendered_blocks.append("\n".join(rows))
                 continue
 
             text_block = "\n".join(block)
@@ -427,14 +565,18 @@ class GuideTranslator:
                 # The marker and the whitespace in front of it come from the
                 # source, not from the answer: the model trims the text it
                 # returns, and the blank line under an import is lost with it.
-                translated = wrap(prefix + next_prose().strip(), 80)
-                rendered.append(translated)
-            rendered_blocks.append(rendered)
+                text, parts = next_prose()
+                wrapped = wrap(prefix + text.strip(), 80, self.locale)
+                rendered.append(restore(wrapped, parts))
+            # The pieces carry the blank line that stands between them, so
+            # they are joined without one.
+            rendered_blocks.append("".join(rendered))
 
-        body = "\n".join("\n".join(block) for block in rendered_blocks)
+        body = "\n".join(rendered_blocks)
         body = add_locale_to_links(body, self.locale)
-        header = yaml.safe_dump(
-            front,
+        header = yaml.dump(
+            quote_values(front),
+            Dumper=_FrontmatterDumper,
             allow_unicode=True,
             sort_keys=False,
             default_flow_style=False,

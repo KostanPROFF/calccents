@@ -1,34 +1,34 @@
 ---
-title: Como ler uma tabela de amortização
-description: Explicação de cada coluna de uma tabela de amortização de mortgage, desde a divisão da parcela até o último pagamento ajustado que quita o empréstimo.
-locale: pt
+title: "Como ler uma tabela de amortização"
+description: "Explicação de cada coluna de uma tabela de amortização de mortgage, desde a divisão da parcela até o último pagamento ajustado que quita o empréstimo."
+locale: "pt"
 date: 2026-10-13
 lastReviewed: 2026-10-23
-author: Kostan Proff
-reviewedBy: Tetiana Goncharko
-group: home
-illustration: how-to-read-an-amortization-schedule
+author: "Kostan Proff"
+reviewedBy: "Tetiana Goncharko"
+group: "home"
+illustration: "how-to-read-an-amortization-schedule"
 readingMinutes: 6
 sources:
-- label: CFPB — Cálculo de pagamento de mortgage
-  url: https://www.consumerfinance.gov/ask-cfpb/
-- label: HUD — Ajudando proprietários americanos
-  url: https://www.hud.gov/helping_american_homeowners
+  - label: "CFPB — Cálculo de pagamento de mortgage"
+    url: "https://www.consumerfinance.gov/ask-cfpb/"
+  - label: "HUD — Ajudando proprietários americanos"
+    url: "https://www.hud.gov/helping_american_homeowners"
 relatedTools:
-- mortgage-payment
+  - "mortgage-payment"
 faq:
-- q: Quais são as colunas de uma tabela de amortização?
-  a: 'Normalmente: o número da parcela, o valor da parcela, a parcela de juros, a parcela do principal e o saldo restante. Uma tabela com uma coluna adicional de principal mostra o valor extra aplicado além da parcela programada.'
-- q: Por que o primeiro pagamento é quase todo de juros?
-  a: Porque os juros são cobrados sobre o saldo devedor no início do mês e, no primeiro mês, esse saldo corresponde ao valor total emprestado. A parcela do principal é o que sobra do pagamento depois dos juros.
-- q: Por que o último pagamento é diferente?
-  a: A parcela mensal tem um número fixo de centavos, e o cálculo deixa um pequeno saldo no final do prazo. O último pagamento é ajustado para quitá-lo, o que é uma prática padrão.
-- q: A tabela inclui impostos e seguros?
-  a: Normalmente, não. Uma tabela de amortização puro cobre o empréstimo. Os valores depositados em escrow aparecem no extrato da parcela, enquanto o IPTU e o seguro são custos anuais divididos em parcelas mensais, e não amortizados.
-- q: O que mostra a coluna de juros acumulados?
-  a: 'O total de juros cobrados até aquele ponto do empréstimo. É o número que torna visíveis os primeiros anos: uma grande parte dos juros totais é cobrada muito antes de o saldo ficar pequeno.'
-- q: Posso usar uma tabela para verificar o efeito de um pagamento extra?
-  a: Sim. O cronograma é recalculado mês a mês, então um pagamento extra reduz o cronograma inteiro e a última linha fica mais próxima. Essa é a forma mais clara de ver o efeito de uma mudança.
+  - q: "Quais são as colunas de uma tabela de amortização?"
+    a: "Normalmente: o número da parcela, o valor da parcela, a parcela de juros, a parcela do principal e o saldo restante. Uma tabela com uma coluna adicional de principal mostra o valor extra aplicado além da parcela programada."
+  - q: "Por que o primeiro pagamento é quase todo de juros?"
+    a: "Porque os juros são cobrados sobre o saldo devedor no início do mês e, no primeiro mês, esse saldo corresponde ao valor total emprestado. A parcela do principal é o que sobra do pagamento depois dos juros."
+  - q: "Por que o último pagamento é diferente?"
+    a: "A parcela mensal tem um número fixo de centavos, e o cálculo deixa um pequeno saldo no final do prazo. O último pagamento é ajustado para quitá-lo, o que é uma prática padrão."
+  - q: "A tabela inclui impostos e seguros?"
+    a: "Normalmente, não. Uma tabela de amortização puro cobre o empréstimo. Os valores depositados em escrow aparecem no extrato da parcela, enquanto o IPTU e o seguro são custos anuais divididos em parcelas mensais, e não amortizados."
+  - q: "O que mostra a coluna de juros acumulados?"
+    a: "O total de juros cobrados até aquele ponto do empréstimo. É o número que torna visíveis os primeiros anos: uma grande parte dos juros totais é cobrada muito antes de o saldo ficar pequeno."
+  - q: "Posso usar uma tabela para verificar o efeito de um pagamento extra?"
+    a: "Sim. O cronograma é recalculado mês a mês, então um pagamento extra reduz o cronograma inteiro e a última linha fica mais próxima. Essa é a forma mais clara de ver o efeito de uma mudança."
 ---
 
 import GuideIllustration from '../../../components/visuals/GuideIllustration.astro';
@@ -38,51 +38,31 @@ de números e é a resposta mais direta que existe à pergunta "quanto esse loan
 realmente está me custando" — porque mostra cada dólar, em ordem, com o saldo
 após cada pagamento.
 
-
-
 Veja como ler um.
-
-
 
 ## As colunas
 
-
-
 Um cronograma típico tem cinco ou seis colunas.
-
-
 
 **Número do pagamento.** O mês, contando a partir do primeiro pagamento.
 
+**Valor do pagamento.** O total pago naquele mês. É o mesmo valor em quase
+todos os meses, e esse é o objetivo da amortização: o pagamento é constante, e
+apenas sua composição muda.
 
-
-**Valor do pagamento.** O total pago naquele mês. É o mesmo valor em quase todos
-os meses, e esse é o objetivo da amortização: o pagamento é constante, e apenas
-sua composição muda.
-
-
-
-**Juros.** Os juros cobrados naquele mês. São iguais ao saldo no início do mês
-multiplicados pela taxa mensal. A coluna começa alta e diminui.
-
-
+**Juros.** Os juros cobrados naquele mês. São iguais ao saldo no início do
+mês multiplicados pela taxa mensal. A coluna começa alta e diminui.
 
 **Principal.** A parte do pagamento que reduz o saldo. É o pagamento menos os
 juros; começa pequena e aumenta. Juros mais principal soma o pagamento, e vale
 conferir isso em qualquer cronograma que você receber.
 
-
-
 **Extra.** Qualquer valor pago acima do pagamento programado, aplicado ao
 principal. É zero na maioria dos cronogramas e aparece no que você monta na
 calculadora quando usa o campo de pagamento extra.
 
-
-
 **Saldo.** O que ainda deve ser pago após esse pagamento. Esta é a coluna que
 conta a história.
-
-
 
 
 <div class="guide-inline-figure">
@@ -90,35 +70,24 @@ conta a história.
 </div>
 ## Os três formatos a observar
 
+**A coluna de juros diminui.** Não porque a taxa muda, mas porque o saldo
+sobre o qual ela é cobrada diminui.
 
+**A coluna de principal aumenta.** Não porque alguma decisão faz com que mais
+do pagamento seja alocado a ela, mas porque os juros consomem menos do
+pagamento.
 
-**A coluna de juros diminui.** Não porque a taxa muda, mas porque o saldo sobre
-o qual ela é cobrada diminui.
-
-
-
-**A coluna de principal aumenta.** Não porque alguma decisão faz com que mais do
-pagamento seja alocado a ela, mas porque os juros consomem menos do pagamento.
-
-
-
-**A coluna de saldo é a interessante.** Ela diminui lentamente no início, depois
-mais rapidamente e, por fim, estabiliza à medida que se aproxima de zero. A
-parte íngreme fica perto do final, o que é o contrário do que a maioria das
+**A coluna de saldo é a interessante.** Ela diminui lentamente no início,
+depois mais rapidamente e, por fim, estabiliza à medida que se aproxima de zero.
+A parte íngreme fica perto do final, o que é o contrário do que a maioria das
 pessoas espera, e é o motivo pelo qual um loan de trinta anos é quitado muito
 mais rápido do que parece.
 
-
-
 ## A coluna de juros acumulados
-
-
 
 Se um cronograma tem uma coluna que acumula juros em vez de mostrá-los por mês,
 vale a pena encontrá-la. Essa coluna responde à pergunta que a coluna mensal não
 consegue: quanto do custo eu já paguei?
-
-
 
 Em um empréstimo típico de trinta anos, aproximadamente um quarto dos juros
 totais é cobrado nos primeiros cinco anos, e a maior parte é cobrada na primeira
@@ -126,20 +95,14 @@ década. Ver isso em uma única coluna é uma experiência diferente de somar
 manualmente os valores dos juros mensais.
 
 
-
-
 <div class="guide-inline-figure">
   <GuideIllustration slug="monthly-payment-vs-total-cost-mortgage" locale={frontmatter.locale} />
 </div>
 ## Por que a última linha é diferente
 
-
-
 A parcela é um número fixo de centavos, e um empréstimo não se divide igualmente
 em centavos inteiros ao longo de um número fixo de meses. Um pequeno saldo
 permanece em aberto no final.
-
-
 
 A parcela final é ajustada para quitar esse saldo. Isso não é uma anomalia nem
 um erro; é o que acontece sempre que uma parcela é arredondada. A calculadora
@@ -147,49 +110,33 @@ deste site ajusta a parcela final pelo mesmo motivo, e a última linha do
 cronograma é a que se consulta se quiser confirmar que o empréstimo termina
 exatamente em zero.
 
-
-
 ## O que não consta no cronograma
-
-
 
 Um cronograma de amortização puro cobre o empréstimo e nada mais.
 
-
-
-**Impostos prediais e seguros** não são amortizados. São custos anuais divididos
-em parcelas mensais, e aparecem no extrato da parcela em vez do cronograma. Um
-cronograma que os inclui está mostrando custódia de recursos, não amortização.
-
-
+**Impostos prediais e seguros** não são amortizados. São custos anuais
+divididos em parcelas mensais, e aparecem no extrato da parcela em vez do
+cronograma. Um cronograma que os inclui está mostrando custódia de recursos, não
+amortização.
 
 **Taxas** não constam nele. Custos de fechamento, pontos e seguro do hipótese
 são separados da aritmética do empréstimo.
 
-
-
-**Inflação** não consta nele. Um cronograma é um conjunto de valores nominais, o
-que é correto para um empréstimo com taxa fixa e não descreve o que esses
-valores compram.
-
-
+**Inflação** não consta nele. Um cronograma é um conjunto de valores
+nominais, o que é correto para um empréstimo com taxa fixa e não descreve o que
+esses valores compram.
 
 ## Como usar um cronograma para testar uma mudança
-
-
 
 O uso mais prático de um cronograma é a comparação. Altere uma variável e veja o
 que acontece:
 
-
-
 - Adicione $200 por mês de principal extra e observe o número de linhas
-diminuir. - Altere o prazo de 30 anos para 15 e observe a coluna de juros
-começar bem mais baixa. - Altere a taxa e observe a coluna de juros começar bem
-mais alta e todo o cronograma se estender.
+  diminuir.
+- Altere o prazo de 30 anos para 15 e observe a coluna de juros começar bem mais
+  baixa.
+- Altere a taxa e observe a coluna de juros começar bem mais alta e todo o
+  cronograma se estender.
 
-
-
-A <a href="/pt/tools/mortgage-payment/">calculadora de pagamento do mortgage</a>
-gera a versão anual desta tabela, e o guia de amortação explica o mecanismo por
-trás de cada coluna.
+A <a href="/pt/tools/mortgage-payment/">calculadora de pagamento do mortgage</a> gera a versão anual desta tabela, e
+o guia de amortação explica o mecanismo por trás de cada coluna.

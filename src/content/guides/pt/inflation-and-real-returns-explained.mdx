@@ -1,87 +1,67 @@
 ---
-title: Inflação e Retornos Reais Explicados
-description: Por que uma retorno nominal e um retorno real são números diferentes, como converter um no outro e o que isso significa para o saldo de poupança ao longo do tempo.
-locale: pt
+title: "Inflação e Retornos Reais Explicados"
+description: "Por que uma retorno nominal e um retorno real são números diferentes, como converter um no outro e o que isso significa para o saldo de poupança ao longo do tempo."
+locale: "pt"
 date: 2026-10-10
 lastReviewed: 2026-10-23
-author: Kostan Proff
-reviewedBy: Tetiana Goncharko
-group: investing
-illustration: inflation-and-real-returns-explained
+author: "Kostan Proff"
+reviewedBy: "Tetiana Goncharko"
+group: "investing"
+illustration: "inflation-and-real-returns-explained"
 readingMinutes: 7
 sources:
-- label: BLS — Índice de Preços ao Consumidor
-  url: https://www.bls.gov/cpi/
-- label: BLS — tabelas de dados do CPI
-  url: https://www.bls.gov/data/
-- label: Investor.gov — Juros compostos e inflação
-  url: https://www.investor.gov/introduction-investing/investing-basics/glossary/compound-interest
+  - label: "BLS — Índice de Preços ao Consumidor"
+    url: "https://www.bls.gov/cpi/"
+  - label: "BLS — tabelas de dados do CPI"
+    url: "https://www.bls.gov/data/"
+  - label: "Investor.gov — Juros compostos e inflação"
+    url: "https://www.investor.gov/introduction-investing/investing-basics/glossary/compound-interest"
 relatedTools:
-- compound-interest
+  - "compound-interest"
 faq:
-- q: Qual é a taxa real?
-  a: 'A taxa que descreve a mudança no poder de compra, e não a mudança no número da conta. É a taxa nominal ajustada pela inflação: (1 + nominal) / (1 + inflation) − 1.'
-- q: Qual é a equação de Fisher?
-  a: 'A relação entre a taxa nominal, a taxa real e a inflação: (1 + nominal) = (1 + real) × (1 + inflação). É a razão pela qual a taxa real não é simplesmente a taxa nominal menos a inflação.'
-- q: A taxa nominal menos a inflação é suficiente?
-  a: Como aproximação, ela é próxima, e com inflação baixa a diferença é pequena. Com 7% nominais e inflação de 2,5%, a subtração resulta em 4,5%, e o número exato é 4,39%.
-- q: Qual medida da inflação devo usar?
-  a: O Consumer Price Index é a medida padrão de uso geral. A escolha importa em um horizonte longo porque o índice que corresponde aos seus próprios gastos é o que descreve o seu próprio poder de compra.
-- q: A inflação afeta o pagamento de um mortgage de taxa fixa?
-  a: Ela não altera o pagamento, que é fixado pela nota. Ela altera o que o pagamento compra, o que sustenta o argumento de quitar antecipadamente um empréstimo de taxa fixa quando o custo real da dívida é alto.
-- q: O retorno real é garantido?
-  a: Não. O retorno real é um cálculo feito com números estimados, e a própria inflação usada é histórica. O cálculo mostra o resultado da aritmética para as entradas fornecidas.
+  - q: "Qual é a taxa real?"
+    a: "A taxa que descreve a mudança no poder de compra, e não a mudança no número da conta. É a taxa nominal ajustada pela inflação: (1 + nominal) / (1 + inflation) − 1."
+  - q: "Qual é a equação de Fisher?"
+    a: "A relação entre a taxa nominal, a taxa real e a inflação: (1 + nominal) = (1 + real) × (1 + inflação). É a razão pela qual a taxa real não é simplesmente a taxa nominal menos a inflação."
+  - q: "A taxa nominal menos a inflação é suficiente?"
+    a: "Como aproximação, ela é próxima, e com inflação baixa a diferença é pequena. Com 7% nominais e inflação de 2,5%, a subtração resulta em 4,5%, e o número exato é 4,39%."
+  - q: "Qual medida da inflação devo usar?"
+    a: "O Consumer Price Index é a medida padrão de uso geral. A escolha importa em um horizonte longo porque o índice que corresponde aos seus próprios gastos é o que descreve o seu próprio poder de compra."
+  - q: "A inflação afeta o pagamento de um mortgage de taxa fixa?"
+    a: "Ela não altera o pagamento, que é fixado pela nota. Ela altera o que o pagamento compra, o que sustenta o argumento de quitar antecipadamente um empréstimo de taxa fixa quando o custo real da dívida é alto."
+  - q: "O retorno real é garantido?"
+    a: "Não. O retorno real é um cálculo feito com números estimados, e a própria inflação usada é histórica. O cálculo mostra o resultado da aritmética para as entradas fornecidas."
 ---
 
 import GuideIllustration from '../../../components/visuals/GuideIllustration.astro';
 
-Um retorno de 7 percent parece um bom ano até você perguntar o que ele comprou.
-Se os preços subiram 2.5 percent no mesmo período, o dinheiro cresceu 7 percent
-e cada um desses dólares comprou um pouco menos do que comprava um ano antes.
+Um retorno de 7% parece um bom ano até você perguntar o que ele comprou. Se os
+preços subiram 2.5% no mesmo período, o dinheiro cresceu 7% e cada um desses
+dólares comprou um pouco menos do que comprava um ano antes.
 
-
-
-A <a href="/pt/tools/compound-interest/">calculadora de juros compostos</a> informa
-os dois valores, porque uma projeção que mostra apenas o número nominal está
-descrevendo um saldo, em vez de descrever quanto vale esse saldo.
-
-
+A <a href="/pt/tools/compound-interest/">calculadora de juros compostos</a> informa os dois valores, porque uma
+projeção que mostra apenas o número nominal está descrevendo um saldo, em vez de
+descrever quanto vale esse saldo.
 
 ## Dois números diferentes
 
+**Nominal** é a taxa da conta: 7%. É o número que aparece no extrato e é o
+que determina o comportamento do saldo da conta.
 
-
-**Nominal** é a taxa da conta: 7 percent. É o número que aparece no extrato e é
-o que determina o comportamento do saldo da conta.
-
-
-
-**Real** é a taxa após a inflação: o valor que o saldo realmente tem em poder de
-compra. É o número que indica se o dinheiro ganhou ou perdeu terreno.
-
-
+**Real** é a taxa após a inflação: o valor que o saldo realmente tem em poder
+de compra. É o número que indica se o dinheiro ganhou ou perdeu terreno.
 
 Os dois não são iguais, e a relação entre eles é a equação de Fisher:
 
-
-
 **(1 + nominal) = (1 + real) × (1 + inflação)**
-
-
 
 Resolvendo para a taxa real:
 
-
-
 **real = (1 + nominal) / (1 + inflação) − 1**
 
-
-
-Com 7 percent nominal e inflação de 2.5 percent, a taxa real é 4.39 percent, não
-os 4.5 percent que a subtração simples fornece. A diferença é pequena nessas
-taxas e cresce em taxas mais altas, e por isso vale usar a fórmula exata.
-
-
+Com 7% nominal e inflação de 2.5%, a taxa real é 4.39%, não os 4.5% que a
+subtração simples fornece. A diferença é pequena nessas taxas e cresce em taxas
+mais altas, e por isso vale usar a fórmula exata.
 
 
 <div class="guide-inline-figure">
@@ -89,31 +69,20 @@ taxas e cresce em taxas mais altas, e por isso vale usar a fórmula exata.
 </div>
 ## Exemplo prático
 
-
-
 A coluna de valor real da calculadora faz a mesma conversão no saldo, em vez de
-fazê-la na taxa. Um saldo de $10,000 a 7 percent, com $500 por mês durante 10
-anos, termina em algo acima de $92,000 em termos nominais. Com inflação de 2.5
-percent, o mesmo saldo, no poder de compra do ano inicial, fica em torno de
-$72,000.
-
-
+fazê-la na taxa. Um saldo de $10,000 a 7%, com $500 por mês durante 10 anos,
+termina em algo acima de $92,000 em termos nominais. Com inflação de 2.5%, o
+mesmo saldo, no poder de compra do ano inicial, fica em torno de $72,000.
 
 O valor nominal indica que a conta tem $92,000. O valor real indica que ela tem
 o que $72,000 compravam dez anos atrás. Os dois são verdadeiros e respondem a
 perguntas diferentes. O primeiro é sobre a conta. O segundo é sobre sua vida.
 
-
-
 ## Qual índice de inflação usar
-
-
 
 O Bureau of Labor Statistics publica o Consumer Price Index, que é uma medida
 geral e padrão da variação de preços, além das tabelas de dados subjacentes e de
 uma calculadora para períodos específicos.
-
-
 
 No longo prazo, a escolha do índice importa mais do que as pessoas esperam,
 porque o índice que corresponde aos seus próprios gastos é o que descreve seu
@@ -122,32 +91,22 @@ comprados por domicílios típicos, e é o padrão para a maioria dos cálculos,
 incluindo o deste site.
 
 
-
-
 <div class="guide-inline-figure">
   <GuideIllustration slug="compound-interest-calculator-explained" locale={frontmatter.locale} />
 </div>
 ## Inflação e dívidas com taxa fixa
-
-
 
 A relação funciona ao contrário em um financiamento com taxa fixa. Uma parcela
 fixa por trinta anos fica menor em termos reais à medida que os preços sobem. O
 mutuário devolve o empréstimo com dinheiro que vale menos a cada ano do que o
 dinheiro com o qual fez o empréstimo.
 
-
-
 Esse é o argumento para amortizar antecipadamente um empréstimo com taxa fixa
 quando as taxas reais são altas, e isso é aritmética, não opinião. É também por
 isso que um empréstimo com taxa fixa é um passivo fixo em termos nominais e
 decrescente em termos reais.
 
-
-
 ## Inflação e os números nas ferramentas
-
-
 
 A calculadora de juros compostos aplica a taxa de inflação ao saldo, produzindo
 a coluna de valor real. A calculadora de aluguel versus compra não ajusta pela
@@ -156,25 +115,17 @@ e o ajuste pela inflação se aplicaria tanto à série de aluguel quanto à sé
 propriedade; a ferramenta deixa a escolha de como tratar a inflação fora do
 cálculo e informa isso.
 
-
-
 A calculadora de financiamento imobiliário também não ajusta pela inflação, pelo
 mesmo motivo. Uma parcela em trinta anos é um número fixo de dólares, e o que
 esse número vale é uma questão sobre o futuro, não sobre o empréstimo.
 
-
-
 ## O que um retorno real não é
-
-
 
 Um retorno real é um cálculo baseado em números pressupostos. A taxa de inflação
 usada é histórica, a taxa nominal é pressuposta como constante, e as
 contribuições são pressupostas como constantes. Cada uma dessas premissas é
 razoável para uma projeção e falsa para o futuro, e o resultado deve ser lido
 como "sob estas premissas", e não como uma previsão.
-
-
 
 O objetivo de mostrar o número real não é fazer uma previsão. É mostrar que um
 número sem ele está incompleto.
