@@ -81,11 +81,11 @@ export const LOCALE_META: Record<Locale, LocaleMeta> = {
   },
   zh: {
     code: 'zh',
-    htmlLang: 'zh',
+    htmlLang: 'zh-Hans',
     ogLocale: 'zh_CN',
     intl: 'zh-CN',
-    nativeName: '中文',
-    englishName: 'Chinese',
+    nativeName: '简体中文',
+    englishName: 'Chinese (Simplified)',
     dir: 'ltr',
   },
   ko: {
@@ -108,7 +108,7 @@ export const LOCALE_META: Record<Locale, LocaleMeta> = {
   },
   pt: {
     code: 'pt',
-    htmlLang: 'pt',
+    htmlLang: 'pt-BR',
     ogLocale: 'pt_BR',
     intl: 'pt-BR',
     nativeName: 'Português',
@@ -118,8 +118,8 @@ export const LOCALE_META: Record<Locale, LocaleMeta> = {
   ar: {
     code: 'ar',
     htmlLang: 'ar',
-    ogLocale: 'ar_AE',
-    intl: 'ar-AE',
+    ogLocale: 'ar_AR',
+    intl: 'ar-u-nu-latn',
     nativeName: 'العربية',
     englishName: 'Arabic',
     dir: 'rtl',
@@ -128,7 +128,7 @@ export const LOCALE_META: Record<Locale, LocaleMeta> = {
     code: 'tl',
     htmlLang: 'tl',
     ogLocale: 'tl_PH',
-    intl: 'tl-PH',
+    intl: 'fil-PH',
     nativeName: 'Tagalog',
     englishName: 'Tagalog',
     dir: 'ltr',
@@ -200,6 +200,16 @@ export function localeFromPath(pathname: string): Locale {
 export function alternates(path: string): { locale: Locale; href: string }[] {
   const clean = stripLocale(path);
   return LOCALES.map((locale) => ({ locale, href: localePath(locale, clean) }));
+}
+
+/**
+ * The arrow that means "go on".
+ *
+ * A link that leads further points the way the line reads: to the right in
+ * every language but Arabic, where it points to the left.
+ */
+export function forwardArrow(locale: Locale): string {
+  return LOCALE_META[locale].dir === 'rtl' ? '←' : '→';
 }
 
 /**

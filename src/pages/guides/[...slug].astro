@@ -1,10 +1,10 @@
 ---
 import GuidePage from '../../components/pages/GuidePage.astro';
-import { getGuides, guideSlug } from '../../i18n/guides.ts';
+import { getTranslatedGuides, guideSlug } from '../../i18n/guides.ts';
 import type { GuideEntry } from '../../i18n/guides.ts';
 
 export async function getStaticPaths() {
-  const guides = await getGuides('en');
+  const guides = await getTranslatedGuides('en');
   return guides.map((guide) => ({
     params: { slug: guideSlug(guide.id) },
     props: { guide },

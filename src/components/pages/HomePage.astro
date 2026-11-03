@@ -8,8 +8,8 @@ import { tileHue } from '../visuals/toolGlyphs.ts';
 import { getSite } from '../../config/site.ts';
 import { getTools } from '../../config/tools.ts';
 import { getUi } from '../../i18n/ui/index.ts';
-import { LOCALES, localePath, type Locale } from '../../i18n/locales.ts';
-import { getGuides, guideSlug } from '../../i18n/guides.ts';
+import { forwardArrow, LOCALE_META, LOCALES, localePath, type Locale } from '../../i18n/locales.ts';
+import { getGuides, guideHref } from '../../i18n/guides.ts';
 
 interface Props {
   locale: Locale;
@@ -67,7 +67,7 @@ const organization = {
           <p class="hero__lede">{ui.home.lede}</p>
           <div class="hero__actions">
             <a class="btn btn--primary btn--lg" href={localePath(locale, '/tools/')}>
-              {ui.home.cta} →
+              {ui.home.cta} {forwardArrow(locale)}
             </a>
             <a class="btn btn--lg" href={localePath(locale, '/guides/')}>
               {ui.nav.guides}
@@ -164,7 +164,8 @@ const organization = {
           featured.map((guide) => (
             <a
               class="guide-row"
-              href={localePath(locale, `/guides/${guideSlug(guide.id)}/`)}
+              href={guideHref(guide)}
+              lang={guide.data.locale !== locale ? LOCALE_META[guide.data.locale].htmlLang : undefined}
             >
               <span class="guide-row__title">{guide.data.title}</span>
               <span class="guide-row__meta">
@@ -267,11 +268,11 @@ const organization = {
     flex-direction: column-reverse;
     gap: var(--space-1);
     padding: var(--space-5) var(--space-6);
-    border-left: 1px solid var(--border);
+    border-inline-start: 1px solid var(--border);
   }
 
   .stats-strip__item:first-child {
-    border-left: 0;
+    border-inline-start: 0;
   }
 
   .stats-strip dd {
@@ -312,7 +313,7 @@ const organization = {
     }
 
     .stats-strip__item:nth-child(3) {
-      border-left: 0;
+      border-inline-start: 0;
     }
 
     .stats-strip__item:nth-child(n + 3) {
@@ -400,5 +401,13 @@ const organization = {
 
   .guide-row:hover .guide-row__meta::after {
     transform: translateX(3px);
+  }
+
+  :global([dir='rtl']) .guide-row__meta::after {
+    content: '←';
+  }
+
+  :global([dir='rtl']) .guide-row:hover .guide-row__meta::after {
+    transform: translateX(-3px);
   }
 </style>

@@ -342,6 +342,8 @@ a:hover {
 
 .skip-link {
   position: absolute;
+  /* The logical side, so in Arabic the link hides off the right edge,
+     which a right-to-left page does not scroll towards. */
   inset-inline-start: -9999px;
   top: 0;
   z-index: 100;
@@ -623,7 +625,7 @@ a:hover {
   }
 
   .site-nav a:last-child {
-    margin-right: -0.5rem;
+    margin-inline-end: -0.5rem;
   }
 
   .theme-toggle,
@@ -849,6 +851,15 @@ a:hover {
   transform: translateX(3px);
 }
 
+/* The arrow points the way the line reads. */
+[dir='rtl'] .tile__meta::after {
+  content: '←';
+}
+
+[dir='rtl'] .tile:hover .tile__meta::after {
+  transform: translateX(-3px);
+}
+
 /* A calculator's badge: its icon on a square of its own gradient. */
 .glyph {
   display: inline-grid;
@@ -1049,6 +1060,13 @@ select.input {
   cursor: pointer;
 }
 
+/* The chevron sits at the end of the field, which is the left in Arabic. */
+[dir='rtl'] select.input {
+  background-position:
+    0.8rem 50%,
+    1.15rem 50%;
+}
+
 .input:hover {
   border-color: var(--border-strong);
 }
@@ -1173,6 +1191,9 @@ form details .table-wrap {
 /* A slider whose track fills with the brand gradient up to the thumb. The
    script sets --fill; without it the track reads as half full. */
 .range {
+  /* The track is painted from the left, so the slider keeps running left to
+     right in Arabic too, the way a number line does. */
+  direction: ltr;
   -webkit-appearance: none;
   appearance: none;
   width: 100%;
@@ -1489,7 +1510,7 @@ form details .table-wrap {
 .table th,
 .table td {
   padding: var(--space-3) var(--space-3);
-  text-align: right;
+  text-align: end;
   border-bottom: 1px solid var(--border-subtle);
 }
 
@@ -1824,6 +1845,10 @@ form details .table-wrap {
   transform: translateX(2px);
 }
 
+[dir='rtl'] .sources li:hover {
+  transform: translateX(-2px);
+}
+
 .sources__index {
   color: var(--accent-ink);
   font-family: var(--font-mono);
@@ -2009,7 +2034,7 @@ html.consent-granted ins.adsbygoogle {
 
 .check-list {
   margin-top: var(--space-5);
-  padding-inline: 0;
+  padding-inline-start: 0;
   list-style: none;
   display: grid;
   gap: var(--space-3);

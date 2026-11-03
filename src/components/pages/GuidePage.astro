@@ -8,7 +8,7 @@ import { getSite } from '../../config/site.ts';
 import { personLinks } from '../../config/people.ts';
 import { getUi } from '../../i18n/ui/index.ts';
 import { formatDate, localePath, type Locale } from '../../i18n/locales.ts';
-import { guideSlug, type GuideEntry } from '../../i18n/guides.ts';
+import { guideLocales, guideSlug, type GuideEntry } from '../../i18n/guides.ts';
 import { getTool, isToolSlug } from '../../config/tools.ts';
 import ToolGlyph from '../visuals/ToolGlyph.astro';
 import { tileHue } from '../visuals/toolGlyphs.ts';
@@ -27,6 +27,7 @@ const ui = getUi(locale);
 
 const slug = guideSlug(guide.id);
 const path = localePath(locale, `/guides/${slug}/`);
+const locales = await guideLocales(slug);
 
 const relatedTools = data.relatedTools
   .filter(isToolSlug)
@@ -86,6 +87,7 @@ const faqPage = {
   locale={locale}
   ogType="article"
   jsonLd={[article, faqPage]}
+  locales={locales}
 >
   <div class="container">
     <div class="page-head">

@@ -5,8 +5,11 @@ import {
   DEFAULT_LOCALE,
   LOCALE_META,
   LOCALES,
+  alternates,
   formatDate,
+  forwardArrow,
   localePath,
+  stripLocale,
   type Locale,
 } from './locales.ts';
 
@@ -87,6 +90,18 @@ describe('formatDate', () => {
     assert.equal(formatDate(reviewed, 'en'), 'October 23, 2026');
     assert.equal(formatDate(reviewed, 'ru'), '23 октября 2026 г.');
     assert.equal(formatDate(reviewed, 'es'), '23 de octubre de 2026');
+    assert.equal(formatDate(reviewed, 'uk'), '23 жовтня 2026 р.');
+    assert.equal(formatDate(reviewed, 'zh'), '2026年10月23日');
+    assert.equal(formatDate(reviewed, 'pt'), '23 de outubro de 2026');
+  });
+
+  /*
+   * The Arabic pages print their figures in Latin digits, the way the
+   * calculators do, so a date written in Arabic-Indic digits would be the
+   * only number on the page that does not match the rest.
+   */
+  it('writes an Arabic date with the same digits the calculators use', () => {
+    assert.match(formatDate(reviewed, 'ar'), /^23 .+ 2026$/);
   });
 });
 
@@ -104,10 +119,40 @@ describe('localePath', () => {
   });
 
   it('does not prefix the root twice', () => {
-    const locales: Locale[] = ['en', 'ru', 'es'];
-    for (const locale of locales) {
+    for (const locale of LOCALES) {
       const path = localePath(locale, '/');
       assert.equal(path.startsWith('//'), false);
+    }
+  });
+});
+
+describe('alternates', () => {
+  it('lists the same page in every locale', () => {
+    const links = alternates('/ko/tools/net-pay/');
+    assert.equal(links.length, LOCALES.length);
+    assert.deepEqual(
+      links.find((link) => link.locale === 'ar'),
+      { locale: 'ar', href: '/ar/tools/net-pay/' },
+    );
+  });
+
+  it('strips every prefix back to the English path', () => {
+    for (const locale of LOCALES) {
+      assert.equal(stripLocale(localePath(locale, '/guides/')), '/guides/');
+    }
+  });
+});
+
+describe('forwardArrow', () => {
+  /*
+   * The arrow that means "go on" points the way the line reads, so in Arabic
+   * it points to the left.
+   */
+  it('points left in Arabic and right everywhere else', () => {
+    assert.equal(forwardArrow('ar'), '←');
+    for (const locale of LOCALES) {
+      if (locale === 'ar') continue;
+      assert.equal(forwardArrow(locale), '→', `${locale} points the wrong way`);
     }
   });
 });

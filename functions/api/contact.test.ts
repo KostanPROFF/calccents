@@ -113,7 +113,7 @@ test('a form post without JavaScript is answered with a page', async () => {
   assert.equal(response.status, 200);
   assert.match(response.headers.get('Content-Type') ?? '', /text\/html/);
   const html = await response.text();
-  assert.match(html, /<html lang="ru">/);
+  assert.match(html, /<html lang="ru" dir="ltr">/);
   assert.equal(sent.length, 1);
 });
 
@@ -127,7 +127,7 @@ test('a form post without JavaScript is answered in the language of the page', a
   });
 
   const html = await response.text();
-  assert.match(html, /<html lang="es">/);
+  assert.match(html, /<html lang="es" dir="ltr">/);
 });
 
 test('a form post with an empty field is answered with the field message', async () => {
@@ -138,7 +138,7 @@ test('a form post with an empty field is answered with the field message', async
 
   assert.equal(response.status, 422);
   const html = await response.text();
-  assert.match(html, /<html lang="en">/);
+  assert.match(html, /<html lang="en" dir="ltr">/);
 });
 
 test('a filled trap is answered as though the message went out', async () => {

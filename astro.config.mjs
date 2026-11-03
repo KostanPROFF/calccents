@@ -3,6 +3,7 @@ import { defineConfig } from 'astro/config';
 import mdx from '@astrojs/mdx';
 import sitemap from '@astrojs/sitemap';
 import { SITE } from './src/config/site.ts';
+import { LOCALES, LOCALE_META } from './src/i18n/locales.ts';
 import { formatLastModified, lastModifiedFor, sitemapLastModified } from './src/config/sitemapDates.ts';
 
 /**
@@ -30,12 +31,17 @@ export default defineConfig({
    * English pages and `src/pages/ru/`, `src/pages/es/` and the rest hold the
    * others.
    *
+   * The list of languages is read from `src/i18n/locales.ts`, which is the
+   * one place that says which languages the site publishes in: a language
+   * added there and forgotten here would build a page the router does not
+   * know about.
+   *
    * `prefixDefaultLocale: false` is what keeps the English pages where they
    * have always been. It is the default, but it is set explicitly because
    * the whole site depends on it and a reader's old links depend on it too.
    */
   i18n: {
-    locales: ['en', 'ru', 'es', 'zh', 'ko', 'vi', 'pt', 'ar', 'tl', 'uk'],
+    locales: [...LOCALES],
     defaultLocale: 'en',
     routing: {
       prefixDefaultLocale: false,
@@ -54,18 +60,9 @@ export default defineConfig({
        */
       i18n: {
         defaultLocale: 'en',
-        locales: {
-          en: 'en',
-          ru: 'ru',
-          es: 'es',
-          zh: 'zh',
-          ko: 'ko',
-          vi: 'vi',
-          pt: 'pt',
-          ar: 'ar',
-          tl: 'tl',
-          uk: 'uk',
-        },
+        locales: Object.fromEntries(
+          LOCALES.map((locale) => [locale, LOCALE_META[locale].htmlLang]),
+        ),
       },
       /**
        * The date each page was last changed.

@@ -8,9 +8,11 @@ import LanguageSwitcher from './LanguageSwitcher.astro';
 interface Props {
   currentPath: string;
   locale: Locale;
+  /** The languages this page exists in, when it is not in all of them. */
+  locales?: readonly Locale[];
 }
 
-const { currentPath, locale } = Astro.props;
+const { currentPath, locale, locales } = Astro.props;
 const site = getSite(locale);
 const ui = getUi(locale);
 
@@ -54,7 +56,7 @@ function navKey(href: string): string {
           })
         }
       </nav>
-      <LanguageSwitcher locale={locale} currentPath={currentPath} />
+      <LanguageSwitcher locale={locale} currentPath={currentPath} locales={locales} />
       <ThemeToggle locale={locale} />
     </div>
   </div>
