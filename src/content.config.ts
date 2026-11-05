@@ -84,7 +84,7 @@ const guides = defineCollection({
       ),
       author: z.string().min(1),
       reviewedBy: z.string().min(1),
-      group: z.enum(['home', 'renting', 'investing']),
+      group: z.enum(['home', 'money', 'renting', 'investing']),
       /**
        * The picture that sits under the title of the guide.
        *

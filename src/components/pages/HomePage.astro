@@ -3,6 +3,8 @@ import Base from '../../layouts/Base.astro';
 import AdSlot from '../AdSlot.astro';
 import Newsletter from '../Newsletter.astro';
 import HeroCalc from '../visuals/HeroCalc.astro';
+import { heroExample } from '../visuals/heroExample.ts';
+import { formatCurrency } from '../../lib/calc/money.ts';
 import ToolGlyph from '../visuals/ToolGlyph.astro';
 import { tileHue } from '../visuals/toolGlyphs.ts';
 import { getSite } from '../../config/site.ts';
@@ -19,6 +21,8 @@ const { locale } = Astro.props;
 const site = getSite(locale);
 const ui = getUi(locale);
 const tools = getTools(locale);
+
+const sample = heroExample();
 
 const guides = await getGuides(locale);
 const featured = guides.slice(0, 5);
@@ -128,19 +132,19 @@ const organization = {
         </div>
         <div class="result">
           <p class="result__label">{ui.home.sampleMonthlyPayment}</p>
-          <p class="result__headline" style="font-size: var(--text-3xl);">$2,358.42</p>
+          <p class="result__headline" style="font-size: var(--text-3xl);">{formatCurrency(sample.monthlyWithTax)}</p>
           <div class="stat-grid">
             <div class="stat">
               <p class="stat__label">{ui.home.samplePrincipalAndInterest}</p>
-              <p class="stat__value">$1,984.12</p>
+              <p class="stat__value">{formatCurrency(sample.monthly)}</p>
             </div>
             <div class="stat">
               <p class="stat__label">{ui.home.samplePropertyTax}</p>
-              <p class="stat__value">$280.00</p>
+              <p class="stat__value">{formatCurrency(sample.propertyTax)}</p>
             </div>
             <div class="stat">
               <p class="stat__label">{ui.home.sampleTotalInterest}</p>
-              <p class="stat__value">$446,031</p>
+              <p class="stat__value">{formatCurrency(sample.totalInterest, 0)}</p>
             </div>
           </div>
         </div>

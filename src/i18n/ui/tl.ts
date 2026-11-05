@@ -22,7 +22,7 @@ export const tl = {
 
   author: {
     role: 'May-akda',
-    bio: 'Nakatrabaho sa IT infrastructure — cloud, CI/CD, infrastructure as code — kung saan hindi ipinapadala ang isang pagbabago kapag hindi ito naberipika. Panatilihing lean ang mga cloud environment at mabilis ang delivery pipeline ang karaniwang trabaho; pareho ring standard ang ginagamit sa site na ito. Nasa isang lugar ang lahat ng kalkulasyon, saklaw ng unit test ang mga formula upang suriin ang mga ito laban sa mga nakalathalang loan figure, at may source at petsa ng pagbasa ang bawat datos na galing sa labas. Sumusulat ng mga gabay at nagpapanatili ng calculation engine. Isang pangalawang tao ang nagbabasa ng financial content ng bawat gabay bago ito ipublish. Walang anuman dito sa site ang nagsasabi sa mambabasa kung ano ang gagawin.',
+    bio: 'Nakatrabaho sa IT infrastructure — cloud, CI/CD, infrastructure as code — kung saan hindi ipinapadala ang isang pagbabago kapag hindi ito naberipika. Panatilihing lean ang mga cloud environment at mabilis ang delivery pipeline ang karaniwang trabaho; pareho ring standard ang ginagamit sa site na ito. Nasa isang lugar ang lahat ng kalkulasyon, saklaw ng unit test ang mga formula upang suriin ang mga ito laban sa mga nakalathalang loan figure, at may source at petsa ng pagbasa ang bawat datos na galing sa labas. Sumusulat ng mga gabay at nagpapanatili ng calculation engine.',
   },
 
   reviewer: {
@@ -113,6 +113,7 @@ export const tl = {
 
   newsletter: {
     emailAddress: 'Alamat ng email',
+    note: 'Mag-unsubscribe sa isang click mula sa anumang isyu. Ginagamit lang ang address para sa liham na ito.',
     placeholder: 'you@example.com',
     subscribe: 'Mag-subscribe',
   },
@@ -157,7 +158,7 @@ export const tl = {
     guidesHeading: 'Ang kalkulasyon, nakasulat nang detalyado',
     newsletterHeading: 'Get the math sa iyong inbox',
     newsletterLede:
-      'Isang maikling liham kapag may bagong calculator na na-live o muling sinuri ang kasalukuyan. Walang alok, walang sponsored placements.',
+      'Isang maikling liham kapag may bagong calculator na na-live o muling sinuri ang kasalukuyan.',
   },
 
   /*
@@ -200,9 +201,9 @@ export const tl = {
   toolsIndex: {
     title: 'Mga libreng financial calculator',
     description:
-      'Tatlong libreng calculator na nagpapakita ng aritmetika sa likod ng pagbabayad ng mortgage, paghahambing ng pag Rent o pagbili, at projection ng compound interest.',
+      'Anim na libreng calculator: hulog sa mortgage, upa o bili, compound interest, take-home pay, federal income tax at pagbabayad ng utang. Ipinapakita ng bawat isa ang formula nito.',
     heading: 'Mga libreng financial calculator',
-    lede: 'Ipinapakita ng bawat calculator ang formula na ginagamit nito, nakalista ang mga assumption sa likod ng resulta, at malinaw na sinasabi kung ano ang hindi nito ginagawa. Walang email address na hinihingi rito, at walang anumang sign up na hinihingi sa iyo.',
+    lede: 'Ipinapakita ng bawat calculator ang formula na ginagamit nito, nakalista ang mga assumption sa likod ng resulta, at malinaw na sinasabi kung ano ang hindi nito ginagawa. Walang resultang humihingi ng email address o ng account.',
     whatTheseAre: 'Ano ang mga tool na ito',
     whatTheseAreBody: [
       'Mga aritmetikong tool ito. Kinukuha nila ang mga datos na ibinibigay mo, nag-aaplay ng nakalathalang formula, at ibinabalik ang resulta kasama ang kalkulasyon. Ang mortgage calculator dito ay hindi nakakaalam ng iyong credit score, iyong kita, o kung aling lender ang nag-aalok ng kung ano ngayong linggo, at hindi nito susubukan na hguessin.',
@@ -213,7 +214,7 @@ export const tl = {
   guidesIndex: {
     title: 'Mga gabay',
     description:
-      'Labing-limang paliwanag sa aritmetikang nasa likod ng mga mortgage, pagtatanding ng pagrent at pagbili, at compound interest, bawat isa ay may formula, mga pag-aassumption, at mga pinagmulan.',
+      'Labing-walong gabay sa aritmetika ng mortgage, pag-upa o pagbili, compound interest, sahod, income tax at utang, bawat isa ay may formula, mga palagay at mga pinagmulan.',
     heading: 'Mga gabay',
     lede: 'Malalim na paliwanag sa aritmetika at mga pag-aassumption sa likod ng mga calculator. Ipinapakita ng bawat gabay ang formula, nagbibigay ng link sa mga pangunahing pinagmulan, at may petsa ng pagsusuri.',
     missingHeading: 'May kulang ba?',
@@ -222,6 +223,7 @@ export const tl = {
     suggestTopic: 'Magmungkahi ng paksa',
     groups: {
       home: 'Tahanan at mortgage',
+      money: 'Sahod, buwis at utang',
       renting: 'Pagrent at pag-aari',
       investing: 'Pag-iinvest',
     },
@@ -241,7 +243,7 @@ export const tl = {
     isHeading: 'Ano ang site na ito',
     isBody: [
       'Anim na calculator, labingwalong gabay, at ang pangunahing pinagmulan sa likod ng mga ito. Ginagamit ng mga calculator ang mga numerong ibinibigay mo at isinasagawa ang isang nakalathalang formula: ang amortization formula para sa mortgage, ang buwan-buwan na paghah Comparison ng pagkakabenta sa pagmamayapa, ang compound interest formula para sa balanse ng ipon, at ang aritmetika ng pagbabayad ng utang, buwis sa kita at take-home pay.',
-      'Sinusuportahan ng display advertising ang site. Ipinapasiya nito ang paraan ng paggawa nito. Mabilis na naglo-load ang mga pahina at kaunti ang JavaScript dahil ang mabilis na naglo-load na pahina ay nagbibigay ng sapat na panahon sa mambabasa upang makita ang advertisement, at dahil ang mabilis na naglo-load na pahina ang mga tao ay bumabalik. Walang kalkulator ang humihingi ng email address, at walang resulta ang pinaghihigpit.',
+      'Pinopondohan ang site ng display advertising, at iyon ang humuhubog sa pagkakagawa nito. Mabilis mag-load ang mga pahina at kaunti ang JavaScript, kaya kasimbilis sumagot ang calculator sa lumang telepono gaya ng sa computer. Walang calculator na humihingi ng email address, at walang resultang nakatago.',
     ],
     isNotHeading: 'Ano ang hindi site na ito',
     isNotBody: [
@@ -610,7 +612,7 @@ export const tl = {
       title: 'Calculator ng Pagbayad ng Mortgage na may Amortization',
       description:
         'Kalkulahin ang iyong buwanang pagbayad ng mortgage, kabuuang PITI na gastos, at buong amortization schedule. Tingnan ang bawat dolyar ng interest at kung paano binabago ng karagdagang pagbabayad ang petsa ng pagbabayaran.',
-      short: 'Buwanang P&I, buong PITI, iskedyul ng amortisasyon at epekto ng karagdagang bayad.',
+      short: 'Buwanang principal at interes, ang buong bayad kasama ang tax at insurance (PITI), iskedyul ng amortisasyon at epekto ng karagdagang bayad.',
       category: 'Bahay',
       methodNote:
         'Inilalarawan sa ibaba ang formula ng bayad, iskedyul ng amortisasyon at paraan ng paglalapat ng karagdagang bayad. Walang anuman sa pahinang ito ang live na market quote.',
@@ -671,7 +673,7 @@ export const tl = {
       ],
       limits: [
         'Hindi nito sinusuriin kung kwalipikado ka para sa loan, at hindi nito tinitingnan ang iyong credit score, kita, debt-to-income ratio o anumang underwriting rules ng lender.',
-        'Hindi nito binubuo ang kasalukuyang merkadong rates para sa iyong postcode. Ang interest rate na ipinasok mo ang rate na gagamitin mo, at walang live na laman ang pahinang ito.',
+        'Hindi nito binubuo ang kasalukuyang merkadong rates para sa iyong ZIP code. Ang interest rate na ipinasok mo ang rate na gagamitin mo, at walang live na laman ang pahinang ito.',
         'Hindi nito binubuo ang private mortgage insurance, points, loan origination fees, closing costs, o ang escrow timing na nagpapasiya kung saang buwan babagsak ang tax bill.',
         'Hindi nito sinasabi sa iyo kung dapat kang bumili ng bahay. Nagbibigay ito ng isang numero at ang kalkulasyon sa likod nito.',
       ],

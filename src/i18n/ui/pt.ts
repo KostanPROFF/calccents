@@ -22,7 +22,7 @@ export const pt = {
 
   author: {
     role: 'Autor',
-    bio: 'Trabalha com infraestrutura de TI — nuvem, CI/CD, infraestrutura como código — onde uma mudança que não pode ser verificada não é implementada. Manter ambientes de nuvem enxutos e pipelines de entrega rápidos é o trabalho diário; o mesmo padrão é aplicado neste site. A aritmética reside em um só lugar, as fórmulas são cobertas por testes unitários que as verificam em relação a números de empréstimos publicados, e cada número que vem de fora traz sua fonte e a data em que foi lido. Escreve os guias e mantém o motor de cálculo. Uma segunda pessoa lê o conteúdo financeiro de cada guia antes de ser publicado. Nada aqui diz ao leitor o que fazer.',
+    bio: 'Trabalha com infraestrutura de TI — nuvem, CI/CD, infraestrutura como código — onde uma mudança que não pode ser verificada não é implementada. Manter ambientes de nuvem enxutos e pipelines de entrega rápidos é o trabalho diário; o mesmo padrão é aplicado neste site. A aritmética reside em um só lugar, as fórmulas são cobertas por testes unitários que as verificam em relação a números de empréstimos publicados, e cada número que vem de fora traz sua fonte e a data em que foi lido. Escreve os guias e mantém o motor de cálculo.',
   },
 
   reviewer: {
@@ -113,6 +113,7 @@ export const pt = {
 
   newsletter: {
     emailAddress: 'Endereço de e-mail',
+    note: 'Cancele a inscrição com um clique em qualquer edição. O endereço é usado só para esta carta.',
     placeholder: 'you@example.com',
     subscribe: 'Inscrever-se',
   },
@@ -157,7 +158,7 @@ export const pt = {
     guidesHeading: 'A aritmética, detalhada',
     newsletterHeading: 'Receba os cálculos na sua caixa de entrada',
     newsletterLede:
-      'Uma carta curta quando uma nova calculadora for lançada ou uma existente for revisada. Sem ofertas, sem anúncios patrocinados.',
+      'Uma carta curta quando uma nova calculadora for lançada ou uma existente for revisada.',
   },
 
   /*
@@ -200,9 +201,9 @@ export const pt = {
   toolsIndex: {
     title: 'Calculadoras Financeiras Gratuitas',
     description:
-      'Três calculadoras gratuitas que mostram a aritmética por trás de um pagamento de hipoteca, uma comparação entre alugar ou comprar e uma projeção de juros compostos.',
+      'Seis calculadoras gratuitas: parcela da hipoteca, alugar ou comprar, juros compostos, salário líquido, imposto de renda federal e quitação de dívidas. Cada uma mostra sua fórmula.',
     heading: 'Calculadoras financeiras gratuitas',
-    lede: 'Cada calculadora mostra a fórmula que utiliza, lista as premissas por trás do resultado e declara claramente o que não faz. Nada aqui solicita um endereço de e-mail, e nada aqui pede que você se inscreva em qualquer coisa.',
+    lede: 'Cada calculadora mostra a fórmula que utiliza, lista as premissas por trás do resultado e declara claramente o que não faz. Nenhum resultado pede endereço de e-mail ou cadastro.',
     whatTheseAre: 'O que são estas ferramentas',
     whatTheseAreBody: [
       'Estas são ferramentas aritméticas. Elas pegam os números que você fornece, aplicam uma fórmula publicada e devolvem o resultado com o cálculo detalhado. Uma calculadora de hipoteca aqui não conhece sua pontuação de crédito, sua renda ou qual credor está oferecendo o quê esta semana, e não tenta adivinhar.',
@@ -213,7 +214,7 @@ export const pt = {
   guidesIndex: {
     title: 'Guias',
     description:
-      'Quinze explicações da aritmética por trás de hipotecas, alugar versus comprar e juros compostos, cada uma com sua fórmula, suas premissas e suas fontes.',
+      'Dezoito guias sobre a aritmética de hipotecas, alugar ou comprar, juros compostos, salário, imposto de renda e dívidas, cada um com sua fórmula, suas premissas e suas fontes.',
     heading: 'Guias',
     lede: 'Explicações detalhadas da aritmética e das premissas por trás das calculadoras. Cada guia mostra a fórmula, contém links para as fontes primárias e traz uma data de revisão.',
     missingHeading: 'Faltando algo?',
@@ -222,6 +223,7 @@ export const pt = {
     suggestTopic: 'Sugira um tópico',
     groups: {
       home: 'Casa e hipotecas',
+      money: 'Salário, impostos e dívidas',
       renting: 'Alugar e comprar',
       investing: 'Investimentos',
     },
@@ -241,7 +243,7 @@ export const pt = {
     isHeading: 'O que é este site',
     isBody: [
       'Seis calculadoras, dezoito guias e as fontes primárias por trás deles. As calculadoras utilizam os números que você fornece e aplicam uma fórmula publicada: a fórmula de amortização para um financiamento imobiliário, uma comparação mês a mês de fluxo de caixa entre alugar e comprar, a fórmula de juros compostos para um saldo de poupança e a aritmética de quitação de dívidas, imposto de renda e salário líquido.',
-      'O site é financiado por anúncios gráficos. Isso molda a forma como ele é construído. As páginas carregam rapidamente e contêm pouco JavaScript, porque uma página que carrega rápido mantém o leitor por tempo suficiente para ver a publicidade, e porque uma página que carrega rápido é aquela à qual as pessoas retornam. Nenhuma calculadora solicita um endereço de e-mail e nenhum resultado é bloqueado.',
+      'O site é financiado por publicidade gráfica, e isso define como ele é construído. As páginas carregam rápido e usam pouco JavaScript, então uma calculadora responde tão rápido num celular antigo quanto num computador. Nenhuma calculadora pede endereço de e-mail, e nenhum resultado fica bloqueado.',
     ],
     isNotHeading: 'O que este site não é',
     isNotBody: [
@@ -610,7 +612,7 @@ export const pt = {
       title: 'Calculadora de Pagamento de Hipoteca com Amortização',
       description:
         'Calcule seu pagamento mensal de hipoteca, o custo total PITI e o cronograma completo de amortização. Veja cada dólar de juros e como pagamentos extras alteram a data de quitação.',
-      short: 'Principal e juros mensais, PITI completo, cronograma de amortização e o efeito de pagamentos extras.',
+      short: 'Principal e juros mensais, o pagamento completo com impostos e seguro (PITI), cronograma de amortização e o efeito de pagamentos extras.',
       category: 'Início',
       methodNote:
         'A fórmula de pagamento, o cronograma de amortização e a forma como os pagamentos extras são aplicados estão descritos abaixo. Nada nesta página é uma cotação de mercado em tempo real.',

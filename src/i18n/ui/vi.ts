@@ -22,7 +22,7 @@ export const vi = {
 
   author: {
     role: 'Tác giả',
-    bio: 'Làm việc trong lĩnh vực cơ sở hạ tầng CNTT — đám mây, CI/CD, cơ sở hạ tầng dưới dạng mã — nơi một thay đổi không thể xác minh sẽ không được triển khai. Giữ cho môi trường đám mây tinh gọn và các đường ống phân phối nhanh chóng là công việc hàng ngày; tiêu chuẩn tương tự cũng được áp dụng cho trang web này. Các phép tính nằm ở một nơi, các công thức được bao phủ bởi các bài kiểm tra đơn vị đối chiếu với các số liệu khoản vay đã công bố, và mọi số liệu từ bên ngoài đều ghi rõ nguồn và ngày truy xuất. Viết các hướng dẫn và duy trì công cụ tính toán. Một người thứ hai đọc nội dung tài chính của mỗi hướng dẫn trước khi nó được đăng tải. Không có nội dung nào ở đây bảo bạn phải làm gì.',
+    bio: 'Làm việc trong lĩnh vực cơ sở hạ tầng CNTT — đám mây, CI/CD, cơ sở hạ tầng dưới dạng mã — nơi một thay đổi không thể xác minh sẽ không được triển khai. Giữ cho môi trường đám mây tinh gọn và các đường ống phân phối nhanh chóng là công việc hàng ngày; tiêu chuẩn tương tự cũng được áp dụng cho trang web này. Các phép tính nằm ở một nơi, các công thức được bao phủ bởi các bài kiểm tra đơn vị đối chiếu với các số liệu khoản vay đã công bố, và mọi số liệu từ bên ngoài đều ghi rõ nguồn và ngày truy xuất. Viết các hướng dẫn và duy trì công cụ tính toán.',
   },
 
   reviewer: {
@@ -113,6 +113,7 @@ export const vi = {
 
   newsletter: {
     emailAddress: 'Địa chỉ email',
+    note: 'Hủy đăng ký chỉ với một cú nhấp trong bất kỳ thư nào. Địa chỉ chỉ được dùng cho thư này.',
     placeholder: 'you@example.com',
     subscribe: 'Đăng ký',
   },
@@ -157,7 +158,7 @@ export const vi = {
     guidesHeading: 'Các phép tính được trình bày chi tiết',
     newsletterHeading: 'Nhận các phép tính trong hộp thư đến của bạn',
     newsletterLede:
-      'Một lá thư ngắn khi một máy tính mới được ra mắt hoặc một máy tính hiện có được xem xét lại. Không có ưu đãi, không có quảng cáo được tài trợ.',
+      'Một lá thư ngắn khi một máy tính mới được ra mắt hoặc một máy tính hiện có được xem xét lại.',
   },
 
   /*
@@ -200,9 +201,9 @@ export const vi = {
   toolsIndex: {
     title: 'Máy tính tài chính miễn phí',
     description:
-      'Ba máy tính miễn phí hiển thị các phép tính đằng sau khoản thanh toán thế chấp, so sánh thuê nhà với mua nhà và dự báo lãi suất kép.',
+      'Sáu máy tính miễn phí: khoản trả góp thế chấp, thuê hay mua nhà, lãi kép, lương thực nhận, thuế thu nhập liên bang và trả nợ. Mỗi máy tính đều hiển thị công thức.',
     heading: 'Máy tính tài chính miễn phí',
-    lede: 'Mỗi máy tính đều hiển thị công thức được sử dụng, liệt kê các giả định đằng sau kết quả và nêu rõ những gì nó không thực hiện. Không có nội dung nào ở đây yêu cầu địa chỉ email và không có nội dung nào yêu cầu bạn đăng ký bất cứ điều gì.',
+    lede: 'Mỗi máy tính đều hiển thị công thức được sử dụng, liệt kê các giả định đằng sau kết quả và nêu rõ những gì nó không thực hiện. Không kết quả nào yêu cầu địa chỉ email hay đăng ký tài khoản.',
     whatTheseAre: 'Các công cụ này là gì',
     whatTheseAreBody: [
       'Đây là các công cụ tính toán số học. Chúng lấy các con số bạn cung cấp, áp dụng một công thức đã được công bố và trả lại kết quả kèm theo cách tính chi tiết. Máy tính thế chấp ở đây không biết điểm tín dụng, thu nhập của bạn hoặc bên cho vay nào đang cung cấp ưu đãi gì trong tuần này và nó không cố gắng đoán.',
@@ -213,7 +214,7 @@ export const vi = {
   guidesIndex: {
     title: 'Hướng dẫn',
     description:
-      'Mười lăm lời giải thích về các phép tính đằng sau các khoản thế chấp, thuê nhà so với mua nhà và lãi suất kép, mỗi mục đều có công thức, các giả định và nguồn của nó.',
+      'Mười tám hướng dẫn về các phép tính đằng sau thế chấp, thuê hay mua nhà, lãi kép, tiền lương, thuế thu nhập và nợ, mỗi bài đều có công thức, giả định và nguồn.',
     heading: 'Hướng dẫn',
     lede: 'Giải thích chuyên sâu về các phép tính và các giả định đằng sau các công cụ tính toán. Mỗi hướng dẫn đều hiển thị công thức, liên kết đến các nguồn chính và có ngày xem xét.',
     missingHeading: 'Thiếu nội dung nào đó?',
@@ -222,6 +223,7 @@ export const vi = {
     suggestTopic: 'Đề xuất một chủ đề',
     groups: {
       home: 'Nhà ở và thế chấp',
+      money: 'Lương, thuế và nợ',
       renting: 'Thuê nhà và sở hữu nhà',
       investing: 'Đầu tư',
     },
@@ -241,7 +243,7 @@ export const vi = {
     isHeading: 'Trang web này là gì',
     isBody: [
       'Sáu công cụ tính toán, mười tám bài hướng dẫn và các nguồn tài liệu chính đằng sau chúng. Các công cụ này sử dụng những con số bạn cung cấp và áp dụng một công thức đã được công bố: công thức khấu hao cho khoản vay thế chấp, so sánh dòng tiền theo từng tháng giữa việc thuê và mua nhà, công thức lãi kép cho số dư tiết kiệm, cùng các phép tính về trả nợ, thuế thu nhập và thu nhập thực nhận.',
-      'Trang web được tài trợ bởi quảng cáo hiển thị. Điều đó định hình cách trang web được xây dựng. Các trang tải nhanh và chứa ít JavaScript, vì một trang tải nhanh sẽ giữ chân người đọc đủ lâu để xem quảng cáo, và vì một trang tải nhanh là trang mà mọi người sẽ quay lại. Không có công cụ tính toán nào yêu cầu địa chỉ email và không có kết quả nào bị chặn.',
+      'Trang web được duy trì bằng quảng cáo hiển thị, và điều đó quyết định cách nó được xây dựng. Các trang tải nhanh và dùng ít JavaScript, nên máy tính trả kết quả trên điện thoại cũ nhanh như trên máy tính để bàn. Không máy tính nào yêu cầu địa chỉ email, và không kết quả nào bị khóa.',
     ],
     isNotHeading: 'Trang web này không phải là gì',
     isNotBody: [
@@ -610,7 +612,7 @@ export const vi = {
       title: 'Công cụ tính thanh toán thế chấp với lịch trả nợ',
       description:
         'Tính toán khoản thanh toán thế chấp hàng tháng, tổng chi phí PITI và lịch trả nợ đầy đủ của bạn. Xem từng đô la tiền lãi và cách các khoản thanh toán thêm giúp thay đổi ngày tất toán.',
-      short: 'Tiền gốc và lãi hàng tháng, tổng PITI, lịch trình khấu hao và ảnh hưởng của các khoản thanh toán thêm.',
+      short: 'Tiền gốc và lãi hàng tháng, tổng khoản trả gồm thuế và bảo hiểm (PITI), lịch trình khấu hao và ảnh hưởng của các khoản thanh toán thêm.',
       category: 'Trang chủ',
       methodNote:
         'Công thức tính khoản thanh toán, lịch trình khấu hao và cách áp dụng các khoản thanh toán thêm được mô tả dưới đây. Không có nội dung nào trên trang này là báo giá thị trường trực tiếp.',

@@ -9,7 +9,7 @@ export const es = {
 
   author: {
     role: 'Autor',
-    bio: 'Trabaja en infraestructura de TI —nubes, CI/CD, infraestructura como código—, donde un cambio que no se puede verificar no llega a producción. Mantener las nubes en orden y los pipelines de entrega rápidos es el trabajo del día a día; el mismo criterio recorre todo este sitio. La aritmética vive en un solo sitio, las fórmulas están cubiertas por pruebas unitarias que las contrastan con cifras de préstamos publicadas, y toda cifra externa lleva su fuente y la fecha en que se consultó. Escribe las guías y mantiene el motor de cálculo. Otra persona lee la parte financiera de cada guía antes de publicarla. Aquí no se le dice al lector qué hacer.',
+    bio: 'Trabaja en infraestructura de TI —nubes, CI/CD, infraestructura como código—, donde un cambio que no se puede verificar no llega a producción. Mantener las nubes en orden y los pipelines de entrega rápidos es el trabajo del día a día; el mismo criterio recorre todo este sitio. La aritmética vive en un solo sitio, las fórmulas están cubiertas por pruebas unitarias que las contrastan con cifras de préstamos publicadas, y toda cifra externa lleva su fuente y la fecha en que se consultó. Escribe las guías y mantiene el motor de cálculo.',
   },
 
   reviewer: {
@@ -99,6 +99,7 @@ export const es = {
 
   newsletter: {
     emailAddress: 'Correo electrónico',
+    note: 'Puedes darte de baja con un clic desde cualquier envío. La dirección solo se usa para esta carta.',
     placeholder: 'you@example.com',
     subscribe: 'Suscribirse',
   },
@@ -143,7 +144,7 @@ export const es = {
     guidesHeading: 'La aritmética, escrita',
     newsletterHeading: 'Recibe los cálculos en tu correo',
     newsletterLede:
-      'Una carta corta cuando sale una calculadora nueva o cuando se revisa una existente. Sin ofertas ni espacios patrocinados.',
+      'Una carta corta cuando sale una calculadora nueva o cuando se revisa una existente.',
   },
 
   illustration: {
@@ -177,9 +178,9 @@ export const es = {
   toolsIndex: {
     title: 'Calculadoras financieras gratuitas',
     description:
-      'Tres calculadoras gratuitas que muestran la aritmética que hay detrás del pago de una hipoteca, de la comparación entre alquiler y compra y de la proyección del interés compuesto.',
+      'Seis calculadoras gratuitas: pago de hipoteca, alquilar o comprar, interés compuesto, sueldo neto, impuesto federal sobre la renta y pago de deudas. Cada una muestra su fórmula.',
     heading: 'Calculadoras financieras gratuitas',
-    lede: 'Cada calculadora muestra la fórmula que usa, enumera los supuestos que hay detrás del resultado y dice con claridad lo que no hace. Nada de esto pide una dirección de correo ni te pide que te suscribas a nada.',
+    lede: 'Cada calculadora muestra la fórmula que usa, enumera los supuestos que hay detrás del resultado y dice con claridad lo que no hace. Ningún resultado pide una dirección de correo ni una cuenta.',
     whatTheseAre: 'Qué son estas herramientas',
     whatTheseAreBody: [
       'Son herramientas aritméticas. Toman los números que introduces, aplican una fórmula publicada y devuelven el resultado con la cuenta adjunta. Una calculadora de hipotecas de este sitio no conoce tu historial crediticio, tus ingresos ni qué entidad ofrece qué esta semana, y no lo adivina.',
@@ -190,7 +191,7 @@ export const es = {
   guidesIndex: {
     title: 'Guías',
     description:
-      'Quince explicaciones de la aritmética que hay detrás de las hipotecas, del alquiler frente a la compra y del interés compuesto, cada una con su fórmula, sus supuestos y sus fuentes.',
+      'Dieciocho guías sobre la aritmética de la hipoteca, el alquiler frente a la compra, el interés compuesto, el sueldo, el impuesto sobre la renta y las deudas, cada una con su fórmula, sus supuestos y sus fuentes.',
     heading: 'Guías',
     lede: 'Explicaciones a fondo de la aritmética y de los supuestos que hay detrás de las calculadoras. Cada guía muestra la fórmula, enlaza con las fuentes primarias e incluye una fecha de revisión.',
     missingHeading: '¿Falta algo?',
@@ -199,6 +200,7 @@ export const es = {
     suggestTopic: 'Sugerir un tema',
     groups: {
       home: 'Vivienda e hipotecas',
+      money: 'Sueldo, impuestos y deudas',
       renting: 'Alquiler y propiedad',
       investing: 'Inversión',
     },
@@ -218,11 +220,11 @@ export const es = {
     isHeading: 'Qué es este sitio',
     isBody: [
       'Seis calculadoras, dieciocho guías y las fuentes primarias en las que se basan. Las calculadoras toman los números que introduces y aplican una fórmula publicada: la fórmula de amortización de una hipoteca, una comparación de efectivo mes a mes entre alquiler y compra, la fórmula del interés compuesto para un saldo de ahorro y los cálculos de pago de deudas, impuesto sobre la renta y salario neto.',
-      'El sitio se financia con publicidad gráfica. Eso condiciona cómo está construido. Las páginas cargan rápido y llevan poco JavaScript, porque una página que carga rápido retiene al lector el tiempo suficiente para ver la publicidad, y porque una página que carga rápido es a la que la gente vuelve. Ninguna calculadora pide una dirección de correo, y ningún resultado está bloqueado.',
+      'El sitio se financia con publicidad gráfica, y eso condiciona cómo está construido. Las páginas cargan rápido y llevan poco JavaScript, así que una calculadora responde igual de rápido en un teléfono viejo que en un ordenador. Ninguna calculadora pide una dirección de correo, y ningún resultado está bloqueado.',
     ],
     isNotHeading: 'Qué no es este sitio',
     isNotBody: [
-      'No es una corretora, no acepta solicitudes y no cobra comisión a nadie por hacer clic en nada. No hay espacios patrocinados, ni enlaces de afiliado, ni formularios de captación. La publicidad es publicidad gráfica y nada más, lo que significa que lo único que paga la visita de un lector es su atención.',
+      'No es un intermediario financiero, no acepta solicitudes y no cobra comisión a nadie por hacer clic en nada. No hay espacios patrocinados, ni enlaces de afiliado, ni formularios de captación. La publicidad es publicidad gráfica y nada más, lo que significa que lo único que paga la visita de un lector es su atención.',
       'Ninguna herramienta de aquí evalúa tus circunstancias. Una calculadora de hipotecas que devolviera «aporta el 20 %» estaría equivocada la mayoría de las veces, porque la respuesta correcta depende de cosas que la página no puede ver: tus otros ahorros, tu trabajo, tu tolerancia a un mal mes. Así que cada herramienta calcula y ahí se detiene.',
     ],
     rulesHeading: 'Las reglas que sigue el sitio',
@@ -582,7 +584,7 @@ export const es = {
       title: 'Calculadora de pago de hipoteca con amortización',
       description:
         'Calcula tu pago mensual de hipoteca, el coste total PITI y el cuadro completo de amortización. Mira cada dólar de intereses y cómo los pagos adicionales adelantan la fecha de cancelación.',
-      short: 'Capital e intereses mensuales, PITI completo, cuadro de amortización y el efecto de los pagos adicionales.',
+      short: 'Capital e intereses mensuales, el pago completo con impuestos y seguro (PITI), cuadro de amortización y el efecto de los pagos adicionales.',
       category: 'Vivienda',
       methodNote:
         'La fórmula del pago, el cuadro de amortización y el modo en que se aplican los pagos adicionales se describen más abajo. Nada de esta página es una cotización de mercado en vivo.',
