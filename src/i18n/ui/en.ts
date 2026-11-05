@@ -34,7 +34,7 @@ export const en = {
 
   author: {
     role: 'Author',
-    bio: 'Works in IT infrastructure — cloud, CI/CD, infrastructure as code — where a change that cannot be verified does not ship. Keeping cloud environments lean and delivery pipelines fast is the day job; the same standard runs through this site. The arithmetic lives in one place, the formulas are covered by unit tests that check them against published loan figures, and every figure that comes from outside carries its source and the date it was read. Writes the guides and maintains the calculation engine. A second person reads the financial content of each guide before it goes live. Nothing here tells the reader what to do.',
+    bio: 'Works in IT infrastructure — cloud, CI/CD, infrastructure as code — where a change that cannot be verified does not ship. Keeping cloud environments lean and delivery pipelines fast is the day job; the same standard runs through this site. The arithmetic lives in one place, the formulas are covered by unit tests that check them against published loan figures, and every figure that comes from outside carries its source and the date it was read. Writes the guides and maintains the calculation engine.',
   },
 
   reviewer: {
@@ -125,6 +125,7 @@ export const en = {
 
   newsletter: {
     emailAddress: 'Email address',
+    note: 'Unsubscribe from any issue in one click. The address is used for this letter and nothing else.',
     placeholder: 'you@example.com',
     subscribe: 'Subscribe',
   },
@@ -135,7 +136,7 @@ export const en = {
       'Free financial calculators for mortgage payments, rent versus buy, compound interest, take-home pay, federal tax and debt payoff. Every formula is shown.',
     eyebrow: 'Financial calculators',
     heading: 'Know the number before you decide',
-    lede: 'Free tools for the arithmetic behind a mortgage, a lease, a payslip and a stack of debt. Every formula is written out, every assumption belongs to you, and no page tells you what to do with the result.',
+    lede: 'Free tools for the arithmetic behind a mortgage, a lease, a paycheck and a stack of debt. Every formula is written out, every assumption belongs to you, and no page tells you what to do with the result.',
     cta: 'Browse the calculators',
     calculatorsEyebrow: 'The calculators',
     calculatorsHeading: 'Six questions, six sets of numbers',
@@ -169,7 +170,7 @@ export const en = {
     guidesHeading: 'The arithmetic, written out',
     newsletterHeading: 'Get the math in your inbox',
     newsletterLede:
-      'One short letter when a new calculator goes live or an existing one is re-reviewed. No offers, no sponsored placements.',
+      'One short letter when a new calculator goes live or an existing one is re-reviewed.',
   },
 
   /*
@@ -212,9 +213,9 @@ export const en = {
   toolsIndex: {
     title: 'Free Financial Calculators',
     description:
-      'Three free calculators that show the arithmetic behind a mortgage payment, a rent versus buy comparison and a compound interest projection.',
+      'Six free calculators: mortgage payment, rent versus buy, compound interest, take-home pay, federal income tax and debt payoff. Each one shows its formula.',
     heading: 'Free financial calculators',
-    lede: 'Each calculator shows the formula it uses, lists the assumptions behind the result, and states plainly what it does not do. Nothing here asks for an email address, and nothing here asks you to sign up for anything.',
+    lede: 'Each calculator shows the formula it uses, lists the assumptions behind the result, and states plainly what it does not do. No result asks for an email address, and none of it needs an account.',
     whatTheseAre: 'What these tools are',
     whatTheseAreBody: [
       'These are arithmetic tools. They take the numbers you supply, apply a published formula, and hand the result back with the working attached. A mortgage calculator here does not know your credit score, your income, or which lender is offering what this week, and it does not try to guess.',
@@ -225,7 +226,7 @@ export const en = {
   guidesIndex: {
     title: 'Guides',
     description:
-      'Fifteen explanations of the arithmetic behind mortgages, renting versus buying and compound interest, each with its formula, its assumptions and its sources.',
+      'Eighteen guides to the arithmetic of mortgages, renting versus buying, compound interest, pay, income tax and debt, each with its formula, assumptions and sources.',
     heading: 'Guides',
     lede: 'In-depth explanations of the arithmetic and the assumptions behind the calculators. Every guide shows the formula, links to the primary sources, and carries a review date.',
     missingHeading: 'Missing something?',
@@ -234,6 +235,7 @@ export const en = {
     suggestTopic: 'Suggest a topic',
     groups: {
       home: 'Home and mortgages',
+      money: 'Pay, tax and debt',
       renting: 'Renting and owning',
       investing: 'Investing',
     },
@@ -253,7 +255,7 @@ export const en = {
     isHeading: 'What this site is',
     isBody: [
       'Six calculators, eighteen guides, and the primary sources behind them. The calculators take numbers you supply and apply a published formula: the amortization formula for a mortgage, a month-by-month cash comparison for renting against buying, the compound interest formula for a savings balance, and the arithmetic of paying off debt, income tax and take-home pay.',
-      'The site is funded by display advertising. That shapes how it is built. Pages load quickly and carry little JavaScript, because a page that loads fast keeps the reader long enough to see the advertising, and because a page that loads fast is the one people come back to. No calculator asks for an email address, and no result is gated.',
+      'The site is funded by display advertising, and that shapes how it is built. Pages load quickly and carry little JavaScript, so a calculator answers as fast on an old phone as on a desktop. No calculator asks for an email address, and no result is gated.',
     ],
     isNotHeading: 'What this site is not',
     isNotBody: [
@@ -353,7 +355,7 @@ export const en = {
     description:
       'Every primary source this site relies on for its figures and its methods, and why each one is here.',
     heading: 'Sources',
-    lede: 'Every figure on this site comes from one of the organisations below, or from arithmetic the site shows in full. Nothing is quoted from a blog post, a summary or a secondary retelling.',
+    lede: 'Every figure on this site comes from one of the organizations below, or from arithmetic the site shows in full. Nothing is quoted from a blog post, a summary or a secondary retelling.',
     whyHeading: 'Why a source list exists',
     whyBody: [
       'A number without a source is an assertion. These pages are written for people who want to check the arithmetic themselves, which only works if the original data is one click away. Each guide therefore carries its own list of sources, and this page is the index of all of them.',
@@ -575,7 +577,7 @@ export const en = {
       'The calculations are implemented once, in one place, and tested. Even so, a mistake is possible. If you find one, the contact page explains how to report it, and reported defects are fixed and the review date updated.',
     advertisingHeading: 'Advertising',
     advertisingBody:
-      'The site is funded by display advertising. Advertisements are served by a third party and are not under the site\'s control. Advertisements are labelled and separated from the site\'s own content. No advertiser pays for a page, a placement, a placement in a search result, or a mention of a product in a guide.',
+      'The site is funded by display advertising. Advertisements are served by a third party and are not under the site\'s control. Advertisements are labeled and separated from the site\'s own content. No advertiser pays for a page, a placement, a placement in a search result, or a mention of a product in a guide.',
     useHeading: 'Use of the site',
     useBody:
       'The site is published for personal use. You may read it, print it and link to it. You may not republish substantial parts of the guides as your own work, or use the calculators to build a product that competes with the site.',
@@ -622,7 +624,7 @@ export const en = {
       title: 'Mortgage Payment Calculator with Amortization',
       description:
         'Calculate your monthly mortgage payment, total PITI cost and full amortization schedule. See every dollar of interest and how extra payments move the payoff date.',
-      short: 'Monthly P&I, full PITI, amortization schedule and the effect of extra payments.',
+      short: 'Monthly principal and interest, the full payment with tax and insurance (PITI), the amortization schedule and the effect of extra payments.',
       category: 'Home',
       methodNote:
         'The payment formula, the amortization schedule and the way extra payments are applied are described below. Nothing on this page is a live market quote.',
@@ -683,7 +685,7 @@ export const en = {
       ],
       limits: [
         'It does not check whether you qualify for a loan, and it does not look at your credit score, income, debt-to-income ratio or any lender\'s underwriting rules.',
-        'It does not quote current market rates for your postcode. The interest rate you enter is the rate you use, and nothing on this page is live.',
+        'It does not quote current market rates for your ZIP code. The interest rate you enter is the rate you use, and nothing on this page is live.',
         'It does not model private mortgage insurance, points, loan origination fees, closing costs, or the escrow timing that decides which month a tax bill lands in.',
         'It does not tell you whether to buy a home. It produces a number and the working behind it.',
       ],
@@ -1190,7 +1192,7 @@ export const en = {
       fields: {
         grossIncome: 'Gross income for the year',
         filingStatus: 'Filing status',
-        itemisedDeduction: 'Itemised deduction',
+        itemisedDeduction: 'Itemized deduction',
         standardDeduction: 'Standard deduction',
         useStandard: 'Use the standard deduction',
         state: 'State',
@@ -1217,7 +1219,7 @@ export const en = {
         taxableIncome: 'Taxable income',
         deductionApplied: 'Deduction applied',
         standardDeduction: 'Standard deduction',
-        itemisedDeduction: 'Itemised deduction',
+        itemisedDeduction: 'Itemized deduction',
         federalTax: 'Federal income tax',
         stateTaxableIncome: 'State taxable income',
         stateCredits: 'State credits',
@@ -1229,7 +1231,7 @@ export const en = {
         marginalRate: 'Marginal rate',
         afterTax: 'Income after tax',
         note:
-          'The deduction applied is the larger of the two: the standard deduction for the filing status, or the itemised deduction entered on the left. The state tax is worked out from the state you pick.',
+          'The deduction applied is the larger of the two: the standard deduction for the filing status, or the itemized deduction entered on the left. The state tax is worked out from the state you pick.',
       },
       resultNote:
         'The figure is a tax liability, not the amount withheld from a paycheque. The federal figure does not include the federal credits or the payments already made during the year; the state figure includes the state credits the model carries.',
@@ -1247,7 +1249,7 @@ export const en = {
         'taxable income = gross income − pre-tax deductions − deduction; tax = bracket table applied to taxable income; state tax = the state brackets applied to the adjusted gross income less the state standard deduction and exemption, less the federal income tax paid where the state allows it, less the state credits',
       method: [
         'The calculation starts with the gross income for the year and takes the pre-tax deductions off, because a 401(k) contribution or a health account contribution is not taxed as income.',
-        'The deduction comes next. The standard deduction for the filing status is used unless the reader enters an itemised deduction, and the larger of the two is the one that applies. The standard deduction for 2026 is $16,100 for a single filer, $32,200 for married filing jointly and $24,150 for head of household.',
+        'The deduction comes next. The standard deduction for the filing status is used unless the reader enters an itemized deduction, and the larger of the two is the one that applies. The standard deduction for 2026 is $16,100 for a single filer, $32,200 for married filing jointly and $24,150 for head of household.',
         'What is left is the taxable income, and the tax is the 2026 bracket table applied to it. Each bracket is a fixed amount of tax plus a percentage of the income above the bottom of that bracket, the way the IRS publishes it.',
         'The two rates answer different questions. The marginal rate is the rate the next dollar of taxable income is taxed at, which is the highest bracket the income reaches. The effective rate is the total tax divided by the whole income, and it is lower because the higher brackets only touch the part of the income above them.',
         'The state tax is worked out on its own. The state starts from the adjusted gross income, takes off its own standard deduction and personal exemption where it gives them as exclusions, applies its own brackets slice by slice, and takes off the credits it pays. The states that give the exemption or the standard deduction as a credit instead get it off the tax, which is where those credits are counted.',
@@ -1258,9 +1260,9 @@ export const en = {
       limits: [
         'It does not model the federal tax credits. The federal child tax credit, the federal earned income credit and the education credits reduce the tax and are not in the calculation.',
         'It does not model the capital gains and ordinary income distinction, so a year with investment income is calculated at the ordinary rates.',
-        'It does not model the senior deduction, or any deduction outside the standard and itemised amounts entered on the left.',
+        'It does not model the senior deduction, or any deduction outside the standard and itemized amounts entered on the left.',
         'It does not model self-employment tax, which is charged on the net earnings of a self-employed person and has its own base and rate.',
-        'It does not model the state and local income tax deduction that many states allow inside their itemised deductions.',
+        'It does not model the state and local income tax deduction that many states allow inside their itemized deductions.',
         'It does not model capital gains rates, the surtaxes some states charge high earners, or the taxes of city and county governments.',
         'It does not use the head of household table of Vermont, whose rates for 2026 are published as preliminary figures, so a Vermont head of household is worked out from the single filer table.',
         'It does not carry every state credit. The state earned income tax credit is there for the states that set it as a percentage of the federal credit and for the three that work it out on their own, and the child tax credit is there for the states whose credit turns on the age of the child. The credits of the other states are not in it.',
@@ -1268,7 +1270,7 @@ export const en = {
       faq: [
         {
           q: 'Which deduction should I use?',
-          a: 'The standard deduction unless the itemised deductions add up to more. The calculator shows the standard deduction for the filing status and the itemised figure side by side, so the comparison is one glance.',
+          a: 'The standard deduction unless the itemized deductions add up to more. The calculator shows the standard deduction for the filing status and the itemized figure side by side, so the comparison is one glance.',
         },
         {
           q: 'What is the difference between the effective and the marginal rate?',

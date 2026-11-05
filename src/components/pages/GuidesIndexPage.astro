@@ -19,11 +19,12 @@ const ui = getUi(locale);
 
 const guides = await getGuides(locale);
 
-const groups = ['home', 'renting', 'investing'] as const;
+const groups = ['home', 'money', 'renting', 'investing'] as const;
 
 /** The calculator a guide card wears the badge of: the first one it explains. */
 const FALLBACK_TOOL: Record<(typeof groups)[number], ToolSlug> = {
   home: 'mortgage-payment',
+  money: 'net-pay',
   renting: 'rent-vs-buy',
   investing: 'compound-interest',
 };

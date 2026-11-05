@@ -34,7 +34,10 @@ const slotIds = {
   footer: import.meta.env.PUBLIC_ADSENSE_SLOT_FOOTER,
 };
 
-const slotId = slotIds[placement];
+// A slot ID is digits only. Anything else (a stray space, the angle
+// brackets from a copied placeholder) makes Google ignore the unit, so it
+// is stripped here rather than trusted.
+const slotId = (slotIds[placement] ?? '').replace(/\D/g, '');
 const enabled = Boolean(slotId);
 ---
 

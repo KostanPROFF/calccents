@@ -12,7 +12,7 @@
 import { getUi } from '../../i18n/ui/index.ts';
 import { fill } from '../../i18n/ui/index.ts';
 import { forwardArrow, localePath, type Locale } from '../../i18n/locales.ts';
-import { computeMonthlyPayment } from '../../lib/calc/mortgage.ts';
+import { HERO_DEFAULTS as DEFAULTS, heroExample } from './heroExample.ts';
 import { formatCurrency } from '../../lib/calc/money.ts';
 
 interface Props {
@@ -22,10 +22,7 @@ interface Props {
 const { locale } = Astro.props;
 const t = getUi(locale).home;
 
-const DEFAULTS = { price: 450000, down: 20, rate: 6.5, years: 30 };
-const loan = DEFAULTS.price * (1 - DEFAULTS.down / 100);
-const monthly = computeMonthlyPayment(loan, DEFAULTS.rate, DEFAULTS.years * 12);
-const totalInterest = monthly * DEFAULTS.years * 12 - loan;
+const { loan, monthly, totalInterest } = heroExample();
 ---
 
 <form class="hero-calc" id="hero-calc" data-years={t.calcYears}>
