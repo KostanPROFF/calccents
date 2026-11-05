@@ -4,8 +4,10 @@
  *
  * Two scripts on this site set cookies: the AdSense loader, which serves
  * the advertising, and the Google Analytics loader, which counts the page
- * views. Neither one may be in the document before the reader has answered
- * the cookie question.
+ * views. Neither one may be in the document as a script tag. The ad script
+ * waits for the answer. The analytics script runs in consent mode from the
+ * first page, so it may only start with every kind of storage denied: that
+ * is what keeps it from setting a cookie before the answer.
  *
  * The gate proves five things over the built output, where the mistake
  * would actually ship:
@@ -19,6 +21,8 @@
  *      request waits for the answer as well
  *   5. the privacy policy names that provider, because it is the one that
  *      receives the request
+ *   6. the analytics start in consent mode with storage denied unless the
+ *      reader has already accepted, and only on the production host
  *
  * The third point is the one that matters. A page that carries the
  * tracker in the head works exactly like a page without a consent banner,
@@ -46,6 +50,15 @@ const DECISION_MARKER = 'cc-consent';
 
 /** The trackers, and where they are loaded from. */
 const ANALYTICS_MARKER = 'googletagmanager.com/gtag/js?id=';
+
+/**
+ * Consent mode. The default has to be set before the config call, and it
+ * has to be denied unless the reader's stored answer says otherwise; the
+ * host check keeps a local copy of the site out of the analytics.
+ */
+const CONSENT_DEFAULT_MARKER = "gtag('consent', 'default', consentState(granted ? 'granted' : 'denied'))";
+const CONSENT_START_MARKER = "startAnalytics(decision === 'granted')";
+const ANALYTICS_HOST_MARKER = "if (host !== ANALYTICS_HOST && host !== 'www.' + ANALYTICS_HOST) return;";
 const ADS_MARKER = 'pagead2.googlesyndication.com';
 
 /**
@@ -189,6 +202,7 @@ let pagesWithoutAds = 0;
 let pagesWithoutHosting = 0;
 let pagesWithoutSuppression = 0;
 let pagesWithStaticTracker = 0;
+let pagesWithoutConsentMode = 0;
 let pagesWithoutCrawlerException = 0;
 const staticExamples: string[] = [];
 
@@ -220,6 +234,13 @@ for (const file of htmlFiles) {
   if (!html.includes(REOPEN_MARKER)) pagesWithoutReopen += 1;
   if (!html.includes(DECISION_MARKER)) pagesWithoutDecision += 1;
   if (!html.includes(ANALYTICS_MARKER)) pagesWithoutAnalytics += 1;
+  if (
+    ![CONSENT_DEFAULT_MARKER, CONSENT_START_MARKER, ANALYTICS_HOST_MARKER].every((marker) =>
+      html.includes(marker),
+    )
+  ) {
+    pagesWithoutConsentMode += 1;
+  }
   if (!html.includes(ADS_MARKER)) pagesWithoutAds += 1;
   if (!html.includes(HOSTING_BEACON)) pagesWithoutHosting += 1;
   if (!html.includes(HOSTING_SUPPRESSION_MARKER)) pagesWithoutSuppression += 1;
@@ -301,6 +322,13 @@ if (pagesWithStaticTracker > 0) {
       `so the request goes out before the answer (${staticExamples.join(', ')})`,
   );
 }
+if (pagesWithoutConsentMode > 0) {
+  problems.push(
+    `${pagesWithoutConsentMode} of ${htmlFiles.length} pages do not start the analytics in ` +
+      'consent mode with storage denied on the production host only, so the analytics cookie ' +
+      'could be set before the answer',
+  );
+}
 if (!cssHasPendingRule) {
   problems.push('no stylesheet keeps the ad units hidden while the answer is pending');
 }
@@ -371,7 +399,7 @@ if (problems.length > 0) {
 
 console.log(
   `Consent gating check passed: ${htmlFiles.length} pages carry the banner, ` +
-    `all three trackers are loaded only after the answer, the ad units stay hidden until then, ` +
+    `the ad script and the beacon are loaded only after the answer, the analytics start in consent mode with storage denied, the ad units stay hidden until then, ` +
     `Google's crawler is served the ad script directly, the hosting provider's beacon is left ` +
     `out for a reader in the European Union, and the privacy policy names the hosting provider ` +
     `whose page analytics run on every visit.`,

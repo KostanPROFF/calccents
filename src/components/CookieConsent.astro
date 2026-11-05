@@ -2,12 +2,15 @@
 /**
  * Cookie consent.
  *
- * The site loads three things once the reader has answered: the AdSense
- * script from Google, which serves the advertising, the Google Analytics
- * script, which counts the page views, and the Cloudflare beacon, which
- * measures how fast the pages load. The first two set cookies. The third
- * sets none, but it is still a request to a third party, so it waits for
- * the answer as well.
+ * The site loads two things once the reader has answered: the AdSense
+ * script from Google, which serves the advertising, and the Cloudflare
+ * beacon, which measures how fast the pages load. The first sets cookies.
+ * The second sets none, but it is still a request to a third party, so it
+ * waits for the answer as well.
+ *
+ * Google Analytics is the exception. It runs in consent mode from the first
+ * page: before the answer, and after a refusal, it sets no cookie and sends
+ * only cookieless pings. Accepting switches its cookie on.
  *
  * Cloudflare can add a beacon of its own to every page it serves, and that
  * one reports the page view before anyone has answered anything. The
@@ -17,16 +20,18 @@
  * site's own copy takes its place after the answer.
  *
  * The script tags are not in the document. They are injected by the
- * bootstrap below once the answer is known, which is why the source of a
- * page contains the URLs but no request goes out before the answer.
+ * bootstrap below, the ad script and the beacon only once the answer is
+ * known, which is why the source of a page contains the URLs but no request
+ * that can set a cookie goes out before the answer.
  *
  * The three states:
  *
- *   no answer   the banner is shown, the ad units stay hidden and no
- *               request leaves the browser
- *   accepted   all three scripts are loaded, the ad units are pushed to
- *               Google
- *   declined   nothing is loaded, the ad units are removed from the page
+ *   no answer   the banner is shown, the ad units stay hidden, and only
+ *               the cookieless analytics pings leave the browser
+ *   accepted   analytics storage is granted, the ad script and the beacon
+ *               are loaded, the ad units are pushed to Google
+ *   declined   analytics stays cookieless, nothing else is loaded, the ad
+ *               units are removed from the page
  *
  * A reader in the European Union is an exception to the middle one: the
  * hosting provider's beacon is not loaded for them at all, so that provider
@@ -64,6 +69,7 @@ const adsenseClient = import.meta.env.PUBLIC_ADSENSE_CLIENT || SITE.adsensePubli
 const cloudflareToken =
   import.meta.env.PUBLIC_CLOUDFLARE_BEACON_TOKEN || SITE.cloudflareBeaconToken;
 const gaUrl = `https://www.googletagmanager.com/gtag/js?id=${gaId}`;
+const analyticsHost = new URL(SITE.origin).hostname;
 const adsenseUrl = `https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${adsenseClient}`;
 const cloudflareUrl = 'https://static.cloudflareinsights.com/beacon.min.js';
 
@@ -82,6 +88,7 @@ const bootstrap = `(function () {
   var KEY = 'cc-consent';
   var GA_ID = '${gaId}';
   var GA_URL = '${gaUrl}';
+  var ANALYTICS_HOST = '${analyticsHost}';
   var ADSENSE_URL = '${adsenseUrl}';
   var CLOUDFLARE_URL = '${cloudflareUrl}';
   var CLOUDFLARE_TOKEN = '${cloudflareToken}';
@@ -102,16 +109,46 @@ const bootstrap = `(function () {
     try { window.localStorage.setItem(KEY, value); } catch (error) { /* private mode */ }
   }
 
-  function loadAnalytics() {
+  /*
+   * Google Analytics, in consent mode.
+   *
+   * The tag is loaded on every page, before the answer, but it starts with
+   * every kind of storage denied. In that state it sets no cookie and reads
+   * none, and sends Google only a cookieless signal that a page was viewed,
+   * which Google uses to model the visits it cannot count. Accepting
+   * switches storage on; declining leaves it off.
+   *
+   * It only runs on the production host. A copy of the site running on a
+   * developer's machine would otherwise report its page views into the
+   * same property, and those visits would be counted as readers.
+   */
+  var analyticsStarted = false;
+  var CONSENT_TYPES = ['ad_storage', 'ad_user_data', 'ad_personalization', 'analytics_storage'];
+
+  function consentState(value) {
+    var state = {};
+    for (var i = 0; i < CONSENT_TYPES.length; i += 1) { state[CONSENT_TYPES[i]] = value; }
+    return state;
+  }
+
+  function startAnalytics(granted) {
+    var host = window.location.hostname;
+    if (host !== ANALYTICS_HOST && host !== 'www.' + ANALYTICS_HOST) return;
     window.dataLayer = window.dataLayer || [];
     function gtag() { window.dataLayer.push(arguments); }
     window.gtag = gtag;
+    gtag('consent', 'default', consentState(granted ? 'granted' : 'denied'));
     gtag('js', new Date());
     gtag('config', GA_ID);
     var el = document.createElement('script');
     el.async = true;
     el.src = GA_URL;
     document.head.appendChild(el);
+    analyticsStarted = true;
+  }
+
+  function grantAnalytics() {
+    if (analyticsStarted) window.gtag('consent', 'update', consentState('granted'));
   }
 
   function loadAds() {
@@ -253,7 +290,7 @@ const bootstrap = `(function () {
 
   function grant() {
     document.documentElement.classList.add('consent-granted');
-    loadAnalytics();
+    grantAnalytics();
     loadAds();
     loadHostingAnalyticsWhenKnown();
   }
@@ -280,6 +317,8 @@ const bootstrap = `(function () {
   function isCrawler() {
     return /bot|crawler|spider|slurp|mediapartners/i.test(navigator.userAgent || '');
   }
+
+  if (!isCrawler()) startAnalytics(decision === 'granted');
 
   if (isCrawler()) {
     document.documentElement.classList.add('consent-granted');
