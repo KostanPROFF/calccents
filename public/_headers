@@ -1,0 +1,4 @@
+# Files in /_astro/ carry a content hash in their name, so a changed file gets
+# a new URL and an old URL never changes. They can be kept for a year.
+/_astro/*
+  Cache-Control: public, max-age=31536000, immutable
