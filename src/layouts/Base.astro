@@ -195,6 +195,15 @@ const reviewer = {
     <Fragment
       set:html={'<meta name="impact-site-verification" value="06fd731b-1b39-47ba-8f9c-8994a5eb280c" />'}
     />
+    <!--
+      Impact's Universal Tracking Tag, exactly as Impact gave it.
+
+      Impact's site check looks for it in the page, and once the account is
+      approved it turns links to Impact's brands into tracked affiliate links
+      and counts their impressions. It loads asynchronously, so it does not
+      hold up the page.
+    -->
+    <script is:inline type="text/javascript">(function(i,m,p,a,c,t){c.ire_o=p;c[p]=c[p]||function(){(c[p].a=c[p].a||[]).push(arguments)};t=a.createElement(m);var z=a.getElementsByTagName(m)[0];t.async=1;t.src=i;z.parentNode.insertBefore(t,z)})('https://utt.impactcdn.com/P-A8149810-0176-4098-922f-b0dfc765b8cb1.js','script','impactStat',document,window);impactStat('transformLinks');impactStat('trackImpression');</script>
     <link rel="sitemap" href="/sitemap-index.xml" />
 
     <!--
