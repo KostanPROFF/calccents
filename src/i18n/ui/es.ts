@@ -96,9 +96,9 @@ export const es = {
   },
 
   home: {
-    title: 'Calccents — Calculadoras financieras que muestran sus cuentas',
+    title: 'Calccents — calculadoras financieras con fórmulas',
     description:
-      'Calculadoras financieras gratuitas para el pago de hipotecas, comparar alquiler y compra, el interés compuesto, el salario neto, el impuesto federal y la amortización de deudas. Se muestra cada fórmula.',
+      'Calculadoras financieras gratis: hipoteca, alquiler o compra, interés compuesto, salario neto, impuesto federal y deudas. Cada fórmula a la vista.',
     socialDescription:
       'Calculadoras gratis de hipoteca, alquiler, interés, salario, impuestos y deudas. Con cada fórmula.',
     eyebrow: 'Calculadoras financieras',

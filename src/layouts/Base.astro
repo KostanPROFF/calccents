@@ -63,8 +63,15 @@ const canonical = new URL(path, site.origin).toString();
 const OG_IMAGE_VERSION = 2;
 const ogImage = new URL(`/og-image.png?v=${OG_IMAGE_VERSION}`, site.origin).toString();
 
-const fullTitle =
-  path === '/' ? `${site.name} — ${site.tagline}` : `${title} | ${site.name}`;
+/**
+ * The title in the browser tab and in search results.
+ *
+ * Every page adds the site name after its own title, except the home page
+ * in each language, whose title already starts with the site name; adding
+ * it again gave "Calccents — … | Calccents" on every translated home page.
+ */
+const isHome = path === localePath(locale, '/');
+const fullTitle = isHome ? title : `${title} | ${site.name}`;
 
 /**
  * The same page in the other languages.

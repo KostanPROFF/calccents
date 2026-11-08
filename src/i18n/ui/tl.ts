@@ -110,9 +110,9 @@ export const tl = {
   },
 
   home: {
-    title: 'Calccents — Mga financial calculator na nagpapakita ng kanilang kalkulasyon',
+    title: 'Calccents — mga financial calculator na may formula',
     description:
-      'Libeng mga financial calculator para sa mortgage payments, rent versus buy, compound interest, take-home pay, federal tax at debt payoff. Ipinapakita ang bawat formula.',
+      'Libreng financial calculator para sa mortgage, upa o bili, compound interest, take-home pay, federal tax at utang. Ipinapakita ang bawat formula.',
     socialDescription:
       'Libreng calculator para sa mortgage, upa o bili, interest, sahod, buwis at utang. Kita ang bawat formula.',
     eyebrow: 'Mga financial calculator',
