@@ -186,6 +186,15 @@ const reviewer = {
       Like the tag above it carries no code and makes no request.
     -->
     <meta name="fo-verify" content="659ef6af-d867-4b56-aab5-d48f9b2e69d1" />
+    <!--
+      The same proof for Impact, another affiliate network. Impact asks for
+      the code in a `value` attribute rather than `content`, so it is kept
+      exactly as they gave it. HTML has no `value` on a meta tag, so Astro's
+      type check refuses it as an attribute; it goes in as written markup.
+    -->
+    <Fragment
+      set:html={'<meta name="impact-site-verification" value="06fd731b-1b39-47ba-8f9c-8994a5eb280c" />'}
+    />
     <link rel="sitemap" href="/sitemap-index.xml" />
 
     <!--
