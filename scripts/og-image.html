@@ -16,7 +16,10 @@
             --screenshot=public/og-image.png --window-size=1200,630 \
             "file://$PWD/scripts/og-image.html"
 
-        The values below are the dark theme tokens from src/styles/global.css.
+        The values below are the dark theme tokens from src/styles/global.css:
+        the page background, the brand gradient (violet into cyan into mint),
+        the heading gradient and the text colours. The heading and the
+        mortgage example are the ones on the home page.
       */
       * {
         margin: 0;
@@ -27,111 +30,274 @@
       body {
         width: 1200px;
         height: 630px;
-        background: #08090a;
-        color: #f3f5f6;
-        font-family: 'Inter', -apple-system, 'Helvetica Neue', Arial, sans-serif;
+        background:
+          radial-gradient(ellipse 620px 420px at 12% -10%, rgba(139, 123, 255, 0.28) 0%, transparent 70%),
+          radial-gradient(ellipse 560px 420px at 92% 110%, rgba(62, 232, 170, 0.16) 0%, transparent 70%),
+          radial-gradient(ellipse 520px 380px at 78% 10%, rgba(80, 190, 255, 0.14) 0%, transparent 70%),
+          #05060b;
+        color: #f5f6ff;
+        font-family: -apple-system, 'SF Pro Display', 'Inter', 'Helvetica Neue', Arial, sans-serif;
         -webkit-font-smoothing: antialiased;
-        display: grid;
-        grid-template-rows: auto 1fr;
-        padding: 72px 80px;
+        padding: 64px 72px;
         position: relative;
         overflow: hidden;
+        display: grid;
+        grid-template-columns: 1fr 372px;
+        column-gap: 56px;
+      }
+
+      body::before {
+        content: '';
+        position: absolute;
+        inset: 0;
+        background-image:
+          linear-gradient(rgba(255, 255, 255, 0.035) 1px, transparent 1px),
+          linear-gradient(90deg, rgba(255, 255, 255, 0.035) 1px, transparent 1px);
+        background-size: 48px 48px;
+        -webkit-mask-image: radial-gradient(ellipse 70% 70% at 30% 40%, #000 0%, transparent 80%);
+        pointer-events: none;
+      }
+
+      .copy {
+        position: relative;
+        display: flex;
+        flex-direction: column;
       }
 
       .brand {
         display: flex;
         align-items: center;
         gap: 14px;
-        font-size: 26px;
+        font-size: 28px;
         font-weight: 600;
         letter-spacing: -0.02em;
       }
 
       .mark {
-        width: 44px;
-        height: 44px;
-        border-radius: 12px;
-        background: #6e8fff;
-        color: #05070f;
+        width: 48px;
+        height: 48px;
+        border-radius: 14px;
+        background:
+          linear-gradient(180deg, rgba(255, 255, 255, 0.35) 0%, rgba(255, 255, 255, 0) 50%),
+          linear-gradient(135deg, #a596ff 0%, #6fc8ff 50%, #5cf2c0 100%);
         display: flex;
         align-items: center;
         justify-content: center;
-        font-size: 24px;
-        font-weight: 700;
-      }
-
-      .body {
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        max-width: 760px;
       }
 
       .eyebrow {
-        font-size: 17px;
-        font-weight: 500;
+        margin-top: 52px;
+        align-self: flex-start;
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        padding: 8px 18px;
+        border-radius: 999px;
+        border: 1px solid rgba(139, 123, 255, 0.4);
+        background: rgba(139, 123, 255, 0.12);
+        font-size: 16px;
+        font-weight: 600;
         letter-spacing: 0.14em;
         text-transform: uppercase;
-        color: #6e8fff;
+        color: #cdc6ff;
+      }
+
+      .eyebrow::before {
+        content: '';
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        background: #5cf2c0;
+        box-shadow: 0 0 10px #5cf2c0;
       }
 
       h1 {
+        margin-top: 24px;
+        font-size: 74px;
+        line-height: 1.02;
+        font-weight: 800;
+        letter-spacing: -0.045em;
+      }
+
+      h1 .accent {
+        background: linear-gradient(100deg, #a596ff 0%, #6fc8ff 55%, #5cf2c0 100%);
+        -webkit-background-clip: text;
+        background-clip: text;
+        color: transparent;
+      }
+
+      .lede {
         margin-top: 22px;
-        font-size: 68px;
-        line-height: 1.06;
+        font-size: 24px;
+        line-height: 1.45;
+        color: #aab1cc;
+        max-width: 600px;
+      }
+
+      .actions {
+        margin-top: auto;
+        display: flex;
+        align-items: center;
+        gap: 18px;
+      }
+
+      .cta {
+        padding: 16px 30px;
+        border-radius: 999px;
+        background: linear-gradient(115deg, #a596ff 0%, #6fc8ff 48%, #5cf2c0 100%);
+        color: #07051a;
+        font-size: 24px;
+        font-weight: 700;
+        letter-spacing: -0.01em;
+        box-shadow: 0 10px 40px rgba(139, 123, 255, 0.35);
+      }
+
+      .note {
+        font-size: 20px;
+        color: #8d94b3;
+      }
+
+      .card {
+        position: relative;
+        align-self: center;
+        padding: 28px;
+        border-radius: 28px;
+        border: 1px solid rgba(139, 123, 255, 0.35);
+        background: linear-gradient(180deg, rgba(26, 30, 52, 0.92) 0%, rgba(12, 14, 24, 0.92) 100%);
+        box-shadow: 0 30px 80px rgba(0, 0, 0, 0.5), 0 0 60px rgba(139, 123, 255, 0.18);
+      }
+
+      .card-title {
+        font-size: 17px;
         font-weight: 600;
-        letter-spacing: -0.035em;
+        color: #aab1cc;
       }
 
-      p.lede {
-        margin-top: 26px;
-        font-size: 25px;
-        line-height: 1.5;
-        color: #9aa2a8;
-        max-width: 680px;
+      .row {
+        margin-top: 18px;
       }
 
-      .chart {
+      .row-label {
+        display: flex;
+        justify-content: space-between;
+        font-size: 16px;
+        color: #aab1cc;
+      }
+
+      .row-label b {
+        color: #f5f6ff;
+        font-weight: 700;
+      }
+
+      .track {
+        position: relative;
+        margin-top: 10px;
+        height: 6px;
+        border-radius: 999px;
+        background: rgba(255, 255, 255, 0.08);
+      }
+
+      .track span {
         position: absolute;
-        right: -40px;
-        bottom: -60px;
-        width: 620px;
-        opacity: 0.9;
+        inset: 0 auto 0 0;
+        border-radius: 999px;
+        background: linear-gradient(90deg, #a596ff 0%, #6fc8ff 60%, #5cf2c0 100%);
+      }
+
+      .track span::after {
+        content: '';
+        position: absolute;
+        right: -9px;
+        top: -6px;
+        width: 18px;
+        height: 18px;
+        border-radius: 50%;
+        background: #f5f6ff;
+      }
+
+      .result {
+        margin-top: 24px;
+        padding: 20px;
+        border-radius: 18px;
+        background: #080a13;
+        border: 1px solid rgba(255, 255, 255, 0.06);
+      }
+
+      .result-label {
+        font-size: 13px;
+        font-weight: 600;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+        color: #a99dff;
+      }
+
+      .result-value {
+        margin-top: 6px;
+        font-size: 46px;
+        font-weight: 800;
+        letter-spacing: -0.03em;
+        background: linear-gradient(100deg, #a596ff 0%, #6fc8ff 55%, #5cf2c0 100%);
+        -webkit-background-clip: text;
+        background-clip: text;
+        color: transparent;
+      }
+
+      .result-formula {
+        margin-top: 8px;
+        font-family: ui-monospace, 'SF Mono', Menlo, monospace;
+        font-size: 14px;
+        color: #8d94b3;
       }
     </style>
   </head>
   <body>
-    <div class="brand">
-      <span class="mark">C</span>
-      <span>Calccents</span>
-    </div>
+    <div class="copy">
+      <div class="brand">
+        <span class="mark">
+          <svg width="30" height="30" viewBox="0 0 32 32" aria-hidden="true">
+            <path
+              d="M22.4 11.2a7.4 7.4 0 1 0 0 9.6"
+              fill="none"
+              stroke="#07051a"
+              stroke-width="3.4"
+              stroke-linecap="round"
+            />
+          </svg>
+        </span>
+        <span>Calccents</span>
+      </div>
 
-    <div class="body">
       <span class="eyebrow">Financial calculators</span>
-      <h1>Every figure<br />shows its work</h1>
+      <h1>Know the number<br /><span class="accent">before you decide</span></h1>
       <p class="lede">
-        Mortgage, rent, compound interest, take-home pay, federal tax and debt payoff.
-        The formula sits next to the answer, and every number carries its source.
+        Mortgage, rent vs buy, interest, paycheck, tax and debt. Every formula written out.
       </p>
+
+      <div class="actions">
+        <span class="cta">Try the free calculators →</span>
+        <span class="note">No sign-up</span>
+      </div>
     </div>
 
-    <svg class="chart" viewBox="0 0 620 420" fill="none" aria-hidden="true">
-      <defs>
-        <linearGradient id="fill" x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0%" stop-color="#6e8fff" stop-opacity="0.22" />
-          <stop offset="100%" stop-color="#6e8fff" stop-opacity="0" />
-        </linearGradient>
-      </defs>
-      <path
-        d="M0 392 C 90 384, 150 352, 200 306 C 258 252, 292 176, 330 96 C 352 48, 372 20, 400 0 L400 420 L0 420 Z"
-        fill="url(#fill)"
-      />
-      <path
-        d="M0 392 C 90 384, 150 352, 200 306 C 258 252, 292 176, 330 96 C 352 48, 372 20, 400 0"
-        stroke="#6e8fff"
-        stroke-width="3.5"
-        stroke-linecap="round"
-      />
-    </svg>
+    <div class="card">
+      <div class="card-title">A monthly mortgage payment</div>
+      <div class="row">
+        <div class="row-label"><span>Home price</span><b>$450,000</b></div>
+        <div class="track"><span style="width: 42%"></span></div>
+      </div>
+      <div class="row">
+        <div class="row-label"><span>Down payment</span><b>20%</b></div>
+        <div class="track"><span style="width: 34%"></span></div>
+      </div>
+      <div class="row">
+        <div class="row-label"><span>Interest rate</span><b>6.50%</b></div>
+        <div class="track"><span style="width: 62%"></span></div>
+      </div>
+      <div class="result">
+        <div class="result-label">Principal &amp; interest</div>
+        <div class="result-value">$2,275.44</div>
+        <div class="result-formula">M = P · r(1+r)ⁿ / ((1+r)ⁿ − 1)</div>
+      </div>
+    </div>
   </body>
 </html>

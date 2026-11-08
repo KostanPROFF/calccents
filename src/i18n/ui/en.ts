@@ -125,6 +125,8 @@ export const en = {
     title: 'Calccents — Financial calculators that show their work',
     description:
       'Free financial calculators for mortgage payments, rent versus buy, compound interest, take-home pay, federal tax and debt payoff. Every formula is shown.',
+    socialDescription:
+      'Free mortgage, rent-vs-buy, interest, paycheck, tax and debt calculators. Every formula shown.',
     eyebrow: 'Financial calculators',
     heading: 'Know the number before you decide',
     lede: 'Free tools for the arithmetic behind a mortgage, a lease, a paycheck and a stack of debt. Every formula is written out, every assumption belongs to you, and no page tells you what to do with the result.',

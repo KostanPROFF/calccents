@@ -487,6 +487,14 @@ and committed as `public/og-image.png`:
   "file://$PWD/scripts/og-image.html"
 ```
 
+After redrawing it, raise `OG_IMAGE_VERSION` in `src/layouts/Base.astro`.
+Social apps cache the card by its address, and links shared before would
+keep the old card.
+
+The home page gives link previews a shorter description than search results
+(`home.socialDescription` in each language file): a preview on a phone shows
+about 110 to 125 characters and cuts the rest.
+
 The picture is decorative and carries no figures of its own, so a guide
 picture repeats the arithmetic of the guide rather than inventing a number
 nobody can check.
