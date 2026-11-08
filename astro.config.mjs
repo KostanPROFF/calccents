@@ -20,6 +20,14 @@ export default defineConfig({
   trailingSlash: 'always',
   build: {
     format: 'directory',
+    /**
+     * The styles go into each page instead of separate files.
+     *
+     * They are about 11 KB compressed in all. As separate files they blocked
+     * the first paint until two more requests came back, which on a slow
+     * phone connection cost most of a second before any text appeared.
+     */
+    inlineStylesheets: 'always',
   },
   /**
    * The site is published in English, Russian, Spanish, Chinese, Korean,
