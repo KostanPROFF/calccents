@@ -10,6 +10,15 @@ import '../styles/global.css';
 interface Props {
   title: string;
   description: string;
+  /**
+   * A shorter description for link previews in social apps and messengers.
+   *
+   * Those previews show about 110 to 125 characters on a phone and cut the
+   * rest, while search results show about 155. A page whose description is
+   * written for search can give a shorter one here; without it the preview
+   * uses the description.
+   */
+  socialDescription?: string;
   /** Path of the current page, including the locale prefix. */
   path: string;
   /** The language this page is written in. */
@@ -31,6 +40,7 @@ interface Props {
 const {
   title,
   description,
+  socialDescription = description,
   path,
   locale,
   jsonLd = [],
@@ -43,6 +53,16 @@ const site = getSite(locale);
 const ui = getUi(locale);
 
 const canonical = new URL(path, site.origin).toString();
+
+/**
+ * The link preview card, rendered from scripts/og-image.html.
+ *
+ * Social apps cache the image by its address, so the version goes up each
+ * time the card is redrawn; otherwise links shared before keep the old card.
+ */
+const OG_IMAGE_VERSION = 2;
+const ogImage = new URL(`/og-image.png?v=${OG_IMAGE_VERSION}`, site.origin).toString();
+
 const fullTitle =
   path === '/' ? `${site.name} — ${site.tagline}` : `${title} | ${site.name}`;
 
@@ -140,16 +160,16 @@ const reviewer = {
     <meta property="og:type" content={ogType} />
     <meta property="og:site_name" content={site.name} />
     <meta property="og:title" content={title} />
-    <meta property="og:description" content={description} />
+    <meta property="og:description" content={socialDescription} />
     <meta property="og:url" content={canonical} />
     <meta property="og:locale" content={site.ogLocale} />
     <meta
       property="og:image"
-      content={new URL('/og-image.png', site.origin).toString()}
+      content={ogImage}
     />
     <meta property="og:image:width" content="1200" />
     <meta property="og:image:height" content="630" />
-    <meta property="og:image:alt" content={site.name} />
+    <meta property="og:image:alt" content={`${site.name} — ${site.tagline}`} />
     {
       alternateLinks
         .filter((alternate) => alternate.locale !== locale)
@@ -162,10 +182,10 @@ const reviewer = {
     }
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content={title} />
-    <meta name="twitter:description" content={description} />
+    <meta name="twitter:description" content={socialDescription} />
     <meta
       name="twitter:image"
-      content={new URL('/og-image.png', site.origin).toString()}
+      content={ogImage}
     />
 
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />

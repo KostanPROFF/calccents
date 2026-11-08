@@ -113,6 +113,8 @@ export const pt = {
     title: 'Calccents — Calculadoras financeiras que mostram o passo a passo',
     description:
       'Calculadoras financeiras gratuitas para pagamentos de hipotecas, alugar versus comprar, juros compostos, salário líquido, impostos federais e quitação de dívidas. Todas as fórmulas são exibidas.',
+    socialDescription:
+      'Calculadoras grátis de hipoteca, aluguel, juros, salário, impostos e dívidas. Todas as fórmulas à vista.',
     eyebrow: 'Calculadoras financeiras',
     heading: 'Saiba o número antes de decidir',
     lede: 'Ferramentas gratuitas para a aritmética por trás de uma hipoteca, um contrato de aluguel, um contracheque e uma pilha de dívidas. Cada fórmula é escrita, cada premissa pertence a você e nenhuma página diz o que você deve fazer com o resultado.',
