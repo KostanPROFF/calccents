@@ -71,11 +71,9 @@ export const SITE = {
   /**
    * The Cloudflare Web Analytics site token.
    *
-   * Cloudflare used to add its beacon to every page it served, which meant
-   * a request left the browser before anyone had answered the cookie
-   * question. The automatic setup is switched off in the Cloudflare
-   * dashboard, and the beacon is loaded by the consent bootstrap instead,
-   * so it goes out only after the answer.
+   * The automatic setup is switched off in the Cloudflare dashboard, and
+   * the beacon is loaded by the consent bootstrap instead, which leaves it
+   * out for a reader in the European Union.
    *
    * A site token is public by design: Cloudflare says so itself, because
    * the token is visible in the source of every page that carries the

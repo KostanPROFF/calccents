@@ -177,8 +177,8 @@ const reviewer = {
 
       This tells Google which publisher account this site belongs to, which
       is how the application is reviewed. It carries no ad code and makes no
-      request to anyone: the loader script is loaded by the consent
-      component, and only after the reader has agreed to cookies.
+      request to anyone: the loader script is at the end of the body, in the
+      consent component.
     -->
     <meta name="google-adsense-account" content={site.adsensePublisherId} />
     <link rel="sitemap" href="/sitemap-index.xml" />
@@ -220,11 +220,9 @@ const reviewer = {
     <Footer locale={locale} />
 
     {/*
-      The consent banner and the scripts it gates.
-
-      The Google scripts set cookies, so none of them is in the document
-      until the reader has answered. The component injects them.
+      The advertising and analytics scripts, with their consent defaults.
+      Google's own consent message asks the question where the law needs it.
     */}
-    <CookieConsent locale={locale} />
+    <CookieConsent />
   </body>
 </html>
