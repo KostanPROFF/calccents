@@ -110,9 +110,9 @@ export const vi = {
   },
 
   home: {
-    title: 'Calccents — Các công cụ tính toán tài chính hiển thị cách tính',
+    title: 'Calccents — máy tính tài chính có công thức',
     description:
-      'Các công cụ tính toán tài chính miễn phí cho khoản vay thế chấp, thuê nhà so với mua nhà, lãi kép, thu nhập thực nhận, thuế liên bang và trả nợ. Mọi công thức đều được hiển thị.',
+      'Máy tính tài chính miễn phí: thế chấp, thuê hay mua, lãi kép, lương thực nhận, thuế liên bang và trả nợ. Mọi công thức đều được hiển thị.',
     socialDescription:
       'Máy tính miễn phí cho thế chấp, thuê hay mua, lãi kép, lương thực nhận, thuế và nợ. Hiện rõ mọi công thức.',
     eyebrow: 'Công cụ tính toán tài chính',
