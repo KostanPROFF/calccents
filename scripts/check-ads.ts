@@ -8,9 +8,8 @@
  * separate mechanism, and they stay off until their slot IDs are
  * configured.
  *
- * The loader tag itself is not in the document. The consent component
- * injects it after the reader has agreed to cookies, so the URL is in the
- * page and the request is not. The consent check proves the second half.
+ * The loader is a script tag on every page. It also shows Google's consent
+ * message where the law needs one; the consent check covers that part.
  *
  * So the site has two states, and the check knows both:
  *
@@ -39,7 +38,7 @@ import { fileURLToPath } from 'node:url';
 const ROOT = fileURLToPath(new URL('..', import.meta.url)).replace(/\/$/, '');
 const DIST = join(ROOT, 'dist');
 
-/** The loader script. Its URL is on every page; the tag is injected on consent. */
+/** The loader script, on every page. */
 const SCRIPT_MARKER = 'pagead2.googlesyndication.com';
 
 /** Marks that only appear when a hand-placed ad unit is rendered. */

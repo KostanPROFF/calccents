@@ -1,33 +1,28 @@
 #!/usr/bin/env node
 /**
- * Consent gating check.
+ * Consent check.
  *
- * Two scripts on this site set cookies: the AdSense loader, which serves
- * the advertising, and the Google Analytics loader, which counts the page
- * views. Neither one may be in the document as a script tag. The ad script
- * waits for the answer. The analytics script runs in consent mode from the
- * first page, so it may only start with every kind of storage denied: that
- * is what keeps it from setting a cookie before the answer.
+ * The consent question is asked by Google's own certified consent message,
+ * which the AdSense loader shows to readers in the European Economic Area,
+ * the United Kingdom and Switzerland. The site's part is to put the loader
+ * on every page and to start Google Analytics with storage denied in those
+ * countries, so that no analytics cookie is set before the answer.
  *
- * The gate proves five things over the built output, where the mistake
- * would actually ship:
+ * The gate proves, over the built output where a mistake would ship:
  *
- *   1. the banner is on every page, and the way back to it is too
- *   2. all three script URLs are present, so they can be loaded after
- *      consent
- *   3. none of them is loaded as a script tag, so nothing goes out before
- *      the answer
- *   4. the hosting provider's beacon is loaded by the bootstrap, so the
- *      request waits for the answer as well
- *   5. the privacy policy names that provider, because it is the one that
- *      receives the request
- *   6. the analytics start in consent mode with storage denied unless the
- *      reader has already accepted, and only on the production host
- *
- * The third point is the one that matters. A page that carries the
- * tracker in the head works exactly like a page without a consent banner,
- * and the banner on it is decoration. The check looks for the script tag
- * rather than for the URL, because the URL has to be in the source.
+ *   1. every page loads the AdSense loader, which carries Google's message
+ *   2. every page starts the analytics in consent mode: denied by default in
+ *      the consent countries, granted elsewhere, on the production host only,
+ *      and the full list of those countries is on the page
+ *   3. the analytics loader is not a script tag, so it cannot run before the
+ *      consent defaults are set
+ *   4. every page carries the footer button that reopens Google's message
+ *   5. the hosting provider's beacon is loaded by the bootstrap, never as a
+ *      script tag, without the "version" field, and is left out for a reader
+ *      in the European Union, and the privacy policy says so and names the
+ *      provider
+ *   6. the old banner of the site's own is gone, so a reader is never asked
+ *      twice
  *
  * Run: node scripts/check-consent.ts
  */
@@ -36,361 +31,179 @@ import { readdirSync, readFileSync, statSync } from 'node:fs';
 import { join, relative } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
-import { EU_COUNTRIES, isEuCountry } from '../src/lib/data/euCountries.ts';
+import { CONSENT_COUNTRIES, EU_COUNTRIES, isEuCountry } from '../src/lib/data/euCountries.ts';
 
 const ROOT = fileURLToPath(new URL('..', import.meta.url)).replace(/\/$/, '');
 const DIST = join(ROOT, 'dist');
 
-/** The banner, and the button that opens it again. */
-const BANNER_MARKER = 'id="consent-banner"';
-const REOPEN_MARKER = 'data-consent-open';
+/** The AdSense loader, as a script tag: it is what shows Google's message. */
+const ADS_TAG = /<script[^>]*src=["']https:\/\/pagead2\.googlesyndication\.com\/pagead\/js\/adsbygoogle\.js\?client=ca-pub-\d+/i;
 
-/** Where the answer is kept in the browser. */
-const DECISION_MARKER = 'cc-consent';
-
-/** The trackers, and where they are loaded from. */
+/** The analytics loader must not be a tag: the defaults have to come first. */
 const ANALYTICS_MARKER = 'googletagmanager.com/gtag/js?id=';
+const ANALYTICS_TAG = /<script[^>]*src=["'][^"']*googletagmanager\.com\/gtag\/js/i;
 
-/**
- * Consent mode. The default has to be set before the config call, and it
- * has to be denied unless the reader's stored answer says otherwise; the
- * host check keeps a local copy of the site out of the analytics.
- */
-const CONSENT_DEFAULT_MARKER = "gtag('consent', 'default', consentState(granted ? 'granted' : 'denied'))";
-const CONSENT_START_MARKER = "startAnalytics(decision === 'granted')";
-const ANALYTICS_HOST_MARKER = "if (host !== ANALYTICS_HOST && host !== 'www.' + ANALYTICS_HOST) return;";
-const ADS_MARKER = 'pagead2.googlesyndication.com';
+/** Consent mode: denied in the consent countries, granted elsewhere. */
+const CONSENT_MODE_MARKERS = [
+  'denied.region = CONSENT_COUNTRIES;',
+  "gtag('consent', 'default', denied);",
+  "gtag('consent', 'default', consentState('granted'));",
+  "if (host !== ANALYTICS_HOST && host !== 'www.' + ANALYTICS_HOST) return;",
+];
+const CONSENT_LIST_MARKER = `var CONSENT_COUNTRIES = ${JSON.stringify(CONSENT_COUNTRIES)};`;
 
-/**
- * A script tag that loads a tracker.
- *
- * The tag is what makes the request. The URL inside the bootstrap is just
- * a string in a script; the tag is what the browser fetches.
- */
-const STATIC_TAG = new RegExp(
-  `<script[^>]*src=["'][^"']*(${[ANALYTICS_MARKER, ADS_MARKER]
-    .map((marker) => marker.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'))
-    .join('|')})`,
-  'i',
-);
+/** The footer button that reopens Google's message. */
+const REOPEN_MARKER = 'data-consent-open';
+const REVOCATION_MARKER = 'googlefc.showRevocationMessage()';
 
-/** The rule that keeps the ad units out of sight until the answer. */
-const PENDING_MARKER = 'consent-granted';
+/** The banner the site used to show itself. */
+const OLD_BANNER_MARKER = 'id="consent-banner"';
 
-/**
- * The crawler exception.
- *
- * Google's crawler cannot answer the cookie question, and a site whose
- * advertising only loads after a click is reviewed as a site with no
- * advertising on it. The bootstrap therefore serves the ad script to a
- * recognised crawler without the banner. If that branch is removed, the
- * review starts failing on a site that looks perfectly healthy, so the gate
- * checks that the branch is still there.
- */
-const CRAWLER_MARKER = 'isCrawler';
-
-/**
- * The hosting provider's own page analytics.
- *
- * Cloudflare used to add its beacon to every page it served, which meant a
- * request left the browser before the reader had answered anything. The
- * automatic setup is switched off in the Cloudflare dashboard, and the
- * beacon is loaded by the consent bootstrap instead, so it goes out only
- * after the answer.
- *
- * The gate therefore treats the beacon like the two Google trackers: the
- * URL has to be in the source, so it can be loaded after the answer, and it
- * must not be in the document as a script tag, because then the request
- * would go out before the answer. The privacy policy has to name the
- * provider as well, since it is the one that receives the request.
- */
+/** The hosting provider's beacon. */
 const HOSTING_MARKER = 'Cloudflare';
 const HOSTING_BEACON = 'static.cloudflareinsights.com';
-
-/**
- * The code that takes the beacon Cloudflare adds by itself out of the
- * document.
- *
- * Cloudflare can inject a beacon into every page it serves, and that one
- * reports the page view before the reader has answered anything. The
- * automatic setup is switched off in the Cloudflare dashboard, so there is
- * nothing to remove; the consent bootstrap removes it anyway, and the site's
- * own copy is loaded after the answer instead. If the removal is gone and
- * the setup is ever switched back on, the page view goes out before the
- * answer again.
- */
+const HOSTING_TAG = /<script[^>]*src=["'][^"']*static\.cloudflareinsights\.com/i;
 const HOSTING_SUPPRESSION_MARKER = 'suppressInjectedBeacon';
-
-/**
- * The beacon configuration on the page.
- *
- * The configuration is what tells the beacon where to report the page view.
- * Cloudflare's own dashboard hands out a configuration with the site token
- * and nothing else, and the beacon then reports to Cloudflare's analytics
- * service, which answers with the CORS headers this domain needs.
- *
- * The "version" field changes that: with it, the beacon reports to the
- * site's own /cdn-cgi/rum endpoint instead, and that endpoint answers 404
- * while the automatic setup in the Cloudflare dashboard is off. The page
- * view would then be counted nowhere, and nothing on the page would show
- * it. The field is easy to add back by hand, because it looks like part of
- * the configuration Cloudflare writes itself, so the gate checks that it is
- * gone.
- */
 const HOSTING_BEACON_VERSION_MARKER = 'version: CLOUDFLARE_VERSION';
-
-/**
- * The exclusion of readers in the European Union.
- *
- * The hosting provider's dashboard can be told not to count visitors from
- * the European Union, but that setting only covers the beacon the edge adds
- * to every page it serves. This site loads the beacon itself, so the country
- * is asked for and the beacon is left out for a reader in the EU.
- *
- * Two things have to stay in place: the branch in the bootstrap that does
- * it, and the sentence in the privacy policy that tells the reader. The
- * words of that sentence differ in the three languages, so the gate
- * accepts any of the three.
- */
 const EU_EXCLUSION_MARKER = 'loadHostingAnalyticsWhenKnown';
+const EU_LIST_MARKER = `var EU_COUNTRIES = ${JSON.stringify(EU_COUNTRIES)};`;
 const EU_POLICY_MARKERS = ['European Union', 'Европейского союза', 'Unión Europea'];
 
-/**
- * The list of the member states, as it goes into the page.
- *
- * The bootstrap is handed the list, and the page has to carry all of it: a
- * list that lost a country would quietly let a reader in that country be
- * counted. The list also has to be the list of the member states and not
- * something longer, because a country that is not a member state is not
- * covered by the promise the policy makes.
- */
-const EU_LIST_MARKER = JSON.stringify(EU_COUNTRIES);
+/** The European Economic Area, the United Kingdom and Switzerland. */
+const CONSENT_COUNTRY_COUNT = 32;
+const EU_MEMBER_COUNT = 27;
 
-function collectFiles(dir: string, extensions: string[]): string[] {
+function collectFiles(dir: string, extension: string): string[] {
   const found: string[] = [];
-  let entries: string[];
-  try {
-    entries = readdirSync(dir);
-  } catch {
-    return found;
-  }
-  for (const entry of entries) {
+  for (const entry of readdirSync(dir)) {
     const full = join(dir, entry);
     if (statSync(full).isDirectory()) {
-      found.push(...collectFiles(full, extensions));
-    } else if (extensions.some((ext) => entry.endsWith(ext))) {
+      found.push(...collectFiles(full, extension));
+    } else if (entry.endsWith(extension)) {
       found.push(full);
     }
   }
   return found;
 }
 
-if (!statSync(DIST).isDirectory()) {
+interface PageRule {
+  /** What is wrong when the rule fails on a page. */
+  problem: string;
+  /** Whether a page passes. */
+  passes: (html: string) => boolean;
+}
+
+const PAGE_RULES: PageRule[] = [
+  {
+    problem: "do not load the AdSense loader, so Google's consent message is never shown",
+    passes: (html) => ADS_TAG.test(html),
+  },
+  {
+    problem: 'cannot load the analytics script',
+    passes: (html) => html.includes(ANALYTICS_MARKER),
+  },
+  {
+    problem: 'load the analytics as a script tag, before the consent defaults are set',
+    passes: (html) => !ANALYTICS_TAG.test(html),
+  },
+  {
+    problem:
+      'do not start the analytics denied in the consent countries and granted elsewhere, ' +
+      'on the production host only',
+    passes: (html) => CONSENT_MODE_MARKERS.every((marker) => html.includes(marker)),
+  },
+  {
+    problem: 'do not carry the whole list of the countries where consent is required',
+    passes: (html) => html.includes(CONSENT_LIST_MARKER),
+  },
+  {
+    problem: "have no button that reopens Google's consent message",
+    passes: (html) => html.includes(REOPEN_MARKER) && html.includes(REVOCATION_MARKER),
+  },
+  {
+    problem: "still carry the site's own banner, so a reader is asked twice",
+    passes: (html) => !html.includes(OLD_BANNER_MARKER),
+  },
+  {
+    problem: "cannot load the hosting provider's page analytics",
+    passes: (html) => html.includes(HOSTING_BEACON) && html.includes(HOSTING_SUPPRESSION_MARKER),
+  },
+  {
+    problem: "carry the hosting provider's beacon as a script tag",
+    passes: (html) => !HOSTING_TAG.test(html),
+  },
+  {
+    problem:
+      "point the hosting provider's beacon at the site's own /cdn-cgi/rum endpoint, " +
+      'which answers 404 while the automatic setup is off',
+    passes: (html) => !html.includes(HOSTING_BEACON_VERSION_MARKER),
+  },
+  {
+    problem: "do not leave the hosting provider's beacon out for a reader in the European Union",
+    passes: (html) => html.includes(EU_EXCLUSION_MARKER) && html.includes(EU_LIST_MARKER),
+  },
+];
+
+const PRIVACY_RULES: PageRule[] = [
+  {
+    problem: 'do not name the hosting provider',
+    passes: (html) => html.includes(HOSTING_MARKER),
+  },
+  {
+    problem: 'do not say that a reader in the European Union is not counted by the hosting provider',
+    passes: (html) => EU_POLICY_MARKERS.some((marker) => html.includes(marker)),
+  },
+];
+
+function failures(files: string[], rules: PageRule[]): string[] {
+  const pages = files.map((file) => ({ rel: relative(DIST, file), html: readFileSync(file, 'utf8') }));
+  return rules.flatMap((rule) => {
+    const failing = pages.filter((page) => !rule.passes(page.html));
+    if (failing.length === 0) return [];
+    const examples = failing.slice(0, 3).map((page) => page.rel).join(', ');
+    return [`${failing.length} of ${pages.length} pages ${rule.problem} (${examples})`];
+  });
+}
+
+function listProblems(): string[] {
+  const problems: string[] = [];
+  if (EU_COUNTRIES.length !== EU_MEMBER_COUNT || !isEuCountry('DE') || isEuCountry('GB')) {
+    problems.push('the list of the member states of the European Union is not the twenty-seven');
+  }
+  const required = [...EU_COUNTRIES, 'IS', 'LI', 'NO', 'GB', 'CH'];
+  if (
+    CONSENT_COUNTRIES.length !== CONSENT_COUNTRY_COUNT ||
+    !required.every((code) => CONSENT_COUNTRIES.includes(code))
+  ) {
+    problems.push(
+      'the consent countries are not the European Economic Area, the United Kingdom and Switzerland',
+    );
+  }
+  return problems;
+}
+
+if (!statSync(DIST, { throwIfNoEntry: false })?.isDirectory()) {
   console.error('dist/ does not exist. Run "pnpm build" first.');
   process.exit(1);
 }
 
-const htmlFiles = collectFiles(DIST, ['.html']);
-const cssFiles = collectFiles(DIST, ['.css']);
-const problems: string[] = [];
-
-let pagesWithoutBanner = 0;
-let pagesWithoutReopen = 0;
-let pagesWithoutDecision = 0;
-let pagesWithoutAnalytics = 0;
-let pagesWithoutAds = 0;
-let pagesWithoutHosting = 0;
-let pagesWithoutSuppression = 0;
-let pagesWithStaticTracker = 0;
-let pagesWithoutConsentMode = 0;
-let pagesWithoutCrawlerException = 0;
-const staticExamples: string[] = [];
-
-/**
- * A script tag that loads the hosting provider's beacon.
- *
- * Cloudflare injects this one at the edge, so it never appears in the
- * built output. If it does appear, the site is adding a second copy and
- * every page view would be counted twice.
- */
-const HOSTING_TAG = new RegExp(
-  `<script[^>]*src=["'][^"']*${HOSTING_BEACON.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}`,
-  'i',
+const htmlFiles = collectFiles(DIST, '.html');
+const privacyFiles = htmlFiles.filter((file) =>
+  relative(DIST, file).replace(/\\/g, '/').endsWith('privacy/index.html'),
 );
 
-let pagesWithHostingTag = 0;
-let pagesWithBeaconVersion = 0;
-let pagesWithoutEuExclusion = 0;
-let pagesWithoutEuList = 0;
-let privacyPages = 0;
-let privacyPagesWithoutHosting = 0;
-let privacyPagesWithoutEu = 0;
+const problems = [
+  ...failures(htmlFiles, PAGE_RULES),
+  ...failures(privacyFiles, PRIVACY_RULES),
+  ...listProblems(),
+];
 
-for (const file of htmlFiles) {
-  const html = readFileSync(file, 'utf8');
-  const rel = relative(DIST, file);
-
-  if (!html.includes(BANNER_MARKER)) pagesWithoutBanner += 1;
-  if (!html.includes(REOPEN_MARKER)) pagesWithoutReopen += 1;
-  if (!html.includes(DECISION_MARKER)) pagesWithoutDecision += 1;
-  if (!html.includes(ANALYTICS_MARKER)) pagesWithoutAnalytics += 1;
-  if (
-    ![CONSENT_DEFAULT_MARKER, CONSENT_START_MARKER, ANALYTICS_HOST_MARKER].every((marker) =>
-      html.includes(marker),
-    )
-  ) {
-    pagesWithoutConsentMode += 1;
-  }
-  if (!html.includes(ADS_MARKER)) pagesWithoutAds += 1;
-  if (!html.includes(HOSTING_BEACON)) pagesWithoutHosting += 1;
-  if (!html.includes(HOSTING_SUPPRESSION_MARKER)) pagesWithoutSuppression += 1;
-  if (!html.includes(CRAWLER_MARKER)) pagesWithoutCrawlerException += 1;
-
-  const staticTag = html.match(STATIC_TAG);
-  if (staticTag) {
-    pagesWithStaticTracker += 1;
-    if (staticExamples.length < 3) staticExamples.push(rel);
-  }
-
-  if (HOSTING_TAG.test(html)) {
-    pagesWithHostingTag += 1;
-  }
-
-  if (html.includes(HOSTING_BEACON_VERSION_MARKER)) {
-    pagesWithBeaconVersion += 1;
-  }
-
-  if (!html.includes(EU_EXCLUSION_MARKER)) {
-    pagesWithoutEuExclusion += 1;
-  }
-
-  if (!html.includes(EU_LIST_MARKER)) {
-    pagesWithoutEuList += 1;
-  }
-
-  if (rel.replace(/\\/g, '/').endsWith('privacy/index.html')) {
-    privacyPages += 1;
-    if (!html.includes(HOSTING_MARKER)) privacyPagesWithoutHosting += 1;
-    if (!EU_POLICY_MARKERS.some((marker) => html.includes(marker))) {
-      privacyPagesWithoutEu += 1;
-    }
-  }
-}
-
-const cssHasPendingRule = cssFiles.some((file) =>
-  readFileSync(file, 'utf8').includes(PENDING_MARKER),
-);
-
-if (pagesWithoutBanner > 0) {
-  problems.push(`${pagesWithoutBanner} of ${htmlFiles.length} pages have no consent banner`);
-}
-if (pagesWithoutReopen > 0) {
-  problems.push(
-    `${pagesWithoutReopen} of ${htmlFiles.length} pages have no way to reopen the banner`,
-  );
-}
-if (pagesWithoutDecision > 0) {
-  problems.push(
-    `${pagesWithoutDecision} of ${htmlFiles.length} pages do not remember the answer`,
-  );
-}
-if (pagesWithoutAnalytics > 0) {
-  problems.push(
-    `${pagesWithoutAnalytics} of ${htmlFiles.length} pages cannot load the analytics script`,
-  );
-}
-if (pagesWithoutAds > 0) {
-  problems.push(
-    `${pagesWithoutAds} of ${htmlFiles.length} pages cannot load the ad script`,
-  );
-}
-if (pagesWithoutHosting > 0) {
-  problems.push(
-    `${pagesWithoutHosting} of ${htmlFiles.length} pages cannot load the hosting ` +
-      'provider\'s page analytics after the answer',
-  );
-}
-if (pagesWithoutSuppression > 0) {
-  problems.push(
-    `${pagesWithoutSuppression} of ${htmlFiles.length} pages do not remove the beacon ` +
-      'the hosting provider adds by itself, so the page view goes out before the answer',
-  );
-}
-if (pagesWithStaticTracker > 0) {
-  problems.push(
-    `${pagesWithStaticTracker} of ${htmlFiles.length} pages load a tracker as a script tag, ` +
-      `so the request goes out before the answer (${staticExamples.join(', ')})`,
-  );
-}
-if (pagesWithoutConsentMode > 0) {
-  problems.push(
-    `${pagesWithoutConsentMode} of ${htmlFiles.length} pages do not start the analytics in ` +
-      'consent mode with storage denied on the production host only, so the analytics cookie ' +
-      'could be set before the answer',
-  );
-}
-if (!cssHasPendingRule) {
-  problems.push('no stylesheet keeps the ad units hidden while the answer is pending');
-}
-if (pagesWithoutCrawlerException > 0) {
-  problems.push(
-    `${pagesWithoutCrawlerException} of ${htmlFiles.length} pages do not serve the ad script ` +
-      'to Google\'s crawler, so the advertising review sees a site with no advertising on it',
-  );
-}
-if (pagesWithHostingTag > 0) {
-  problems.push(
-    `${pagesWithHostingTag} of ${htmlFiles.length} pages carry the hosting provider's beacon ` +
-      'as a script tag, so the request goes out before the answer',
-  );
-}
-if (pagesWithBeaconVersion > 0) {
-  problems.push(
-    `${pagesWithBeaconVersion} of ${htmlFiles.length} pages point the hosting provider's beacon ` +
-      "at the site's own /cdn-cgi/rum endpoint, which answers 404 while the automatic setup in " +
-      'the Cloudflare dashboard is off. The page view would be counted nowhere.',
-  );
-}
-if (privacyPagesWithoutHosting > 0) {
-  problems.push(
-    `${privacyPagesWithoutHosting} of ${privacyPages} privacy pages do not name the hosting ` +
-      'provider. Its page analytics run on every visit, so the policy has to say so.',
-  );
-}
-if (pagesWithoutEuExclusion > 0) {
-  problems.push(
-    `${pagesWithoutEuExclusion} of ${htmlFiles.length} pages do not leave the hosting ` +
-      "provider's beacon out for a reader in the European Union",
-  );
-}
-if (privacyPagesWithoutEu > 0) {
-  problems.push(
-    `${privacyPagesWithoutEu} of ${privacyPages} privacy pages do not say that a reader in ` +
-      'the European Union is not counted by the hosting provider',
-  );
-}
-if (pagesWithoutEuList > 0) {
-  problems.push(
-    `${pagesWithoutEuList} of ${htmlFiles.length} pages do not carry the whole list of the ` +
-      'member states of the European Union, so a reader in a country that fell off the list ' +
-      'would be counted',
-  );
-}
-if (
-  EU_COUNTRIES.length !== 27 ||
-  !isEuCountry('DE') ||
-  !isEuCountry('FR') ||
-  isEuCountry('US') ||
-  isEuCountry('GB')
-) {
-  problems.push(
-    'the list of the member states of the European Union is not the list of twenty-seven ' +
-      'member states, so the promise the policy makes is not the one the code keeps',
-  );
+if (privacyFiles.length === 0) {
+  problems.push('no privacy page was built');
 }
 
 if (problems.length > 0) {
-  console.error('Consent gating check failed:\n');
+  console.error('Consent check failed:\n');
   for (const problem of problems) {
     console.error(`  ${problem}`);
   }
@@ -398,9 +211,7 @@ if (problems.length > 0) {
 }
 
 console.log(
-  `Consent gating check passed: ${htmlFiles.length} pages carry the banner, ` +
-    `the ad script and the beacon are loaded only after the answer, the analytics start in consent mode with storage denied, the ad units stay hidden until then, ` +
-    `Google's crawler is served the ad script directly, the hosting provider's beacon is left ` +
-    `out for a reader in the European Union, and the privacy policy names the hosting provider ` +
-    `whose page analytics run on every visit.`,
+  `Consent check passed: ${htmlFiles.length} pages load the AdSense loader with Google's ` +
+    'consent message, start the analytics denied in the consent countries, carry the button ' +
+    "that reopens the message, and keep the hosting provider's beacon away from EU readers.",
 );

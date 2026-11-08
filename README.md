@@ -88,7 +88,7 @@ scripts/
 ├─ lint-advisory.ts        YMYL guardrail, plus its own test suite
 ├─ check-links.ts          internal link resolution
 ├─ check-ads.ts            AdSense gating, both directions
-├─ check-consent.ts        consent gating: no tracker before the answer
+├─ check-consent.ts        consent: Google's message, regional consent mode
 ├─ check-contrast.ts       contrast of every text token, in both themes
 ├─ check-scoped-styles.ts  a scoped rule must not target an unscoped element
 ├─ check-state-data.ts     every jurisdiction, every bracket, in order
@@ -207,13 +207,14 @@ earlier deployment from the Cloudflare Pages dashboard.
 Cloudflare's Web Analytics is switched on for the zone, and the automatic
 setup in the dashboard is off: Cloudflare no longer adds its beacon to the
 pages it serves, and the site installs the snippet itself. That snippet is
-loaded by the consent bootstrap, after the answer, with the site token from
-`src/config/site.ts`.
+loaded by the consent bootstrap, with the site token from
+`src/config/site.ts`, for every reader outside the European Union.
 
 The code that takes an automatically added beacon out of the document is
 still on every page. It costs nothing and it covers the case where the
 dashboard setting is turned back on: a script that is removed before it
-runs does not run, so the page view would still wait for the answer.
+runs does not run, so a page view is never counted twice and a reader in
+the EU is never counted.
 
 The beacon reports to Cloudflare's own analytics service, at
 `cloudflareinsights.com/cdn-cgi/rum`, which answers with the CORS headers
@@ -227,9 +228,9 @@ field comes back.
 
 The beacon sets no cookie, writes nothing to local storage and creates no
 identifier, and the IP address it carries is used at the edge to work out
-the country and is discarded there. It is still a third party that receives
-a request from every visitor who accepts, so the privacy policy names it in
-all ten languages.
+the country and is discarded there. Because it stores nothing it does not
+wait for a consent answer, but it is still a third party that receives a
+request, so the privacy policy names it in all ten languages.
 
 Two gates watch this:
 
@@ -377,8 +378,7 @@ reviews the application, and the loader script it asks for.
 
 The loader script is what turns on **auto ads**: Google decides where the
 units go and places them itself. The site therefore makes an ad request on
-every page, once the reader has answered the cookie question, and it shows
-no ad until the account is approved.
+every page, and it shows no ad until the account is approved.
 
 The site also has three hand-placed positions: one in the result panel, one
 in the article, one at the foot of the page. They are a second mechanism,
@@ -409,22 +409,9 @@ configured. To use them:
 with the name and the domain, and the variable is only an override for the
 CI build that uses dummy IDs.
 
-The loader itself is not a script tag in the page. The consent component
-injects it once the reader has agreed to cookies, so the ad units stay
-hidden until then and a reader who declines never sends a request to
-Google.
-
-**The crawler exception.** Google's own crawler reviews the site for
-advertising. It renders the page but it cannot answer a cookie question, so
-on a site where the advertising only loads after a click it sees no
-advertising at all — which is one of the commonest reasons an application is
-turned down. The consent bootstrap therefore recognises a crawler user agent
-and gives it the ad script straight away, with no banner and without the
-analytics. It is not a reader: no choice is recorded for it and nothing is
-stored about it. `check-consent.ts` checks that this branch is still there,
-because a site that passes every other gate and shows the reviewer an empty
-page is exactly the failure this guards against. The privacy page says so in
-all ten languages.
+The loader is a plain script tag at the end of every page. It also carries
+Google's consent message (see "Consent" below), which is why it is not held
+back behind a question of the site's own.
 
 The automatic gate is the part that matters. It reads the three slot
 variables and works out what the build should contain: all three set means
@@ -506,8 +493,8 @@ nobody can check.
 
 ## Analytics
 
-Google Analytics 4 is loaded on every page a reader has agreed to cookies
-on. The measurement ID lives in `src/config/site.ts` next to the name and the
+Google Analytics 4 runs on every page in consent mode (see "Consent"
+below). The measurement ID lives in `src/config/site.ts` next to the name and the
 domain, because the property belongs to the site, and a GA4 measurement ID is
 public by design — it is visible in the source of every page that loads the
 tag. `PUBLIC_GA_ID` overrides it, which is how a build can prove the tag
@@ -521,31 +508,36 @@ now describes what actually happens.
 
 ## Consent
 
-The AdSense loader and the Google Analytics loader both set cookies, so
-neither one is in the document until the reader has answered the cookie
-question. `src/components/CookieConsent.astro` owns the whole thing:
+The cookie question is asked by Google, not by the site. The AdSense account
+publishes Google's own consent message (AdSense → Privacy & messaging →
+European regulations), a consent platform certified under the IAB
+Transparency and Consent Framework, which is what Google requires before it
+serves full advertising in Europe. The AdSense loader shows it, and only to
+readers in the European Economic Area, the United Kingdom and Switzerland.
+Everyone else is not asked anything.
 
-- the banner is on every page and is the only thing in the body that is
-  rendered by the component
-- the answer is kept in `localStorage` under `cc-consent`, as `granted` or
-  `denied`
-- accepting injects both scripts and pushes the hand-placed ad units to
-  Google; declining removes the ad units from the page and loads nothing
-- changing the answer later reloads the page, because a script that has
-  already run cannot be unloaded
-- the footer carries a button that opens the banner again, so the answer is
-  not a one-time decision
+`src/components/CookieConsent.astro` holds the site's part:
 
-The URLs of both scripts are in the source of every page, because that is
-what the ad gate reads, and the check for a script *tag* is what proves that
-nothing goes out before the answer. `scripts/check-consent.ts` runs that
-check over the built output, in the verify job and again in the deploy job
-for the build that is about to ship.
+- Google Analytics starts in consent mode with storage **denied** in the
+  countries listed in `CONSENT_COUNTRIES` (`src/lib/data/euCountries.ts`)
+  and **granted** everywhere else; Google's message updates the state when
+  the reader answers. Analytics run on the production host only.
+- the AdSense loader is a script tag on every page, and the hand-placed
+  units are queued for it.
+- the footer button reopens Google's message. It is hidden until the
+  message reports that the consent rules apply to the reader.
+- the Cloudflare beacon is left out for a reader in the European Union.
 
-The trade-off is deliberate: a reader who declines sees no advertising, and
-the site earns nothing from that visit. That is the honest reading of
-"decline", and the alternative — loading the ad script for a reader who said
-no — is the thing the banner exists to prevent.
+Google's message has to be published in the AdSense account, with consent
+mode for Google tags switched on, for any of this to ask the question. The
+site cannot check that from the build, so it is a step in the dashboard,
+not a gate.
+
+`scripts/check-consent.ts` runs over the built output, in the verify job
+and again in the deploy job: it checks the loader tag, the regional
+defaults and the list of countries, the footer button, that the analytics
+loader is not a script tag of its own, that the site's old banner is gone,
+and the rules for the Cloudflare beacon.
 
 ## The tax year
 

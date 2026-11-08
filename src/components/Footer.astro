@@ -71,11 +71,11 @@ const siteLinks = site.footer.filter((item) => !item.href.startsWith('/tools/'))
       }
     </p>
     {/*
-      The cookie question has to be answerable more than once. A reader
-      who declined the cookies and changed their mind needs a way back to
-      the banner, and that link belongs where the other footer links are.
+      The cookie question has to be answerable more than once. The button
+      reopens Google's consent message, and stays hidden for a reader the
+      message does not apply to: the consent component shows it.
     */}
-    <button type="button" class="footer-consent" data-consent-open>
+    <button type="button" class="footer-consent" data-consent-open hidden>
       {ui.footer.cookieSettings}
     </button>
   </div>

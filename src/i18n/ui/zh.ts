@@ -28,15 +28,6 @@ export const zh = {
     bio: '在指南发布前阅读其中的财务内容：数据、其背后的假设以及来源。作者构建计算引擎；审核员从另一侧读取结果，即从处理金钱而非代码的人的角度。她的名字仅出现在她审核过的指南上。',
   },
 
-  consent: {
-    heading: 'Cookie',
-    body: '本网站使用 Cookie 来投放广告并统计页面阅读量。接受后将加载广告和托管服务商的无 Cookie 信标，并启用 Google Analytics 的 Cookie。在您作出选择之前或拒绝之后，不会加载任何广告，Google Analytics 也不使用 Cookie，只向 Google 发送页面已被浏览的无 Cookie 信号。对于欧盟地区的读者，托管服务商的信标完全不会被加载。您可以稍后在页脚更改您的选择。有关收集的数据及其提供方的信息，请参阅 {privacyLink}。',
-    privacyLink: '隐私页面',
-    accept: '接受',
-    reject: '拒绝',
-    settings: 'Cookie 设置',
-  },
-
   nav: {
     tools: '工具',
     guides: '指南',
@@ -519,10 +510,10 @@ export const zh = {
     analyticsPoliciesLink: 'policies.google.com',
     analyticsHeading: '分析',
     analyticsBody:
-      '页面浏览量通过 Google Analytics 4 记录，相关服务由 Google 通过 googletagmanager.com 提供。所用数据仅限于页面、引流来源以及粗略到国家或城市级别的位置；IP 地址会被截断，而不是完整存储。这些数据用于统计访问次数和了解哪些页面被阅读。Google 对其如何使用来自网站和应用的服务的说明见 {analyticsPoliciesLink}。该脚本以同意模式（Consent Mode）在每个页面上运行。在您接受 Cookie 询问之前，或在您拒绝之后，它不会设置或读取任何 Cookie，只向 Google 发送页面已被浏览的无 Cookie 信号，不带任何能把一次访问与下一次访问关联起来的标识符；Google 利用这些信号估算无法直接统计的访问。接受后，分析功能会启用其 Cookie。欧盟读者同样适用。',
+      '页面浏览量通过 Google Analytics 4 记录，相关服务由 Google 通过 googletagmanager.com 提供。所用数据仅限于页面、引流来源以及粗略到国家或城市级别的位置；IP 地址会被截断，而不是完整存储。这些数据用于统计访问次数和了解哪些页面被阅读。Google 对其如何使用来自网站和应用的服务的说明见 {analyticsPoliciesLink}。该脚本以同意模式（Consent Mode）在每个页面上运行。对于欧洲经济区、英国或瑞士的读者，它在启动时关闭 Cookie：在您于 Google 的同意消息中表示同意之前，或在您拒绝之后，它不会设置或读取任何 Cookie，只向 Google 发送页面已被浏览的无 Cookie 信号，不带任何能把一次访问与下一次访问关联起来的标识符；Google 利用这些信号估算无法直接统计的访问。同意后，分析功能会启用其 Cookie。在其他国家和地区，分析 Cookie 从第一个页面起即已启用。',
     hostingAnalyticsHeading: '托管与页面性能',
     hostingAnalyticsBody:
-      '本网站托管在 Cloudflare 上，Cloudflare 自有的网络分析会在每个页面上运行。由 static.cloudflareinsights.com 提供的小脚本会测量页面浏览情况：打开了哪个页面、访问来自哪里、使用了哪种浏览器和操作系统、请求来自哪个国家，以及页面加载用了多长时间。IP 地址在 Cloudflare 的边缘节点用于判断国家，并在那里丢弃，而不是存储。该脚本不设置 Cookie、不向本地存储写入任何内容，也不创建可能跨页面追踪您的标识符。它输出的数据包括页面浏览量和访问次数统计，以及页面加载速度。只有在您接受 Cookie 询问后才会加载该脚本。欧盟读者完全不会被统计：不会为其加载该脚本。',
+      '本网站托管在 Cloudflare 上，Cloudflare 自有的网络分析会在每个页面上运行。由 static.cloudflareinsights.com 提供的小脚本会测量页面浏览情况：打开了哪个页面、访问来自哪里、使用了哪种浏览器和操作系统、请求来自哪个国家，以及页面加载用了多长时间。IP 地址在 Cloudflare 的边缘节点用于判断国家，并在那里丢弃，而不是存储。该脚本不设置 Cookie、不向本地存储写入任何内容，也不创建可能跨页面追踪您的标识符。它输出的数据包括页面浏览量和访问次数统计，以及页面加载速度。由于它不存储任何内容，因此无需等待 Cookie 询问。欧盟读者完全不会被统计：不会为其加载该脚本。',
     newsletterHeading: '简报',
     newsletterBody:
       '如果您订阅了简报，您输入的地址将被发送至负责发送邮件的服务商 Buttondown，并存储在那里以便发送简报。该地址仅用于简报，不会用于其他任何用途，且每一期简报都包含退订链接。',
@@ -537,7 +528,7 @@ export const zh = {
       '如果上述提供商发生变动，本页面也会随之更新。页面底部的日期为本内容最后一次审核的日期。',
     consentHeading: '您的选择',
     consentBody:
-      '在您作出选择之前，不会加载任何广告，不会设置任何 Cookie，主机提供商的页面分析也不会启用；Google Analytics 以同意模式运行，只发送页面已被浏览的无 Cookie 信号。如果您接受，将加载广告和信标，分析功能启用其 Cookie，并在您的浏览器中记住您的选择；如果您拒绝，本网站的使用体验完全相同，不会加载其他任何内容，分析功能也继续不使用 Cookie。无论您如何选择，欧盟读者都不会使用主机提供商的页面分析。页脚中的 {settingsLink} 链接会再次打开该询问。有一个例外：Google 自有的网络爬虫会直接收到广告脚本，因为它无法回答该询问。系统不会为其记录选择，也不会存储任何相关信息。上述状态会在两个计算器页面上读取，但不属于本项选择：不会为其设置 Cookie，也不会将相关信息发送给分析提供商。',
+      'Cookie 询问由 Google 的同意消息提出，这是一个通过 IAB 透明度与同意框架（Transparency and Consent Framework）认证的同意管理平台，并且只在法律要求的地区显示：欧洲经济区、英国和瑞士。在这些地区，在您作答之前，Google Analytics 不会设置 Cookie，Google 会根据您的回答投放广告；您的回答由 Google 的消息保存在您的浏览器中，页脚的“Cookie 设置”链接可以再次打开它。在其他地区不会提出这一询问：广告和分析 Cookie 从第一个页面起即运行，您可以在 Google 广告设置中更改 Google 个性化广告的方式。无论哪种情况，托管服务商的页面分析都不会为欧盟读者加载。上文所述的州信息只在两个计算器页面上读取，不属于这一选择：不会为它设置 Cookie，也不会有任何相关信息发送给分析服务商。',
     lastReviewed: '最后审查日期：{date}。',
   },
 
