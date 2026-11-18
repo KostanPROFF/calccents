@@ -71,6 +71,24 @@ const siteLinks = site.footer.filter((item) => !item.href.startsWith('/tools/'))
       }
     </p>
     {/*
+      The LaunchNest listing badge, as LaunchNest gave it. The image is
+      loaded lazily, so it costs nothing until the reader scrolls here.
+    */}
+    <a
+      class="footer-badge"
+      href="https://launchnest.io/p/calccents"
+      target="_blank"
+      rel="noopener"
+    >
+      <img
+        src="https://launchnest.io/badge/calccents.svg?variant=featured"
+        alt="Calccents on LaunchNest"
+        width="220"
+        height="56"
+        loading="lazy"
+      />
+    </a>
+    {/*
       The cookie question has to be answerable more than once. The button
       reopens Google's consent message, and stays hidden for a reader the
       message does not apply to: the consent component shows it.
@@ -82,6 +100,15 @@ const siteLinks = site.footer.filter((item) => !item.href.startsWith('/tools/'))
 </footer>
 
 <style>
+  .footer-badge {
+    display: inline-block;
+    margin-top: var(--space-3);
+  }
+
+  .footer-badge img {
+    display: block;
+  }
+
   .footer-consent {
     margin-top: var(--space-3);
     padding: 0;
