@@ -239,6 +239,19 @@ const SCENES: Record<DrawnSlug, Scene> = {
       { x: 192, y: 34 },
     ],
   },
+  // Several tools of different reach, and the one that fits the question.
+  'how-to-choose-a-financial-calculator': {
+    grid: [40, 76, 112],
+    columns: [
+      { x: 196, y: 112, w: 5, h: 28 },
+      { x: 212, y: 104, w: 5, h: 36 },
+    ],
+    dots: [
+      { x: 40, y: 34 },
+      { x: 150, y: 30 },
+      { x: 186, y: 64 },
+    ],
+  },
 };
 
 /** The furniture of the picture this page draws, if it draws one itself. */
@@ -837,6 +850,30 @@ const fillWideId = nextFigureId(`guide-fill-wide-${slug}`);
                 vector-effect="non-scaling-stroke"
               />
               <circle cx="150" cy="88" r="3" fill="var(--accent)" />
+            </g>
+          )
+        }
+
+        {
+          slug === 'how-to-choose-a-financial-calculator' && (
+            <g>
+              {/* The question: the level of answer the reader needs. */}
+              <path
+                d="M18 64 L222 64"
+                fill="none"
+                stroke="var(--text-muted)"
+                stroke-width="1"
+                stroke-dasharray="4 4"
+                vector-effect="non-scaling-stroke"
+              />
+              {/* Candidate tools, each reaching a different height. */}
+              <rect x="34" y="104" width="22" height="36" rx="3" fill="none" stroke="var(--text-muted)" stroke-width="1.25" vector-effect="non-scaling-stroke" />
+              <rect x="70" y="86" width="22" height="54" rx="3" fill="none" stroke="var(--text-muted)" stroke-width="1.25" vector-effect="non-scaling-stroke" />
+              <rect x="146" y="40" width="22" height="100" rx="3" fill="none" stroke="var(--text-muted)" stroke-width="1.25" vector-effect="non-scaling-stroke" />
+              {/* The one that meets the question exactly. */}
+              <rect x="108" y="64" width="24" height="76" rx="3" fill={`url(#${fillId})`} />
+              <rect x="108" y="64" width="24" height="76" rx="3" fill="none" stroke="var(--accent)" stroke-width="2.25" vector-effect="non-scaling-stroke" />
+              <circle cx="120" cy="64" r="3" fill="var(--accent)" />
             </g>
           )
         }
