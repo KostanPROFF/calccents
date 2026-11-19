@@ -33,7 +33,8 @@ export type GuideIllustrationSlug =
   | 'rent-vs-buy-common-mistakes'
   | 'compound-vs-simple-interest'
   | 'how-compounding-frequency-changes-results'
-  | 'inflation-and-real-returns-explained';
+  | 'inflation-and-real-returns-explained'
+  | 'how-to-choose-a-financial-calculator';
 
 /** Every slug, in the order the guides read them. */
 export const GUIDE_ILLUSTRATION_SLUGS = [
@@ -55,6 +56,7 @@ export const GUIDE_ILLUSTRATION_SLUGS = [
   'compound-vs-simple-interest',
   'how-compounding-frequency-changes-results',
   'inflation-and-real-returns-explained',
+  'how-to-choose-a-financial-calculator',
 ] as const satisfies readonly GuideIllustrationSlug[];
 
 /** The calculator whose picture a guide reuses, when it has one. */

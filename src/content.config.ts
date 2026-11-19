@@ -111,6 +111,7 @@ const guides = defineCollection({
         'rent-vs-buy-calculator-explained',
         'rent-vs-buy-common-mistakes',
         'understanding-apr',
+        'how-to-choose-a-financial-calculator',
       ]),
       readingMinutes: z.number().int().min(3).max(25),
       sources: z
