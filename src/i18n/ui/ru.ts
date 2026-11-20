@@ -83,6 +83,7 @@ export const ru = {
     sources: 'Источники',
     sourcesNote: 'Это первоисточники за цифрами и методом в этом руководстве.',
     calculatorsBehindThisGuide: 'Калькуляторы к этому руководству',
+    relatedGuides: 'Другие руководства по теме',
     published: 'Опубликовано',
     lastReviewed: 'Последняя вычитка',
     reviewedBy: 'Проверила',

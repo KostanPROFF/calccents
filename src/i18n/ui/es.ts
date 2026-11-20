@@ -72,6 +72,7 @@ export const es = {
     sources: 'Fuentes',
     sourcesNote: 'Estas son las fuentes primarias detrás de las cifras y el método de esta guía.',
     calculatorsBehindThisGuide: 'Calculadoras detrás de esta guía',
+    relatedGuides: 'Más guías sobre el tema',
     published: 'Publicado',
     lastReviewed: 'Última revisión',
     reviewedBy: 'Revisado por',

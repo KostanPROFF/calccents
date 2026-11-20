@@ -28,6 +28,7 @@ import { getTool, type ToolSlug } from '../config/tools.ts';
 import { getUi } from '../i18n/ui/index.ts';
 import { formatDate, localePath, type Locale } from '../i18n/locales.ts';
 import { getGuides, guideHref, guideSlug } from '../i18n/guides.ts';
+import { guideSlugsForTool } from '../config/relatedContent.ts';
 
 interface Props {
   slug: ToolSlug;
@@ -69,6 +70,10 @@ const Calculator = CALCULATORS[slug];
 /**
  * The related guides, named in the language the page is in.
  *
+ * The dictionary's hand-picked guides come first. Every other guide written
+ * in this language that names this calculator in its `relatedTools` follows,
+ * so a guide always links back from the calculator it explains.
+ *
  * The title comes from the guide itself when the guide exists in this
  * language. Otherwise the dictionary's title is used, and the link goes to
  * the English guide, so a page in a language whose guides are not finished
@@ -76,11 +81,18 @@ const Calculator = CALCULATORS[slug];
  */
 const guides = await getGuides(locale);
 const bySlug = new Map(guides.map((guide) => [guideSlug(guide.id), guide]));
-const relatedGuides = copy.relatedGuides.map((entry) => {
-  const guide = bySlug.get(entry.slug);
+const curatedTitles = new Map(copy.relatedGuides.map((entry) => [entry.slug, entry.title]));
+const translated = guides
+  .filter((guide) => guide.data.locale === locale)
+  .map((guide) => ({ ...guide.data, slug: guideSlug(guide.id) }));
+const relatedGuides = guideSlugsForTool(slug, [...curatedTitles.keys()], translated).map((guideSlugValue) => {
+  const guide = bySlug.get(guideSlugValue);
   return {
-    href: guide ? guideHref(guide) : localePath(locale, `/guides/${entry.slug}/`),
-    title: guide?.data.locale === locale ? guide.data.title : entry.title,
+    href: guide ? guideHref(guide) : localePath(locale, `/guides/${guideSlugValue}/`),
+    title:
+      guide?.data.locale === locale
+        ? guide.data.title
+        : (curatedTitles.get(guideSlugValue) ?? guide?.data.title ?? guideSlugValue),
   };
 });
 

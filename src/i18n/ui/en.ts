@@ -98,6 +98,7 @@ export const en = {
     sources: 'Sources',
     sourcesNote: 'These are the primary sources behind the figures and the method in this guide.',
     calculatorsBehindThisGuide: 'Calculators behind this guide',
+    relatedGuides: 'More guides on this topic',
     published: 'Published',
     lastReviewed: 'Last reviewed',
     reviewedBy: 'Reviewed by',
