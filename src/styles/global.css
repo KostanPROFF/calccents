@@ -1862,36 +1862,32 @@ form details .table-wrap {
    Ads
    -------------------------------------------------------------------------- */
 
+/*
+ * The box a hand-placed unit lives in.
+ *
+ * Its height is reserved before the ad arrives, so that the ad fills space
+ * the page already set aside instead of pushing the text below it down. The
+ * figure is the height of the sizes Google serves most often into a
+ * responsive unit of this width: 300×250 and 336×280 on a phone, 336×280
+ * and 300×250 beside the text on a wider screen. A shorter ad leaves some
+ * empty space; a taller one still grows the box, but by less.
+ *
+ * The box is not clipped. Cutting an ad off is against AdSense policy and a
+ * clipped ad is not counted as viewed.
+ */
 .ad-slot {
   display: block;
   width: 100%;
+  min-height: 280px;
   margin-block: var(--space-8);
   text-align: center;
-  overflow: hidden;
+  contain: layout;
 }
 
-ins.adsbygoogle {
+.ad-slot ins.adsbygoogle {
   display: block;
   width: 100%;
-  min-height: 90px;
-  margin-block: var(--space-8);
-  text-align: center;
-  overflow: hidden;
-}
-
-.ad-slot--reserved {
-  min-height: 90px;
-  border-radius: var(--radius-md);
-  background: var(--surface-inset);
-  border: 1px dashed var(--border-subtle);
-}
-
-.ad-slot--in-article {
-  min-height: 90px;
-}
-
-.ad-slot--footer {
-  min-height: 90px;
+  min-height: 280px;
 }
 
 /* --------------------------------------------------------------------------

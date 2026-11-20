@@ -216,6 +216,17 @@ const reviewer = {
     <link rel="sitemap" href="/sitemap-index.xml" />
 
     <!--
+      The ad loader and the analytics tag load at the end of the body, after
+      the text. Opening the connection to their hosts now, while the page is
+      still being read, takes the DNS lookup and the TLS handshake out of the
+      time an ad needs to arrive, which is time the reader spends looking at
+      an empty box. The loader is requested with crossorigin="anonymous", so
+      its connection is opened the same way or the browser cannot reuse it.
+    -->
+    <link rel="preconnect" href="https://pagead2.googlesyndication.com" crossorigin />
+    <link rel="dns-prefetch" href="https://www.googletagmanager.com" />
+
+    <!--
       The theme is chosen before the first paint, so a reader never sees a
       flash of the wrong colours. A stored choice wins; otherwise the
       operating system decides.
