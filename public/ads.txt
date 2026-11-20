@@ -1,1 +1,12 @@
+# ads.txt for calccents.com
+#
+# The sellers allowed to sell advertising on this site. Each line is
+# <ad system domain>, <publisher ID>, <DIRECT or RESELLER>, <certification ID>.
+#
+# When a managed ad network (Mediavine, Raptive, Ezoic) takes over, it hosts
+# its own ads.txt and keeps it up to date. This file is then replaced by a
+# redirect to that address: see public/_redirects.
+
+OWNERDOMAIN=calccents.com
+
 google.com, pub-5321511632415174, DIRECT, f08c47fec0942fa0

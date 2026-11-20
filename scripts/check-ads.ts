@@ -182,6 +182,18 @@ if (expectSlots) {
   // error.
   for (const rel of pagesWithSlots) {
     const source = readFileSync(join(DIST, rel), 'utf8');
+
+    // Every unit has to sit in the box that reserves its height. A unit
+    // outside it starts at no height and pushes the page down when the ad
+    // arrives, which is the layout shift the box exists to prevent.
+    const units = countOccurrences(source, 'class="adsbygoogle"');
+    const boxes = (source.match(/class="ad-slot ad-slot--[a-z-]+"/g) ?? []).length;
+    if (boxes < units) {
+      problems.push(
+        `${rel} has ${units - boxes} ad unit(s) outside the .ad-slot box that reserves their height`,
+      );
+    }
+
     const slotClient = clientFromSlots(source);
     if (!slotClient) {
       problems.push(`${rel} has an ad unit with no publisher ID`);

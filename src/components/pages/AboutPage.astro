@@ -79,7 +79,11 @@ const correctionsBody = fill(copy.correctionsBody, {
       <p set:html={correctionsBody} />
     </div>
 
+    {/*
+      One unit, not two. The page ends right after the text, so a second unit
+      here would sit directly under the first, and two ads stacked with
+      nothing between them is a layout ad networks mark down on review.
+    */}
     <AdSlot placement="in-article" />
-    <AdSlot placement="footer" />
   </div>
 </Base>
