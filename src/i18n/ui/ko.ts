@@ -86,6 +86,7 @@ export const ko = {
     sources: '출처',
     sourcesNote: '이 가이드의 수치와 계산 방식의 근거가 되는 주요 출처입니다.',
     calculatorsBehindThisGuide: '이 가이드와 관련된 계산기',
+    relatedGuides: '같은 주제의 다른 가이드',
     published: '게시일',
     lastReviewed: '최종 검토일',
     reviewedBy: '검토자',

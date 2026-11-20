@@ -86,6 +86,7 @@ export const pt = {
     sources: 'Fontes',
     sourcesNote: 'Estas são as fontes primárias por trás dos números e do método neste guia.',
     calculatorsBehindThisGuide: 'Calculadoras relacionadas a este guia',
+    relatedGuides: 'Mais guias sobre o tema',
     published: 'Publicado',
     lastReviewed: 'Última revisão',
     reviewedBy: 'Revisado por',

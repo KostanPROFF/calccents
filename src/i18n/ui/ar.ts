@@ -101,6 +101,7 @@ export const ar = {
     sources: 'المصادر',
     sourcesNote: 'هذه هي المصادر الأساسية وراء الأرقام والمنهجية في هذا الدليل.',
     calculatorsBehindThisGuide: 'الحاسبات المستخدمة في هذا الدليل',
+    relatedGuides: 'أدلة أخرى في الموضوع نفسه',
     published: 'تاريخ النشر',
     lastReviewed: 'آخر مراجعة',
     reviewedBy: 'راجعه',

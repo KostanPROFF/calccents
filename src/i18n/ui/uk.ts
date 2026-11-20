@@ -96,6 +96,7 @@ export const uk = {
     sources: 'Джерела',
     sourcesNote: 'Це першоджерела, що стоять за цифрами та методом у цьому посібнику.',
     calculatorsBehindThisGuide: 'Калькулятори в основі цього посібника',
+    relatedGuides: 'Інші посібники на цю тему',
     published: 'Опубліковано',
     lastReviewed: 'Востаннє перевірено',
     reviewedBy: 'Перевірив',
