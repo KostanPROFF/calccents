@@ -5,3 +5,15 @@ allowBuilds:
 minimumReleaseAgeExclude:
   - miniflare@5.20261019.1-beta
   - wrangler@4.151.3
+
+# Astro pulls vite in transitively. 8.3.4 has GHSA-p4f5-76q4-ffq7 (code
+# injection through the dev server's /@id/ virtual modules); the fix ships
+# in 8.3.7 together with rolldown 1.2.18. Astro also depends on rolldown
+# directly, so that copy is raised as well. The newer rolldown accepts a beta
+# of @emnapi as a peer, and pnpm picks it, which breaks `astro check`; the
+# @emnapi pins keep the stable line the rest of the tree uses.
+overrides:
+  vite: ^8.3.7
+  rolldown: ~1.2.18
+  '@emnapi/core': ^1.11.3
+  '@emnapi/runtime': ^1.11.3
