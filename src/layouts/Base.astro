@@ -3,6 +3,7 @@ import { getSite } from '../config/site.ts';
 import { getUi } from '../i18n/ui/index.ts';
 import { alternates, DEFAULT_LOCALE, LOCALE_META, localePath, type Locale } from '../i18n/locales.ts';
 import Nav from '../components/Nav.astro';
+import LanguageSuggest from '../components/LanguageSuggest.astro';
 import Footer from '../components/Footer.astro';
 import CookieConsent from '../components/CookieConsent.astro';
 import '../styles/global.css';
@@ -246,6 +247,8 @@ const reviewer = {
   <body>
     <a class="skip-link" href="#main">{ui.ui.skipToContent}</a>
     <Nav currentPath={Astro.url.pathname} locale={locale} locales={locales} />
+    {/* A page that is not indexed, such as the 404, has no translations to offer. */}
+    {!noindex && <LanguageSuggest currentPath={path} locale={locale} locales={locales} />}
     <main id="main">
       <slot />
     </main>

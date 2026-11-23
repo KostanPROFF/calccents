@@ -1,0 +1,191 @@
+---
+/**
+ * The offer of this page in the reader's own language.
+ *
+ * The site does not pick a language for the reader. English lives at the
+ * root and every other language under its own prefix, and a reader who
+ * follows a plain link to calccents.com gets English whatever their browser
+ * is set to. Search engines send readers to the right version through the
+ * `hreflang` links; a link shared in a chat does not.
+ *
+ * So when the browser's preferred language is one the site publishes in,
+ * and this page exists in it, a small bar under the header offers the
+ * switch, written in that language. It never redirects: a redirect by
+ * language hides the other versions from search crawlers, which come
+ * without a language preference, and takes the choice away from a reader
+ * who wants the English page.
+ *
+ * The bar stays away once the reader has made a choice: following it,
+ * closing it, or picking a language in the switcher in the header. That
+ * choice is kept in the browser, and only there.
+ *
+ * Everything the bar may need is rendered into the page as data, and the
+ * script fills the text in. The bar is hidden until then, so a reader
+ * without scripts, and every crawler, sees nothing. The script is inline and
+ * runs as soon as the bar is parsed, before the first paint, so the bar
+ * never pushes the page down after the reader has started reading.
+ */
+import { LOCALE_META, LOCALES, localePath, stripLocale, type Locale } from '../i18n/locales.ts';
+import { getUi } from '../i18n/ui/index.ts';
+import { LOCALE_CHOICE_KEY, preferredLocale } from '../lib/client/languageChoice.ts';
+
+interface Props {
+  locale: Locale;
+  /** The path of the current page, including the locale prefix. */
+  currentPath: string;
+  /** The languages this page exists in, when it is not in all of them. */
+  locales?: readonly Locale[];
+}
+
+const { locale, currentPath, locales } = Astro.props;
+const path = stripLocale(currentPath);
+
+/** The other languages this page exists in, with the words to offer each. */
+const offers = LOCALES.filter((code) => code !== locale && (!locales || locales.includes(code))).map(
+  (code) => {
+    const ui = getUi(code).ui;
+    return {
+      locale: code,
+      lang: LOCALE_META[code].htmlLang,
+      dir: LOCALE_META[code].dir,
+      href: localePath(code, path),
+      message: ui.languageSuggest,
+      action: ui.languageSuggestSwitch,
+      dismiss: ui.languageSuggestDismiss,
+    };
+  },
+);
+---
+
+{
+  offers.length > 0 && (
+    <div
+      class="language-suggest"
+      data-language-suggest
+      data-locale={locale}
+      data-offers={JSON.stringify(offers)}
+      role="region"
+      hidden
+    >
+      <div class="container language-suggest__inner">
+        <p class="language-suggest__message" data-language-suggest-message />
+        <a class="language-suggest__action" href="#" data-language-suggest-action />
+        <button class="language-suggest__close" type="button" data-language-suggest-close>
+          <svg
+            viewBox="0 0 24 24"
+            width="16"
+            height="16"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            aria-hidden="true"
+          >
+            <path d="M6 6l12 12M18 6L6 18" />
+          </svg>
+        </button>
+      </div>
+    </div>
+  )
+}
+{offers.length > 0 && <script
+  is:inline
+  set:html={`(function () {
+  var KEY = ${JSON.stringify(LOCALE_CHOICE_KEY)};
+  var preferredLocale = ${preferredLocale.toString()};
+  var bar = document.currentScript && document.currentScript.previousElementSibling;
+  if (!bar || !bar.hasAttribute('data-language-suggest')) return;
+
+  function remember(choice) {
+    try { localStorage.setItem(KEY, choice); } catch (error) {}
+  }
+  try { if (localStorage.getItem(KEY) !== null) return; } catch (error) {}
+
+  var current = bar.getAttribute('data-locale') || '';
+  var offers = [];
+  try { offers = JSON.parse(bar.getAttribute('data-offers') || '[]'); } catch (error) {}
+  var languages = navigator.languages && navigator.languages.length ? navigator.languages : [navigator.language || ''];
+  var wanted = preferredLocale(languages, [current].concat(offers.map(function (o) { return o.locale; })));
+  var offer = offers.filter(function (o) { return o.locale === wanted; })[0];
+  if (!offer || wanted === current) return;
+
+  var message = bar.querySelector('[data-language-suggest-message]');
+  var action = bar.querySelector('[data-language-suggest-action]');
+  var close = bar.querySelector('[data-language-suggest-close]');
+  if (!message || !action || !close) return;
+
+  bar.lang = offer.lang;
+  bar.dir = offer.dir;
+  bar.setAttribute('aria-label', offer.action);
+  message.textContent = offer.message;
+  action.textContent = offer.action;
+  action.href = offer.href;
+  action.hreflang = offer.lang;
+  close.setAttribute('aria-label', offer.dismiss);
+  close.title = offer.dismiss;
+  action.addEventListener('click', function () { remember(offer.locale); });
+  close.addEventListener('click', function () { remember(current); bar.hidden = true; });
+  bar.hidden = false;
+})();`}
+/>}
+
+<style>
+  .language-suggest {
+    background: var(--surface-raised);
+    border-bottom: 1px solid var(--border);
+  }
+
+  .language-suggest[hidden] {
+    display: none;
+  }
+
+  .language-suggest__inner {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2) var(--space-4);
+    padding-block: var(--space-3);
+  }
+
+  .language-suggest__message {
+    flex: 1 1 auto;
+    min-width: 0;
+    margin: 0;
+    font-size: var(--text-sm);
+    color: var(--text-secondary);
+  }
+
+  .language-suggest__action {
+    flex: none;
+    white-space: nowrap;
+    font-size: var(--text-sm);
+    font-weight: 600;
+    color: var(--accent-ink);
+    text-decoration: underline;
+    text-underline-offset: 0.2em;
+  }
+
+  .language-suggest__close {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    flex: none;
+    border: 0;
+    border-radius: var(--radius-md);
+    background: transparent;
+    color: var(--text-muted);
+    cursor: pointer;
+  }
+
+  .language-suggest__close:hover {
+    background: var(--surface-inset);
+    color: var(--text);
+  }
+
+  .language-suggest__close:focus-visible,
+  .language-suggest__action:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+  }
+</style>
