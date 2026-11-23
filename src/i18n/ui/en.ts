@@ -102,6 +102,14 @@ export const en = {
     lastReviewed: 'Last reviewed',
     reviewedBy: 'Reviewed by',
     language: 'Language',
+    /*
+      The bar that offers a reader the page in the language of their
+      browser. Each string is shown in its own language, to a reader who is
+      on a page in another one.
+    */
+    languageSuggest: 'This page is also available in English.',
+    languageSuggestSwitch: 'Switch to English',
+    languageSuggestDismiss: 'Close',
     switchTheme: 'Switch theme',
     switchToLight: 'Switch to light theme',
     switchToDark: 'Switch to dark theme',

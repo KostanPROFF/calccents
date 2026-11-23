@@ -94,6 +94,8 @@ function hrefFor(code: Locale): string {
 </div>
 
 <script>
+  import { LOCALE_CHOICE_KEY } from '../lib/client/languageChoice.ts';
+
   const switchers = document.querySelectorAll<HTMLElement>('[data-language-switcher]');
 
   function close(switcher: HTMLElement): void {
@@ -117,6 +119,18 @@ function hrefFor(code: Locale): string {
       button.setAttribute('aria-expanded', open ? 'false' : 'true');
       menu.hidden = open;
     });
+
+    // A language picked here is the reader's choice, so the bar that offers
+    // the page in the browser's language does not come back.
+    for (const option of menu.querySelectorAll<HTMLAnchorElement>('a[hreflang]')) {
+      option.addEventListener('click', () => {
+        try {
+          localStorage.setItem(LOCALE_CHOICE_KEY, option.hreflang);
+        } catch {
+          // Storage can be blocked; nothing else depends on it.
+        }
+      });
+    }
 
     switcher.addEventListener('keydown', (event) => {
       if (event.key === 'Escape') {
