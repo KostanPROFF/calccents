@@ -89,6 +89,23 @@ const siteLinks = site.footer.filter((item) => !item.href.startsWith('/tools/'))
       />
     </a>
     {/*
+      The BuiltByIndies listing badge, as BuiltByIndies gave it. It has to be
+      in the page's HTML itself: BuiltByIndies checks the home page for it.
+    */}
+    <a
+      class="footer-badge"
+      href="https://builtbyindies.com/products/calccents?utm_source=badge&utm_medium=embed&utm_campaign=live"
+      target="_blank"
+      rel="noopener"
+    >
+      <img
+        src="https://builtbyindies.com/badge/ab73bec0-6e79-4609-8d28-d2304e520488.svg?theme=dark"
+        alt="BuiltByIndies"
+        height="60"
+        loading="lazy"
+      />
+    </a>
+    {/*
       The cookie question has to be answerable more than once. The button
       reopens Google's consent message, and stays hidden for a reader the
       message does not apply to: the consent component shows it.
@@ -103,6 +120,8 @@ const siteLinks = site.footer.filter((item) => !item.href.startsWith('/tools/'))
   .footer-badge {
     display: inline-block;
     margin-top: var(--space-3);
+    margin-right: var(--space-3);
+    vertical-align: middle;
   }
 
   .footer-badge img {
