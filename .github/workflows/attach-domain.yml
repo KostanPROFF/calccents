@@ -32,7 +32,7 @@ jobs:
     steps:
       # The redirect rule is a script in the repository, so the repository
       # has to be on disk before the steps below run.
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
 
       - name: Attach the domain
         env:
