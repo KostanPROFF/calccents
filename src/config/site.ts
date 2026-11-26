@@ -48,7 +48,10 @@ export const SITE = {
    * engine ties the site to the same publisher elsewhere. Only profiles that
    * exist and that the site controls belong here.
    */
-  profiles: ['https://www.linkedin.com/company/calccents/'] as readonly string[],
+  profiles: [
+    'https://www.linkedin.com/company/calccents/',
+    'https://www.crunchbase.com/organization/calccents',
+  ] as readonly string[],
   /** The public repository, mentioned on the about and editorial pages. */
   repository: 'https://github.com/KostanPROFF/calccents',
   /**
