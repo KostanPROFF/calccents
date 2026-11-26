@@ -15,3 +15,19 @@
 # /ads.txt https://adstxt.mediavine.com/sites/<site-slug>/ads.txt 301
 # /ads.txt https://ads.adthrive.com/sites/<site-id>/ads.txt 301
 # /ads.txt https://srv.adstxtmanager.com/<ezoic-id>/calccents.com 301
+
+# Guides that have no translation yet.
+#
+# Until November 2026 the Arabic, Korean, Portuguese, Tagalog, Ukrainian,
+# Vietnamese and Chinese guide routes also built the English text of any
+# guide missing in that language, at the translated address and with a
+# canonical pointing at itself. Search engines found those copies and
+# refused to index them as duplicates. The routes now build only real
+# translations, and the old addresses forward to the English guide.
+/ar/guides/how-to-choose-a-financial-calculator/ /guides/how-to-choose-a-financial-calculator/ 301
+/ko/guides/how-to-choose-a-financial-calculator/ /guides/how-to-choose-a-financial-calculator/ 301
+/pt/guides/how-to-choose-a-financial-calculator/ /guides/how-to-choose-a-financial-calculator/ 301
+/tl/guides/how-to-choose-a-financial-calculator/ /guides/how-to-choose-a-financial-calculator/ 301
+/uk/guides/how-to-choose-a-financial-calculator/ /guides/how-to-choose-a-financial-calculator/ 301
+/vi/guides/how-to-choose-a-financial-calculator/ /guides/how-to-choose-a-financial-calculator/ 301
+/zh/guides/how-to-choose-a-financial-calculator/ /guides/how-to-choose-a-financial-calculator/ 301
