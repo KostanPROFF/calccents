@@ -3,3 +3,15 @@
 # The sitemap is built as /sitemap-index.xml, but /sitemap.xml is the
 # address people and many tools try first, so it forwards there.
 /sitemap.xml /sitemap-index.xml 301
+
+# ads.txt managed by an ad network.
+#
+# Mediavine, Raptive and Ezoic each host the site's ads.txt themselves and
+# update it as their demand partners change, which is several times a month.
+# They ask for /ads.txt to be redirected to their copy. On approval, delete
+# public/ads.txt and uncomment the line for the network, with the address
+# from its dashboard:
+#
+# /ads.txt https://adstxt.mediavine.com/sites/<site-slug>/ads.txt 301
+# /ads.txt https://ads.adthrive.com/sites/<site-id>/ads.txt 301
+# /ads.txt https://srv.adstxtmanager.com/<ezoic-id>/calccents.com 301

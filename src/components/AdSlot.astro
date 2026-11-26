@@ -41,14 +41,27 @@ const slotId = (slotIds[placement] ?? '').replace(/\D/g, '');
 const enabled = Boolean(slotId);
 ---
 
+{/*
+  The unit sits in a box that already has the height of the ad it is most
+  likely to receive. An ad arrives a second or two after the page, usually
+  while the reader is scrolling towards it, and an <ins> that starts at no
+  height and grows to 280 pixels pushes everything under it down the screen.
+  That push is what Core Web Vitals count as layout shift, and premium ad
+  networks read that score before they read anything else.
+
+  The box keeps its height when Google has nothing to fill it with: a box
+  that collapses moves the page just as much as one that grows.
+*/}
 {
   enabled && (
-    <ins
-      class="adsbygoogle"
-      data-ad-client={client}
-      data-ad-slot={slotId}
-      data-ad-format="auto"
-      data-full-width-responsive="true"
-    />
+    <div class={`ad-slot ad-slot--${placement}`} data-ad-placement={placement}>
+      <ins
+        class="adsbygoogle"
+        data-ad-client={client}
+        data-ad-slot={slotId}
+        data-ad-format="auto"
+        data-full-width-responsive="true"
+      />
+    </div>
   )
 }
