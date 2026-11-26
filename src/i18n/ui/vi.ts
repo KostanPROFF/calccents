@@ -86,6 +86,7 @@ export const vi = {
     sources: 'Nguồn',
     sourcesNote: 'Đây là các nguồn chính đằng sau các con số và phương pháp trong hướng dẫn này.',
     calculatorsBehindThisGuide: 'Các công cụ tính toán đằng sau hướng dẫn này',
+    relatedGuides: 'Các hướng dẫn khác cùng chủ đề',
     published: 'Đã xuất bản',
     lastReviewed: 'Xem xét lần cuối',
     reviewedBy: 'Được xem xét bởi',

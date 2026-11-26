@@ -84,6 +84,7 @@ export const zh = {
     sources: '来源',
     sourcesNote: '这些是本指南中数字和方法背后的原始来源。',
     calculatorsBehindThisGuide: '本指南所涉及的计算器',
+    relatedGuides: '同主题的其他指南',
     published: '发布日期',
     lastReviewed: '最后审核日期',
     reviewedBy: '审核人',

@@ -8,7 +8,14 @@ import { getSite } from '../../config/site.ts';
 import { personLinks } from '../../config/people.ts';
 import { getUi } from '../../i18n/ui/index.ts';
 import { formatDate, localePath, type Locale } from '../../i18n/locales.ts';
-import { guideLocales, guideSlug, type GuideEntry } from '../../i18n/guides.ts';
+import {
+  getTranslatedGuides,
+  guideHref,
+  guideLocales,
+  guideSlug,
+  type GuideEntry,
+} from '../../i18n/guides.ts';
+import { relatedGuidesFor } from '../../config/relatedContent.ts';
 import { getTool, isToolSlug } from '../../config/tools.ts';
 import ToolGlyph from '../visuals/ToolGlyph.astro';
 import { tileHue } from '../visuals/toolGlyphs.ts';
@@ -32,6 +39,18 @@ const locales = await guideLocales(slug);
 const relatedTools = data.relatedTools
   .filter(isToolSlug)
   .map((toolSlug) => getTool(toolSlug, locale));
+
+/**
+ * The other guides in this language that explain the same calculators, or
+ * failing that sit in the same group. Only guides written in this language,
+ * so the block never mixes two languages on one page.
+ */
+const siblings = (await getTranslatedGuides(locale)).map((entry) => ({
+  ...entry.data,
+  slug: guideSlug(entry.id),
+  href: guideHref(entry),
+}));
+const relatedGuides = relatedGuidesFor({ ...data, slug }, siblings);
 
 const article = {
   '@context': 'https://schema.org',
@@ -154,6 +173,22 @@ const faqPage = {
                 <span class="tile__title">{tool.name}</span>
                 <span class="tile__text">{tool.short}</span>
                 <span class="tile__meta">{ui.ui.calculate}</span>
+              </a>
+            ))}
+          </div>
+        </section>
+      )
+    }
+
+    {
+      relatedGuides.length > 0 && (
+        <section class="section-sm">
+          <h2>{ui.ui.relatedGuides}</h2>
+          <div class="grid grid--2" style="margin-top: var(--space-5);">
+            {relatedGuides.map((related) => (
+              <a class="tile" href={related.href}>
+                <span class="tile__title">{related.title}</span>
+                <span class="tile__meta">{ui.ui.readTheGuide}</span>
               </a>
             ))}
           </div>

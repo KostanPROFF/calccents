@@ -86,6 +86,7 @@ export const tl = {
     sources: 'Mga pinagkukunan',
     sourcesNote: 'Ito ang mga pangunahing pinagmulan ng mga datos at paraang ginamit sa gabay na ito.',
     calculatorsBehindThisGuide: 'Mga calculator sa likod ng gabay na ito',
+    relatedGuides: 'Iba pang gabay sa paksang ito',
     published: 'Nailathala',
     lastReviewed: 'Huling sinuri',
     reviewedBy: 'Sinuri ni',
