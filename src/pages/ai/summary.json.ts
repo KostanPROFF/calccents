@@ -21,6 +21,7 @@ export const GET: APIRoute = async () => {
     contact: SITE.email,
     author: { name: SITE.author.name, profiles: SITE.author.links.map((link) => link.href) },
     reviewer: { name: SITE.reviewer.name, profiles: SITE.reviewer.links.map((link) => link.href) },
+    profiles: [...SITE.profiles],
     sourceCode: SITE.repository,
     pricing: 'Free. No account, sign-up or email address is needed.',
     advice: 'The site publishes calculations and explanations, not financial, tax, legal or investment advice.',

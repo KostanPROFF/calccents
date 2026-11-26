@@ -41,6 +41,14 @@ export const SITE = {
     name: REVIEWER.name,
     links: REVIEWER.links,
   },
+  /**
+   * The profiles of the site itself, as opposed to the people behind it.
+   *
+   * They go into the `sameAs` of the organization, which is how a search
+   * engine ties the site to the same publisher elsewhere. Only profiles that
+   * exist and that the site controls belong here.
+   */
+  profiles: ['https://www.linkedin.com/company/calccents/'] as readonly string[],
   /** The public repository, mentioned on the about and editorial pages. */
   repository: 'https://github.com/KostanPROFF/calccents',
   /**

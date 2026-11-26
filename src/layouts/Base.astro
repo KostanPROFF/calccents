@@ -1,5 +1,5 @@
 ---
-import { getSite } from '../config/site.ts';
+import { getSite, SITE } from '../config/site.ts';
 import { getUi } from '../i18n/ui/index.ts';
 import { alternates, DEFAULT_LOCALE, LOCALE_META, localePath, type Locale } from '../i18n/locales.ts';
 import Nav from '../components/Nav.astro';
@@ -104,7 +104,7 @@ const organization = {
   foundingDate: site.founded,
   email: site.email,
   logo: new URL('/favicon.svg', site.origin).toString(),
-  sameAs: [site.repository, ...site.author.links.map((link) => link.href)],
+  sameAs: [...SITE.profiles, site.repository, ...site.author.links.map((link) => link.href)],
 };
 
 const person = {
