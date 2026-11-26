@@ -2,3 +2,15 @@
 # a new URL and an old URL never changes. They can be kept for a year.
 /_astro/*
   Cache-Control: public, max-age=31536000, immutable
+
+# The plain files written for AI systems and feed readers. They hold text in
+# every language the site publishes, so the charset is stated rather than
+# left to a guess.
+/llms.txt
+  Content-Type: text/plain; charset=utf-8
+/.well-known/ai.txt
+  Content-Type: text/plain; charset=utf-8
+/rss.xml
+  Content-Type: application/rss+xml; charset=utf-8
+/*/rss.xml
+  Content-Type: application/rss+xml; charset=utf-8

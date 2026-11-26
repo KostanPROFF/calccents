@@ -156,6 +156,32 @@ export const tl = {
     newsletterHeading: 'Get the math sa iyong inbox',
     newsletterLede:
       'Isang maikling liham kapag may bagong calculator na na-live o muling sinuri ang kasalukuyan.',
+    faq: [
+      {
+        q: "Ano ang Calccents?",
+        a: "Ang Calccents ay isang libreng website ng mga calculator para sa personal na pananalapi sa US at ng mga gabay na nagpapaliwanag sa mga ito. Saklaw ng mga tool ang hulog sa mortgage, pag-upa laban sa pagbili, compound interest, take-home pay, federal income tax at pagbabayad ng utang, at isinusulat ng bawat isa ang formula na ginagamit nito at ang mga palagay sa likod ng resulta.",
+      },
+      {
+        q: "Libre ba ito, at kailangan ba ng account?",
+        a: "Libre ang lahat ng tool at gabay. Wala sa mga ito ang humihingi ng account, pag-sign up o email address. Pinopondohan ang site ng display advertising.",
+      },
+      {
+        q: "Ano ang nangyayari sa mga numerong inilalagay ko?",
+        a: "Tumatakbo ang pagkalkula sa iyong browser. Hindi ipinapadala sa site o kaninuman ang mga value na inilagay mo at hindi ito iniimbak kahit saan; nawawala ang mga ito kapag isinara ang tab.",
+      },
+      {
+        q: "Saan galing ang mga numero?",
+        a: "Ang mga tax bracket, payroll tax rate, contribution limit at iba pang nailathalang numero ay galing sa mga pangunahing sanggunian gaya ng IRS, Social Security Administration at Bureau of Labor Statistics. May link sa sanggunian ang bawat numero, at ipinapakita ng bawat pahina ang petsa kung kailan huling sinuri ang mga numero nito.",
+      },
+      {
+        q: "Nagbibigay ba ang Calccents ng payong pinansyal?",
+        a: "Hindi. Ipinapakita ng site kung paano nakukuha ang isang numero at kung saan ito nakadepende. Hindi nito sinusuri ang sitwasyon ninuman at hindi ito nagmumungkahi ng hakbang; trabaho iyon ng isang lisensyadong propesyonal na alam ang mga detalye.",
+      },
+      {
+        q: "Sino ang sumusulat at sumusuri ng nilalaman?",
+        a: "Si Kostan Proff ang sumusulat ng mga gabay at nagpapanatili ng calculation engine. Sinusuri ni Tetiana Goncharko ang nilalamang pinansyal ng bawat gabay bago ito ilathala. Nakalista silang dalawa, kasama ang kanilang mga profile, sa pahina ng editorial team.",
+      },
+    ],
   },
 
   /*

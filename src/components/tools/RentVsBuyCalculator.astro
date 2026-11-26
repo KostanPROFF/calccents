@@ -6,6 +6,7 @@
  * three language versions share a single implementation. Every label comes
  * from the dictionary for the language the page is in.
  */
+import { toolAgentDescription, toolAgentName } from '../../config/tools.ts';
 import ResultPanel from '../ResultPanel.astro';
 import ResultChart from '../ResultChart.astro';
 import AdSlot from '../AdSlot.astro';
@@ -25,6 +26,8 @@ const copy = ui.tool['rent-vs-buy'];
   <form
   class="card"
   id="rent-buy-form"
+  toolname={toolAgentName('rent-vs-buy')}
+  tooldescription={toolAgentDescription('rent-vs-buy')}
   novalidate
   data-not-within-horizon={copy.script.notWithinHorizon}
   data-month-label={copy.script.month}

@@ -142,6 +142,32 @@ export const es = {
     newsletterHeading: 'Recibe los cálculos en tu correo',
     newsletterLede:
       'Una carta corta cuando sale una calculadora nueva o cuando se revisa una existente.',
+    faq: [
+      {
+        q: "¿Qué es Calccents?",
+        a: "Calccents es un sitio gratuito de calculadoras de finanzas personales para Estados Unidos, con guías que las explican. Las herramientas cubren la cuota de una hipoteca, alquilar frente a comprar, el interés compuesto, el salario neto, el impuesto federal sobre la renta y el pago de deudas, y cada una escribe la fórmula que usa y los supuestos detrás del resultado.",
+      },
+      {
+        q: "¿Es gratis? ¿Hace falta una cuenta?",
+        a: "Todas las herramientas y guías son gratuitas. Ninguna pide una cuenta, un registro ni una dirección de correo. El sitio se financia con publicidad.",
+      },
+      {
+        q: "¿Qué pasa con los números que escribo?",
+        a: "El cálculo se hace en su navegador. Los valores que introduce no se envían al sitio ni a nadie más y no se guardan en ningún lugar; al cerrar la pestaña desaparecen.",
+      },
+      {
+        q: "¿De dónde salen las cifras?",
+        a: "Los tramos fiscales, las tasas sobre la nómina, los límites de aportación y otras cifras publicadas vienen de fuentes primarias como el IRS, la Administración del Seguro Social y la Oficina de Estadísticas Laborales. Cada cifra enlaza con su fuente y cada página muestra la fecha en que se revisaron sus números.",
+      },
+      {
+        q: "¿Calccents da asesoramiento financiero?",
+        a: "No. El sitio muestra cómo se obtiene un número y de qué depende. No evalúa la situación de nadie ni recomienda un curso de acción; eso corresponde a un profesional con licencia que conozca los detalles.",
+      },
+      {
+        q: "¿Quién escribe y revisa el contenido?",
+        a: "Kostan Proff escribe las guías y mantiene el motor de cálculo. Tetiana Goncharko revisa el contenido financiero de cada guía antes de publicarla. Ambos aparecen, con sus perfiles, en la página del equipo editorial.",
+      },
+    ],
   },
 
   illustration: {

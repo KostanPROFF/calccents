@@ -6,6 +6,7 @@
  * three language versions share a single implementation. Every label comes
  * from the dictionary for the language the page is in.
  */
+import { toolAgentDescription, toolAgentName } from '../../config/tools.ts';
 import ResultPanel from '../ResultPanel.astro';
 import ResultChart from '../ResultChart.astro';
 import AdSlot from '../AdSlot.astro';
@@ -22,7 +23,7 @@ const copy = ui.tool['mortgage-payment'];
 ---
 
 <div>
-  <form class="card" id="mortgage-form" novalidate data-locale={LOCALE_META[locale].intl}>
+  <form class="card" id="mortgage-form" toolname={toolAgentName('mortgage-payment')} tooldescription={toolAgentDescription('mortgage-payment')} novalidate data-locale={LOCALE_META[locale].intl}>
   <div class="input-group">
     <label class="field" for="home-price">
       <span class="field__label">{copy.fields.homePrice}</span>

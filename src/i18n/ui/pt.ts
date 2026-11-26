@@ -156,6 +156,32 @@ export const pt = {
     newsletterHeading: 'Receba os cálculos na sua caixa de entrada',
     newsletterLede:
       'Uma carta curta quando uma nova calculadora for lançada ou uma existente for revisada.',
+    faq: [
+      {
+        q: "O que é a Calccents?",
+        a: "A Calccents é um site gratuito de calculadoras de finanças pessoais para os Estados Unidos, com guias que as explicam. As ferramentas tratam da prestação de uma hipoteca, de alugar ou comprar, de juros compostos, do salário líquido, do imposto de renda federal e da quitação de dívidas, e cada uma escreve a fórmula que usa e as premissas por trás do resultado.",
+      },
+      {
+        q: "É gratuito? É preciso criar uma conta?",
+        a: "Todas as ferramentas e guias são gratuitos. Nenhum deles pede conta, cadastro ou endereço de e-mail. O site é financiado por publicidade.",
+      },
+      {
+        q: "O que acontece com os números que digito?",
+        a: "O cálculo é feito no seu navegador. Os valores digitados não são enviados ao site nem a mais ninguém e não ficam guardados em lugar nenhum; ao fechar a aba, eles são descartados.",
+      },
+      {
+        q: "De onde vêm os números?",
+        a: "Faixas de imposto, alíquotas sobre a folha de pagamento, limites de contribuição e outros números publicados vêm de fontes primárias como o IRS, a Administração da Previdência Social e o Departamento de Estatísticas do Trabalho. Cada número tem link para a fonte, e cada página mostra a data da última verificação.",
+      },
+      {
+        q: "A Calccents dá aconselhamento financeiro?",
+        a: "Não. O site mostra como um número é obtido e do que ele depende. Ele não avalia a situação de ninguém e não recomenda um caminho; isso cabe a um profissional habilitado que conheça os detalhes.",
+      },
+      {
+        q: "Quem escreve e revisa o conteúdo?",
+        a: "Kostan Proff escreve os guias e mantém o motor de cálculo. Tetiana Goncharko revisa o conteúdo financeiro de cada guia antes da publicação. Os dois aparecem, com seus perfis, na página da equipe editorial.",
+      },
+    ],
   },
 
   /*

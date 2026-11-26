@@ -6,6 +6,7 @@
  * three language versions share a single implementation. Every label comes
  * from the dictionary for the language the page is in.
  */
+import { toolAgentDescription, toolAgentName } from '../../config/tools.ts';
 import ResultPanel from '../ResultPanel.astro';
 import ResultChart from '../ResultChart.astro';
 import AdSlot from '../AdSlot.astro';
@@ -25,6 +26,8 @@ const copy = ui.tool['compound-interest'];
   <form
   class="card"
   id="compound-form"
+  toolname={toolAgentName('compound-interest')}
+  tooldescription={toolAgentDescription('compound-interest')}
   novalidate
   data-years-one={copy.script.yearsOne}
   data-years-other={copy.script.yearsOther}

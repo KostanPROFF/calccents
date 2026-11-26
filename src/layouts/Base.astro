@@ -6,6 +6,7 @@ import Nav from '../components/Nav.astro';
 import LanguageSuggest from '../components/LanguageSuggest.astro';
 import Footer from '../components/Footer.astro';
 import CookieConsent from '../components/CookieConsent.astro';
+import { feedPath } from '../lib/geo/index.ts';
 import '../styles/global.css';
 
 interface Props {
@@ -96,6 +97,7 @@ const alternateLinks = alternates(path).filter(
 const organization = {
   '@context': 'https://schema.org',
   '@type': 'Organization',
+  '@id': new URL('/#organization', site.origin).toString(),
   name: site.name,
   url: site.origin,
   description: site.description,
@@ -215,6 +217,16 @@ const reviewer = {
     -->
     <meta name="fo-verify" content="659ef6af-d867-4b56-aab5-d48f9b2e69d1" />
     <link rel="sitemap" href="/sitemap-index.xml" />
+    <!--
+      The feed of the guides in the language of the page. Feed readers and the
+      crawlers behind AI answers find new guides through it.
+    -->
+    <link
+      rel="alternate"
+      type="application/rss+xml"
+      title={`${site.name} — ${ui.nav.guides}`}
+      href={new URL(feedPath(locale), site.origin).toString()}
+    />
 
     <!--
       The ad loader and the analytics tag load at the end of the body, after

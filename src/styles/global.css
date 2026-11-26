@@ -813,6 +813,7 @@ a:hover {
 .tile__title {
   font-weight: 650;
   font-size: var(--text-lg);
+  line-height: var(--leading-normal);
   letter-spacing: -0.015em;
   color: var(--text);
   transition: color var(--transition);
@@ -1865,6 +1866,7 @@ form details .table-wrap {
 .faq__question {
   font-weight: 650;
   font-size: var(--text-base);
+  line-height: var(--leading-normal, 1.5);
   color: var(--text);
   letter-spacing: -0.01em;
 }
