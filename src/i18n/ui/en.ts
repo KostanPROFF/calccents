@@ -136,11 +136,11 @@ export const en = {
       'Free financial calculators for mortgage payments, rent versus buy, compound interest, take-home pay, federal tax and debt payoff. Every formula is shown.',
     socialDescription:
       'Free mortgage, rent-vs-buy, interest, paycheck, tax and debt calculators. Every formula shown.',
-    eyebrow: 'Financial calculators',
+    eyebrow: 'Personal finance, worked out',
     heading: 'Know the number before you decide',
     lede: 'Free tools for the arithmetic behind a mortgage, a lease, a paycheck and a stack of debt. Every formula is written out, every assumption belongs to you, and no page tells you what to do with the result.',
-    cta: 'Browse the calculators',
-    calculatorsEyebrow: 'The calculators',
+    cta: 'Browse the tools',
+    calculatorsEyebrow: 'The tools',
     calculatorsHeading: 'Six questions, six sets of numbers',
     workHeading: 'Every figure shows its work',
     workPoints: [
@@ -162,9 +162,9 @@ export const en = {
     calcMonthly: 'Monthly principal & interest',
     calcLoan: 'Loan amount',
     calcTotalInterest: 'Total interest',
-    calcOpen: 'Open the full calculator',
-    calcNote: 'Principal and interest only. Property tax, insurance and HOA are in the full calculator.',
-    statCalculators: 'calculators',
+    calcOpen: 'Open the full mortgage tool',
+    calcNote: 'Principal and interest only. Property tax, insurance and HOA are in the full version.',
+    statCalculators: 'free tools',
     statGuides: 'guides with the working shown',
     statLanguages: 'languages',
     statSignups: 'sign-ups to use any of it',
@@ -172,7 +172,37 @@ export const en = {
     guidesHeading: 'The arithmetic, written out',
     newsletterHeading: 'Get the math in your inbox',
     newsletterLede:
-      'One short letter when a new calculator goes live or an existing one is re-reviewed.',
+      'One short letter when a new tool goes live or an existing one is re-reviewed.',
+    /*
+      Questions about the site as a whole, shown on the home page and
+      described there as an FAQPage.
+    */
+    faq: [
+      {
+        q: "What is Calccents?",
+        a: "Calccents is a free website of US personal finance calculators and the guides that explain them. The tools cover a mortgage payment, renting versus buying, compound interest, take-home pay, federal income tax and paying off debt, and each one writes out the formula it uses and the assumptions behind the result.",
+      },
+      {
+        q: "Is it free, and is an account needed?",
+        a: "Every tool and every guide is free to use. None of them asks for an account, a sign-up or an email address. The site is funded by display advertising.",
+      },
+      {
+        q: "What happens to the numbers I type in?",
+        a: "The arithmetic runs in your browser. The values you enter are not sent to the site or to anyone else and are not stored anywhere; closing the tab discards them.",
+      },
+      {
+        q: "Where do the figures come from?",
+        a: "Tax brackets, payroll tax rates, contribution limits and other published figures come from primary sources such as the IRS, the Social Security Administration and the Bureau of Labor Statistics. Each figure is linked to its source, and every page shows the date its numbers were last checked.",
+      },
+      {
+        q: "Does Calccents give financial advice?",
+        a: "No. The site shows how a number is worked out and what it depends on. It does not assess anyone's situation and does not recommend a course of action; that is a job for a licensed professional who knows the details.",
+      },
+      {
+        q: "Who writes and reviews the content?",
+        a: "Kostan Proff writes the guides and maintains the calculation engine. Tetiana Goncharko reviews the financial content of each guide before it is published. Both are listed, with their profiles, on the editorial team page.",
+      },
+    ],
   },
 
   /*

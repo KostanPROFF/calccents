@@ -2,6 +2,7 @@
 import Base from '../../layouts/Base.astro';
 import AdSlot from '../AdSlot.astro';
 import Newsletter from '../Newsletter.astro';
+import Faq from '../Faq.astro';
 import HeroCalc from '../visuals/HeroCalc.astro';
 import { heroExample } from '../visuals/heroExample.ts';
 import { formatCurrency } from '../../lib/calc/money.ts';
@@ -43,12 +44,21 @@ const webSite = {
   inLanguage: site.lang,
 };
 
-const organization = {
+/*
+  The questions about the site as a whole.
+
+  The organization itself is described by the layout on every page, with its
+  profiles; a second, shorter copy here gave a crawler two descriptions of the
+  same publisher that disagreed about its profiles.
+*/
+const faqPage = {
   '@context': 'https://schema.org',
-  '@type': 'Organization',
-  name: site.name,
-  url: site.origin,
-  logo: new URL('/favicon.svg', site.origin).toString(),
+  '@type': 'FAQPage',
+  mainEntity: ui.home.faq.map((item) => ({
+    '@type': 'Question',
+    name: item.q,
+    acceptedAnswer: { '@type': 'Answer', text: item.a },
+  })),
 };
 ---
 
@@ -58,7 +68,7 @@ const organization = {
   socialDescription={ui.home.socialDescription}
   path={localePath(locale, '/')}
   locale={locale}
-  jsonLd={[webSite, organization]}
+  jsonLd={[webSite, faqPage]}
 >
   <section class="hero-section">
     <div class="hero-grid-bg" aria-hidden="true"></div>
@@ -109,7 +119,7 @@ const organization = {
                 <ToolGlyph slug={tool.slug} />
                 <span class="badge">{tool.category}</span>
               </span>
-              <span class="tile__title">{tool.name}</span>
+              <h3 class="tile__title">{tool.name}</h3>
               <span class="tile__text">{tool.short}</span>
               <span class="tile__meta">{ui.ui.calculate}</span>
             </a>
@@ -172,7 +182,7 @@ const organization = {
               href={guideHref(guide)}
               lang={guide.data.locale !== locale ? LOCALE_META[guide.data.locale].htmlLang : undefined}
             >
-              <span class="guide-row__title">{guide.data.title}</span>
+              <h3 class="guide-row__title">{guide.data.title}</h3>
               <span class="guide-row__meta">
                 {ui.ui.minRead.replace('{n}', String(guide.data.readingMinutes))}
               </span>
@@ -184,6 +194,15 @@ const organization = {
   </section>
 
   <AdSlot placement="in-article" />
+
+  <section class="section-sm">
+    <div class="container" style="max-width: 880px;">
+      <h2 class="section-heading">{ui.ui.commonQuestions}</h2>
+      <div style="margin-top: var(--space-6);">
+        <Faq items={ui.home.faq} />
+      </div>
+    </div>
+  </section>
 
   <section class="section-sm">
     <div class="container" style="max-width: 720px;">
@@ -382,6 +401,9 @@ const organization = {
   }
 
   .guide-row__title {
+    font-size: inherit;
+    letter-spacing: normal;
+    line-height: inherit;
     color: var(--text);
     font-weight: 550;
     transition: color var(--transition);

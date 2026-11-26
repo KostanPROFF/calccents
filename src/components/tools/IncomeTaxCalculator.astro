@@ -1,4 +1,5 @@
 ---
+import { toolAgentDescription, toolAgentName } from '../../config/tools.ts';
 import { getUi } from '../../i18n/ui/index.ts';
 import ResultPanel from '../ResultPanel.astro';
 import ResultChart from '../ResultChart.astro';
@@ -20,7 +21,7 @@ const childBands = CHILD_AGE_BANDS;
 ---
 
 <div>
-  <form class="card" id="income-tax-form" novalidate
+  <form class="card" id="income-tax-form" toolname={toolAgentName('income-tax')} tooldescription={toolAgentDescription('income-tax')} novalidate
     data-state-detected={copy.script.stateDetected}
     data-detected-from-ip={ui.ui.detectedFromIp}
     data-children-total={copy.script.childrenTotal}>

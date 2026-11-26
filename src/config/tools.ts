@@ -114,3 +114,59 @@ export function getTool(slug: ToolSlug, locale: Locale): ToolDefinition {
 export function isToolSlug(value: string): value is ToolSlug {
   return (TOOL_SLUGS as readonly string[]).includes(value);
 }
+
+/**
+ * How each calculator introduces itself to a browser agent.
+ *
+ * Chrome's WebMCP proposal lets a page mark a form as a tool that an AI agent
+ * may fill in on the reader's behalf: `toolname` names it, `tooldescription`
+ * says what it does. The proposal is experimental and a browser that does not
+ * know the attributes ignores them, so they cost nothing where they are not
+ * read.
+ *
+ * The names are stable identifiers rather than prose, so they are the same in
+ * every language. The descriptions are written for the agent, in English, and
+ * say what the form computes and nothing about what the reader should do.
+ */
+const AGENT: Record<ToolSlug, { name: string; description: string }> = {
+  'mortgage-payment': {
+    name: 'calculate_mortgage_payment',
+    description:
+      'Computes the monthly payment on a fixed-rate US mortgage from the home price, down payment, interest rate and term, adds property tax, home insurance and an HOA fee, applies an optional extra principal payment, and shows the amortization schedule.',
+  },
+  'rent-vs-buy': {
+    name: 'compare_rent_vs_buy',
+    description:
+      'Compares the monthly cost of renting with the monthly cost of owning a home over a chosen number of years, from the purchase price, down payment, mortgage rate and term, rent, running costs, closing and selling costs and the annual change in home value, and reports the upfront outlay, the equity built and the crossover month.',
+  },
+  'compound-interest': {
+    name: 'calculate_compound_interest',
+    description:
+      'Projects the future balance of savings from a starting balance, a monthly contribution, an annual rate, a compounding frequency and a number of years, separates contributions from interest earned, and can show the balance in today\'s money for a given inflation rate.',
+  },
+  'net-pay': {
+    name: 'calculate_take_home_pay',
+    description:
+      'Estimates take-home pay per paycheck for a US employee from gross pay, pay period, filing status, a state income tax rate and pre-tax retirement and health contributions, using the 2026 federal income tax, Social Security and Medicare figures.',
+  },
+  'income-tax': {
+    name: 'estimate_federal_income_tax',
+    description:
+      'Estimates 2026 US federal income tax from gross income, filing status, pre-tax deductions, the standard or an itemized deduction and the number of children, shows the tax in each bracket with the marginal and effective rates, and adds an optional state income tax.',
+  },
+  'debt-payoff': {
+    name: 'plan_debt_payoff',
+    description:
+      'Builds a month-by-month payoff schedule for several debts under the avalanche and snowball orders from each balance, interest rate and minimum payment plus an extra monthly payment, and reports the payoff date and total interest of each order.',
+  },
+};
+
+/** The stable name a browser agent calls a calculator by. */
+export function toolAgentName(slug: ToolSlug): string {
+  return AGENT[slug].name;
+}
+
+/** What a calculator does, written for a browser agent. */
+export function toolAgentDescription(slug: ToolSlug): string {
+  return AGENT[slug].description;
+}

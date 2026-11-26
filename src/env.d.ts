@@ -13,3 +13,16 @@ interface ImportMetaEnv {
 interface ImportMeta {
   readonly env: ImportMetaEnv;
 }
+
+/**
+ * The attributes of Chrome's WebMCP proposal, which mark a form as a tool a
+ * browser agent may fill in. They are experimental and not in the standard
+ * HTML types yet, so they are declared here for the form element alone.
+ */
+declare namespace astroHTML.JSX {
+  interface FormHTMLAttributes {
+    toolname?: string | undefined | null;
+    tooldescription?: string | undefined | null;
+    toolautosubmit?: boolean | string | undefined | null;
+  }
+}

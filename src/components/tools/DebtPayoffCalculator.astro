@@ -1,4 +1,5 @@
 ---
+import { toolAgentDescription, toolAgentName } from '../../config/tools.ts';
 import { getUi } from '../../i18n/ui/index.ts';
 import ResultPanel from '../ResultPanel.astro';
 import ResultChart from '../ResultChart.astro';
@@ -15,7 +16,7 @@ const copy = ui.tool['debt-payoff'];
 ---
 
 <div>
-  <form class="card" id="debt-form" novalidate>
+  <form class="card" id="debt-form" toolname={toolAgentName('debt-payoff')} tooldescription={toolAgentDescription('debt-payoff')} novalidate>
     <div class="debt-rows" id="debt-rows">
       <div class="debt-row" data-debt-row>
         <label class="field">

@@ -156,6 +156,32 @@ export const vi = {
     newsletterHeading: 'Nhận các phép tính trong hộp thư đến của bạn',
     newsletterLede:
       'Một lá thư ngắn khi một máy tính mới được ra mắt hoặc một máy tính hiện có được xem xét lại.',
+    faq: [
+      {
+        q: "Calccents là gì?",
+        a: "Calccents là một trang web miễn phí gồm các công cụ tính tài chính cá nhân tại Mỹ và những bài hướng dẫn giải thích chúng. Các công cụ tính khoản trả góp thế chấp, so sánh thuê và mua nhà, lãi kép, lương thực nhận, thuế thu nhập liên bang và việc trả nợ, và mỗi công cụ đều viết ra công thức được dùng cùng các giả định đằng sau kết quả.",
+      },
+      {
+        q: "Có miễn phí không? Có cần tài khoản không?",
+        a: "Mọi công cụ và bài hướng dẫn đều miễn phí. Không công cụ nào yêu cầu tài khoản, đăng ký hay địa chỉ email. Trang web được duy trì bằng quảng cáo hiển thị.",
+      },
+      {
+        q: "Những con số tôi nhập sẽ ra sao?",
+        a: "Phép tính chạy trong trình duyệt của bạn. Các giá trị bạn nhập không được gửi đến trang web hay bất kỳ ai khác và không được lưu ở đâu cả; đóng thẻ là chúng biến mất.",
+      },
+      {
+        q: "Các số liệu lấy từ đâu?",
+        a: "Các bậc thuế, thuế suất trên tiền lương, hạn mức đóng góp và các số liệu công bố khác lấy từ nguồn gốc như IRS, Cơ quan An sinh Xã hội và Cục Thống kê Lao động. Mỗi số liệu đều có liên kết tới nguồn, và mỗi trang ghi ngày các con số được kiểm tra lần gần nhất.",
+      },
+      {
+        q: "Calccents có đưa ra lời khuyên tài chính không?",
+        a: "Không. Trang web cho thấy một con số được tính ra như thế nào và phụ thuộc vào điều gì. Nó không đánh giá hoàn cảnh của ai và không đề xuất cách hành động; đó là việc của một chuyên gia có giấy phép nắm rõ chi tiết.",
+      },
+      {
+        q: "Ai viết và kiểm duyệt nội dung?",
+        a: "Kostan Proff viết các bài hướng dẫn và duy trì bộ máy tính toán. Tetiana Goncharko kiểm duyệt nội dung tài chính của từng bài trước khi đăng. Cả hai đều có tên và hồ sơ trên trang đội ngũ biên tập.",
+      },
+    ],
   },
 
   /*
