@@ -2,3 +2,39 @@
 # a new URL and an old URL never changes. They can be kept for a year.
 /_astro/*
   Cache-Control: public, max-age=31536000, immutable
+
+# Content Security Policy.
+#
+# Two headers, on purpose.
+#
+# The enforced one closes the doors that nothing on the site uses, so it
+# cannot break a page, an ad or a badge:
+#
+#   object-src 'none'          no <object>/<embed> plugins anywhere
+#   base-uri 'self'            an injected <base> cannot reroute every
+#                              relative script and link to another host
+#   form-action ...            forms post only here (the contact form) or to
+#                              Buttondown (the newsletter, when it is on)
+#   frame-ancestors 'self'     no other site can frame these pages, which is
+#                              what click-jacking needs
+#   upgrade-insecure-requests  a stray http:// request is made over https
+#
+# It deliberately does not limit script-src, img-src, frame-src or
+# connect-src. AdSense and Google's consent message load from a long and
+# changing list of Google hosts, and the premium networks the site is being
+# prepared for (Mediavine, Raptive, Ezoic) each bring dozens of demand
+# partners of their own. An allowlist written today would quietly blank the
+# ad slots the day one of them adds a host.
+#
+# The report-only header is the full allowlist that the site needs today:
+# AdSense and its consent message, Google Analytics, Cloudflare Web
+# Analytics, the LaunchNest and BuiltByIndies badges, and the inline scripts
+# (the theme switch, the consent bootstrap, Astro's inlined page scripts).
+# The browser blocks nothing because of it and only prints a warning in the
+# console for anything it would have blocked. Once a few weeks pass with no
+# warning on real pages with ads showing, its script-src can be moved into
+# the enforced header. When an ad network is switched, its hosts go here
+# first.
+/*
+  Content-Security-Policy: object-src 'none'; base-uri 'self'; form-action 'self' https://buttondown.com https://buttondown.email; frame-ancestors 'self'; upgrade-insecure-requests
+  Content-Security-Policy-Report-Only: default-src 'self'; script-src 'self' 'unsafe-inline' https://pagead2.googlesyndication.com https://*.googlesyndication.com https://*.adtrafficquality.google https://*.doubleclick.net https://*.googletagservices.com https://fundingchoicesmessages.google.com https://*.google.com https://*.gstatic.com https://www.googletagmanager.com https://static.cloudflareinsights.com; style-src 'self' 'unsafe-inline' https://*.gstatic.com https://fonts.googleapis.com; font-src 'self' data: https://fonts.gstatic.com; img-src 'self' data: https:; connect-src 'self' https://*.google.com https://*.google-analytics.com https://*.analytics.google.com https://*.googletagmanager.com https://*.googlesyndication.com https://*.adtrafficquality.google https://*.doubleclick.net https://fundingchoicesmessages.google.com https://cloudflareinsights.com https://static.cloudflareinsights.com; frame-src https://*.googlesyndication.com https://*.doubleclick.net https://*.google.com https://fundingchoicesmessages.google.com https://*.adtrafficquality.google; object-src 'none'; base-uri 'self'; form-action 'self' https://buttondown.com https://buttondown.email
